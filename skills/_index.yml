@@ -1,0 +1,65 @@
+generated: '2026-09-13'
+method: generated
+source: openapi/visma-net-erp-service-api-openapi.json and https://docs.vismasoftware.no/businessnxtapi/ai/mcp/
+note: Every operationId referenced by the three Visma.net ERP skills was verified to exist in the published
+  spec. The Business NXT MCP skill is grounded in the tool names Visma publishes; their inputSchemas are
+  auth-gated and were not fetched. No skill was written against the eAccounting or Payroll specs because
+  those documents declare no operationId to ground one in.
+skill_count: 4
+skills:
+- name: visma-business-nxt-mcp-session
+  file: skills/visma-business-nxt-mcp-session.md
+  api: Visma Business NXT MCP
+  description: Open a Business NXT MCP session, load the tenant schema, query safely, and make a guarded
+    write.
+  operations:
+  - businessnxt-init
+  - businessnxt-init_company
+  - businessnxt-get_table_definitions
+  - businessnxt-get_field_values
+  - businessnxt-execute_graphql_query
+  - businessnxt-create_entity
+  - businessnxt-update_entity
+- name: visma-create-customer-and-sales-order
+  file: skills/visma-create-customer-and-sales-order.md
+  api: Visma.net ERP API
+  description: Create a customer in Visma.net ERP and raise a sales order against it, then cancel the
+    order if it was raised in error.
+  operations:
+  - Customer_GetAll
+  - Customer_Post
+  - Customer_GetBycustomerCd
+  - SalesOrder_Post
+  - SalesOrder_GetByorderNbr
+  - SalesOrder_CancelSalesOrderBysaleOrderNumber
+- name: visma-invoice-and-reverse
+  file: skills/visma-invoice-and-reverse.md
+  api: Visma.net ERP API
+  description: Issue, release and print a customer invoice in Visma.net ERP, and reverse it correctly
+    when it has to be undone.
+  operations:
+  - CustomerInvoice_Create
+  - CustomerInvoice_GetByinvoiceNumber
+  - CustomerInvoice_ReleaseInvoiceByinvoiceNumber
+  - CustomerInvoice_PrintInvoiceByrefNbr
+  - CustomerInvoice_SendToAutoInvoiceByinvoiceNumber
+  - CustomerInvoice_CorrectInvoiceByinvoiceNumber
+  - CustomerInvoice_ReverseInvoiceByinvoiceNumber
+  - CustomerInvoice_ReverseInvoiceAndApplyToNoteByinvoiceNumber
+  - CustomerInvoice_DeleteByinvoiceNumber
+- name: visma-supplier-invoice-approval
+  file: skills/visma-supplier-invoice-approval.md
+  api: Visma.net ERP API
+  description: Register a supplier and its invoice in Visma.net ERP, move the invoice through release,
+    and void or reverse it when needed.
+  operations:
+  - Supplier_GetAll
+  - Supplier_Post
+  - Supplier_GetBysupplierCd
+  - SupplierInvoice_Post
+  - SupplierInvoice_GetByinvoiceNumber
+  - SupplierInvoice_GetByApprovalDocumentId
+  - SupplierInvoice_ReleaseInvoiceByinvoiceNumber
+  - SupplierInvoice_VoidInvoiceBydocumentTypeinvoiceNumber
+  - SupplierInvoice_ReverseInvoiceBydocumentTypeinvoiceNumber
+  - Supplier_GetSupplierBalanceBysupplierCd

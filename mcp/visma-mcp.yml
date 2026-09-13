@@ -1,0 +1,195 @@
+generated: '2026-09-13'
+method: searched
+source: https://docs.vismasoftware.no/businessnxtapi/ai/mcp/ and https://developer.vismaonline.com/docs/spiris-mcp-server
+status: published
+note: 'Visma runs TWO first-party remote MCP servers, both hosted by Visma and both OAuth-protected. Neither
+  ships a stdio package: there is nothing to install. Live tools/list introspection is auth-gated on both
+  (HTTP 401, WWW-Authenticate: Bearer), so the tool inventory below is transcribed from the providers''
+  own published documentation, not from a schema fetch — inputSchemas require authenticated introspection.'
+deployment:
+  mode: remote
+  endpoint: https://mcp.business.visma.net/
+  auth: oauth
+  verified: probed
+  note: Primary endpoint is the Business NXT MCP server. A second first-party remote server, Spiris MCP,
+    is listed under servers[] below. Both were probed on 2026-09-13.
+servers:
+- name: Business NXT MCP
+  endpoint: https://mcp.business.visma.net/
+  transport: streamable-http
+  stateless: true
+  auth: oauth
+  auth_server: https://mcp.business.visma.net (jwks and userinfo delegated to https://connect.visma.com)
+  scopes:
+  - openid
+  - email
+  - profile
+  - business-nxt-mcp:graphql
+  - offline_access
+  discovery:
+    protected_resource: https://mcp.business.visma.net/.well-known/oauth-protected-resource
+    authorization_server: https://mcp.business.visma.net/.well-known/oauth-authorization-server
+  probe:
+    url: https://mcp.business.visma.net/
+    method: POST tools/list
+    http_status: 401
+    www_authenticate: Bearer realm="https://mcp.business.visma.net/"
+    fetched: '2026-09-13'
+  install_examples:
+  - claude mcp add --transport http business-nxt https://mcp.business.visma.net/
+  - codex mcp add business-nxt --url https://mcp.business.visma.net/
+  docs: https://docs.vismasoftware.no/businessnxtapi/ai/mcp/
+  tool_count: 19
+  tools:
+  - name: businessnxt-init
+    category: session
+    description: Starts the session; returns the companies the user can access with companyNo and tenantId.
+  - name: businessnxt-init_company
+    category: session
+    description: Loads tenant schema (core tables + data model extensions) and per-company configuration.
+      Required before any query, skill or mutation.
+  - name: businessnxt-get_table_definitions
+    category: schema
+    description: 'Table schemas: columns with readOnly/primaryKey/DME hints, joinup/joindown relations,
+      canInsert/canUpdate flags.'
+  - name: businessnxt-get_table_documentation
+    category: docs
+    description: Plain-English reference docs from doc.visma.net for a table, field, or workflow page.
+  - name: businessnxt-get_field_values
+    category: schema
+    description: Enum/bitmask catalogue for coded integer fields (for example order.orderType).
+  - name: businessnxt-search_documentation
+    category: docs
+    description: Free-text search over doc.visma.net page titles and summaries.
+  - name: businessnxt-execute_graphql_query
+    category: read
+    description: Runs a read-only GraphQL query against the selected company; mutations blocked at the
+      AST level.
+  - name: businessnxt-create_entity
+    category: write
+    description: Creates one or more entities; supports nested children and a dryRun mode.
+  - name: businessnxt-update_entity
+    category: write
+    description: Updates an entity; requires primary keys plus current oldValues (optimistic concurrency).
+  - name: businessnxt-list_skills
+    category: skills
+    description: Lists available workflow skill guides with summaries and tags.
+  - name: businessnxt-get_skill
+    category: skills
+    description: Loads a skill guide by id or search query, optionally with live reference data.
+  - name: businessnxt-attach_document
+    category: documents
+    description: Attaches a file to a Business NXT entity (two-phase).
+  - name: businessnxt-view_document
+    category: documents
+    description: Opens an attached document in a visual viewer.
+  - name: businessnxt-read_document
+    category: documents
+    description: Extracts document content (text/images from PDF, XML, HTML, CSV) or renders PDF pages
+      as PNG.
+  - name: businessnxt-get_design_guidelines
+    category: ui
+    description: Design tokens, ECharts theme and styling rules for dashboards and viewers.
+  - name: businessnxt-dashboard
+    category: ui
+    description: Renders an interactive chart dashboard over a result set.
+  - name: businessnxt-calculator
+    category: utility
+    description: Arbitrary-precision arithmetic for monetary and accounting computation.
+  - name: businessnxt-get_current_datetime
+    category: utility
+    description: Current date/time in an IANA timezone, with optional day offset.
+  - name: businessnxt-submit_feedback
+    category: feedback
+    description: Reports a problem or gap with the businessnxt-* tools.
+  write_surface:
+    mechanism: create_entity / update_entity only; GraphQL mutations are blocked at the AST level.
+    tables:
+    - order
+    - orderLine
+    - associate
+    - appointment
+    - product
+    - productCategory
+    - priceAndDiscountMatrix
+    - deliveryAlternative
+    - structure
+    - text
+    - batch
+    - voucher
+    - budget
+    - budgetLine
+    - capitalAsset
+    - crossReference (create only)
+    - stockBalance (update only)
+    guardrails:
+    - Per-company AI permission must be granted (separate Read and Write toggles; Write requires Read).
+    - update_entity requires current oldValues, so a stale snapshot blocks the write.
+    - create_entity supports dryRun validation that returns server-computed values without persisting.
+    - 'Token is user-scoped: the server cannot exceed the signed-in user''s Business NXT permissions.'
+- name: Spiris MCP (Bookkeeping & Invoicing / eAccounting)
+  endpoint: https://mcp.spiris.se/mcp
+  transport: streamable-http
+  auth: oauth
+  auth_server: https://auth.mcp.spiris.se
+  scopes:
+  - mcp:ea
+  dynamic_client_registration: true
+  discovery:
+    protected_resource: https://mcp.spiris.se/.well-known/oauth-protected-resource/mcp
+    authorization_server: https://auth.mcp.spiris.se/.well-known/oauth-authorization-server
+  probe:
+    url: https://mcp.spiris.se/mcp
+    method: POST tools/list
+    http_status: 401
+    www_authenticate: Bearer resource_metadata="https://mcp.spiris.se/.well-known/oauth-protected-resource/mcp"
+    fetched: '2026-09-13'
+  install_examples:
+  - claude mcp add --transport http spiris https://mcp.spiris.se/mcp
+  docs: https://developer.vismaonline.com/docs/spiris-mcp-server
+  release_notes: https://github.com/Spiris-Visma/spiris-mcp/releases
+  maturity: beta (early access); free during beta, a monthly fee is stated to come before general release
+  ownership_note: 'Served from spiris.se rather than a visma.com host: Visma Spcs was renamed Spiris and
+    the product line kept its own brand domain, while its API, docs and status still run on Visma infrastructure
+    (eaccountingapi.vismaonline.com, developer.vismaonline.com, status.visma.com). The Spiris MCP docs
+    are published on developer.vismaonline.com.'
+  tool_domains:
+  - domain: Customers
+    capabilities: find, create and update customers; view customer groups
+  - domain: Orders
+    capabilities: create, search and update orders; convert an order to an invoice
+  - domain: Customer invoices
+    capabilities: create, send and search invoices; register payments; send reminders; void
+  - domain: Articles
+    capabilities: create, search and update products and services with accounting rules; view article
+      groups
+  - domain: Suppliers
+    capabilities: find, create and update
+  - domain: Supplier invoices
+    capabilities: create and search
+  - domain: Vouchers
+    capabilities: create and search journal entries, including by fiscal year
+  - domain: Accounts
+    capabilities: browse, create and update chart of accounts and account types; balances at a date
+  - domain: Company summary
+    capabilities: multi-year financial-health overview
+  - domain: Attachments
+    capabilities: list and link files to documents
+  - domain: Projects
+    capabilities: create, search and update
+  - domain: Cost centers
+    capabilities: list
+  - domain: Company settings
+    capabilities: view
+  - domain: Feedback
+    capabilities: built-in submit_feedback tool
+  activation_prerequisites:
+  - A Spiris subscription.
+  - Add the "MCP - Beta" service under Manage subscriptions (Administrator role).
+  - Enable it per user under Manage users.
+  - Accept the terms and conditions on the Home page.
+gaps:
+- No MCP server is published for Visma.net ERP itself, although Visma Connect advertises a visma.net.erp.ai.mcp:execute
+  scope.
+- Neither server publishes an anonymous tools/list, so machine-readable inputSchemas are not obtainable
+  without credentials.

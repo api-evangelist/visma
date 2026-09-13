@@ -1,0 +1,144 @@
+generated: '2026-09-13'
+method: probed
+source:
+- well-known/visma-connect-openid-configuration.json
+- well-known/visma-identity-vismaonline-openid-configuration.json
+- well-known/visma-business-nxt-mcp-oauth-protected-resource.json
+- well-known/visma-spiris-mcp-oauth-protected-resource.json
+- openapi/visma-net-erp-service-api-openapi.json
+- https://www.visma.com/trust-centre-products/visma-net-erp
+conformance:
+- id: oauth2
+  conforms: true
+  evidence: OAuth 2.0 declared as the only securityScheme in both Visma.net ERP specs (clientCredentials
+    and authorizationCode flows, token URL https://connect.visma.com/connect/token).
+- id: oidc
+  conforms: true
+  evidence: 'Two OpenID Providers publish complete discovery documents: https://connect.visma.com/.well-known/openid-configuration
+    and https://identity.vismaonline.com/.well-known/openid-configuration (both HTTP 200).'
+- id: oauth2-pkce
+  conforms: true
+  evidence: code_challenge_methods_supported = ['plain', 'S256'] at connect.visma.com; PKCE is mandated
+    for interactive Business NXT integrations.
+- id: oauth2-dpop
+  conforms: true
+  evidence: dpop_signing_alg_values_supported is advertised in the connect.visma.com discovery document.
+- id: oauth2-device-flow
+  conforms: true
+  evidence: device_authorization_endpoint present at connect.visma.com.
+- id: ciba
+  conforms: true
+  evidence: backchannel_authentication_endpoint and backchannel_token_delivery_modes_supported present
+    at connect.visma.com.
+- id: oidc-backchannel-logout
+  conforms: true
+  evidence: backchannel_logout_supported and frontchannel_logout_supported are both true at connect.visma.com.
+- id: rfc9728-oauth-protected-resource
+  conforms: true
+  evidence: 'Both MCP servers serve RFC 9728 protected-resource metadata: https://mcp.business.visma.net/.well-known/oauth-protected-resource
+    and https://mcp.spiris.se/.well-known/oauth-protected-resource/mcp (both HTTP 200).'
+- id: rfc7591-dynamic-client-registration
+  conforms: true
+  evidence: registration_endpoint https://auth.mcp.spiris.se/oauth/register is advertised by the Spiris
+    MCP authorization server.
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: https://connect.visma.com/.well-known/security.txt returns 200 with Contact, Policy, Encryption,
+    Acknowledgments, Canonical and Expires fields.
+- id: rfc7232-conditional-requests
+  conforms: true
+  evidence: ETag returned on GET and optional If-Match accepted on 97 write operations in the Visma.net
+    ERP spec, with 412 Precondition Failed on mismatch.
+- id: rfc9457
+  conforms: false
+  evidence: No operation in any of the five OpenAPI files returns application/problem+json; eAccounting
+    uses a proprietary {ErrorCode, DeveloperErrorMessage, ErrorId} envelope.
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key header or equivalent replay-safe retry contract is documented or declared
+    in any spec.
+- id: pagination
+  conforms: true
+  evidence: pageNumber/pageSize on 89 Visma.net ERP operations; PaginatedResponseOf<T> envelopes throughout
+    the eAccounting spec.
+- id: openapi-3
+  conforms: true
+  evidence: 'All five published specs declare openapi: 3.0.4.'
+- id: graphql
+  conforms: true
+  evidence: Business NXT publishes GraphQL endpoints at https://business.visma.net/api/graphql and /api/graphql-service;
+    introspection is auth-gated (HTTP 401, "Jwt is missing").
+- id: mcp
+  conforms: true
+  evidence: 'Two first-party streamable-HTTP MCP servers, both answering POST with 401 + WWW-Authenticate:
+    Bearer on 2026-09-13.'
+- id: asyncapi
+  conforms: false
+  evidence: A documented webhook catalogue exists (31 entities, 58 events across two publishers) but no
+    AsyncAPI document is published.
+- id: iso-27001
+  conforms: true
+  evidence: Visma Trust Centre product page for Visma Net (ERP) lists ISO 27001 within the Visma Cloud
+    Delivery Model scope, owned by Visma AS.
+- id: isae-3402-type-ii
+  conforms: true
+  evidence: Visma Trust Centre product page for Visma Net (ERP) lists ISAE 3402 Type II within the Visma
+    Cloud Delivery Model scope.
+- id: iso-9001
+  conforms: true
+  evidence: Visma Trust Centre product page for Visma Net (ERP) lists ISO 9001, owned by Visma Software
+    International AS.
+- id: gdpr
+  conforms: true
+  evidence: Visma Trust Centre publishes per-product subprocessor lists with processing locations, and
+    hosting for Visma Net ERP is stated as Azure EU/EEA (Netherlands).
+domain_standards:
+- id: peppol
+  conforms: true
+  market: European e-invoicing
+  evidence: The eAccounting API exposes an AutoInvoice tag and documents electronic-address requirements
+    for outbound customer invoices (error 4017 AutoInvoiceMissingElectronicAddress, 4014/4015 missing
+    Your/Our reference), which are the PEPPOL BIS Billing sender obligations. Visma Connect additionally
+    advertises hubix-prod:customer-invoice:peppol as a named scope.
+  evidence_locations:
+  - openapi/visma-eaccounting-api-openapi.json tag AutoInvoice
+  - well-known/visma-connect-openid-configuration.json scopes_supported
+- id: sie
+  conforms: true
+  market: Swedish accounting data interchange
+  evidence: The eAccounting spec declares a SieFileImportExport tag, implementing the Swedish SIE bookkeeping
+    file standard.
+  evidence_locations:
+  - openapi/visma-eaccounting-api-openapi.json tag SieFileImportExport
+- id: rot-rut
+  conforms: true
+  market: Swedish tax deduction scheme
+  evidence: Error codes 4029 SsnNumberIsInvalid and 4030 OcrNumberIsInvalid are documented specifically
+    for ROT/RUT input and Swedish OCR payment references.
+  evidence_locations:
+  - https://developer.vismaonline.com/docs/error-codes-copy-1
+- id: altinn
+  conforms: true
+  market: Norwegian statutory reporting
+  evidence: Visma Connect advertises altinn-integration-api:request-tax-card as a supported scope, and
+    Visma.net AutoReport submits statutory reports to public authorities.
+  evidence_locations:
+  - well-known/visma-connect-openid-configuration.json scopes_supported
+  - https://docs.vismasoftware.no/autoreport/
+- id: scim
+  conforms: false
+  evidence: No SCIM schema URN or /scim/v2 surface appears in any spec or discovery document.
+- id: odata
+  conforms: partial
+  evidence: The eAccounting API accepts OData-flavoured $filter and $version query parameters and documents
+    them, but publishes no $metadata document, so it is OData-shaped rather than OData-conformant.
+not_applicable:
+- fhir
+- fapi
+- psd2
+- openrtb
+- sparkplug
+- activitypub
+- lti
+- oai-pmh
+- hl7v2

@@ -1,0 +1,960 @@
+generated: '2026-09-13'
+method: derived
+source:
+- openapi/visma-eaccounting-api-openapi.json
+- openapi/visma-net-erp-service-api-openapi.json
+note: 'Derived by walking $ref links and id-reference field names in the published specs. The eAccounting
+  spec supports this well: 1,704-schema Visma.net ERP models its relationships inside flat DTOs whose
+  foreign keys do not carry the referenced type name, so NO relationship edges could be derived from it
+  honestly — only its resource inventory is recorded. 251 id-reference edges were derived from the eAccounting
+  schema set.'
+apis:
+- api: Bookkeeping & Invoicing / eAccounting API v2
+  schemas: 324
+  resources: 87
+  derived_relationships: 251
+- api: Visma.net ERP API v1
+  schemas: 1704
+  resources: 100
+  derived_relationships: 0
+  note: Foreign keys are typed as plain strings/ints named after the business document (customerNumber,
+    invoiceNumber, orderNbr) and do not name a schema, so no edge can be derived without guessing.
+entities:
+- name: AccountApi
+  schema: '#/components/schemas/AccountApi'
+  relationships:
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+  - to: FiscalYearApi
+    via: FiscalYearId
+    kind: belongs_to
+- name: AllocationPeriodApi
+  schema: '#/components/schemas/AllocationPeriodApi'
+  relationships:
+  - to: SupplierInvoiceDraftApi
+    via: SupplierInvoiceDraftId
+    kind: belongs_to
+  - to: SupplierInvoiceApi
+    via: SupplierInvoiceId
+    kind: belongs_to
+  - to: CustomerInvoiceApi
+    via: CustomerInvoiceId
+    kind: belongs_to
+  - to: CustomerInvoiceDraftApi
+    via: CustomerInvoiceDraftId
+    kind: belongs_to
+  - to: VoucherApi
+    via: VoucherId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: AllocationPlan
+  schema: '#/components/schemas/AllocationPlan'
+  relationships:
+  - to: SupplierInvoiceDraftApi
+    via: SupplierInvoiceDraftId
+    kind: belongs_to
+  - to: SupplierInvoiceApi
+    via: SupplierInvoiceId
+    kind: belongs_to
+  - to: VoucherApi
+    via: VoucherId
+    kind: belongs_to
+- name: ArticleApi
+  schema: '#/components/schemas/ArticleApi'
+  relationships:
+  - to: UnitApi
+    via: UnitId
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierId
+    kind: belongs_to
+- name: AttachmentApi
+  schema: null
+  relationships: []
+- name: AttachmentInterpretationApi
+  schema: '#/components/schemas/AttachmentInterpretationApi'
+  relationships:
+  - to: Attachment
+    via: AttachmentId
+    kind: belongs_to
+  - to: DocumentApi
+    via: DocumentNumber
+    kind: belongs_to
+  - to: OrderApi
+    via: OrderNumber
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerNumber
+    kind: belongs_to
+  - to: BankAccountApi
+    via: BankAccountNumber
+    kind: belongs_to
+- name: BankTransactionRowApi
+  schema: '#/components/schemas/BankTransactionRowApi'
+  relationships:
+  - to: PaymentVoucherApi
+    via: PaymentVoucherId
+    kind: belongs_to
+  - to: PaymentVoucherApi
+    via: PaymentVoucherNumber
+    kind: belongs_to
+  - to: VoucherApi
+    via: VoucherId
+    kind: belongs_to
+- name: CompanyNumberSeriesApi
+  schema: '#/components/schemas/CompanyNumberSeriesApi'
+  relationships:
+  - to: CustomerInvoiceApi
+    via: CustomerInvoiceNumber
+    kind: belongs_to
+  - to: QuoteApi
+    via: QuoteNumber
+    kind: belongs_to
+  - to: OrderApi
+    via: OrderNumber
+    kind: belongs_to
+- name: CompanySettingsApi
+  schema: '#/components/schemas/CompanySettingsApi'
+  relationships:
+  - to: CountryApi
+    via: CountryCode
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: TermsOfPaymentApi
+    via: TermsOfPaymentId
+    kind: belongs_to
+- name: CostCenterApi
+  schema: '#/components/schemas/CostCenterApi'
+  relationships: []
+- name: CostCenterItemApi
+  schema: '#/components/schemas/CostCenterItemApi'
+  relationships:
+  - to: CostCenterApi
+    via: CostCenterId
+    kind: belongs_to
+- name: CountryApi
+  schema: '#/components/schemas/CountryApi'
+  relationships: []
+- name: CurrencyApi
+  schema: '#/components/schemas/CurrencyApi'
+  relationships: []
+- name: CustomerApi
+  schema: '#/components/schemas/CustomerApi'
+  relationships:
+  - to: DiscountAgreementApi
+    via: DiscountAgreementId
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: DeliveryMethodApi
+    via: DeliveryMethodId
+    kind: belongs_to
+  - to: DeliveryTermApi
+    via: DeliveryTermId
+    kind: belongs_to
+  - to: TermsOfPaymentApi
+    via: TermsOfPaymentId
+    kind: belongs_to
+  - to: SalesPriceListApi
+    via: SalesPriceListId
+    kind: belongs_to
+- name: CustomerBatchApi
+  schema: '#/components/schemas/CustomerBatchApi'
+  relationships:
+  - to: CustomerApi
+    via: CustomerNumber
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: DeliveryMethodApi
+    via: DeliveryMethodId
+    kind: belongs_to
+  - to: DeliveryTermApi
+    via: DeliveryTermId
+    kind: belongs_to
+  - to: TermsOfPaymentApi
+    via: TermsOfPaymentId
+    kind: belongs_to
+  - to: SalesPriceListApi
+    via: SalesPriceListId
+    kind: belongs_to
+- name: CustomerInvoiceApi
+  schema: '#/components/schemas/CustomerInvoiceApi'
+  relationships:
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerId
+    kind: belongs_to
+  - to: DeliveryMethodApi
+    via: DeliveryMethodCode
+    kind: belongs_to
+  - to: DeliveryTermApi
+    via: DeliveryTermCode
+    kind: belongs_to
+  - to: TermsOfPaymentApi
+    via: TermsOfPaymentId
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerNumber
+    kind: belongs_to
+  - to: VoucherApi
+    via: VoucherNumber
+    kind: belongs_to
+  - to: VoucherApi
+    via: VoucherId
+    kind: belongs_to
+- name: CustomerInvoiceBookkeepingHistoryApi
+  schema: '#/components/schemas/CustomerInvoiceBookkeepingHistoryApi'
+  relationships:
+  - to: VoucherApi
+    via: VoucherId
+    kind: belongs_to
+  - to: BankTransactionApi
+    via: BankTransactionId
+    kind: belongs_to
+  - to: BankAccountApi
+    via: BankAccountId
+    kind: belongs_to
+- name: CustomerInvoiceDraftApi
+  schema: '#/components/schemas/CustomerInvoiceDraftApi'
+  relationships:
+  - to: CustomerApi
+    via: CustomerId
+    kind: belongs_to
+  - to: TermsOfPaymentApi
+    via: TermsOfPaymentId
+    kind: belongs_to
+  - to: DeliveryMethodApi
+    via: DeliveryMethodCode
+    kind: belongs_to
+  - to: DeliveryTermApi
+    via: DeliveryTermCode
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerNumber
+    kind: belongs_to
+- name: CustomerInvoiceDraftRowApi
+  schema: '#/components/schemas/CustomerInvoiceDraftRowApi'
+  relationships:
+  - to: ArticleApi
+    via: ArticleId
+    kind: belongs_to
+  - to: UnitApi
+    via: UnitId
+    kind: belongs_to
+  - to: ArticleApi
+    via: ArticleNumber
+    kind: belongs_to
+  - to: VatRateApi
+    via: VatRateId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: CustomerInvoiceRowApi
+  schema: '#/components/schemas/CustomerInvoiceRowApi'
+  relationships:
+  - to: ArticleApi
+    via: ArticleNumber
+    kind: belongs_to
+  - to: ArticleApi
+    via: ArticleId
+    kind: belongs_to
+  - to: UnitApi
+    via: UnitId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: CustomerInvoiceValuationHistoryApi
+  schema: '#/components/schemas/CustomerInvoiceValuationHistoryApi'
+  relationships:
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: CustomerInvoiceApi
+    via: CustomerInvoiceId
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerNumber
+    kind: belongs_to
+- name: CustomerLedgerItemApi
+  schema: '#/components/schemas/CustomerLedgerItemApi'
+  relationships:
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerId
+    kind: belongs_to
+  - to: VoucherApi
+    via: VoucherId
+    kind: belongs_to
+- name: DeliveryMethodApi
+  schema: '#/components/schemas/DeliveryMethodApi'
+  relationships: []
+- name: DeliveryTermApi
+  schema: '#/components/schemas/DeliveryTermApi'
+  relationships: []
+- name: FiscalYearApi
+  schema: '#/components/schemas/FiscalYearApi'
+  relationships: []
+- name: OrderApi
+  schema: '#/components/schemas/OrderApi'
+  relationships:
+  - to: CustomerApi
+    via: CustomerId
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerNumber
+    kind: belongs_to
+  - to: DeliveryMethodApi
+    via: DeliveryMethodCode
+    kind: belongs_to
+  - to: DeliveryTermApi
+    via: DeliveryTermId
+    kind: belongs_to
+  - to: DeliveryMethodApi
+    via: DeliveryMethodId
+    kind: belongs_to
+  - to: DeliveryTermApi
+    via: DeliveryTermCode
+    kind: belongs_to
+  - to: TermsOfPaymentApi
+    via: TermsOfPaymentId
+    kind: belongs_to
+- name: OrderRowApi
+  schema: '#/components/schemas/OrderRowApi'
+  relationships:
+  - to: ArticleApi
+    via: ArticleId
+    kind: belongs_to
+  - to: UnitApi
+    via: UnitId
+    kind: belongs_to
+  - to: ArticleApi
+    via: ArticleNumber
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: PaymentVoucherRowApi
+  schema: '#/components/schemas/PaymentVoucherRowApi'
+  relationships:
+  - to: AccountApi
+    via: AccountNumber
+    kind: belongs_to
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: ProjectApi
+  schema: '#/components/schemas/ProjectApi'
+  relationships:
+  - to: CustomerApi
+    via: CustomerId
+    kind: belongs_to
+- name: PurchaseReceiptApi
+  schema: '#/components/schemas/PurchaseReceiptApi'
+  relationships:
+  - to: BankAccountApi
+    via: BankAccountId
+    kind: belongs_to
+  - to: AccountingTemplateApi
+    via: AccountingTemplateId
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierId
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierNumber
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+- name: PurchaseReceiptDraftApi
+  schema: '#/components/schemas/PurchaseReceiptDraftApi'
+  relationships:
+  - to: BankAccountApi
+    via: BankAccountId
+    kind: belongs_to
+  - to: AccountingTemplateApi
+    via: AccountingTemplateId
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierId
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierNumber
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+- name: PurchaseReceiptDraftRowApi
+  schema: '#/components/schemas/PurchaseReceiptDraftRowApi'
+  relationships:
+  - to: AccountApi
+    via: AccountNumber
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+- name: PurchaseReceiptRowApi
+  schema: '#/components/schemas/PurchaseReceiptRowApi'
+  relationships:
+  - to: AccountApi
+    via: AccountNumber
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+- name: QuoteApi
+  schema: '#/components/schemas/QuoteApi'
+  relationships:
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerId
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerNumber
+    kind: belongs_to
+  - to: DeliveryMethodApi
+    via: DeliveryMethodCode
+    kind: belongs_to
+  - to: DeliveryTermApi
+    via: DeliveryTermCode
+    kind: belongs_to
+- name: QuoteRowApi
+  schema: '#/components/schemas/QuoteRowApi'
+  relationships:
+  - to: ArticleApi
+    via: ArticleId
+    kind: belongs_to
+  - to: UnitApi
+    via: UnitId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+  - to: ArticleApi
+    via: ArticleNumber
+    kind: belongs_to
+- name: SalesPriceListRowApi
+  schema: '#/components/schemas/SalesPriceListRowApi'
+  relationships:
+  - to: SalesPriceListApi
+    via: SalesPriceListId
+    kind: belongs_to
+  - to: ArticleApi
+    via: ArticleId
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+- name: SupplierApi
+  schema: '#/components/schemas/SupplierApi'
+  relationships:
+  - to: BankAccountApi
+    via: BankAccountNumber
+    kind: belongs_to
+  - to: BankApi
+    via: BankCode
+    kind: belongs_to
+  - to: CountryApi
+    via: CountryCode
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: TermsOfPaymentApi
+    via: TermsOfPaymentId
+    kind: belongs_to
+  - to: ForeignPaymentCode
+    via: ForeignPaymentCodeId
+    kind: belongs_to
+  - to: AccountingTemplateApi
+    via: AccountingTemplateId
+    kind: belongs_to
+- name: SupplierBatchApi
+  schema: '#/components/schemas/SupplierBatchApi'
+  relationships:
+  - to: SupplierApi
+    via: SupplierNumber
+    kind: belongs_to
+  - to: BankAccountApi
+    via: BankAccountNumber
+    kind: belongs_to
+  - to: BankApi
+    via: BankCode
+    kind: belongs_to
+  - to: CountryApi
+    via: CountryCode
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: TermsOfPaymentApi
+    via: TermsOfPaymentId
+    kind: belongs_to
+  - to: ForeignPaymentCode
+    via: ForeignPaymentCodeId
+    kind: belongs_to
+- name: SupplierInvoiceApi
+  schema: '#/components/schemas/SupplierInvoiceApi'
+  relationships:
+  - to: SupplierApi
+    via: SupplierId
+    kind: belongs_to
+  - to: BankAccountApi
+    via: BankAccountId
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierNumber
+    kind: belongs_to
+  - to: VoucherApi
+    via: VoucherNumber
+    kind: belongs_to
+  - to: VoucherApi
+    via: VoucherId
+    kind: belongs_to
+  - to: AccountingTemplateApi
+    via: AccountingTemplateId
+    kind: belongs_to
+  - to: VatReportApi
+    via: VatReportId
+    kind: belongs_to
+- name: SupplierInvoiceDraftApi
+  schema: '#/components/schemas/SupplierInvoiceDraftApi'
+  relationships:
+  - to: SupplierApi
+    via: SupplierId
+    kind: belongs_to
+  - to: BankAccountApi
+    via: BankAccountId
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierNumber
+    kind: belongs_to
+  - to: AccountingTemplateApi
+    via: AccountingTemplateId
+    kind: belongs_to
+- name: SupplierInvoiceDraftRowApi
+  schema: '#/components/schemas/SupplierInvoiceDraftRowApi'
+  relationships:
+  - to: AccountApi
+    via: AccountNumber
+    kind: belongs_to
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: SupplierInvoicePreviewRowsRequestApi
+  schema: '#/components/schemas/SupplierInvoicePreviewRowsRequestApi'
+  relationships:
+  - to: AccountingTemplateApi
+    via: AccountingTemplateId
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierId
+    kind: belongs_to
+- name: SupplierInvoiceRowApi
+  schema: '#/components/schemas/SupplierInvoiceRowApi'
+  relationships:
+  - to: AccountApi
+    via: AccountNumber
+    kind: belongs_to
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: SupplierInvoiceRowPatchRequestApi
+  schema: '#/components/schemas/SupplierInvoiceRowPatchRequestApi'
+  relationships:
+  - to: AccountApi
+    via: AccountNumber
+    kind: belongs_to
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: SupplierInvoiceValuationHistoryApi
+  schema: '#/components/schemas/SupplierInvoiceValuationHistoryApi'
+  relationships:
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+  - to: SupplierInvoiceApi
+    via: SupplierInvoiceId
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierNumber
+    kind: belongs_to
+- name: SupplierLedgerItemApi
+  schema: null
+  relationships: []
+- name: SupplierLedgerItemBatchApi
+  schema: '#/components/schemas/SupplierLedgerItemBatchApi'
+  relationships:
+  - to: SupplierInvoiceApi
+    via: SupplierInvoiceNumber
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierNumber
+    kind: belongs_to
+  - to: CurrencyApi
+    via: CurrencyCode
+    kind: belongs_to
+- name: TermsOfPaymentApi
+  schema: '#/components/schemas/TermsOfPaymentApi'
+  relationships: []
+- name: UnitApi
+  schema: '#/components/schemas/UnitApi'
+  relationships: []
+- name: UpdateCompanyNumberSeriesApi
+  schema: '#/components/schemas/UpdateCompanyNumberSeriesApi'
+  relationships:
+  - to: CustomerInvoiceApi
+    via: CustomerInvoiceNumber
+    kind: belongs_to
+  - to: QuoteApi
+    via: QuoteNumber
+    kind: belongs_to
+  - to: OrderApi
+    via: OrderNumber
+    kind: belongs_to
+- name: VatCodeApi
+  schema: '#/components/schemas/VatCodeApi'
+  relationships: []
+- name: VoucherApi
+  schema: '#/components/schemas/VoucherApi'
+  relationships: []
+- name: VoucherDraftRowApi
+  schema: '#/components/schemas/VoucherDraftRowApi'
+  relationships:
+  - to: AccountApi
+    via: AccountNumber
+    kind: belongs_to
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: VoucherRowApi
+  schema: '#/components/schemas/VoucherRowApi'
+  relationships:
+  - to: AccountApi
+    via: AccountNumber
+    kind: belongs_to
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+- name: VoucherWithOverunderPaymentRowApi
+  schema: '#/components/schemas/VoucherWithOverunderPaymentRowApi'
+  relationships:
+  - to: AccountApi
+    via: AccountNumber
+    kind: belongs_to
+  - to: VatCodeApi
+    via: VatCodeId
+    kind: belongs_to
+  - to: ProjectApi
+    via: ProjectId
+    kind: belongs_to
+  - to: CustomerApi
+    via: CustomerId
+    kind: belongs_to
+  - to: SupplierApi
+    via: SupplierId
+    kind: belongs_to
+resource_inventory:
+  eaccounting:
+  - resource: customerinvoices
+    operations: 19
+  - resource: orders
+    operations: 16
+  - resource: quotes
+    operations: 14
+  - resource: salesdocumentattachments
+    operations: 12
+  - resource: supplierinvoices
+    operations: 11
+  - resource: companysettings
+    operations: 10
+  - resource: customerinvoicedrafts
+    operations: 7
+  - resource: supplierinvoicedrafts
+    operations: 7
+  - resource: quotedrafts
+    operations: 6
+  - resource: salespricelists
+    operations: 6
+  - resource: accounts
+    operations: 5
+  - resource: attachments
+    operations: 5
+  - resource: customers
+    operations: 5
+  - resource: articlelabels
+    operations: 4
+  - resource: articles
+    operations: 4
+  - resource: customerledgeritems
+    operations: 4
+  - resource: messagethreads
+    operations: 4
+  - resource: integrations
+    operations: 4
+  - resource: purchasereceiptdrafts
+    operations: 4
+  - resource: webshoporders
+    operations: 4
+  - resource: allocationperiods
+    operations: 3
+  - resource: attachmentlinks
+    operations: 3
+  - resource: autoinvoice
+    operations: 3
+  - resource: banktransactions
+    operations: 3
+  - resource: company
+    operations: 3
+  - resource: costcenteritems
+    operations: 3
+  - resource: customerlabels
+    operations: 3
+  - resource: fiscalyears
+    operations: 3
+  - resource: revenuecostssummary
+    operations: 3
+  - resource: purchasereceipts
+    operations: 3
+  - resource: sie4import
+    operations: 3
+  - resource: suppliers
+    operations: 3
+  - resource: trial
+    operations: 3
+  - resource: voucherdrafts
+    operations: 3
+  - resource: vouchers
+    operations: 3
+  - resource: webhooks
+    operations: 3
+  - resource: accountbalances
+    operations: 2
+  - resource: approval
+    operations: 2
+  - resource: articleaccountcodings
+    operations: 2
+  - resource: bankaccounts
+    operations: 2
+  - resource: charts
+    operations: 2
+  - resource: costcenters
+    operations: 2
+  - resource: countries
+    operations: 2
+  - resource: currencies
+    operations: 2
+  - resource: deliverymethods
+    operations: 2
+  - resource: deliveryterms
+    operations: 2
+  - resource: discountagreements
+    operations: 2
+  - resource: foreignpaymentcodes
+    operations: 2
+  - resource: inventoryitems
+    operations: 2
+  - resource: accountingtemplates
+    operations: 2
+  - resource: licenseagreements
+    operations: 2
+  - resource: notes
+    operations: 2
+  - resource: partnerresourcelinks
+    operations: 2
+  - resource: projects
+    operations: 2
+  - resource: sie4export
+    operations: 2
+  - resource: termsofpayments
+    operations: 2
+  - resource: units
+    operations: 2
+  - resource: vatcodes
+    operations: 2
+  - resource: vatreports
+    operations: 2
+  - resource: voucherwithoverunderpayment
+    operations: 2
+  visma_net_erp:
+  - resource: salesorder
+    operations: 27
+  - resource: customer
+    operations: 19
+  - resource: salesorderbasic
+    operations: 18
+  - resource: inventory
+    operations: 16
+  - resource: supplierInvoice
+    operations: 16
+  - resource: customerinvoice
+    operations: 13
+  - resource: supplier
+    operations: 13
+  - resource: customerContract
+    operations: 11
+  - resource: shipment
+    operations: 11
+  - resource: PurchaseReceipt
+    operations: 9
+  - resource: customerCreditNote
+    operations: 8
+  - resource: customerDebitNote
+    operations: 8
+  - resource: project
+    operations: 7
+  - resource: employee
+    operations: 6
+  - resource: cashTransaction
+    operations: 5
+  - resource: creditNote
+    operations: 5
+  - resource: customerOverdueCharge
+    operations: 5
+  - resource: dimension
+    operations: 5
+  - resource: discount
+    operations: 5
+  - resource: expenseClaim
+    operations: 5
+  - resource: journaltransaction
+    operations: 5
+  - resource: supplierPayment
+    operations: 5
+  - resource: timeCard
+    operations: 5
+  - resource: uiExtension
+    operations: 5
+  - resource: customerPayment
+    operations: 4
+  - resource: multilanguage
+    operations: 4
+  - resource: payment
+    operations: 4
+  - resource: salesperson
+    operations: 4
+  - resource: vat
+    operations: 4
+  - resource: warehouse
+    operations: 4
+  - resource: blob
+    operations: 3
+  - resource: branch
+    operations: 3
+  - resource: customerpaymentmethod
+    operations: 3
+  - resource: expenseReceipt
+    operations: 3
+  - resource: inventoryadjustment
+    operations: 3
+  - resource: inventoryissue
+    operations: 3
+  - resource: inventoryReceipt
+    operations: 3
+  - resource: inventoryTransfer
+    operations: 3
+  - resource: kitassembly
+    operations: 3
+  - resource: KitSpecifications
+    operations: 3
+  - resource: location
+    operations: 3
+  - resource: organization
+    operations: 3
+  - resource: purchaseorder
+    operations: 3
+  - resource: PurchaseReceiptBasic
+    operations: 3
+  - resource: salescategory
+    operations: 3
+  - resource: supplierlocation
+    operations: 3
+  - resource: account
+    operations: 2
+  - resource: attribute
+    operations: 2
+  - resource: background
+    operations: 2
+  - resource: carrier
+    operations: 2
+  - resource: cashaccount
+    operations: 2
+  - resource: cashsale
+    operations: 2
+  - resource: contact
+    operations: 2
+  - resource: contractUsage
+    operations: 2
+  - resource: country
+    operations: 2
+  - resource: currency
+    operations: 2
+  - resource: currencyrate
+    operations: 2
+  - resource: customerCreditWriteOff
+    operations: 2
+  - resource: customerSalesPrice
+    operations: 2
+  - resource: deferralCode
+    operations: 2
+id_conventions:
+  eaccounting: GUID primary keys on most resources (customerId, articleId, supplierId); accounts are keyed
+    by integer AccountNumber and countries/currencies by ISO code.
+  visma_net_erp: Business document numbers as natural keys (accountCd, invoiceNumber, saleOrderNumber,
+    receiptNumber), not surrogate GUIDs.

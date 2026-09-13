@@ -1,0 +1,73 @@
+generated: '2026-09-13'
+method: searched
+source:
+- https://docs.vismasoftware.no/vismanetapi/end-of-life-notices/
+- https://docs.vismasoftware.no/vismanetapi/end-of-life-notices/change-base-url/
+- https://docs.vismasoftware.no/vismanetapi/end-of-life-notices/salesorder-v1-v2/
+- https://developer.vismaonline.com/docs/versioning-copy
+- https://status.visma.com/
+versioning:
+  scheme: URI path version
+  visma_net_erp: v1 (with v2 and v3 variants on SalesOrder)
+  eaccounting: v2
+  payroll: v2 (v1 still served)
+deprecation_policy:
+  published: true
+  url: https://docs.vismasoftware.no/vismanetapi/end-of-life-notices/
+  mechanism: 'Visma publishes dated End of life notices in the API docs and enforces them by progressive
+    throttling rather than an immediate cut-off: the retired surface keeps working under a shrinking rate-limit
+    policy until shutdown.'
+  rfc8594_headers:
+    sunset: false
+    deprecation: false
+    note: No Sunset or Deprecation response headers are documented; the signal is a docs notice plus a
+      dedicated throttling policy name.
+deprecations:
+- item: integration.visma.net base URL
+  replacement: https://api.finance.visma.net
+  status: deprecated, throttled
+  throttle_started: '2026-02-01'
+  initial_limit: 500 calls/hour per application
+  end_state: Limit reduced over following weeks until the old URL is permanently shut down.
+  notice: https://docs.vismasoftware.no/vismanetapi/end-of-life-notices/change-base-url/
+  note: The new base URL drops the old "API/controller/api/" path segment.
+- item: SalesOrder V1 and V2 endpoints
+  replacement: SalesOrder V3
+  status: deprecated, throttled under policy 8-fixed-window
+  notice: https://docs.vismasoftware.no/vismanetapi/end-of-life-notices/salesorder-v1-v2/
+  best_practices: https://docs.vismasoftware.no/vismanetapi/api-reference/salesordersv3/best-practices/
+- item: GET /v1/purchasereceipt
+  status: end-of-life notice published
+  notice: https://docs.vismasoftware.no/vismanetapi/end-of-life-notices/get-v1purchasereceipt/
+- item: Visma Developer Forum (static rate-limit articles)
+  status: closed
+  replacement: Live X-RateLimit-* response headers plus the rate-limits docs page
+- item: Visma Spcs brand
+  status: renamed to Spiris
+  notice: https://developer.vismaonline.com/changelog/weve-changed-our-name-visma-spcs-is-now-spiris
+  note: 'A brand change, not an API retirement: hosts, paths and versions are unchanged.'
+deprecated_in_spec:
+  count: 0
+  note: 'No operation in any of the five OpenAPI files carries deprecated: true — the retirements above
+    are documented in prose only.'
+status_page:
+  url: https://status.visma.com/
+  platform: Atlassian Statuspage
+  page_name: Visma Cloud Services
+  api: https://status.visma.com/api/v2/summary.json
+  components_include:
+  - Spiris - Bokforing & Fakturering/Visma eAccounting
+  - Visma Net ERP
+  - Visma ML Assets
+  probe:
+    url: https://status.visma.com/api/v2/summary.json
+    http_status: 200
+    fetched: '2026-09-13'
+sla:
+  published: false
+  note: No public API SLA document was found; availability commitments sit inside product contracts and
+    the Visma Cloud Delivery Model.
+support:
+  visma_net_erp: https://docs.vismasoftware.no/vismanetapi/support/
+  visma_net_erp_email: cloud.api.support@visma.com
+  eaccounting_email: api@spiris.se

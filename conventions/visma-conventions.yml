@@ -1,0 +1,195 @@
+generated: '2026-09-13'
+method: searched
+source:
+- https://docs.vismasoftware.no/vismanetapi/api-reference/features/
+- https://docs.vismasoftware.no/vismanetapi/api-reference/features/etag/
+- https://docs.vismasoftware.no/vismanetapi/api-reference/features/pagination/
+- https://docs.vismasoftware.no/vismanetapi/api-reference/features/background/
+- https://developer.vismaonline.com/docs/pagination-copy
+- https://developer.vismaonline.com/docs/versioning-copy
+- openapi/visma-net-erp-service-api-openapi.json
+auth_style:
+  summary: 'OAuth 2.0 through Visma Connect (connect.visma.com) for Visma.net ERP and Business NXT, and
+    through Visma Online IdentityServer (identity.vismaonline.com) for eAccounting and Cloud Payroll.
+    Two application shapes: Service (client credentials, machine-to-machine) and Interactive (authorization
+    code, acting for a signed-in user). No API-key auth anywhere.'
+  see: authentication/visma-authentication.yml
+idempotency:
+  coverage: none
+  mechanism: null
+  detail: 'No Idempotency-Key header, no client-supplied request identifier and no replay-safe retry contract
+    is documented or declared on any of the five specs. What Visma.net ERP ships instead is OPTIMISTIC
+    CONCURRENCY: an ETag on GET (also surfaced in the body as timeStamp) and an optional If-Match on 97
+    PUT/POST operations, which returns 412 Precondition Failed when the stored version has moved on. That
+    prevents a lost update; it does not make a retried POST safe. The Business NXT MCP server applies
+    the same idea at the tool layer by requiring oldValues on update_entity.'
+  related_mechanism:
+    name: ETag / If-Match optimistic concurrency
+    scope_operations: 97
+    success: 204 No Content with a new ETag
+    conflict: 412 Precondition Failed
+    docs: https://docs.vismasoftware.no/vismanetapi/api-reference/features/etag/
+reversibility:
+  grade: documented
+  summary: 'Reversal exists as first-class domain operations rather than as a generic undo: accounting
+    documents are voided or credited rather than deleted, and the MCP write surface exposes the same verbs.
+    No published document states a TIME WINDOW inside which a reversal works, so this grades documented
+    rather than verified — the windows that do exist are accounting-period locks, and the docs describe
+    them as errors (VoucherDateIsInLockedPeriod 4026, VoucherDateIsInLockedYearException 4038) rather
+    than as a stated reversal deadline.'
+  write_surfaces:
+  - surface: Visma.net ERP API
+    reversal: 'First-class reversal actions rather than a generic undo: 4 cancel, 3 void and 4 reverse
+      operations, plus 17 DELETE operations on unreleased documents and a CreditNote resource for reversing
+      released invoices.'
+    operation_examples:
+    - operationId: SalesOrder_CancelSalesOrderBysaleOrderNumber
+      http: POST /v1/salesorder/{saleOrderNumber}/action/cancelSalesOrder
+    - operationId: CustomerInvoice_ReverseInvoiceByinvoiceNumber
+      http: POST /v1/customerinvoice/{invoiceNumber}/action/reverse
+    - operationId: CustomerInvoice_ReverseInvoiceAndApplyToNoteByinvoiceNumber
+      http: POST /v1/customerinvoice/{invoiceNumber}/action/reverseandapplytonote
+    - operationId: SupplierInvoice_VoidInvoiceBydocumentTypeinvoiceNumber
+      http: POST /v1/supplierInvoice/{documentType}/{invoiceNumber}/action/voidinvoice
+    - operationId: CustomerPayment_VoidPaymentBypaymentNumber
+      http: POST /v1/customerPayment/{paymentNumber}/action/void
+    - operationId: CashTransaction_ReverseByreferenceNbr
+      http: POST /v1/cashTransaction/{referenceNbr}/action/reverse
+    - operationId: PurchaseReceipt_CancelReceiptByreceiptNumber
+      http: POST /v1/PurchaseReceipt/{receiptNumber}/action/cancelReceipt
+    - operationId: Shipment_CancelShipmentByshipmentNumber
+      http: POST /v1/shipment/{shipmentNumber}/action/cancelShipment
+    - operationId: CustomerInvoice_DeleteByinvoiceNumber
+      http: DELETE /v1/customerinvoice/{invoiceNumber}
+    window: null
+    window_source: null
+    note: No published document states a deadline for any of these. The only time constraint Visma documents
+      is the accounting-period / fiscal-year lock, and it is described as an error condition rather than
+      as a reversal window.
+  - surface: eAccounting customer invoices
+    reversal: Void an invoice; create a credit note against it
+    operation_examples:
+    - POST /customerinvoices
+    - GET /customerinvoices
+    window: null
+    note: The Spiris MCP docs list "void" among customer-invoice capabilities; no window is stated.
+  - surface: eAccounting orders
+    reversal: Undo an order
+    window: null
+    note: Error 4028 OrderCannotBeVoided documents a condition that blocks the undo (connected backorders),
+      not a deadline.
+  - surface: eAccounting vouchers / accounting periods
+    reversal: Reversing voucher entries
+    window: null
+    note: Constrained by locked periods and locked fiscal years, surfaced as errors 4026, 4037 and 4038.
+      The lock date is tenant configuration, not a published API window.
+  - surface: Business NXT MCP
+    reversal: update_entity with oldValues; no delete tool is exposed
+    window: null
+    note: Writes are limited to 17 named tables; every other table is read-only through the MCP.
+  dry_run:
+    available: true
+    scope: Business NXT MCP businessnxt-create_entity dryRun mode
+    detail: Validates and returns server-computed values, including currency context, without persisting.
+    rest_equivalent: null
+pagination:
+  visma_net_erp:
+    style: page-number
+    params:
+    - pageNumber
+    - pageSize
+    alternate_params:
+    - skipRecords
+    - numberToRead
+    - greaterThanValue
+    response: Metadata returned in response headers; ETag moves into the body field timeStamp on paginated
+      responses.
+    operations_with_paging: 89
+    docs: https://docs.vismasoftware.no/vismanetapi/api-reference/features/pagination/
+  eaccounting:
+    style: envelope
+    response_shape: PaginatedResponseOf<T>
+    docs: https://developer.vismaonline.com/docs/pagination-copy
+filtering:
+  visma_net_erp:
+    params:
+    - lastModifiedDateTime
+    - lastModifiedDateTimeCondition
+    - createdDateTime
+    - createdDateTimeCondition
+    - status
+    - branch
+    - project
+    - customer
+    - orderBy
+    note: DateTime filters take a companion *Condition operator parameter.
+    docs: https://docs.vismasoftware.no/vismanetapi/api-reference/features/date-time-condition-operators/
+  eaccounting:
+    style: OData-flavoured $filter
+    error: 6000 QueryParameterError on an invalid query
+    docs: https://developer.vismaonline.com/docs/filtering-copy
+field_selection:
+  eaccounting:
+    supported: true
+    docs: https://developer.vismaonline.com/docs/selecting-copy
+  visma_net_erp:
+    supported: false
+async_processing:
+  visma_net_erp:
+    header: erp-api-background
+    operations: 509
+    detail: Nearly every ERP operation accepts an erp-api-background header that turns the call into a
+      background job, acknowledged immediately and completed asynchronously. This is the ERP API's answer
+      to long-running writes.
+    docs: https://docs.vismasoftware.no/vismanetapi/api-reference/features/background/
+versioning:
+  visma_net_erp:
+    style: URI path
+    current: v1
+    example: GET https://api.finance.visma.net/v1/account
+  eaccounting:
+    style: URI path, with three alternates
+    current: v2
+    alternates:
+    - custom header "version"
+    - Accept header version=2
+    - URL attribute $version=2
+    docs: https://developer.vismaonline.com/docs/versioning-copy
+  payroll:
+    style: URI path
+    current: v2
+    note: V1 remains published alongside V2.
+error_envelope:
+  eaccounting:
+    shape: '{ErrorCode, DeveloperErrorMessage, ErrorId}'
+    rfc9457: false
+    note: ErrorId is a correlation GUID to quote to support.
+  visma_net_erp:
+    shape: JSON and XML variants per operation (application/json, text/json, application/xml, text/xml)
+    rfc9457: false
+  see: errors/visma-problem-types.yml
+rate_limit_signalling:
+  see: rate-limits/visma-rate-limits.yml
+  headers:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  - X-RateLimit-Policy
+  - Retry-After
+request_tracing:
+  visma_net_erp:
+    header: x-vbc-traceid
+    observed: true
+    note: Observed on live 401 responses from business.visma.net and mcp.business.visma.net on 2026-09-13.
+  eaccounting:
+    field: ErrorId
+    note: Per-error correlation id in the response body.
+attachments:
+  visma_net_erp:
+    docs: https://docs.vismasoftware.no/vismanetapi/api-reference/features/attachment/
+cross_links:
+- errors/visma-problem-types.yml
+- lifecycle/visma-lifecycle.yml
+- authentication/visma-authentication.yml
+- rate-limits/visma-rate-limits.yml
+- scopes/visma-scopes.yml

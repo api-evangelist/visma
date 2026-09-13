@@ -1,0 +1,217 @@
+generated: '2026-09-13'
+method: derived
+source: Business NXT MCP tool table (https://docs.vismasoftware.no/businessnxtapi/ai/mcp/), Spiris MCP
+  tool domains (https://developer.vismaonline.com/docs/spiris-mcp-server) and openapi/visma-eaccounting-api-openapi.json
+note: THE eACCOUNTING SPEC DECLARES NO operationId ON ANY OF ITS 228 OPERATIONS, so this crosswalk binds
+  MCP tool domains to METHOD+PATH rather than to operationIds. Both MCP servers gate tools/list behind
+  OAuth, so tool names below are the published names and domains, mapped by name and semantics; confidence
+  is set accordingly and never above medium for the Spiris rows.
+surfaces:
+  openapi:
+  - file: openapi/visma-eaccounting-api-openapi.json
+    operations: 228
+    operation_ids: 0
+    gated: false
+  - file: openapi/visma-net-erp-service-api-openapi.json
+    operations: 511
+    operation_ids: 511
+    gated: false
+  graphql:
+  - endpoint: https://business.visma.net/api/graphql
+    gated: true
+    probe:
+      http_status: 401
+      body: Jwt is missing
+  mcp:
+  - url: https://mcp.business.visma.net/
+    gated: true
+    probe_status: 401
+  - url: https://mcp.spiris.se/mcp
+    gated: true
+    probe_status: 401
+crosswalk:
+- tool: businessnxt-execute_graphql_query
+  category: read
+  rest: []
+  binding: graphql
+  confidence: high
+  note: Backed by the Business NXT GraphQL schema at https://business.visma.net/api/graphql, not by any
+    REST operation in this repo.
+- tool: businessnxt-create_entity
+  category: write
+  rest: []
+  binding: graphql
+  confidence: high
+  note: GraphQL mutation surface on Business NXT; no public REST equivalent.
+- tool: businessnxt-update_entity
+  category: write
+  rest: []
+  binding: graphql
+  confidence: high
+  note: GraphQL mutation surface on Business NXT; no public REST equivalent.
+- tool: Customers.search / create / update
+  category: sales
+  rest:
+  - (untitled) GET /customers
+  - POST /customers
+  - PUT /customers/{customerId}
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: Orders.create / search / update / convert-to-invoice
+  category: sales
+  rest:
+  - GET /orders
+  - POST /orders
+  - PUT /orders/{id}
+  - POST /orders/{id}/convert
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: CustomerInvoices.create / send / search / register-payment / void
+  category: sales
+  rest:
+  - GET /customerinvoices
+  - POST /customerinvoices
+  - GET /customerinvoicedrafts
+  - POST /customerledgeritems
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: Articles.create / search / update
+  category: sales
+  rest:
+  - GET /articles
+  - POST /articles
+  - PUT /articles/{articleId}
+  - GET /articlelabels
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: Suppliers.find / create / update
+  category: purchasing
+  rest:
+  - GET /suppliers
+  - POST /suppliers
+  - PUT /suppliers/{id}
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: SupplierInvoices.create / search
+  category: purchasing
+  rest:
+  - GET /supplierinvoices
+  - POST /supplierinvoices
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: Vouchers.create / search
+  category: accounting
+  rest:
+  - GET /vouchers
+  - POST /vouchers
+  - GET /fiscalyears
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: Accounts.browse / create / update / balances
+  category: accounting
+  rest:
+  - GET /accounts
+  - POST /accounts
+  - GET /accountbalances/{date}
+  - GET /accountTypes
+  binding: name-and-semantics
+  confidence: high
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: Attachments.list / link
+  category: other
+  rest:
+  - GET /attachments
+  - POST /attachmentlinks
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: Projects.create / search / update
+  category: other
+  rest:
+  - GET /projects
+  - POST /projects
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: CostCenters.list
+  category: other
+  rest:
+  - GET /costcenters
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+- tool: CompanySettings.view
+  category: other
+  rest:
+  - GET /companysettings
+  binding: name-and-semantics
+  confidence: medium
+  server: https://mcp.spiris.se/mcp
+  note: Bound to eAccounting API v2 method+path; the spec declares no operationId.
+mcp_only:
+- tool: businessnxt-init
+  reason: MCP session bootstrap; no REST equivalent.
+- tool: businessnxt-init_company
+  reason: MCP session bootstrap; no REST equivalent.
+- tool: businessnxt-get_table_definitions
+  reason: Business NXT schema introspection; not exposed over REST.
+- tool: businessnxt-get_table_documentation
+  reason: Serves doc.visma.net prose; documentation surface, not an API operation.
+- tool: businessnxt-search_documentation
+  reason: Documentation search; no API operation.
+- tool: businessnxt-get_field_values
+  reason: Enum catalogue derived from the tenant schema.
+- tool: businessnxt-list_skills
+  reason: Workflow skill guides shipped with the MCP server.
+- tool: businessnxt-get_skill
+  reason: Workflow skill guides shipped with the MCP server.
+- tool: businessnxt-get_design_guidelines
+  reason: Client-side rendering tokens.
+- tool: businessnxt-dashboard
+  reason: Client-side chart rendering.
+- tool: businessnxt-calculator
+  reason: Local computation helper.
+- tool: businessnxt-get_current_datetime
+  reason: Local computation helper.
+- tool: businessnxt-submit_feedback
+  reason: Feedback channel to the Visma team.
+- tool: businessnxt-attach_document / view_document / read_document
+  reason: Document handling bound to Business NXT GraphQL, not to a public REST operation.
+rest_only:
+  note: The entire 511-operation Visma.net ERP REST surface has no MCP tool at all — no MCP server is
+    published for Visma.net ERP. Within eAccounting, the tool set covers roughly a dozen of 69 tags; untooled
+    areas include quotes, deliveries, VAT reports, bank reconciliation, webhooks, ROT/RUT, terms of payment
+    and document approval.
+  examples:
+  - 'Visma.net ERP: all 511 operations'
+  - 'eAccounting: QuoteDrafts'
+  - 'eAccounting: Quotes'
+  - 'eAccounting: DeliveryMethods / DeliveryTerms'
+  - 'eAccounting: BankTransactions'
+  - 'eAccounting: VatReports'
+  - 'eAccounting: Webhooks'
+  - 'eAccounting: TermsOfPayment'
+coverage:
+  mcp_tools_documented: 33
+  bound_to_rest: 12
+  mcp_only: 14
+  rest_operations_total: 890
+  rest_operations_with_a_tool: unknown — tool inputSchemas are auth-gated

@@ -1,0 +1,58 @@
+generated: '2026-09-13'
+method: searched
+source:
+- https://docs.vismasoftware.no/vismanetapi/api-reference/rate-limits/
+- https://docs.vismasoftware.no/vismanetapi/end-of-life-notices/change-base-url/
+- https://developer.vismaonline.com/docs/rate-limits-copy
+limit_count: 4
+note: 'Visma.net ERP stopped publishing a static number: the docs say the allowance is "X requests per
+  hour for each company and client combination" and direct integrators to read the live headers instead.
+  The two migration policies DO carry a published number. eAccounting publishes a flat per-client, per-endpoint
+  limit.'
+limits:
+- api: Visma.net ERP API
+  policy: 4-fixed-window (Standard)
+  scope: per company + client combination
+  window: 1 hour
+  limit: null
+  note: The docs deliberately withhold the number ("X requests per hour") and point to the X-RateLimit-*
+    headers.
+- api: Visma.net ERP API
+  policy: 6-fixed-window Old Url Domain (Migration)
+  scope: per application
+  window: 1 hour
+  limit: 500
+  effective: '2026-02-01'
+  note: Applies only to the retired base URL integration.visma.net. Visma states the limit will be gradually
+    reduced until the old URL is shut down.
+- api: Visma.net ERP API
+  policy: 8-fixed-window SalesOrder V1/V2 Endpoints (Migration)
+  scope: per application
+  window: 1 hour
+  limit: null
+  note: Migration throttle on the deprecated SalesOrder V1/V2 endpoints.
+- api: Bookkeeping & Invoicing / eAccounting API and Cloud Payroll API
+  scope: per client and per endpoint/URL
+  window: 1 minute
+  limit: 600
+  note: Exhaustion returns 429 with ErrorCode 4010 and a DeveloperErrorMessage stating the retry delay
+    in seconds.
+headers:
+  visma_net_erp:
+  - name: X-RateLimit-Limit
+    meaning: Total calls allowed for the company+client inside the window.
+  - name: X-RateLimit-Remaining
+    meaning: Requests left before the limit is reached.
+  - name: X-RateLimit-Reset
+    meaning: Seconds until the window resets.
+  - name: X-RateLimit-Policy
+    meaning: Name of the policy being applied, e.g. 4-fixed-window.
+  - name: Retry-After
+    meaning: Sent with 429; seconds to wait before a retry will succeed.
+  eaccounting:
+  - name: null
+    meaning: No rate-limit response headers are documented; the 429 body carries the retry delay in prose.
+exhaustion_status: 429
+guidance:
+- Read X-RateLimit-Remaining proactively rather than waiting for a 429.
+- On 429, honour Retry-After (Visma.net ERP) or parse the seconds from DeveloperErrorMessage (eAccounting).

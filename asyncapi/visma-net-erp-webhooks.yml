@@ -1,0 +1,228 @@
+generated: '2026-09-13'
+method: searched
+source:
+- https://docs.vismasoftware.no/vismanetapi/webhooks/event-and-entities/
+- https://docs.vismasoftware.no/vismanetapi/webhooks/visma-developer-portal/
+spec: null
+asyncapi_published: false
+note: Visma.net ERP documents a real, complete webhook catalogue but publishes no AsyncAPI document for
+  it. Subscriptions are managed in the Visma Developer Portal per application, not through an API call.
+  The eAccounting API additionally carries WebHooks and WebHooksBase tags in its OpenAPI, so that product
+  line manages subscriptions over REST; Visma publishes no event catalogue page for it.
+management:
+  visma_net_erp:
+    where: Visma Developer Portal (https://oauth.developers.visma.com/service-registry/)
+    docs: https://docs.vismasoftware.no/vismanetapi/webhooks/visma-developer-portal/
+  eaccounting:
+    where: REST, via the WebHooks endpoints in the eAccounting OpenAPI
+    spec: openapi/visma-eaccounting-api-openapi.json
+publisher_count: 2
+entity_count: 31
+event_count: 58
+publishers:
+- publisher: Visma Net Financial
+  entity_count: 17
+  event_count: 44
+  entities:
+  - entity: Account
+    events:
+    - name: Changed
+      description: Fires when account is created or updated
+    - name: Created
+      description: Fires when account is created
+    - name: Deleted
+      description: Fires when account is deleted
+    - name: Identity Changed
+      description: Fires when account number (accountCd) is updated
+    - name: Updated
+      description: Fires when account is updated
+  - entity: AP Invoice
+    events:
+    - name: Status Changed
+      description: Fires when the document status changed
+  - entity: AR Invoice
+    events:
+    - name: Action Triggered
+      description: Fires when the action button in the document is used
+    - name: Changed
+      description: Fires when AR Invoice is created or updated
+    - name: Status Changed
+      description: Fires when the document status changed
+  - entity: Customer
+    events:
+    - name: Action Triggered
+      description: Fires when the action button in the document is used
+    - name: Changed
+      description: Fires when Customer is created or updated
+    - name: Created
+      description: Fires when Customer is created
+    - name: Updated
+      description: Fires when Customer is updated
+  - entity: Dimension
+    events:
+    - name: Changed
+      description: Fires when Dimension is created or updated
+  - entity: Employee
+    events:
+    - name: Changed
+      description: Fires when Employee is created or updated
+  - entity: EP Employee
+    events:
+    - name: Created
+      description: Fires when EP Employee is created
+    - name: Updated
+      description: Fires when EP Employee is updated
+  - entity: First Time Startup
+    events:
+    - name: Completed
+      description: Fires when startup is completed
+  - entity: Inventory Item
+    events:
+    - name: Action Triggered
+      description: Fires when the action button in the document is used
+    - name: Changed
+      description: Fires when Inventory item is created or updated
+    - name: Created
+      description: Fires when Inventory item is created
+    - name: Updated
+      description: Fires when Inventory Item is updated
+  - entity: PM Project
+    events:
+    - name: Action Triggered
+      description: Fires when the action button in the document is used
+    - name: Created
+      description: Fires when Project Management Project is created
+    - name: PMTask Updated
+      description: Fires when Project Management Task is updated
+    - name: Updated
+      description: Fires when Project Management Project is updated
+  - entity: Project
+    events:
+    - name: Changed
+      description: Fires when Project is created or updated
+  - entity: Purchase Order
+    events:
+    - name: Action Triggered
+      description: Fires when the action button in the document is used
+    - name: Changed
+      description: Fires when Purchase Order is created or updated
+    - name: Status Changed
+      description: Fires when the document status changed
+  - entity: Sales Order
+    events:
+    - name: Action Triggered
+      description: Fires when the action button in the document is used SalesOrder endpoint id approaching
+        end-of-life. Use dedicated Sales Order endpoints and events from publisher Visma.net ERP SalesOrderService
+    - name: Changed
+      description: Fires when SalesOrder is created or updated. SalesOrder endpoint id approaching end-of-life.
+        Use dedicated Sales Order endpoints and events from publisher Visma.net ERP SalesOrderService
+    - name: Status Changed
+      description: Fires when the document status changed. SalesOrder endpoint id approaching end-of-life.
+        Use dedicated Sales Order endpoints and events from publisher Visma.net ERP SalesOrderService
+  - entity: Segment
+    events:
+    - name: Changed
+      description: Fires when segment key is updated
+    - name: Value Changed
+      description: Fires when segment value is updated
+  - entity: Shipment
+    events:
+    - name: Action Triggered
+      description: Fires when the action button in the document is used
+    - name: Changed
+      description: Fires when Shipment is created or updated
+    - name: Deleted
+      description: Fires when shipment is deleted
+    - name: Status Changed
+      description: Fires when the document status changed
+  - entity: Supplier
+    events:
+    - name: Action Triggered
+      description: Fires when the action button in the document is used
+    - name: Changed
+      description: Fires when Supplier is created or updated
+    - name: Created
+      description: Fires when Supplier is created
+    - name: Updated
+      description: Fires when Supplier is updated
+  - entity: Background API Operation
+    events:
+    - name: Response Ready
+      description: Triggered by Visma Net application when a background API request finished in the background
+        and has a response. This API request must have the header `erp-api-background` with the value
+        subscription
+- publisher: Visma Net ERP SalesOrderService
+  entity_count: 14
+  event_count: 14
+  entities:
+  - entity: Sales Order is created
+    events:
+    - name: SALESORDER_CREATED
+      description: This fires as soon as a sales order is created.
+  - entity: Sales Order is updated
+    events:
+    - name: SALESORDER_UPDATED
+      description: This fires as sonn as a sales order is updated.
+  - entity: Sales Order is deleted
+    events:
+    - name: SALESORDER_DELETED
+      description: This fires as sonn as a sales order is deleted.
+  - entity: Custom Action from the UI
+    events:
+    - name: SALESORDER_UI_CUSTOMACTION
+      description: This fires when a custom action is clicked in the UI.
+  - entity: Voucher import failed
+    events:
+    - name: IMPORT_VOUCHER_FAILED
+      description: An import operation has failed to start due to failed validation or some other error
+  - entity: Voucher import successfully started
+    events:
+    - name: IMPORT_VOUCHER_SUCCESSFUL
+      description: A voucher import is validated and import has started
+  - entity: Voucher document failed to synchronize
+    events:
+    - name: VOUCHER_DOCUMENT_SYNCHRONIZATION_FAILED
+      description: One document in the voucher failed to be synchronized completely (in particular the
+        operation to release failed). Document corresponds to unique `refNumber`
+  - entity: Voucher document is synchronized successfully
+    events:
+    - name: VOUCHER_DOCUMENT_SYNCHRONIZED
+      description: One document in the voucher has been synchronized successfully. Document corresponds
+        to unique `refNumber`
+  - entity: Voucher is processed into transactions
+    events:
+    - name: VOUCHER_PROCESSED
+      description: Event raised when a voucher has been processed into batches and transactions
+  - entity: Voucher failed to be processed into transactions
+    events:
+    - name: VOUCHER_PROCESSING_FAILED
+      description: Event raised when an attempt to transform a voucher into transactions has failed
+  - entity: Voucher is received
+    events:
+    - name: VOUCHER_RECEIVED
+      description: Event raised when a voucher is received and has passed validation
+  - entity: Synchronizing a voucher failed
+    events:
+    - name: VOUCHER_SYNCHRONIZATION_FAILED
+      description: Event raised when an attempt to synchronize a voucher failed in part or as a whole
+  - entity: All documents in a voucher has been created
+    events:
+    - name: VOUCHER_SYNCHRONIZATION_STARTED
+      description: All documents in a voucher has been created successfully, but is not yet released.
+        Document corresponds to unique `refNumber`
+  - entity: Voucher is synchronized to Visma Net
+    events:
+    - name: VOUCHER_SYNCHRONIZED
+      description: Event raised when a voucher has been synchronized with VismaNet
+event_vocabulary:
+- Created
+- Updated
+- Changed
+- Deleted
+- Identity Changed
+- Status Changed
+- Action Triggered
+- Value Changed
+- Completed
+- Response Ready
+- PMTask Updated

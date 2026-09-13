@@ -1,0 +1,260 @@
+generated: '2026-09-13'
+method: searched
+source:
+- https://developer.vismaonline.com/docs/error-codes-copy-1
+- https://developer.vismaonline.com/docs/error-handling-copy
+- openapi/visma-net-erp-service-api-openapi.json
+- openapi/visma-eaccounting-api-openapi.json
+format: vendor-specific
+rfc9457: false
+note: Neither API uses application/problem+json. eAccounting publishes a complete, stable numeric error
+  catalogue (56 codes) in a three-field envelope; Visma.net ERP publishes no error-code reference and
+  its spec declares only HTTP statuses, in both JSON and XML media types.
+envelopes:
+- api: Bookkeeping & Invoicing / eAccounting + Cloud Payroll
+  content_type: application/json;charset=UTF-8
+  fields:
+  - name: ErrorCode
+    meaning: Numeric code from the published catalogue below.
+  - name: DeveloperErrorMessage
+    meaning: Detailed explanation of why the error occurred.
+  - name: ErrorId
+    meaning: GUID correlation id to quote to API support (api@spiris.se).
+  schema_ref: '#/components/schemas/CommonExtendedBadRequest'
+- api: Visma.net ERP API
+  content_types:
+  - application/json
+  - text/json
+  - application/xml
+  - text/xml
+  fields: null
+  note: The spec declares status codes and media types but no documented error body schema reference set.
+status_profile:
+  visma_net_erp:
+    '412': 97
+    '404': 19
+    '400': 16
+    '401': 16
+    '500': 16
+    '403': 11
+    '409': 2
+    '410': 1
+    note: 412 dominates because If-Match optimistic concurrency is declared on 97 write operations.
+  eaccounting:
+    '400': 225
+    '404': 33
+    '403': 19
+    '401': 15
+  payroll_v2:
+    '400': 88
+catalog_count: 56
+catalog:
+- code: 2000
+  name: DataModelValidationError
+  meaning: This error is thrown when any data model validations are broken in the request. See the rules
+    for each POST method on each property.
+- code: 3000
+  name: ResourceNotFound
+  meaning: This error is thrown when you refer to a specific object that does not exist, eg. customers,
+    suppliers or articles in a request.
+- code: 3001
+  name: FiscalYearDoesNotExist
+  meaning: This error is thrown when you refer to a specific fiscalyear that does not exist.
+- code: 3002
+  name: AccountNotFound
+  meaning: This error is thrown when you refer to a specific account that does not exist.
+- code: 3003
+  name: InsufficientApprovalPermission
+  meaning: This error is thrown when you have insufficient permissions to bookeep an invoice when using
+    supplier invoice approval flow.
+- code: 4000
+  name: Conflict
+  meaning: This error is thrown when you try to create a object that cannot exist as a duplicate.
+- code: 4001
+  name: CanNotBeDeleted
+  meaning: This error is thrown when you try to delete a object that cannot be deleted. For example, when
+    a object has dependencies, it cannot be deleted.
+- code: 4002
+  name: CanNotBeCreatedOrUpdated
+  meaning: This error is thrown when you try to create or update a object that contains one or more invalid
+    properties that prevents it from being created or updated.
+- code: 4002
+  name: NoAccessToModule
+  meaning: This error is thrown when the user lack one or more modules. Some endpoints require additional
+    modules in Bookkeeping & Invoicing/eAccounting purchased from the InApp store.
+- code: 4003
+  name: StartupGuideNotCompleted
+  meaning: This error is thrown when you try to make requests towards a company that hasn't completed
+    the startup guide in Bookkeeping & Invoicing/eAccounting.
+- code: 4004
+  name: CompanyNotActive
+  meaning: This error is thrown when you try to make requests towards an inactive company.
+- code: 4005
+  name: NotAuthorized
+  meaning: This error is thrown when you try to make unauthorized requests towards the API.
+- code: 4006
+  name: NoAccessToScopes
+  meaning: This error is thrown when you try to make requests towards an endpoint which require scopes
+    that you are not authorized with.
+- code: 4007
+  name: PermissionDenied
+  meaning: This error is thrown when you try to make requests with an authorized user that does not have
+    sufficient permissions for that specific endpoint.
+- code: 4008
+  name: InvalidControlDigit
+  meaning: This error is thrown when you try to make a request towards an endpoint with ControlDigit validation
+    and the value is invalid.
+- code: 4009
+  name: NoAccessDueToProductVariant
+  meaning: This error is thrown when you try to make requests towards and endpoint that is not included
+    in the authorized company's product variant.
+- code: 4010
+  name: TooManyRequests
+  meaning: This error is thrown when you try to more requests than allowed. Read more about this here.
+- code: 4011
+  name: NoAccessForAuthenticatedUser
+  meaning: This error is thrown when the authenticated user does not have access to Bookkeeping & Invoicing/eAccounting
+    for this company. Give the user access to Bookkeeping & Invoicing/eAccounting or reauthenticate with
+    a user that have access to Bookkeeping & Invoicing/eAccounting to solve the issue.
+- code: 4012
+  name: LicenceAgreementNotAccepted
+  meaning: This error is thrown when the authenticated user does not have accepted the licence agreement
+    for Bookkeeping & Invoicing/eAccounting for this company. The licence agreement can be accepted by
+    logging in to Bookkeeping & Invoicing/eAccounting with the same user and company.
+- code: 4013
+  name: CannotBookkeepInvoice
+  meaning: This error is thrown when the process of bookkeeping the invoice is interrupted by validations
+    like locked fiscal year or accounting period.
+- code: 4014
+  name: AutoInvoiceMissingYourReference
+  meaning: This error is thrown when Norwegian companies lack YourReference when sending customer invoices
+    with AutoInvoice.
+- code: 4015
+  name: AutoInvoiceMissingOurReference
+  meaning: This error is thrown when sending customer invoices with AutoInvoice and the customer requires
+    a reference code, which is missing.
+- code: 4016
+  name: SupplierInvoiceInvalidDueDate
+  meaning: This error is thrown when a invalid invoice date is applied to a supplier invoice.
+- code: 4017
+  name: AutoInvoiceMissingElectronicAddress
+  meaning: This error is thrown when sending customer invoices with AutoInvoice and electronic address
+    is missing on the customer.
+- code: 4018
+  name: SupplierInvoiceValidationSkipSendToBank
+  meaning: This error is thrown when you try to create a supplier invoices with a future date without
+    having the "pay manually" setting active.
+- code: 4019
+  name: NoPermissionForReadonlyUser
+  meaning: This error is thrown when you are authenticated with a readonly user and trying to create/edit/delete
+    an entity.
+- code: 4020
+  name: FiscalYearIsOverlappingOtherYear
+  meaning: This error is thrown when you are trying to create a fiscal year which overlaps another one.
+- code: 4021
+  name: FiscalYearMaximumPeriodExceeded
+  meaning: This error is thrown when you are trying to create a fiscal year with a number of months which
+    exceeds the maximum allowed for the specific country.
+- code: 4022
+  name: FiscalYearEndDateMustBeLastDayOfMonth
+  meaning: This error is thrown when you are trying to create a fiscal year which doesn't end in the last
+    day of a month.
+- code: 4023
+  name: FutureDateCannotBeSet
+  meaning: This error is thrown when you try to pay an invoice in a future date.
+- code: 4024
+  name: SalesAccountNumberMissing
+  meaning: This error is thrown when the sales category selected on an article is missing a ledger account
+    for the specified sales transaction.
+- code: 4025
+  name: InvalidVatNumber
+  meaning: This error is thrown when you have provided an invalid VAT number.
+- code: 4026
+  name: VoucherDateIsInLockedPeriod
+  meaning: This error is thrown when you try to post a voucher in a locked bookkeping period.
+- code: 4027
+  name: ReversedVatZero
+  meaning: This error is thrown when you try to apply reversed VAT to a non-eligible article row.
+- code: 4028
+  name: OrderCannotBeVoided
+  meaning: This error is thrown when trying to undo an order that has backorders connected to it.
+- code: 4029
+  name: SsnNumberIsInvalid
+  meaning: This error is thrown when a invalid social security number is provided for ROT/RUT input.
+- code: 4030
+  name: OcrNumberIsInvalid
+  meaning: This error is thrown when you provide a invalid OCR number.
+- code: 4031
+  name: CustomerInvoiceMissingOrderArticles
+  meaning: This error is thrown when a customer invoice is created based on a order and order rows are
+    missing.
+- code: 4032
+  name: SupplierInvoiceDoesntBalance
+  meaning: This error is thrown when a supplier invoice rows doesn't balance.
+- code: 4033
+  name: ForbiddenActionInApprovalFlow
+  meaning: This error is thrown when the attempted action breaks the rules of approval flow.
+- code: 4034
+  name: NotAllowedWithSandboxClient
+  meaning: This error is thrown when a request from a sandbox client targets a production environment.
+- code: 4035
+  name: InvalidForceBookkeepVat
+  meaning: This error is thrown when ForceBookkeepVat is set to true for a customer in the EU.
+- code: 4037
+  name: ReconciliationSetInLockedAccountingPeriod
+  meaning: This error is thrown when a reconciliation set includes a bank transaction dated within a locked
+    accounting period.
+- code: 4038
+  name: VoucherDateIsInLockedYearException
+  meaning: This error is thrown when the voucher date is set in a locked fiscal year.
+- code: 4039
+  name: NoDomesticAmountAllowedOnDomesticInvoices
+  meaning: This error is thrown when DomesticPaymentAmount is set for the payment of a domestic invoice.
+- code: 4100
+  name: ExternalServiceValidation
+  meaning: This error is thrown when a validation from an external service is thrown.
+- code: 5000
+  name: InternalServerError
+  meaning: This error is thrown when you encounter a error that we have not handled on our side. This
+    can occur if there is a bug in Bookkeeping & Invoicing/eAccounting. These errors should be reported
+    to us at <api@spiris.se>
+- code: 5001
+  name: CantReachSystemDependendency
+  meaning: This error is thrown when you make a request towards and endpoint with external service dependencies,
+    and that dependency is not answering in time. This can occur if a service is down.
+- code: 5002
+  name: OperationCanceled
+  meaning: This error is thrown when you encounter a error that we have not handled on our side. These
+    errors should be reported to us at <api@spiris.se>.
+- code: 5003
+  name: StockToNonStockNoZeroBalance
+  meaning: This error is thrown when an article cannot be changed to non stock article because it has
+    non zero stock balance.
+- code: 5004
+  name: StockToServiceNoZeroBalance
+  meaning: This error is thrown when a stock article cannot be changed to service type article because
+    it has non zero stock balance.
+- code: 5005
+  name: ProjectEnded
+  meaning: This error is thrown when you try to refer to a project that has already ended and is therefor
+    no longer available for usage.
+- code: 5006
+  name: InactiveCostCenter
+  meaning: This error is thrown when you try to refer to a cost center that is inactive and is therefor
+    no longer available for usage.
+- code: 5007
+  name: ItemToAttachNotFound
+  meaning: This error is thrown when you try to attach documents that does not exist.
+- code: 6000
+  name: QueryParameterError
+  meaning: This error is thrown when you make a request with $filter parameters and the query is invalid.
+- code: 6001
+  name: InvalidInput
+  meaning: This error is thrown when you make a request with DateTime properties or filtering and the
+    provided format is wrong.
+families:
+  2xxx: Request/data-model validation
+  3xxx: Resource not found
+  4xxx: Authorization, permissions, quota and domain rules
+  5xxx: Server-side and dependency failures
+  6xxx: Query-parameter and input parsing

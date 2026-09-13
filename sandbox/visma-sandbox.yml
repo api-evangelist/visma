@@ -1,0 +1,37 @@
+generated: '2026-09-13'
+method: searched
+source:
+- https://developer.vismaonline.com/docs/environments
+- https://developer.vismaonline.com/docs/sandbox-faq
+- https://docs.vismasoftware.no/vismanetapi/authentication/application-registration/
+note: Visma's sandbox is a CLIENT TYPE, not a separate host. Test and production share identical base
+  URLs; what separates them is a sandbox-typed IdentityServer client bound to a sandbox-typed Visma Online
+  account. That design means there are no test-mode key prefixes to record — nothing in the URL or the
+  token shape tells a reader which environment a call is hitting.
+environments:
+- name: Sandbox (eAccounting / Payroll)
+  same_urls_as_production: true
+  urls:
+    client: https://eaccounting.vismaonline.com
+    eaccounting_api: https://eaccountingapi.vismaonline.com
+    payroll_api: https://vlsapi.vismaonline.com
+    authorize: https://identity.vismaonline.com/connect/authorize
+    token: https://identity.vismaonline.com/connect/token
+  separation: IdentityServer client of type Sandbox plus a Visma Online account of type Sandbox. A sandbox
+    client cannot reach live production customers.
+  guardrail: Error 4034 NotAllowedWithSandboxClient is returned when a sandbox client targets production.
+  limitations: Sandbox companies do not contain the in-product integrations (Payslip, AutoPay, AutoReport,
+    AutoInvoice and similar). Some are mocked, so calls that touch them can return unexpected errors.
+- name: Developer Portal test applications (Visma.net ERP / Business NXT)
+  registration: https://oauth.developers.visma.com/service-registry/
+  separation: Applications are registered as Service (client credentials) or Interactive (authorization
+    code) and go through a Visma approval step before production credentials are issued.
+  note: Local development redirect URIs are covered in the application-registration docs.
+test_values:
+  test_cards: null
+  test_bank_accounts: null
+  test_clock: null
+  fixtures: null
+  note: Visma publishes no test card numbers, test bank accounts, time-simulation clock or fixture/trigger
+    tooling. Sandbox companies are provisioned with their own data.
+key_prefixes: null
