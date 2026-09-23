@@ -1,0 +1,294 @@
+openapi: 3.2.0
+info:
+  title: Spiris Lön API V2 Work Schedule Time Adjustments API
+  description: Visit our complete Spiris Lön/Cloud Payroll API docs for how to get started, more information about authentication, error handling, query customization and more.
+  contact:
+    email: api@spiris.se
+  version: v2
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: WorkScheduleTimeAdjustments
+  description: Operations for managing work schedule time adjustments for a company. Work schedule time adjustments are used to define exceptions for specific dates which are repeating every year.
+paths:
+  /v2/workscheduletimeadjustments:
+    get:
+      tags:
+      - WorkScheduleTimeAdjustments
+      summary: Get work schedule time adjustments
+      description: Get all work schedule time adjustments or add query parameters to filter the results. The response will include a collection of matched work schedule time adjustments with their information such as unique identifier, name, work days, etc.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfWorkScheduleTimeAdjustmentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2Workscheduletimeadjustments
+      x-operation-id-source: derived
+    post:
+      tags:
+      - WorkScheduleTimeAdjustments
+      summary: Create a work schedule time adjustment
+      description: Create a new work schedule time adjustment for a company. The work schedule time adjustment will be registered based on the supplied information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/WorkScheduleTimeAdjustmentRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkScheduleTimeAdjustmentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postV2Workscheduletimeadjustments
+      x-operation-id-source: derived
+  /v2/workscheduletimeadjustments/{workScheduleTimeAdjustmentId}:
+    get:
+      tags:
+      - WorkScheduleTimeAdjustments
+      summary: Get work schedule time adjustment by unique identifier
+      description: Get work schedule time adjustment by specific identifier. The response will include a work schedule time adjustment (if it's found) information such as unique identifier, name, work days, etc.
+      parameters:
+      - name: workScheduleTimeAdjustmentId
+        in: path
+        description: Work schedule time adjustment unique identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkScheduleTimeAdjustmentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2WorkscheduletimeadjustmentsByWorkScheduleTimeAdjustmentId
+      x-operation-id-source: derived
+components:
+  schemas:
+    PaginatedResponseOfWorkScheduleTimeAdjustmentResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkScheduleTimeAdjustmentResponse'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    WorkScheduleTimeAdjustmentResponse:
+      required:
+      - Name
+      - WorkScheduleTimeAdjustmentWorkDays
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Time adjustment unique identifier
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the time adjustment
+        IsActive:
+          type: boolean
+          description: Is time adjustment active
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the time adjustment was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the time adjustment was last modified (UTC)
+          format: date-time
+        WorkScheduleTimeAdjustmentWorkDays:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WorkScheduleTimeAdjustmentWorkDayResponse'
+          description: Time adjustment work days
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    WorkScheduleTimeAdjustmentWorkDayRequest:
+      type: object
+      properties:
+        CodedDay:
+          type:
+          - integer
+          - 'null'
+          description: 'Code corresponding to a specific holiday/event day of the year. Either CodedDay or AnnualDate must be provided.<br/>Possible values: 1 - NewYearsDay, 2 - TwelfthDay, 3 - GoodFriDay, 4 - EasterEve, 5 - EasterDay, 6 - DayAfterEasterDay, 7 - FirstOfMay, 8 - AscensionDay, 9 - WhitsunEve, 10 - WhitsunDay, 11 - DayAfterWhitsunDay, 12 - MidsummerEve, 13 - MidsummerDay, 14 - AllSaintsDay, 15 - ChristmasEve, 16 - ChristmasDay, 17 - DayAfterChristmasDay, 18 - NewYearsEve, 19 - MaundyThursday, 20 - TwelfthDayDayBefore, 21 - FirstOfMayDayBefore, 22 - AscensionDayDayBefore, 23 - MidsummerEveDayBefore, 24 - ChristmasEveDayBefore, 25 - NewYearsEveDayBefore, 26 - AscensionDayDayAfter, 27 - AllSaintsDayDayBefore, 30 - NationalDay, 31 - NationalDayDayBefore, 110 - NewYearsDayDayAfter, 120 - NationalDayDayAfter, 130 - MidsummerDayDayAfter'
+          format: int32
+        AnnualDate:
+          type:
+          - string
+          - 'null'
+          description: 'Date of a recurring day of the year (format: MM-dd). Either CodedDay or AnnualDate must be provided.'
+        MinutesToWork:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes to work on the specified day. Null indicates day is full time.
+          format: int32
+        Note:
+          type:
+          - string
+          - 'null'
+          description: Optional note/comment (max 50 characters)
+      additionalProperties: false
+    WorkScheduleTimeAdjustmentWorkDayResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Time adjustment work day unique identifier
+          format: uuid
+        CodedDay:
+          type:
+          - integer
+          - 'null'
+          description: 'Code corresponding to a specific holiday/event day of the year<br/>Possible values: 1 - NewYearsDay, 2 - TwelfthDay, 3 - GoodFriDay, 4 - EasterEve, 5 - EasterDay, 6 - DayAfterEasterDay, 7 - FirstOfMay, 8 - AscensionDay, 9 - WhitsunEve, 10 - WhitsunDay, 11 - DayAfterWhitsunDay, 12 - MidsummerEve, 13 - MidsummerDay, 14 - AllSaintsDay, 15 - ChristmasEve, 16 - ChristmasDay, 17 - DayAfterChristmasDay, 18 - NewYearsEve, 19 - MaundyThursday, 20 - TwelfthDayDayBefore, 21 - FirstOfMayDayBefore, 22 - AscensionDayDayBefore, 23 - MidsummerEveDayBefore, 24 - ChristmasEveDayBefore, 25 - NewYearsEveDayBefore, 26 - AscensionDayDayAfter, 27 - AllSaintsDayDayBefore, 30 - NationalDay, 31 - NationalDayDayBefore, 110 - NewYearsDayDayAfter, 120 - NationalDayDayAfter, 130 - MidsummerDayDayAfter'
+          format: int32
+        AnnualDate:
+          type:
+          - string
+          - 'null'
+          description: 'Date of a recurring day of the year (format: MM-dd)'
+        MinutesToWork:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes to work on the specified day. Null indicates day is full time.
+          format: int32
+        Note:
+          type:
+          - string
+          - 'null'
+          description: Optional note/comment
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the time adjustment work day was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the time adjustment work day was last modified (UTC)
+          format: date-time
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    WorkScheduleTimeAdjustmentRequest:
+      required:
+      - Name
+      - WorkScheduleTimeAdjustmentWorkDays
+      type: object
+      properties:
+        Name:
+          minLength: 1
+          type: string
+          description: Name of the time adjustment (max 255 characters)
+        IsActive:
+          type: boolean
+          description: Is time adjustment active
+        WorkScheduleTimeAdjustmentWorkDays:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WorkScheduleTimeAdjustmentWorkDayRequest'
+          description: Time adjustment work days
+      additionalProperties: false

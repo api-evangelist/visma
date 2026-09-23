@@ -1,0 +1,393 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Fixed Asset Transaction API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: FixedAssetTransaction
+paths:
+  /v1/fixedAssetTransaction/{RefNo}:
+    get:
+      tags:
+      - FixedAssetTransaction
+      summary: Get transactions for a specific Asset - Screen ID:FA301000
+      operationId: FixedAssetTransaction_GetByRefNo
+      parameters:
+      - name: RefNo
+        in: path
+        description: Identifies the fixed asset by reference number
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedAssetTransactionDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedAssetTransactionDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/fixedAssetTransaction:
+    get:
+      tags:
+      - FixedAssetTransaction
+      summary: Get a range of transactions - Screen ID:FA301000
+      operationId: FixedAssetTransaction_GetAll
+      parameters:
+      - name: refNo
+        in: query
+        description: View all transactions connected to this Reference number.
+        schema:
+          type: string
+      - name: assetID
+        in: query
+        description: View all transactions connected to this Asset ID.
+        schema:
+          type: string
+      - name: bookID
+        in: query
+        description: View all transactions in this Book ID.
+        schema:
+          type: string
+      - name: fromPeriod
+        in: query
+        description: 'View all transactions from and including this Period. Format: YYYYMM.'
+        schema:
+          type: string
+      - name: toPeriod
+        in: query
+        description: 'View all transactions to and including this Period. Format: YYYYMM.'
+        schema:
+          type: string
+      - name: accountID
+        in: query
+        description: View all transactions for this Account ID.
+        schema:
+          type: string
+      - name: subAccountID
+        in: query
+        description: View all transactions for this Sub Account ID.
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: 'View all transactions with this Status. Available statuses: Balanced, OnHold, Posted and UnPosted.'
+        schema:
+          enum:
+          - Balanced
+          - OnHold
+          - Posted
+          - Unposted
+          type: string
+      - name: transactionType
+        in: query
+        description: 'View all transactions with this Transaction Type. Available types: PurchasingPlus, PurchasingMinus, DepreciationPlus, DepreciationMinus, CalculatedPlus, CalculatedMinu,SalePlus, SaleMinus,TransferPurchasing, TransferDepreciation, ReconciliationPlus, ReconciliationMinus, PurchasingDisposal, PurchasingReversal, AdjustingDeprPlus and AdjustingDeprMinus.'
+        schema:
+          enum:
+          - PurchasingPlus
+          - PurchasingMinus
+          - DepreciationPlus
+          - DepreciationMinus
+          - CalculatedPlus
+          - CalculatedMinus
+          - SalePlus
+          - SaleMinus
+          - TransferPurchasing
+          - TransferDepreciation
+          - ReconciliationPlus
+          - ReconciliationMinus
+          - PurchasingDisposal
+          - PurchasingReversal
+          - AdjustingDeprPlus
+          - AdjustingDeprMinus
+          type: string
+      - name: transactionFromDate
+        in: query
+        description: 'View all transactions from and including this Transaction Date. Date format: YYYY-MM-DD.'
+        schema:
+          type: string
+      - name: transactionToDate
+        in: query
+        description: 'View all transactions to and including this Transaction Date inclusive. Date format: YYYY-MM-DD .'
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedAssetTransactionDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedAssetTransactionDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    FixedAssetTransactionDto:
+      type: object
+      properties:
+        refNo:
+          type: string
+          description: The referance number for this fixed asset transaction
+        lineNo:
+          type: integer
+          description: The line number of this fixed asset transaction
+          format: int32
+        branchID:
+          type: string
+          description: The branch id for this fixed asset transaction
+        origin:
+          enum:
+          - Adjustment
+          - Purchasing
+          - Depreciation
+          - Disposal
+          - Transfer
+          - Reconciliation
+          - Split
+          - Reversal
+          - DisposalReversal
+          type: string
+          description: The origin of this fixed asset transaction. Origin can be
+        assetID:
+          type: string
+          description: The asset id this fixed asset transaction belongs to
+        transactionDescription:
+          type: string
+          description: The description of this fixed asset transaction
+        bookID:
+          type: string
+          description: The book id for this fixed asset transaction
+        transactionType:
+          enum:
+          - PurchasingPlus
+          - PurchasingMinus
+          - DepreciationPlus
+          - DepreciationMinus
+          - CalculatedPlus
+          - CalculatedMinus
+          - SalePlus
+          - SaleMinus
+          - TransferPurchasing
+          - TransferDepreciation
+          - ReconciliationPlus
+          - ReconciliationMinus
+          - PurchasingDisposal
+          - PurchasingReversal
+          - AdjustingDeprPlus
+          - AdjustingDeprMinus
+          type: string
+          description: Type can be
+        accounts:
+          $ref: '#/components/schemas/accountsInFixedAssetTransactionDto'
+        transactionAmount:
+          type: number
+          description: The amount of this fixed asset transaction
+          format: double
+        batchNo:
+          type: string
+          description: The batch number of the general ledger transaction for this fixed asset transaction
+        transactionPeriodID:
+          type: string
+          description: The transaction period id for this fixed asset transaction
+        transactionDate:
+          type: string
+          description: The transaction date for this fixed asset transaction
+          format: date-time
+        register:
+          $ref: '#/components/schemas/registerInFixedAssetTransactionDto'
+        lastModifiedDateTime:
+          type: string
+          description: A system generated date/time that indicates the last change for this fixed asset transaction
+          format: date-time
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    registerInFixedAssetTransactionDto:
+      properties:
+        documentDate:
+          type: string
+          description: The document date for this fixed asset transaction
+          format: date-time
+        status:
+          enum:
+          - Balanced
+          - OnHold
+          - Posted
+          - Unposted
+          type: string
+          description: Status can be
+        hold:
+          type: boolean
+          description: Indecates whether this fixed asset transaction is on hold or not
+      description: The registration details
+    accountsInFixedAssetTransactionDto:
+      properties:
+        debitAccountID:
+          type: string
+          description: The debit account
+        debitSubAccountID:
+          type: string
+          description: The debit sub account
+        creditAccountID:
+          type: string
+          description: The credit account
+        creditSubAccountID:
+          type: string
+          description: The credit sub account
+      description: The accounts used in this fixed asset transaction
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

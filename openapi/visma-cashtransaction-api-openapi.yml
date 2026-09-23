@@ -1,0 +1,1244 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Cash Transaction API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: CashTransaction
+paths:
+  /v1/cashTransaction/{referenceNbr}:
+    get:
+      tags:
+      - CashTransaction
+      summary: Get a specific Transaction - ScreenID=CA304000
+      description: 'Data for the Cash Transaction
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: CashTransaction_GetByreferenceNbr
+      parameters:
+      - name: referenceNbr
+        in: path
+        description: Returns data for the selected Cash transaction
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CashTransactionDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CashTransactionDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - CashTransaction
+      summary: Update a specific CashTransaction - ScreenID=CA304000
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed.
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed.
+
+
+        The response headers include an ETag after a successful PUT operation.'
+      operationId: CashTransaction_PutByreferenceNbr
+      parameters:
+      - name: referenceNbr
+        in: path
+        description: Identifies the Cash Transaction to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Cash Transaction to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+        required: true
+        x-bodyName: cashTransaction
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Cash transaction document version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/cashTransaction:
+    get:
+      tags:
+      - CashTransaction
+      summary: Get all Transaction - ScreenID=CA304000
+      description: Data for the Cash Transaction
+      operationId: CashTransaction_GetAll
+      parameters:
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions.
+        schema:
+          type: integer
+          format: int32
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CashTransactionDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CashTransactionDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - CashTransaction
+      summary: Create a Cash Transaction- ScreenID=CA304000
+      description: 'Response Message has StatusCode Created if POST operation succeed
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        The response headers include an ETag after a successful POST operation.'
+      operationId: CashTransaction_CreateCashTransaction
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Cash Transaction to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CashTransactionUpdateDto'
+        required: true
+        x-bodyName: cashTransaction
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/cashTransaction/{referenceNbr}/action/release:
+    post:
+      tags:
+      - CashTransaction
+      summary: Release cash transaction - ScreenID=CA304000
+      description: 'The action result dto contains information about the result of running the action
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        In this endpoint, If-Match can also be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: CashTransaction_ReleaseByreferenceNbr
+      parameters:
+      - name: referenceNbr
+        in: path
+        description: Reference number of the cash transaction to be released.
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseCashTransactionActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseCashTransactionActionResultDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ReleaseCashTransactionActionResultDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ReleaseCashTransactionActionResultDto'
+        '412':
+          description: Cash transaction document version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+            application/xml: {}
+            text/xml: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/cashTransaction/{referenceNbr}/action/reverse:
+    post:
+      tags:
+      - CashTransaction
+      summary: Reverse a Cash Transaction- ScreenID=CA304000
+      description: 'The action result dto contains information about the result of running the action
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        In this endpoint, If-Match can also be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: CashTransaction_ReverseByreferenceNbr
+      parameters:
+      - name: referenceNbr
+        in: path
+        description: Reference number of the cash transaction to be reversed.
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: The action dto use to condition the action
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReverseCashTransactionActionDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReverseCashTransactionActionDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ReverseCashTransactionActionDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ReverseCashTransactionActionDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReverseCashTransactionActionDto'
+        required: true
+        x-bodyName: reverseActionDto
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReverseCashTransactionActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReverseCashTransactionActionResultDto'
+        '412':
+          description: Cash transaction document version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/cashTransaction/{referenceNbr}/attachment:
+    post:
+      tags:
+      - CashTransaction
+      summary: Creates an attachment and associates it with a cash transaction document.
+      description: 'The action result dto contains information about the result of running the action.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        In this endpoint, If-Match can be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: CashTransaction_CreateAttachmentByreferenceNbr
+      parameters:
+      - name: referenceNbr
+        in: path
+        description: Identifies the cash transaction document
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+        '412':
+          description: Cash transaction document version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    branchInFinancialsDetailDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: "Link to general ledger section &gt; Branch &gt; \tThe branch that initiated the transaction."
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    CashTransactionUpdateDto:
+      type: object
+      properties:
+        referenceNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        tranDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        finanacialPeriod:
+          $ref: '#/components/schemas/finanacialPeriodInCashTransactionUpdateDto'
+        financialPeriod:
+          $ref: '#/components/schemas/financialPeriodInCashTransactionUpdateDto'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        cashAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        entryType:
+          $ref: '#/components/schemas/DtoValueOfString'
+        documentRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        controlTotal:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatZone:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taxCalculationMode:
+          $ref: '#/components/schemas/DtoValueOfNullableOfTaxCalcMode'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        cashTransactionDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashTransactionDetailUpdateDto'
+        cashTransactionTaxDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashTransactionTaxDetailUpdateDto'
+    ownerInCashTransactionDto:
+      properties:
+        internalId:
+          type: string
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: The top part &gt; Owner &gt; The user who created the cash transaction.
+    TaxCategoryNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    TransactionDetailDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: The line number in the table.
+          format: int32
+        branch:
+          $ref: '#/components/schemas/branchInTransactionDetailDto'
+        item:
+          $ref: '#/components/schemas/itemInTransactionDetailDto'
+        description:
+          type: string
+          description: Description &gt; The description provided for the item.
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of the item.
+          format: double
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure of the item.
+        price:
+          type: number
+          description: Price &gt; The unit price for the item.
+          format: double
+        amount:
+          type: number
+          description: Amount &gt; The total amount for all units or items.
+          format: double
+        offsetCashAccount:
+          $ref: '#/components/schemas/offsetCashAccountInTransactionDetailDto'
+        offsetAccount:
+          $ref: '#/components/schemas/offsetAccountInTransactionDetailDto'
+        offsetSubAccount:
+          $ref: '#/components/schemas/offsetSubAccountInTransactionDetailDto'
+        taxCategory:
+          $ref: '#/components/schemas/taxCategoryInTransactionDetailDto'
+        nonBillable:
+          type: boolean
+          description: Non-invoiceable &gt; A check box that indicates (if selected) that this transaction is non-invoiceable in the project.
+        project:
+          $ref: '#/components/schemas/projectInTransactionDetailDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInTransactionDetailDto'
+    offsetCashAccountInTransactionDetailDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Offset cash account &gt; The cash account to be used for the transaction.
+    CashTransactionTaxDetailUpdateDto:
+      type: object
+      properties:
+        vatId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taxableAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        expenseAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+    financialsDetailInCashTransactionDto:
+      properties:
+        batchNumber:
+          type: string
+          description: Link to general ledger section &gt; Batch number &gt; The number of the batch generated to implement the cash transaction.
+        branch:
+          $ref: '#/components/schemas/branchInFinancialsDetailDto'
+        cleared:
+          type: boolean
+          description: Link to general ledger section &gt; Cleared &gt; A check box that indicates (if selected) that the transaction was cleared.
+        clearDate:
+          type: string
+          description: "Link to general ledger section &gt; Clear date &gt; \tThe date when the transaction was cleared."
+          format: date-time
+        taxZone:
+          $ref: '#/components/schemas/taxZoneInFinancialsDetailDto'
+        taxCalcMode:
+          enum:
+          - TaxSetting
+          - Gross
+          - Net
+          type: string
+          description: VAT settings section &gt; VAT calculation &gt; The VAT calculation mode, which defines which amounts (VAT-inclusive or VAT-exclusive) should be entered in the detail lines of a document.
+      description: Financial details tab &gt;
+    ReverseCashTransactionActionDto:
+      type: object
+      properties:
+        returnCashTransaction:
+          type: boolean
+    CashTransactionDto:
+      type: object
+      properties:
+        tranType:
+          enum:
+          - TransferOut
+          - TransferIn
+          - TransferExp
+          - Adjustment
+          type: string
+          description: "The top part &gt; Trans type &gt; \tThe type of cash transaction."
+        referenceNbr:
+          type: string
+          description: The top part &gt; Ref. no. &gt; The unique identifier assigned to the cash transaction in accordance with the numbering sequence.
+        status:
+          enum:
+          - Balanced
+          - Hold
+          - Released
+          - Pending
+          - Rejected
+          type: string
+          description: The top part &gt; Status &gt; The status of the transaction, which is automatically assigned by the system.
+        hold:
+          type: boolean
+          description: The top part &gt; Hold &gt; A check box that, if selected, indicates that the transaction is on hold, which means it may be edited but cannot be released.
+        tranDate:
+          type: string
+          description: 'Mandatory field: The top part &gt; Trans. date* &gt; The date of the transaction.'
+          format: date-time
+        finPeriod:
+          type: string
+          description: The property is now considered obsolete. Use Financial Period instead
+        financialPeriod:
+          type: string
+          description: 'Mandatory field: The top part &gt; Period* &gt; The financial period to which the transaction should be posted.'
+        cashAccount:
+          $ref: '#/components/schemas/cashAccountInCashTransactionDto'
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency of the cash account.
+        entryType:
+          $ref: '#/components/schemas/entryTypeInCashTransactionDto'
+        disbReceipt:
+          enum:
+          - Disbursement
+          - Receipt
+          type: string
+          description: The top part &gt; Disb./receipt &gt; The basic type of the transaction.
+        documentRef:
+          type: string
+          description: The top part &gt; Document ref. &gt; The external document reference number.
+        owner:
+          $ref: '#/components/schemas/ownerInCashTransactionDto'
+        description:
+          type: string
+          description: The top part &gt; Description &gt; A detailed description of the transaction.
+        amount:
+          type: number
+          description: The top part &gt; Amount &gt; The amount of the transaction.
+          format: double
+        vatTaxableTotal:
+          type: number
+          description: The top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The top part &gt; VAT exempt total &gt;  The document total that is exempt from VAT.
+          format: double
+        taxTotal:
+          type: number
+          description: The top part &gt; VAT total &gt; The total amount of tax paid in the document.
+          format: double
+        controlTotal:
+          type: number
+          description: 'Mandatory field: The top part &gt; Control total &gt; The control total of the transaction.'
+          format: double
+        taxAmount:
+          type: number
+          description: The top part &gt; VAT amount &gt; The VAT amount to be paid for the document. A user enters this amount manually.
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        transactionDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionDetailDto'
+          description: Transaction details tab &gt;
+        taxDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashTranTaxDetailDto'
+          description: VAT details tab &gt;
+        financialsDetail:
+          $ref: '#/components/schemas/financialsDetailInCashTransactionDto'
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+    offsetSubAccountInTransactionDetailDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: Offset subaccount* &gt; The corresponding subaccount to be used for the transaction.'
+    projectTaskInTransactionDetailDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The particular task of the project with which this transaction is associated.
+    financialPeriodInCashTransactionUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
+    projectInTransactionDetailDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project &gt; The project with which this transaction is associated, or the code indicating that this transaction is not associated with any project.
+    finanacialPeriodInCashTransactionUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The property is now considered obsolete. Use Financial Period instead
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    taxInCashTranTaxDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: VAT ID &gt; The VAT that applies to the cash transaction.'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    ReverseCashTransactionActionResultDto:
+      type: object
+      properties:
+        referenceNbr:
+          type: string
+        cashTransaction:
+          $ref: '#/components/schemas/CashTransactionDto'
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    CashTranTaxDetailDto:
+      type: object
+      properties:
+        tax:
+          $ref: '#/components/schemas/taxInCashTranTaxDetailDto'
+        taxRate:
+          type: number
+          description: VAT rate &gt; The rate of the VAT.
+          format: double
+        taxableAmount:
+          type: number
+          description: Taxable amount &gt; The taxable amount of the transaction.
+          format: double
+        taxAmount:
+          type: number
+          description: VAT amount &gt; The VAT amount calculated for the transaction.
+          format: double
+        deductibleTaxRate:
+          type: number
+          description: Deductible VAT rate &gt; The percent of deduction that applies to the VAT amount paid to the supplier for specific purchases.
+          format: double
+        expenseAmount:
+          type: number
+          description: Expense amount &gt; The percentage that is deducted from the VAT amount paid to the supplier for specific purchases.
+          format: double
+        includeInVatExemptTotal:
+          type: boolean
+          description: Include in VAT exempt total &gt; A check box that indicates (if selected) that this value-added VAT has a zero rate and is used to calculate a document subtotal that is actually exempt from VAT.
+        pendingVat:
+          type: boolean
+          description: Pending VAT &gt; A check box that indicates (if selected) that the VAT that should be calculated in documents, but should not be recorded to the VAT report until the VAT invoice is received.
+        statisticalVat:
+          type: boolean
+          description: Statistical VAT &gt; A check box that indicates (if selected) that the VAT on documents will be calculated only for statistical purposes or will be reported only but not actually paid.
+        reverseVat:
+          type: boolean
+          description: Reverse VAT &gt; A check box that indicates (if selected) that this is a reverse VAT.
+        taxType:
+          enum:
+          - Sales
+          - Use
+          - Vat
+          - Withholding
+          type: string
+          description: VAT type &gt; The type of VAT.
+    entryTypeInCashTransactionDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Entry type* &gt; The user-defined transaction type.'
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    taxZoneInFinancialsDetailDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        description:
+          type: string
+          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultVatCategory:
+          type: string
+          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultTaxCategory:
+          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: VAT settings section &gt; VAT zone &gt; The VAT zone that applies to the transaction.
+    offsetAccountInTransactionDetailDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Offset account* &gt; The account to be updated by the transaction.'
+    CashTransactionDetailUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        price:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        offsetAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        offsetSubaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        vatCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        notInvoiceable:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        project:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectTask:
+          $ref: '#/components/schemas/DtoValueOfString'
+    cashAccountInCashTransactionDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: The top part &gt; Cash account* &gt; The cash account that is a source account for the transaction.'
+    taxCategoryInTransactionDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT category &gt; The category that applies to the transaction.
+    ReleaseCashTransactionActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    branchInTransactionDetailDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Branch &gt; The branch that created the transaction.'
+    DtoValueOfNullableOfTaxCalcMode:
+      type: object
+      properties:
+        value:
+          enum:
+          - TaxSetting
+          - Gross
+          - Net
+          type: string
+    itemInTransactionDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Item ID &gt; The ID of the non-stock item specified as the transaction subject.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

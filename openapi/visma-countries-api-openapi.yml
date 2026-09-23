@@ -1,0 +1,287 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Countries API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Countries
+  description: 'The country information used for customers, suppliers, and addresses in the company.
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Solo
+
+    * Bookkeeping
+
+    * Payroll'
+paths:
+  /countries:
+    get:
+      tags:
+      - Countries
+      summary: Get countries
+      description: 'Get all countries, or add query parameters to filter the results. The response will include a list of countries with their details, such as name, code, and EU membership status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * vls:api'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfCountryApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCountries
+      x-operation-id-source: derived
+  /countries/{countrycode}:
+    get:
+      tags:
+      - Countries
+      summary: Get a specific country
+      description: 'Get a specific country by its two-letter country code. The response will include the country details such as name, code, and EU membership status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * vls:api'
+      parameters:
+      - name: countrycode
+        in: path
+        description: Two letter code of requested country
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountryApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCountriesByCountrycode
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfCountryApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryApi'
+      additionalProperties: false
+    CountryApi:
+      type: object
+      properties:
+        Name:
+          type:
+          - string
+          - 'null'
+          description: The localized name of the country
+        NameEnglish:
+          type:
+          - string
+          - 'null'
+          description: The English name of the country
+        Code:
+          type:
+          - string
+          - 'null'
+          description: <strong>Possible values:</strong><br/>3166-1 alpha-2)<br/><br/>The two letter country code (ISO.
+        IsEuMember:
+          type: boolean
+          description: Indicates whether the country is a member of the European Union
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

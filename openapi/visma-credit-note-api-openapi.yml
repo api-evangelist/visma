@@ -1,0 +1,1658 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Credit Note API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Credit Note
+paths:
+  /v1/creditNote/{creditNoteNumber}:
+    get:
+      tags:
+      - Credit Note
+      summary: Get a specific Credit Note - Method is deprecated start using the new method in…
+      operationId: CreditNote_GetBycreditNoteNumber
+      parameters:
+      - name: creditNoteNumber
+        in: path
+        description: Identifies the Credit Note
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditNoteDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CreditNoteDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - Credit Note
+      summary: Update a specific Credit Note - Method is deprecated start using the new method…
+      description: Response Message has StatusCode NoContent if PUT operation succeed
+      operationId: CreditNote_PutBycreditNoteNumber
+      parameters:
+      - name: creditNoteNumber
+        in: path
+        description: Identifies the Credit Note to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Credit Note to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+        required: true
+        x-bodyName: creditNoteUpdateDto
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+  /v1/creditNote:
+    get:
+      tags:
+      - Credit Note
+      summary: Get a range of Credit Notes - Method is deprecated start using the new method…
+      operationId: CreditNote_GetAllCreditNotesDto
+      parameters:
+      - name: documentType
+        in: query
+        description: The field is deprecated for specific customer document endpoints. It will only be usable from customer document endpoint.
+        schema:
+          enum:
+          - Invoice
+          - DebitNote
+          - CreditNote
+          - Payment
+          - VoidPayment
+          - Prepayment
+          - Refund
+          - FinCharge
+          - SmallBalanceWo
+          - SmallCreditWo
+          - CashSale
+          - CashReturn
+          - Undefined
+          - NoUpdate
+          type: string
+      - name: released
+        in: query
+        description: Parameter for showing if invoice has been released or not.
+        schema:
+          type: integer
+          format: int32
+      - name: dunningLevel
+        in: query
+        description: The dunning level of the document.
+        schema:
+          type: integer
+          format: int32
+      - name: closedFinancialPeriod
+        in: query
+        description: The date of the closing of the financial period.
+        schema:
+          type: string
+      - name: dunningLetterDateTime
+        in: query
+        description: The date and time for when the document last released a dunning letter.
+        schema:
+          type: string
+      - name: dunningLetterDateTimeCondition
+        in: query
+        description: Set time/date as before (&lt;), after (&gt;), before and including (=&lt;) OR after and including (=&gt;) to filter on time frame.
+        schema:
+          type: string
+      - name: project
+        in: query
+        description: The project with which the document is associated.
+        schema:
+          type: string
+      - name: expandApplications
+        in: query
+        description: True if you want to see all dunning information regarding this document.
+        schema:
+          type: boolean
+      - name: expandDunningInformation
+        in: query
+        schema:
+          type: boolean
+      - name: expandAttachments
+        in: query
+        description: True if you want to see all attachments regarding this document.
+        schema:
+          type: boolean
+      - name: expandTaxDetails
+        in: query
+        description: True if you want to see all VAT details regarding this document.
+        schema:
+          type: boolean
+      - name: expandInvoiceAddress
+        in: query
+        description: True if you want to see all information regarding the invoice address for this document.
+        schema:
+          type: boolean
+      - name: financialPeriod
+        in: query
+        description: The financial period to which the transactions recorded in the document is posted. Format YYYYMM.
+        schema:
+          type: string
+      - name: documentDueDate
+        in: query
+        description: The date when payment for the document is due, in accordance with the credit terms.
+        schema:
+          type: string
+          format: date-time
+      - name: documentDueDateCondition
+        in: query
+        description: 'This value represents the condition to be applied to the Due Date when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal'
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: The status of the document. Use the dropdown to select status.
+        schema:
+          enum:
+          - Hold
+          - Balanced
+          - Voided
+          - Scheduled
+          - Open
+          - Closed
+          - PendingPrint
+          - PendingEmail
+          - CreditHold
+          - CcHold
+          - Reserved
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: externalReference
+        in: query
+        description: The top part &gt; External reference &gt; The external reference used in AutoInvoice.
+        schema:
+          type: string
+      - name: paymentReference
+        in: query
+        description: The top part &gt; Payment ref. &gt; The reference number of the document, as automatically generated by the system in accordance with the number series assigned to cash sales in the Customer ledger preferences window..
+        schema:
+          type: string
+      - name: customerRefNumber
+        in: query
+        description: The top part &gt; External reference &gt; The external reference used in AutoInvoice.
+        schema:
+          type: string
+      - name: customer
+        in: query
+        description: Filter by Customer
+        schema:
+          type: string
+      - name: branch
+        in: query
+        description: Filter by Branch
+        schema:
+          type: string
+      - name: documentDate
+        in: query
+        description: 'This value indicates the document date. Use it to retrieve all records that have the Document Date since that time, up to the future.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+
+          _Note:_ __DocumentDate__ and __DocumentDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+          format: date-time
+      - name: documentDateCondition
+        in: query
+        description: 'This value represents the condition to be applied to the Document Date when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __DocumentDate__ and __DocumentDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: greaterThanValue
+        in: query
+        description: Greater than value. The item which is the object for this, varies from API to API.
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the creation date and time. Use it to retrieve all records that have been created since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditNoteDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditNoteDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - Credit Note
+      summary: Create a Credit Note - Method is deprecated start using the new method in…
+      description: Response Message has StatusCode Created if POST operation succeed
+      operationId: CreditNote_CreateCreditNote
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Credit Note to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreditNoteUpdateDto'
+        required: true
+        x-bodyName: creditNoteUpdateDto
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+  /v1/creditNote/{creditNoteNumber}/attachment:
+    post:
+      tags:
+      - Credit Note
+      summary: Creates an attachment and associates it with a Credit Note.
+      description: Response Message has StatusCode Created if POST operation succeed
+      operationId: CreditNote_CreateHeaderAttachmentBycreditNoteNumber
+      parameters:
+      - name: creditNoteNumber
+        in: path
+        description: Identifies the Credit Note
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+  /v1/creditNote/{creditNoteNumber}/{lineNumber}/attachment:
+    post:
+      tags:
+      - Credit Note
+      summary: Creates an attachment and associates it with a certain Credit Note line.
+      description: Response Message has StatusCode Created if POST operation succeed
+      operationId: CreditNote_CreateLineAttachmentBycreditNoteNumberlineNumber
+      parameters:
+      - name: creditNoteNumber
+        in: path
+        description: Identifies the Credit Note
+        required: true
+        schema:
+          type: string
+      - name: lineNumber
+        in: path
+        description: Specifies line number
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+  /v1/creditNote/{creditNoteNumber}/action/release:
+    post:
+      tags:
+      - Credit Note
+      summary: Release credit note operation - Method is deprecated start using the new method…
+      description: The action result dto contains information about the result of running the action
+      operationId: CreditNote_ReleaseInvoiceBycreditNoteNumber
+      parameters:
+      - name: creditNoteNumber
+        in: path
+        description: Reference number of the credit note to be released
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseInvoiceActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseInvoiceActionResultDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ReleaseInvoiceActionResultDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ReleaseInvoiceActionResultDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    branchNumberInCreditNoteLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Branch* &gt; The branch that sells the line item or provides the service.'
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    salesPersonIDInCreditNoteUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The field is deprecated for customer document endpoints, please use Salesperson instead
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    projectInCreditNoteDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
+    invoiceContactInCreditNoteDto:
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        businessName:
+          type: string
+        attention:
+          type: string
+        email:
+          type: string
+        phone1:
+          type: string
+        overrideContact:
+          type: boolean
+      description: The Invoice address tab &gt; The Invoice contact section.
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+    salesPersonInCreditNoteDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The document details tab &gt; Salesperson ID &gt; The salesperson involved.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    sellerInCreditNoteLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Salesperson ID &gt; The identifier of the salesperson involved.
+    accountInCreditNoteLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Account* &gt; The sales account used for the transaction.'
+    CreditNoteDto:
+      type: object
+      properties:
+        externalReference:
+          type: string
+        contact:
+          $ref: '#/components/schemas/ContactIdNameDto'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+        invoiceLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditNoteLineDto'
+        hold:
+          type: boolean
+          description: The top part &gt; Hold &gt; A check box that indicates (if selected) that the document is a draft. A document with the On Hold status may be edited and cannot be released.
+        discountTotal:
+          type: number
+          description: The top part &gt; Discount total &gt; The document discount total.
+          format: double
+        discountTotalInCurrency:
+          type: number
+          description: The top part &gt; Discount total &gt; The document discount total in your default currency. This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        detailTotal:
+          type: number
+          description: The top part &gt; Detail total &gt; The document total, which the system calculates for all line items in the Document details tab.
+          format: double
+        detailTotalInCurrency:
+          type: number
+          description: Background calculation giving you the Detail total in your default currency. This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        vatTaxableTotal:
+          type: number
+          description: The top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
+          format: double
+        vatTaxableTotalInCurrency:
+          type: number
+          description: Background calculation giving you the VAT taxable total in your default currency. This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The top part &gt; VAT exempt. total &gt; The document total that is exempt from VAT. This total is calculated as the taxable amount for the tax with the Include in VAT Exempt Total check box selected on the Taxes form.This box is available only if the VAT Reporting feature is enabled in your system.
+          format: double
+        vatExemptTotalInCurrency:
+          type: number
+          description: Background calculation giving you the VAT exempt. total in your default currency. This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        salesPersonID:
+          type: integer
+          description: The field is deprecated for customer document endpoints, please use SalesPerson instead
+          format: int32
+        salesPersonDescr:
+          type: string
+          description: The field is deprecated for customer document endpoints, please use SalesPerson instead
+        salesPerson:
+          $ref: '#/components/schemas/salesPersonInCreditNoteDto'
+        paymentReference:
+          type: string
+          description: ///The top part &gt; Payment ref. &gt; The reference number of the document, as automatically generated by the system in accordance with the number series assigned to cash sales in the Customer ledger preferences window..
+        invoiceAddress:
+          $ref: '#/components/schemas/invoiceAddressInCreditNoteDto'
+        invoiceContact:
+          $ref: '#/components/schemas/invoiceContactInCreditNoteDto'
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArAdjustDto'
+        dontPrint:
+          type: boolean
+        dontEmail:
+          type: boolean
+        revoked:
+          type: boolean
+        customer:
+          $ref: '#/components/schemas/customerInCreditNoteDto'
+        documentType:
+          enum:
+          - Invoice
+          - DebitNote
+          - CreditNote
+          - Payment
+          - VoidPayment
+          - Prepayment
+          - Refund
+          - FinCharge
+          - SmallBalanceWo
+          - SmallCreditWo
+          - CashSale
+          - CashReturn
+          - Undefined
+          - NoUpdate
+          type: string
+          description: 'The top part &gt; Type &gt; The document type. The following types are available: invoice, debit note, credit note, overdue charge, credit write-off'
+        referenceNumber:
+          type: string
+          description: The Top part &gt; Ref. no. &gt; The reference number of the customer ledger document in the system.
+        postPeriod:
+          type: string
+          description: The top part &gt; Post period &gt; The period to which the document should be posted. Format YYYYMM.
+        financialPeriod:
+          type: string
+          description: The financial period to which the transactions recorded in the document should be posted. Format YYYYMM.
+        closedFinancialPeriod:
+          type: string
+          description: Format YYYYMM.
+        documentDate:
+          type: string
+          description: 'The top part &gt; Date* &gt; The date when the customer ledger document was created.
+
+            By default, for a new document, it is the current business date, but you can change the date.'
+          format: date-time
+        origInvoiceDate:
+          type: string
+          description: 'The top part &gt; Orig invoice date &gt; The date based on which the Due date and Cash discount date is calculated. Only used if setting "Use Orig Invoice Date" is active in AR Preferences.
+
+            By default, for a new document, it is the current business date, but you can change the date.'
+          format: date-time
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Voided
+          - Scheduled
+          - Open
+          - Closed
+          - PendingPrint
+          - PendingEmail
+          - CreditHold
+          - CcHold
+          - Reserved
+          type: string
+          description: 'The top part &gt; Status &gt; The status of the document, which can be one of the following: Hold, Balanced, Voided, Scheduled, Open, Closed, Pending print, Pending email.'
+        currencyId:
+          type: string
+          description: The top part &gt; Currency &gt; The currency of the document. By default, it is the customer’s default currency,but it can be changed if the Allow Currency Override check box is selected in the AR303000 window.
+        amount:
+          type: number
+          description: 'The top part &gt; Amount &gt; The amount paid by the document. The value appears for new documents if the Validate document totals on entry check box is selected on the AR101000 window.
+
+            If the check box is cleared, then the value appears when the document status is Open.'
+          format: double
+        amountInCurrency:
+          type: number
+          description: Background calculation giving you the Amount in your default currency. This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        balance:
+          type: number
+          description: "The top part &gt; Balance &gt; For an open customer ledger document, the balance after any cash discount was taken. \nFor a document used in the application process, this is the balance after the payments were applied."
+          format: double
+        balanceInCurrency:
+          type: number
+          description: Background calculation giving you the Balance in your default currency. This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        cashDiscount:
+          type: number
+          description: The top part &gt; Cash discount &gt; The cash discount amount that has been or will be taken on the document, which the system calculates based on the specified credit terms.
+          format: double
+        cashDiscountInCurrency:
+          type: number
+          description: Background calculation giving you the Cash discount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethodInCreditNoteDto'
+        customerRefNumber:
+          type: string
+          description: The top part &gt; External reference &gt; The external reference used in AutoInvoice.
+        invoiceText:
+          type: string
+          description: The top part &gt; Invoice text &gt; Any user-provided description of the customer ledger document.
+        lastModifiedDateTime:
+          type: string
+          description: System generated field for last modification date/time of document.
+          format: date-time
+        createdDateTime:
+          type: string
+          description: The Attachments tab &gt; Creation time &gt; The date the attachment was created.
+          format: date-time
+        note:
+          type: string
+          description: Icon Notes on top of the window &gt; Pop-up window for providing any user-defined text connected to the document.
+        vatTotal:
+          type: number
+          description: The top part &gt; VAT total &gt; The VAT amount of the document, as defined on the VAT details tab.
+          format: double
+        vatTotalInCurrency:
+          type: number
+          description: Background calculation giving you the VAT total in your default currency. This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        location:
+          $ref: '#/components/schemas/locationInCreditNoteDto'
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInCreditNoteDto'
+        cashAccount:
+          type: string
+          description: Financial details tab &gt; The payment information section &gt; Cash account &gt; The cash account associated with the payment method.
+        project:
+          $ref: '#/components/schemas/projectInCreditNoteDto'
+        account:
+          $ref: '#/components/schemas/accountInCreditNoteDto'
+        subaccount:
+          $ref: '#/components/schemas/subaccountInCreditNoteDto'
+        customerProject:
+          type: string
+          description: The top part &gt; Customer project no. &gt; The customer project no. used in AutoInvoice.
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a invoice in InvoiceController. Used by getting data.
+    ArAdjustDto:
+      type: object
+      properties:
+        docType:
+          type: string
+        customerCD:
+          type: string
+        refNbr:
+          type: string
+        amountPaid:
+          type: number
+          format: double
+        cashDiscountTaken:
+          type: number
+          format: double
+        balance:
+          type: number
+          format: double
+        pendingPPD:
+          type: boolean
+        released:
+          type: boolean
+        hold:
+          type: boolean
+        voided:
+          type: boolean
+        ppdCrMemoRefNbr:
+          type: string
+        paymentRef:
+          type: string
+        status:
+          type: string
+        applicationDate:
+          type: string
+          format: date-time
+        applicationPeriod:
+          type: string
+        invoiceText:
+          type: string
+    CreditNoteLineDto:
+      type: object
+      properties:
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+        projectTask:
+          $ref: '#/components/schemas/ProjectTaskIdDescriptionDto'
+        lineNumber:
+          type: integer
+          description: Line no. &gt; A counter of lines in the overview of cash sales document overview.
+          format: int32
+        inventoryNumber:
+          type: string
+          description: Item ID &gt; The item ID of the line item, if applicable. Only a non-stock item can be selected.
+        description:
+          type: string
+          description: Transaction descr. &gt; Any brief comment relevant to the transaction.The alphanumeric string may contain up to 30 characters.
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of items (goods or services) of a particular type sold to the customer.
+          format: double
+        unitPrice:
+          type: number
+          description: 'Unit price &gt; The unit price set for the item or service. If you want to update the unit price
+
+            automatically to the current value(that is, the applicable sales or default price),
+
+            you can use the Recalculate Prices and Discounts action.If you have modified
+
+            the unit price and saved the document, the value will not be updated by the
+
+            system if you change the document date.'
+          format: double
+        unitPriceInCurrency:
+          type: number
+          description: Background calculation giving you the Unit price in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        manualAmount:
+          type: number
+          description: Manual amount &gt; a check box indicating that the amount has been entered manually.
+          format: double
+        manualAmountInCurrency:
+          type: number
+          description: Background calculation giving you the Manual amount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        amount:
+          type: number
+          description: 'Amount &gt; The amount after the discount has been applied. The value of this read-only box
+
+            is calculated automatically by deducting the discount amount from the extended price.'
+          format: double
+        cost:
+          type: number
+          description: "Cost &gt; The total cost of the line in default currency. \nThe value will always be 0 for unreleased documents."
+          format: double
+        amountInCurrency:
+          type: number
+          description: Background calculation giving you the Amount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        account:
+          $ref: '#/components/schemas/accountInCreditNoteLineDto'
+        vatCode:
+          $ref: '#/components/schemas/vatCodeInCreditNoteLineDto'
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure (UoM) for the item.
+        discountPercent:
+          type: number
+          description: 'Discount percent &gt; The percent of the line-level discount that has been applied manually or
+
+            automatically.The system selects the Manual Discount check box and
+
+            calculates the discount amount after you have entered the percent manually and
+
+            saved your changes or added a new line.'
+          format: double
+        discountAmount:
+          type: number
+          description: 'Discount amount &gt; The amount of the line-level discount that has been applied manually or
+
+            automatically to this line.The system selects the Manual Discount check box
+
+            and calculates the line amount after you have entered the discount amount
+
+            manually and save your changes or added a new line.'
+          format: double
+        discountAmountInCurrency:
+          type: number
+          description: Background calculation giving you the Discount amount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        manualDiscount:
+          type: boolean
+          description: 'Manual discount &gt; A check box that indicates (if selected) that the discount has been applied
+
+            manually.If you clear the check box, the system clears entered discount percent,
+
+            or discount amount, or selected discount code.'
+        subaccount:
+          $ref: '#/components/schemas/subaccountInCreditNoteLineDto'
+        salesperson:
+          type: string
+          description: The field is deprecated for customer document endpoints, please use Seller instead
+        seller:
+          $ref: '#/components/schemas/sellerInCreditNoteLineDto'
+        deferralSchedule:
+          type: integer
+          description: Original deferral schedule &gt; A read-only column filled in by the system in the Cash return documents created by the reversing process. It shows the identifier of the deferral schedule associated with the original Cash sale document.
+          format: int32
+        deferralCode:
+          type: string
+          description: 'The deferral code assigned to the stock item or non-stock item specified in this
+
+            document line.Upon release of the document, the system generates a deferral
+
+            schedule (or schedules) based on the settings defined in this deferral code.'
+        discountCode:
+          type: string
+          description: The code of the line discount that has been applied to this line automatically or manually.
+        note:
+          type: string
+          description: Table &gt; Icon Notes &gt; Pop-up window for providing any user-defined text connected to the order.
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInCreditNoteLineDto'
+        externalLink:
+          type: string
+    ReleaseInvoiceActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    branchNumberInCreditNoteDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
+    financialPeriodInCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    paymentMethodInCreditNoteDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    customerInCreditNoteDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The top part &gt; Customer &gt; The customer associated with the document.
+    ContactIdNameDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Click the magnifier &gt; The identifier
+          format: int32
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+    countryInCustomerDocumentAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    CreditNoteLineUpdateDto:
+      type: object
+      properties:
+        discountCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taskId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        unitPriceInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        accountNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        vatCodeId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        discountPercent:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        discountAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualDiscount:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        subaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        salesperson:
+          $ref: '#/components/schemas/DtoValueOfString'
+        deferralSchedule:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        deferralCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        termStartDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        termEndDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+    subaccountInCreditNoteLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: Subaccount* &gt; The corresponding subaccount used for this transaction.'
+    subaccountInCreditNoteDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
+    vatCodeInCreditNoteLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: VAT category &gt; The VAT category (if applied) for the transaction. The category represents the type of goods or services.
+    invoiceAddressInCreditNoteDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInCustomerDocumentAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInCustomerDocumentAddressDto'
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box that indicates (if selected) that the invoice address is not the default invoice address of the customer.
+      description: The Invoice address tab &gt; The Invoice address section.
+    ProjectTaskIdDescriptionDto:
+      type: object
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    countyInCustomerDocumentAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    salespersonInCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The identifier of the salesperson involved.
+    postPeriodInCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    locationInCreditNoteDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
+
+        location of the selected customer or, if the invoice is created from an opportunity,
+
+        it is the customer location specified for the opportunity.'
+    CreditNoteUpdateDto:
+      type: object
+      properties:
+        currencyId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerRefNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        externalReference:
+          $ref: '#/components/schemas/DtoValueOfString'
+        contact:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        invoiceLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditNoteLineUpdateDto'
+        referenceNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        childCustomerNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        consolidateInvoices:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        documentDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        origInvoiceDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInCreditNoteUpdateDto'
+        financialPeriod:
+          $ref: '#/components/schemas/financialPeriodInCreditNoteUpdateDto'
+        invoiceText:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        salesPersonID:
+          $ref: '#/components/schemas/salesPersonIDInCreditNoteUpdateDto'
+        salesperson:
+          $ref: '#/components/schemas/salespersonInCreditNoteUpdateDto'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        cashAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        dontPrint:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        dontEmail:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+    accountInCreditNoteDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

@@ -1,0 +1,184 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Currency API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Currency
+paths:
+  /v1/currency/{curyId}:
+    get:
+      tags:
+      - Currency
+      summary: Get a specific Currency - ScreenId=CM202000
+      operationId: Currency_GetSpecificCurrencyBycuryId
+      parameters:
+      - name: curyId
+        in: path
+        description: Returns data for the selected CurrencyId
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CurrencyDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CurrencyDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/CurrencyDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/currency:
+    get:
+      tags:
+      - Currency
+      summary: Get all available Currencies - ScreenId=CM202000
+      operationId: Currency_GetAll
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencyDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencyDto'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencyDto'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencyDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    CurrencyDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Currency Id.
+        description:
+          type: string
+          description: Currency description.
+        symbol:
+          type: string
+          description: Currency symbol.
+        isBaseCurrency:
+          type: boolean
+          description: Identify if the currency is the base currency.
+        decimalPrecision:
+          type: integer
+          description: Decimal precision.
+          format: int32
+        isUsedForAccounting:
+          type: boolean
+          description: Identify if is used for accounting.
+      description: 'Mandatory field: The top part &gt; Currency ID* &gt; The unique identifier for the currency.'
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

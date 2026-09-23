@@ -1,0 +1,475 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Webshop Orders…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: WebshopOrders
+  description: 'Customer orders placed through Spiris webshop.
+
+    Overview of Webshop Order Functionality: Webshop
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing'
+paths:
+  /webshoporders:
+    get:
+      tags:
+      - WebshopOrders
+      summary: Get webshop orders
+      description: 'Get all webshop orders from Visma Webshop, or add query parameters to filter the results. The response will include a list of webshop orders with their details, such as customer information, order date, currency, and line items.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfWebshopOrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getWebshoporders
+      x-operation-id-source: derived
+  /webshoporders/{webshopOrderId}:
+    get:
+      tags:
+      - WebshopOrders
+      summary: Get a specific webshop order
+      description: 'Get a specific webshop order by its unique identifier. The response will include the webshop order details, such as customer information, order date, currency, and line items.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: webshopOrderId
+        in: path
+        description: The unique identifier of the webshop order
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebshopOrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getWebshopordersByWebshopOrderId
+      x-operation-id-source: derived
+  /webshoporders/{webshopOrderId}/convert:
+    post:
+      tags:
+      - WebshopOrders
+      summary: Convert webshop order to invoice
+      description: 'Convert a webshop order to a customer invoice. The resulting invoice will appear as paid in the sales invoice list and will be automatically sent via email to the customer.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: webshopOrderId
+        in: path
+        description: The unique identifier of the webshop order to convert
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Invoice created successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postWebshopordersByWebshopOrderIdConvert
+      x-operation-id-source: derived
+components:
+  schemas:
+    WebshopOrderApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the webshop order
+          format: uuid
+          readOnly: true
+        BaseCurrencyCode:
+          type:
+          - string
+          - 'null'
+          description: Base currency code used by the company
+          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the customer
+        Number:
+          type:
+          - string
+          - 'null'
+          description: Order number
+        OrderCurrencyCode:
+          type:
+          - string
+          - 'null'
+          description: Currency code for the order
+        OrderDate:
+          type: string
+          description: Date when the order was placed
+          format: date-time
+        OrderNumber:
+          type:
+          - string
+          - 'null'
+          description: Original order number from the webshop
+        Note:
+          type:
+          - string
+          - 'null'
+          description: Additional notes for the order
+        TotalAmountBaseCurrency:
+          type: number
+          description: Total amount in base currency
+          format: double
+        TotalAmountOrderCurrency:
+          type: number
+          description: Total amount in order currency
+          format: double
+        CustomerIsPrivatePerson:
+          type: boolean
+          description: Indicates if the customer is a private person
+        Rows:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WebshopOrderRowApi'
+          description: Collection of order rows/line items
+        CustomerAddress1:
+          type:
+          - string
+          - 'null'
+          description: First line of customer address
+        CustomerAddress2:
+          type:
+          - string
+          - 'null'
+          description: Second line of customer address
+        CustomerPostalCode:
+          type:
+          - string
+          - 'null'
+          description: Customer postal code
+        CustomerCity:
+          type:
+          - string
+          - 'null'
+          description: Customer city
+        CustomerCountry:
+          type:
+          - string
+          - 'null'
+          description: Customer country name
+        CustomerCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Two-character country code
+        CustomerVatNo:
+          type:
+          - string
+          - 'null'
+          description: Customer VAT number
+        CorporateIdentityNumber:
+          type:
+          - string
+          - 'null'
+          description: Corporate identity number
+        EmailAddress:
+          type:
+          - string
+          - 'null'
+          description: Customer email address
+          format: email
+        Telephone:
+          type:
+          - string
+          - 'null'
+          description: Customer telephone number
+        ContactPersonMobile:
+          type:
+          - string
+          - 'null'
+          description: Contact person mobile number
+        MessageThreads:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Message thread IDs associated with this order. Fetch messages via GET /v2/messagethreads/{messageThreadId}
+          readOnly: true
+        Notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Note IDs associated with this order. Fetch notes via GET /v2/notes/{noteId}
+          readOnly: true
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    WebshopOrderRowApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the order row
+          format: uuid
+          readOnly: true
+        ArticleName:
+          type:
+          - string
+          - 'null'
+          description: Name of the article
+        ArticleNumber:
+          type:
+          - string
+          - 'null'
+          description: Article number/SKU
+        PricePerUnitInvoiceCurrency:
+          type: number
+          description: Price per unit in invoice currency
+          format: double
+        Quantity:
+          type: number
+          description: Quantity of the item
+          format: double
+        UnitAbbreviation:
+          type:
+          - string
+          - 'null'
+          description: Unit abbreviation (e.g., pcs, kg)
+        Sum:
+          type: number
+          description: Total sum for this row
+          format: double
+        PercentVat:
+          type: number
+          description: VAT percentage
+          format: double
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfWebshopOrderApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebshopOrderApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

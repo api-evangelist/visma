@@ -1,0 +1,453 @@
+openapi: 3.2.0
+info:
+  title: Visma Wageruns API
+  contact:
+    email: api@spiris.se
+  version: '1.0'
+  description: 'Operations tagged Wageruns across 2 of this provider''s published API definitions: visma-payroll-api-v1-openapi-original.json, visma-payroll-api-v2-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: Wageruns
+  description: Operations for fetching wage runs created for Your company's employees.
+paths:
+  /v1/wageruns:
+    get:
+      tags:
+      - Wageruns
+      summary: Get wage runs
+      description: Get all wage runs or add query parameters to filter the results. The response will include a collection of matched wage runs with their information such as wage run unique identifier, payment period dates, associated payslips, etc.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfWagerunApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1Wageruns
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/wageruns/{wagerunId}:
+    get:
+      tags:
+      - Wageruns
+      summary: Get wage run by unique identifier
+      description: Get wage run by specific identifier. The response will include a wage run (if it's found) information such as wage run unique identifier, payment period dates, associated payslips, etc.
+      parameters:
+      - name: wagerunId
+        in: path
+        description: Wage run unique identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WagerunApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1WagerunsByWagerunId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/wageruns:
+    get:
+      tags:
+      - Wageruns
+      summary: Get wage runs
+      description: Get all wage runs or add query parameters to filter the results. The response will include a collection of matched wage runs with their information such as wage run unique identifier, payment period dates, associated payslips, etc.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfWageRunResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2Wageruns
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/wageruns/{wagerunId}:
+    get:
+      tags:
+      - Wageruns
+      summary: Get wage run by unique identifier
+      description: Get wage run by specific identifier. The response will include a wage run (if it's found) information such as wage run unique identifier, payment period dates, associated payslips, etc.
+      parameters:
+      - name: wagerunId
+        in: path
+        description: Wage run unique identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfWageRunResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2WagerunsByWagerunId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfWagerunApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WagerunApi'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    WagerunApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the wage run
+          format: uuid
+        Description:
+          type:
+          - string
+          - 'null'
+          description: Wage run description
+        CreatedUtc:
+          type: string
+          description: UTC timestamp when the wage run was created
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the wage run was last modified
+          format: date-time
+        SalaryPeriodMonthlyFromDateUtc:
+          type: string
+          description: UTC timestamp when payment period starts for monthly salary in this wage run
+          format: date-time
+        SalaryPeriodMonthlyToDateUtc:
+          type: string
+          description: UTC timestamp when payment period ends for monthly salary in this wage run
+          format: date-time
+        SalaryPeriodHourlyFromDateUtc:
+          type: string
+          description: UTC timestamp when payment period starts for hourly salary in this wage run
+          format: date-time
+        SalaryPeriodHourlyToDateUtc:
+          type: string
+          description: UTC timestamp when payment period ends for hourly salary in this wage run
+          format: date-time
+        DeviationPeriodMonthlyToDateUtc:
+          type: string
+          description: UTC timestamp when monthly deviation period ends
+          format: date-time
+        DeviationPeriodHourlyToDateUtc:
+          type: string
+          description: UTC timestamp when deviation period ends
+          format: date-time
+        PaymentDateUtc:
+          type: string
+          description: UTC timestamp when payment is made for this wage run
+          format: date-time
+        GrossSalary:
+          type: number
+          description: Gross salary sum for this wage run
+          format: double
+        Payment:
+          type: number
+          description: Net payment amount for this wage run
+          format: double
+        Tax:
+          type: number
+          description: Total tax amount for this wage run
+          format: double
+        WageRunType:
+          type: integer
+          description: 'Type of the wage run<br/>Possible values: 1 - ordinary pay, 2 - additional payment'
+          format: int32
+        PayslipIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: List of payslip IDs associated with this wage run
+        Locked:
+          type: boolean
+          description: Indicates whether the wage run is locked
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    WageRunResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the wage run
+          format: uuid
+        Description:
+          type:
+          - string
+          - 'null'
+          description: Wage run description
+        CreatedUtc:
+          type: string
+          description: UTC timestamp when the wage run was created
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the wage run was last modified
+          format: date-time
+        SalaryPeriodMonthlyFromDateUtc:
+          type: string
+          description: UTC timestamp when payment period starts for monthly salary in this wage run
+          format: date-time
+        SalaryPeriodMonthlyToDateUtc:
+          type: string
+          description: UTC timestamp when payment period ends for monthly salary in this wage run
+          format: date-time
+        SalaryPeriodHourlyFromDateUtc:
+          type: string
+          description: UTC timestamp when payment period starts for hourly salary in this wage run
+          format: date-time
+        SalaryPeriodHourlyToDateUtc:
+          type: string
+          description: UTC timestamp when payment period ends for hourly salary in this wage run
+          format: date-time
+        DeviationPeriodMonthlyToDateUtc:
+          type: string
+          description: UTC timestamp when deviation period starts
+          format: date-time
+        DeviationPeriodHourlyToDateUtc:
+          type: string
+          description: UTC timestamp when deviation period ends
+          format: date-time
+        PaymentDateUtc:
+          type: string
+          description: UTC timestamp when payment is made for this wage run
+          format: date-time
+        GrossSalary:
+          type: number
+          description: Gross salary sum for this wage run
+          format: double
+        NetSalary:
+          type: number
+          description: Net salary sum for this wage run
+          format: double
+        Tax:
+          type: number
+          description: Total tax amount for this wage run
+          format: double
+        WageRunType:
+          type: integer
+          description: 'Type of the wage run<br/>Possible values: 1 - ordinary pay, 2 - additional payment'
+          format: int32
+        PayslipIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: List of payslip IDs associated with this wage run
+        Locked:
+          type: boolean
+          description: Indicates whether the wage run is locked
+      additionalProperties: false
+    PaginatedResponseOfWageRunResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WageRunResponse'
+      additionalProperties: false
+x-refined-from:
+- visma-payroll-api-v1-openapi-original.json
+- visma-payroll-api-v2-openapi-original.json
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

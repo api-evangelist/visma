@@ -1,0 +1,955 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Customers API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Customers
+  description: 'Organizations or individuals that purchase goods or services from your business.
+
+    Overview of Customer Functionality: Customers
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Solo'
+paths:
+  /customers:
+    get:
+      tags:
+      - Customers
+      summary: Get customers
+      description: 'Get all customers, or add query parameters to filter the results. The response will include a list of customers with their details, such as contact information, addresses, payment terms, and status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfCustomerApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCustomers
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Customers
+      summary: Create a customer
+      description: 'Create a new customer. The system will generate a customer number if not provided.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerApi'
+      responses:
+        '201':
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postCustomers
+      x-operation-id-source: derived
+  /customers/{customerId}:
+    get:
+      tags:
+      - Customers
+      summary: Get a specific customer based on id
+      description: 'Get a specific customer by its unique identifier. The response will include the customer''s details such as name, address, and contact information.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: customerId
+        in: path
+        description: This represents the Id of the customer you want to get
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCustomersByCustomerId
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Customers
+      summary: Update a customer
+      description: 'Replace an existing customer''s data with the provided new data. The customer must already exist in the system.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: customerId
+        in: path
+        description: This represents the Id of the customer you want to update
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerApi'
+      responses:
+        '200':
+          description: Customer updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putCustomersByCustomerId
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Customers
+      summary: Delete a customer
+      description: 'Delete a specified customer. Only customers without any linked transactions can be deleted. To hide a customer that has transactions, set the `IsActive` property to `false` in a PUT request.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: customerId
+        in: path
+        description: This represents the Id of the customer you want to delete
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Customer deleted successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteCustomersByCustomerId
+      x-operation-id-source: derived
+  /customers/{customerId}/autoinvoicerecipients:
+    get:
+      tags:
+      - Customers
+      summary: Get autoinvoice recipients for a customer
+      description: 'Get a list of available autoinvoice recipients for a specific customer. This endpoint helps determine if the customer can receive electronic invoices and provides the available recipient addresses.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: customerId
+        in: path
+        description: This represents the Id of the customer
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfAutoInvoiceAddressApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCustomersByCustomerIdAutoinvoicerecipients
+      x-operation-id-source: derived
+components:
+  schemas:
+    PaginatedResponseOfAutoInvoiceAddressApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoInvoiceAddressApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    AutoInvoiceAddressApi:
+      type: object
+      properties:
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the recipient
+        ElectronicAddress:
+          type:
+          - string
+          - 'null'
+          description: Electronic address for the recipient
+        EdiServiceDelivererId:
+          type:
+          - string
+          - 'null'
+          description: EDI service deliverer id for the recipient
+        Address1:
+          type:
+          - string
+          - 'null'
+          description: First line of the address
+        Address2:
+          type:
+          - string
+          - 'null'
+          description: Second line of the address, if applicable
+        CorporateIdentityNumber:
+          type:
+          - string
+          - 'null'
+          description: Corporate identity number of the recipient
+        CountryCode:
+          type:
+          - string
+          - 'null'
+          description: Country code of the recipient
+        City:
+          type:
+          - string
+          - 'null'
+          description: City of the recipient
+        Gln:
+          type:
+          - string
+          - 'null'
+          description: Gln of the recipient
+        PostalCode:
+          type:
+          - string
+          - 'null'
+          description: Postal code of the recipient
+        VatNumber:
+          type:
+          - string
+          - 'null'
+          description: VAT number of the recipient
+      additionalProperties: false
+    CustomerLabelApi:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Name of the customer label
+        Description:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Description of the customer label
+      additionalProperties: false
+    DirectDebitCustomerSettingsApi:
+      type: object
+      properties:
+        MandateId:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Maximum length 35 characters
+        MandateType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = Core,<br/>2 = B2B
+          format: int32
+        SequenceType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = Recurring,<br/>2 = Recurring,<br/>3 = One-off
+          format: int32
+        SigningDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        EndDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        LatestDirectDebit:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        Bic:
+          maxLength: 11
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Maximum length 11 characters
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfCustomerApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerApi'
+      additionalProperties: false
+    TermsOfPaymentApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system. For v2/quotes and v2/quotedrafts endpoints Id is editable
+          format: uuid
+          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the terms of payment
+        NameEnglish:
+          type:
+          - string
+          - 'null'
+          description: English name of the terms of payment
+        NumberOfDays:
+          type: integer
+          description: Number of days to pay
+          format: int32
+        TermsOfPaymentTypeId:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = CurrentMonth,<br/>2 = Cash,<br/>3 = CardPayment,<br/>4 = DigitalWallet,<br/>5 = PaymentServiceProvider<br/><br/>Type of terms of payment, possible values are.
+          format: int32
+        TermsOfPaymentTypeText:
+          type:
+          - string
+          - 'null'
+        AvailableForSales:
+          type: boolean
+          description: True if this terms of payment can be used on sales documents, false otherwise
+        AvailableForPurchase:
+          type: boolean
+          description: True if this terms of payment can be used on purchase documents, false otherwise
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CustomerApi:
+      required:
+      - InvoiceCity
+      - InvoicePostalCode
+      - IsActive
+      - IsPrivatePerson
+      - Name
+      - TermsOfPaymentId
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        InvoiceCity:
+          maxLength: 50
+          minLength: 0
+          type: string
+        InvoicePostalCode:
+          maxLength: 10
+          minLength: 0
+          type: string
+        GLN:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'NOTE: Obsolete. Please use EdiGlnNumber instead'
+        EmailAddressOrder:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: This is a default email address for sending orders.
+        EmailAddressQuote:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: This is a default email address for sending quotes.
+        PayToAccountId:
+          type:
+          - string
+          - 'null'
+          description: The account Id on which payments are registered
+          format: uuid
+          readOnly: true
+        TermsOfPayment:
+          $ref: '#/components/schemas/TermsOfPaymentApi'
+        LastInvoiceDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        TaxDeductionNumber:
+          type:
+          - string
+          - 'null'
+        PropertyType:
+          maximum: 2
+          minimum: 1
+          type:
+          - integer
+          - 'null'
+          description: <strong>Possible values:</strong><br/>1 = Apartment,<br/>2 = Property<br/><br/>Possible values are.
+          format: int32
+        PropertyReference:
+          maxLength: 40
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ChangedUtc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        CustomerLabels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerLabelApi'
+        MessageThreads:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch messages via GET /v2/messagethreads/{messageThreadId}
+          readOnly: true
+        Notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch notes via GET /v2/notes/{noteId}
+          readOnly: true
+        IsFutureInvoiceDateAllowed:
+          type: boolean
+          description: Future dates on invoices are allowed based on terms of payments and invoice currency code settings
+          readOnly: true
+        RequiresReferenceNumber:
+          type: boolean
+          description: Indicates whether this customer's auto-invoice recipient (InExchange) requires a buyer reference. When true, clients must prompt the user to fill ElectronicReference before sending an e-invoice.
+          readOnly: true
+        Iban:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Customer's bank account IBAN (manual entry). Default value is existing database value (PUT) or empty string (POST)
+        IsDirectDebitEnabled:
+          type:
+          - boolean
+          - 'null'
+          description: Setting for Direct Debit payments. Default value is existing database value (PUT) or empty string (POST)
+        DirectDebitCustomerSettings:
+          $ref: '#/components/schemas/DirectDebitCustomerSettingsApi'
+        DiscountAgreementId:
+          type:
+          - string
+          - 'null'
+          description: The discount agreement id that is connected to the customer. It will be used only for Pro variant companies
+          format: uuid
+        UnpaidInvoicesAmount:
+          type: number
+          description: The total amount of unpaid invoices for the customer.
+          format: double
+          readOnly: true
+        CustomerNumber:
+          maxLength: 16
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Unique identifier, if not provided, the system will provide one. For batch POST requests it is mandatory.
+        CorporateIdentityNumber:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ContactPersonEmail:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ContactPersonMobile:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ContactPersonName:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ContactPersonPhone:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        CurrencyCode:
+          maxLength: 3
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Default value: Currency of the user company'
+        EmailAddress:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: This is a default email address for sending customer invoices.
+        InvoiceAddress1:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        InvoiceAddress2:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        InvoiceCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: When setting a VAT number this should be filled in as well.
+        DeliveryAddress1:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        DeliveryAddress2:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        DeliveryCity:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        DeliveryCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Only used if invoice country code differs from delivery country code
+        DeliveryPostalCode:
+          maxLength: 10
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: If DeliveryBasedVat is set to true this should be filled in as well
+        DeliveryCustomerName:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        DeliveryMethodId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/deliverymethods'
+          format: uuid
+        DeliveryTermId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/deliveryterms'
+          format: uuid
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+        Note:
+          maxLength: 4000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ReverseChargeOnConstructionServices:
+          type: boolean
+          description: 'Default: false. If true, VatNumber must be set aswell'
+        WebshopCustomerNumber:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        MobilePhone:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        Telephone:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        TermsOfPaymentId:
+          type: string
+          description: 'Source: Get from /v2/termsofpayment'
+          format: uuid
+        VatNumber:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: '<strong>Possible values:</strong><br/>8-12 numbers and letters<br/><br/>Format: 2 character country code followed by.'
+        WwwAddress:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        IsPrivatePerson:
+          type: boolean
+        IsNorthernIreland:
+          type:
+          - boolean
+          - 'null'
+        DiscountPercentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+        IsActive:
+          type: boolean
+        ForceBookkeepVat:
+          type: boolean
+          description: Include VAT on invoices for non-EU customer. It cannot be true if InvoiceCountryCode belongs to a country inside EU
+        EdiGlnNumber:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        SalesDocumentLanguage:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ElectronicAddress:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ElectronicReference:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        EdiServiceDelivererId:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        AutoInvoiceActivationEmailSentDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        AutoInvoiceRegistrationRequestSentDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        EmailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A maximum of 5 email addresses can be provided. This field is for CC emails and requires primary email address to be set in EmailAddress property.
+        DeliveryBasedVat:
+          type: boolean
+          description: Option to set the delivery address as the base for vat and oss calculations. Delivery city, country code and postal code must be set as well
+        SalesPriceListId:
+          type:
+          - string
+          - 'null'
+          description: The sales price list id that is connected to the customer. It will be used only for Pro variant companies, and for accounting office consultants working with a company in collaboration
+          format: uuid
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

@@ -1,0 +1,322 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Delivery Methods…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: DeliveryMethods
+  description: 'Ways or means by which goods are delivered to the customer.
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Solo'
+paths:
+  /deliverymethods:
+    get:
+      tags:
+      - DeliveryMethods
+      summary: Get delivery methods
+      description: 'Get all delivery methods, or add query parameters to filter the results. The response will include a list of delivery methods with their details, such as name, english name and code.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      responses:
+        '200':
+          description: Request successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfDeliveryMethodApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getDeliverymethods
+      x-operation-id-source: derived
+    post:
+      tags:
+      - DeliveryMethods
+      summary: Create a delivery method
+      description: 'Create a new delivery method.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryMethodApi'
+      responses:
+        '200':
+          description: Request successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryMethodApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postDeliverymethods
+      x-operation-id-source: derived
+  /deliverymethods/{deliveryMethodId}:
+    get:
+      tags:
+      - DeliveryMethods
+      summary: Get a specific delivery method based on id
+      description: 'Get a specific delivery method by its unique identifier. The response will include all details of the delivery method, such as name, english name and code.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: deliveryMethodId
+        in: path
+        description: This represents the Id of the delivery method.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryMethodApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getDeliverymethodsByDeliveryMethodId
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    DeliveryMethodApi:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the delivery method
+          format: uuid
+          readOnly: true
+        Name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name of the delivery method
+        NameEnglish:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: English name of the delivery method
+        Code:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Code of the delivery method
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfDeliveryMethodApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryMethodApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

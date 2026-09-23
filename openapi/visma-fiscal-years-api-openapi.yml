@@ -1,0 +1,572 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Fiscal Years API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Fiscal Years
+  description: 'The accounting periods that represent a complete financial year for your company. Fiscal years define the start and end dates used for financial reporting, accounting periods, and tax calculations.
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Bookkeeping
+
+    * Solo
+
+    * Payroll'
+paths:
+  /fiscalyears:
+    get:
+      tags:
+      - Fiscal Years
+      summary: Get fiscal years
+      description: 'Get all fiscal years, or add query parameters to filter the results. The response will include a list of fiscal years with their details, such as start date, end date, and locking status for accounting.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfFiscalYearApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getFiscalyears
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Fiscal Years
+      summary: Create a fiscal year
+      description: 'Create a new fiscal year for the company. The fiscal year will be validated for proper duration and date constraints based on the company''s country rules.
+
+
+        `BookkeepingMethod` is optional. When omitted, the new year inherits the bookkeeping method of the closest existing fiscal year. When supplied, the year is created with that method, which allows a company to hold different bookkeeping methods across its fiscal years.
+
+
+        **Restrictions on supplying the bookkeeping method:**
+
+        - Requires the *Change accounting method* permission for the authenticated user when the supplied method differs from the method of the fiscal year the company is working in today — or, when no year covers today, of the fiscal year closest to the new year''s start date. Creating the company''s first fiscal year needs no permission.
+
+        - `NoBookkeeping` can only be set for companies on the `Invoicing` or `CloudPayroll` product variant.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:accounting'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FiscalYearCreateApi'
+      responses:
+        '201':
+          description: Fiscal year created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiscalYearApi'
+        '400':
+          description: Fiscal year can't be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '403':
+          description: Forbidden. The user is not permitted to change the accounting method.
+      operationId: postFiscalyears
+      x-operation-id-source: derived
+  /fiscalyears/{id}:
+    get:
+      tags:
+      - Fiscal Years
+      summary: Get a fiscal year
+      description: 'Get a single fiscal year by its unique identifier. The response will include the fiscal year details, such as start date, end date, and locking status for accounting.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: Id of requested fiscal year.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiscalYearApi'
+        '400':
+          description: Bad request, or the fiscal year does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getFiscalyearsById
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Fiscal Years
+      summary: Update a fiscal year
+      description: 'Update a fiscal year — lock or unlock it for accounting purposes, and change its bookkeeping method. Locking affects the ability to modify accounting data within the fiscal year.
+
+
+        If the fiscal year holds bank transactions that have not been reconciled, locking it fails with HTTP 400 and `ErrorCode` `4048` (`CantLockPeriodWithUnreconciledBankTransaction`). Reconcile those bank transactions and retry. The fiscal year is left unlocked when this happens.
+
+
+        Omit `BookkeepingMethod` to leave the year''s current method unchanged; sending the year''s current method is also accepted and is treated as no change. When a different method is supplied the year is re-booked to match it: switching from `Cash` to `Invoicing` converts the year''s
+
+        customer and supplier invoices to the accrual method. The change is recorded in the company journal.
+
+
+        **Restrictions on changing the bookkeeping method:**
+
+        - Requires the *Change accounting method* permission for the authenticated user.
+
+        - A year whose current method is `NoBookkeeping` cannot be changed to another method.
+
+        - `NoBookkeeping` can only be set for companies on the `Invoicing` or `CloudPayroll` product variant.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:accounting'
+      parameters:
+      - name: id
+        in: path
+        description: Id of the fiscal year to update.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FiscalYearUpdateApi'
+      responses:
+        '200':
+          description: Fiscal year updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiscalYearApi'
+        '400':
+          description: Fiscal year can't be updated, or does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '403':
+          description: Forbidden. The user is not permitted to change the accounting method.
+      operationId: putFiscalyearsById
+      x-operation-id-source: derived
+  /fiscalyears/openingbalances:
+    get:
+      tags:
+      - Fiscal Years
+      summary: Get opening balances
+      description: 'Get the opening balances of the first fiscal year. These are the account balances at the beginning of the fiscal year. For balances of subsequent years, use the GET /accountbalances endpoint instead.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfOpeningBalancesApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getFiscalyearsOpeningbalances
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Fiscal Years
+      summary: Update opening balances
+      description: 'Update the opening balances of the first fiscal year. The sum of all opening balances must equal zero. Optionally enable inactive accounts to allow balance editing.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: enableInactiveAccounts
+        in: query
+        description: 'If true, the selected inactive accounts will be enabled, therefore allowing editing of the balance. Default: true'
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AccountOpeningBalanceApi'
+      responses:
+        '200':
+          description: Opening balances updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpeningBalancesApi'
+        '400':
+          description: Opening balances can't be updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putFiscalyearsOpeningbalances
+      x-operation-id-source: derived
+components:
+  schemas:
+    FiscalYearApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier for the fiscal year
+          format: uuid
+          readOnly: true
+        StartDate:
+          type: string
+          description: The start date of the fiscal year
+          format: date-time
+        EndDate:
+          type: string
+          description: The end date of the fiscal year
+          format: date-time
+        IsLockedForAccounting:
+          type: boolean
+          description: Indicates if the fiscal year is locked for accounting purposes
+        BookkeepingMethod:
+          enum:
+          - 0
+          - 1
+          - 2
+          type: integer
+          description: The bookkeeping method used for the fiscal year
+          format: int32
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    AccountOpeningBalanceApi:
+      type: object
+      properties:
+        AccountNumber:
+          type: integer
+          description: The account number to update
+          format: int64
+        Balance:
+          type: number
+          description: The opening balance amount to set
+          format: double
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    FiscalYearUpdateApi:
+      type: object
+      properties:
+        IsLockedForAccounting:
+          type: boolean
+          description: Indicates if the fiscal year should be locked for accounting purposes
+        BookkeepingMethod:
+          enum:
+          - 0
+          - 1
+          - 2
+          type:
+          - integer
+          - 'null'
+          description: The bookkeeping method used for the fiscal year. Defaults to the existing value if null
+          format: int32
+      additionalProperties: false
+    PaginatedResponseOfOpeningBalancesApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpeningBalancesApi'
+      additionalProperties: false
+    OpeningBalancesApi:
+      type: object
+      properties:
+        Name:
+          type:
+          - string
+          - 'null'
+          description: The name of the account
+        Number:
+          type: integer
+          description: The account number
+          format: int64
+        Balance:
+          type: number
+          description: The opening balance amount on the account
+          format: double
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    FiscalYearCreateApi:
+      required:
+      - EndDate
+      - StartDate
+      type: object
+      properties:
+        StartDate:
+          type: string
+          description: The start date of the fiscal year
+          format: date-time
+        EndDate:
+          type: string
+          description: The end date of the fiscal year
+          format: date-time
+        BookkeepingMethod:
+          enum:
+          - 0
+          - 1
+          - 2
+          type:
+          - integer
+          - 'null'
+          description: The bookkeeping method used for the fiscal year. Defaults to the bookkeeping method of the closest existing fiscal year if null
+          format: int32
+      additionalProperties: false
+    PaginatedResponseOfFiscalYearApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FiscalYearApi'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

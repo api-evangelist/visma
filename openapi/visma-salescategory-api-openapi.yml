@@ -1,0 +1,1018 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Sales Category API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: SalesCategory
+paths:
+  /v1/salescategory/{categoryId}:
+    get:
+      tags:
+      - SalesCategory
+      summary: Get a Sales Category
+      operationId: SalesCategory_GetCategoryBycategoryId
+      parameters:
+      - name: categoryId
+        in: path
+        description: Identifies the Sales Category
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesCategoryDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SalesCategoryDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SalesCategoryDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SalesCategoryDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/salescategory:
+    get:
+      tags:
+      - SalesCategory
+      summary: Get Sales Categories - ScreenId=IN204060
+      operationId: SalesCategory_Get
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesCategoryDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesCategoryDto'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesCategoryDto'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesCategoryDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/salescategory/{categoryId}/item:
+    get:
+      tags:
+      - SalesCategory
+      summary: Get a range of Inventory Items from a specific Sales Category
+      operationId: SalesCategory_GetItemsForCategoryBycategoryId
+      parameters:
+      - name: categoryId
+        in: path
+        description: Identifies the Sales Category
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    expenseAccrualAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Only used for Non-stock items.
+
+        Purchase accrual account &gt; Purchase order accrual account &gt; The liability account to be used for this stock item to accrue amounts on purchase orders related to this item.'
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    expenseEuAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Expense EU account &gt; The income account to be used for this stock item to record EU expenses.
+    cogsSubaccountInInventoryAccountInformationDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Only used for Stock items.
+
+        COGS sub. &gt; The subaccount to be used for this item with the COGS account.'
+    intrastatInInventoryDto:
+      properties:
+        cN8:
+          type: string
+          description: 'Represents the 8 digit level Combine Nomenclature commodity code specific for the year
+
+            for which the creating / actualizations Intrastat declarations is drafted.'
+        countryOfOrigin:
+          type: string
+          description: 'The country of origin of the commodity will be selected,
+
+            that country where the good has been produced or had the last substantial transformation.'
+        supplementaryMeasureUnit:
+          type: string
+          description: 'The requirement for Supplementary Measure Units applies only to certain classes of goods(NC8 Positions)
+
+            that may be expressed from quantitative point of view in other measurement units but kilo also.'
+      description: General information tab &gt; Intrastat section
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+    accountInformationInInventoryDto:
+      properties:
+        expenseAccrualAccount:
+          $ref: '#/components/schemas/expenseAccrualAccountInInventoryAccountInformationDto'
+        inventoryAccount:
+          $ref: '#/components/schemas/inventoryAccountInInventoryAccountInformationDto'
+        expenseAccount:
+          $ref: '#/components/schemas/expenseAccountInInventoryAccountInformationDto'
+        cogsAccount:
+          $ref: '#/components/schemas/cogsAccountInInventoryAccountInformationDto'
+        expenseNonTaxableAccount:
+          $ref: '#/components/schemas/expenseNonTaxableAccountInInventoryAccountInformationDto'
+        expenseEuAccount:
+          $ref: '#/components/schemas/expenseEuAccountInInventoryAccountInformationDto'
+        expenseImportAccount:
+          $ref: '#/components/schemas/expenseImportAccountInInventoryAccountInformationDto'
+        expenseSubaccount:
+          $ref: '#/components/schemas/expenseSubaccountInInventoryAccountInformationDto'
+        cogsSubaccount:
+          $ref: '#/components/schemas/cogsSubaccountInInventoryAccountInformationDto'
+        salesAccount:
+          $ref: '#/components/schemas/salesAccountInInventoryAccountInformationDto'
+        salesNonTaxableAccount:
+          $ref: '#/components/schemas/salesNonTaxableAccountInInventoryAccountInformationDto'
+        salesEuAccount:
+          $ref: '#/components/schemas/salesEuAccountInInventoryAccountInformationDto'
+        salesExportAccount:
+          $ref: '#/components/schemas/salesExportAccountInInventoryAccountInformationDto'
+        salesSubaccount:
+          $ref: '#/components/schemas/salesSubaccountInInventoryAccountInformationDto'
+      description: General ledger account tab &gt;
+    SalesCategoryLineDto:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int32
+        description:
+          type: string
+    ItemClassDto:
+      type: object
+      properties:
+        type:
+          enum:
+          - NonStockItem
+          - LaborItem
+          - ServiceItem
+          - ChargeItem
+          - ExpenseItem
+          - FinishedGoodItem
+          - ComponentPartItem
+          - SubassemblyItem
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDto'
+        id:
+          type: string
+          description: The identifier.
+        description:
+          type: string
+          description: The description.
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    InventoryDto:
+      type: object
+      properties:
+        inventoryId:
+          type: integer
+          description: The unique internal identifier of the  item as is stored in the database. This Id is not visible in the window.
+          format: int32
+        inventoryNumber:
+          type: string
+          description: 'Mandatory field: The top part &gt; Item Id* &gt; The unique alphanumeric identifier of the stock item.'
+        status:
+          enum:
+          - Active
+          - NoSales
+          - NoPurchases
+          - NoRequest
+          - Inactive
+          - MarkedForDeletion
+          - Unknown
+          type: string
+          description: 'The top part &gt; Item status &gt; The status of the stock item. The alternatives are: Active, No sales, No purchases, No request, Inactive, Marked for deletion.'
+        type:
+          enum:
+          - NonStockItem
+          - LaborItem
+          - ServiceItem
+          - ChargeItem
+          - ExpenseItem
+          - FinishedGoodItem
+          - ComponentPartItem
+          - SubassemblyItem
+          type: string
+          description: General information tab &gt; Item defaults section &gt; Type &gt; The type of stock item.
+        description:
+          type: string
+          description: The top part &gt; Description *&gt; A brief description of the stock item.
+        body:
+          type: string
+          description: The top part &gt; Body *&gt; A brief description of the stock item.
+        itemClass:
+          $ref: '#/components/schemas/itemClassInInventoryDto'
+        postingClass:
+          $ref: '#/components/schemas/postingClassInInventoryDto'
+        vatCode:
+          $ref: '#/components/schemas/vatCodeInInventoryDto'
+        lotSerialClass:
+          $ref: '#/components/schemas/lotSerialClassInInventoryDto'
+        defaultPrice:
+          type: number
+          description: Price/cost information tab &gt; Price management section &gt; Default price &gt; The price of the stock item.
+          format: double
+        pendingCost:
+          type: number
+          description: Price/cost information tab &gt; Standard cost section &gt; Pending cost &gt; The pending standard cost for the stock item.
+          format: double
+        pendingCostDate:
+          type: string
+          description: Price/cost information tab &gt; Standard cost section &gt; Pending cost date &gt; The date when the pending standard cost becomes effective.
+          format: date-time
+        currentCost:
+          type: number
+          description: Price/cost information tab &gt; Standard cost section &gt; Current cost &gt; Read-only. This field displays the current standard cost for the stock item.
+          format: double
+        effectiveDate:
+          type: string
+          description: Price/cost information tab &gt; Standard cost section &gt; Effective date &gt; Read-only. This field shows the effective date for the current standard cost of the stock item.
+          format: date-time
+        lastCost:
+          type: number
+          description: Price/cost information tab &gt; Standard cost section &gt; Last cost &gt; Read-only. This field showing the last standard cost defined for the stock item.
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: Information collected from system.
+          format: date-time
+        baseUnit:
+          type: string
+          description: 'Mandatory field: General information tab &gt; Unit of measurement section &gt; Base unit* &gt; The UoM used as the base unit for this stock item.'
+        salesUnit:
+          type: string
+          description: 'Mandatory field: General information tab &gt; Unit of measurement section &gt; Sales unit *&gt; The UoM to be used as the sales unit for the stock item.'
+        purchaseUnit:
+          type: string
+          description: 'Mandatory field: General information tab &gt; Unit of measurement section &gt; Purchase unit *&gt; The UoM to be used as the purchase unit for the stock item.'
+        unspsc:
+          type: string
+          description: General information tab &gt; UNSPSC Code &gt; The UNSPSC code for the stock item.
+        stockItem:
+          type: boolean
+        kitItem:
+          type: boolean
+        accountInformation:
+          $ref: '#/components/schemas/accountInformationInInventoryDto'
+        costPriceStatistics:
+          $ref: '#/components/schemas/costPriceStatisticsInInventoryDto'
+        crossReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryCrossReferenceDto'
+          description: Cross-reference tab &gt;
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+          description: Attributes tab &gt;
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeIdValueDto'
+        warehouseDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarehouseDetailDto'
+          description: Warehouse details tab &gt;
+        inventoryUnits:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryUnitDto'
+          description: General information tab &gt; The Unit conversion table just below the Unit of measurement section. Several fields collected from different parts of the window.
+        defaultWarehouse:
+          $ref: '#/components/schemas/defaultWarehouseInInventoryDto'
+        defaultIssueFrom:
+          $ref: '#/components/schemas/defaultIssueFromInInventoryDto'
+        defaultReceiptTo:
+          $ref: '#/components/schemas/defaultReceiptToInInventoryDto'
+        supplierDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierDetailsLineDto'
+          description: Supplier details tab
+        salesCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesCategoryLineDto'
+          description: Attributes tab &gt; Sales categories grid
+        packaging:
+          $ref: '#/components/schemas/packagingInInventoryDto'
+        intrastat:
+          $ref: '#/components/schemas/intrastatInInventoryDto'
+        recommendedPrice:
+          type: number
+          description: The Price/cost information tab &gt; Price management section &gt; List price &gt; The manufacturer's suggested retail price (MSRP) of the stock item.
+          format: double
+        priceManagerID:
+          type: string
+          description: The Price/cost information tab &gt; Price management section &gt; Price manager &gt; The ID of the manager responsible for the product pricing.
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        priceManager:
+          $ref: '#/components/schemas/priceManagerInInventoryDto'
+        priceClass:
+          $ref: '#/components/schemas/priceClassInInventoryDto'
+        priceWorkgroupID:
+          type: integer
+          description: The Price/cost information tab &gt; Price management section &gt; Price work group &gt; The work group responsible for product pricing. Select the pricing work group for the stock item.
+          format: int32
+        priceClassID:
+          type: string
+          description: The Price/cost information tab &gt; Price management section &gt; Price class &gt; The price class of the item.
+        note:
+          type: string
+          description: Icon Notes on top of the window &gt; Pop-up window for providing any user-defined text connected to the inventory item.
+        timestamp:
+          type: string
+          description: Timestamp of the inventory item record
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    salesEuAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Sales - EU account &gt; The income account to be used for this stock item to record EU sales.
+    salesAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Sales account *&gt; The income account to be used for this stock item to record sales.'
+    postingClassInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: The identifier.
+        description:
+          type: string
+          description: The description.
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; Posting class* &gt; The posting class of the stock item, which by default is the posting class assigned to the item class.'
+    ClassAttributeDetailDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    SalesCategoryDto:
+      type: object
+      properties:
+        categoryID:
+          type: integer
+          description: 'The left pane &gt; Categories. See the list of category members on the right side.
+
+            The right pane &gt; Item ID &gt; The unique identifier of the sales category.'
+          format: int32
+        description:
+          type: string
+          description: The right pane &gt; Description &gt; The description of the sales category, which can serve as an identifier.
+        parentID:
+          type: integer
+          description: The right pane &gt; Parent category &gt; The primary/main category for Item sales.
+          format: int32
+        sortOrder:
+          type: integer
+          format: int32
+        subCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesCategoryDto'
+          description: A list can be expanded on the left side.
+      description: This class represents a Sales Category in SalesCategoryController. Used by getting data.
+    InventoryCrossReferenceDto:
+      type: object
+      properties:
+        alternateType:
+          enum:
+          - CPN
+          - VPN
+          - Global
+          - Barcode
+          type: string
+          description: Alternate type &gt; The type of alternate codification used for the item if applicable.
+        bAccount:
+          $ref: '#/components/schemas/bAccountInInventoryCrossReferenceDto'
+        alternateID:
+          type: string
+          description: 'Mandatory field: Alternate ID &gt; The alternate ID of the stock item (under the specified item ID) as used by the supplier or customer.'
+        description:
+          type: string
+          description: Description &gt; Any comments applicable to the specified cross-reference.
+        isDefault:
+          type: boolean
+          description: Default &gt; Indicates whether this cross-reference is marked as the default one.
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure used for this component.
+        timestamp:
+          type: string
+          description: Timestamp of the inventory item the crossreference belongs to
+    priceClassInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Price/cost information tab &gt; Price management section &gt; Price class &gt; The item price class associated with the non-stock item. Group stock or non-stock items with similar price calculation methods.
+    salesNonTaxableAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Sales - non-taxable account &gt; The income account to be used for this stock item to record non-taxable sales.
+    bAccountInInventoryCrossReferenceDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: Supplier/Customer*, click magnifier &gt; Account ID &gt; Account no. identifying the business account.'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    salesExportAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Sales - export account &gt; The income account to be used for this stock item to record export sales.
+    cogsAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Only used for Stock items.
+
+        COGS account &gt; The expense account to be used for this stock item to record the cost of goods sold (COGS) once the sales order is released.'
+    AttributeIdValueDto:
+      type: object
+      properties:
+        id:
+          type: string
+        value:
+          type: string
+          description: Value &gt; The value of the attribute.
+        description:
+          type: string
+          description: Attribute &gt; The description of the attribute.
+    packagingInInventoryDto:
+      properties:
+        baseItemWeight:
+          type: number
+          description: The weight of the <see cref="!:BaseUnit">Base Unit</see> of the item.
+          format: double
+        weightUOM:
+          type: string
+          description: The <see cref="!:INUnit">Unit of Measure</see> used for the <see cref="P:Visma.net.ERP.Web.Api.Model.V1.IN.PackagingDto.BaseItemWeight">Weight</see> of the item.
+        baseItemVolume:
+          type: number
+          description: The volume of the <see cref="!:BaseUnit">Base Unit</see> of the item.
+          format: double
+        volumeUOM:
+          type: string
+          description: The <see cref="!:INUnit">Unit of Measure</see> used for the <see cref="P:Visma.net.ERP.Web.Api.Model.V1.IN.PackagingDto.BaseItemVolume">Volume</see> of the item.
+      description: Packaging tab
+    salesSubaccountInInventoryAccountInformationDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Sales sub. *&gt; The subaccount to be used for this item to record sales.'
+    InventoryUnitDto:
+      type: object
+      properties:
+        unitType:
+          type: integer
+          format: int32
+        itemClass:
+          $ref: '#/components/schemas/ItemClassDto'
+        inventoryID:
+          type: integer
+          description: The top part &gt; Item ID &gt; The unique alphanumeric identifier of the stock item.
+          format: int32
+        toUnit:
+          type: string
+          description: To unit &gt; The unit of measure selected as the base unit for the item.
+        sampleToUnit:
+          type: string
+        fromUnit:
+          type: string
+          description: 'Mandatory field: From unit &gt; The unit of measure for which the conversion parameters are specified.'
+        unitMultDiv:
+          type: string
+          description: Multiply/divide &gt; The operation to be performed for unit conversion.
+        unitRate:
+          type: number
+          format: double
+        priceAdjustmentMultiplier:
+          type: number
+          description: Price adjustment multiplier &gt; Changes the price automatically if you change the UoM.
+          format: double
+        recordID:
+          type: integer
+          format: int64
+    expenseAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Only used for Non-stock items.
+
+        Mandatory field: Expense account* &gt; The default expense account to be used for this non-stock item.'
+    expenseSubaccountInInventoryAccountInformationDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Only used for Non-stock items.
+
+        Mandatory field: Expense sub* &gt; The subaccount to be used by default with the expense account for transactions related to this non-stock item.'
+    WarehouseDetailDto:
+      type: object
+      properties:
+        isDefault:
+          type: boolean
+        warehouse:
+          type: string
+          description: Warehouse &gt; The warehouse where the stock item is available.
+        quantityOnHand:
+          type: number
+          description: Qty. on hand &gt; The quantity of this item available (on hand) at the warehouse.
+          format: double
+        available:
+          type: number
+          format: double
+        availableForShipment:
+          type: number
+          format: double
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+      description: This class represents a WarehouseDetail part of InventoryItem in InventoryItemController. Used for getting data.
+    defaultIssueFromInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: General information tab &gt; Warehouse defaults section &gt; Default issue from &gt; The location of the warehouse to be used by default to issue quantities of the selected stock item.
+    lotSerialClassInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; Lot/Serial Class* &gt; The lot serial class ID of the stock item, which by default is the ID associated with the item class.'
+    defaultReceiptToInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: General information tab &gt; Warehouse defaults section &gt; Default receipt to &gt; The location of warehouse to be used by default to receive certain quantities of the specified stock item.
+    vatCodeInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; VAT category* &gt; The VAT code of the stock item, which by default is the VAT code associated with the item class.'
+    costPriceStatisticsInInventoryDto:
+      properties:
+        lastCost:
+          type: number
+          description: Cost price statistics section &gt; Last cost &gt; The last standard cost used for the stock item.
+          format: double
+        averageCost:
+          type: number
+          description: Cost price statistics section &gt; Average cost &gt; The average cost for the stock item.
+          format: double
+        minCost:
+          type: number
+          description: Cost price statistics section &gt; Min. cost &gt; The minimum cost for the stock item.
+          format: double
+        maxCost:
+          type: number
+          description: Cost price statistics section &gt; Max. cost &gt; The maximum cost for the stock item.
+          format: double
+      description: Price/cost information tab &gt;
+    ClassAttributeDto:
+      type: object
+      properties:
+        attributeId:
+          type: string
+          description: The Attributes tab &gt; Attribute ID &gt; The identifier of the attribute.
+        description:
+          type: string
+          description: The Attributes tab &gt; Description &gt; A read-only column that displays the detailed description of the attribute.
+        sortOrder:
+          type: integer
+          description: The Attributes tab &gt; Sort order &gt; A number that represents the order of the attribute in the list of class attributes.The lower the number, the higher the attribute will be in the list of class attributes.
+          format: int32
+        required:
+          type: boolean
+          description: The Attributes tab &gt; Required &gt; This check box indicates (if selected) that the attribute value is required for items of the class.
+        attributeType:
+          enum:
+          - Text
+          - Combo
+          - MultiSelectCombo
+          - Lookup
+          - Checkbox
+          - Datetime
+          type: string
+        defaultValue:
+          type: string
+          description: The Attributes tab &gt; Default value &gt; The default value of the attribute.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDetailDto'
+    expenseNonTaxableAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Expense account, non-taxable &gt; The income account to be used for this stock item to record non-taxable expenses.
+    SupplierDetailsLineDto:
+      type: object
+      properties:
+        active:
+          type: boolean
+        default:
+          type: boolean
+        supplierId:
+          type: string
+        supplierName:
+          type: string
+        location:
+          type: string
+        warehouse:
+          type: string
+        purchaseUnit:
+          type: string
+        supplierItemId:
+          type: string
+        shipmentLeadTime:
+          type: integer
+          format: int32
+        leadTime:
+          type: integer
+          format: int32
+        minOrderFreq:
+          type: integer
+          format: int32
+        minOrderQty:
+          type: number
+          format: double
+        maxOrderQty:
+          type: number
+          format: double
+        lotSize:
+          type: number
+          format: double
+        eoq:
+          type: number
+          format: double
+        currencyId:
+          type: string
+        lastSupplierPrice:
+          type: number
+          format: double
+        override:
+          type: boolean
+    inventoryAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Only used for Stock items.
+
+        Inventory account &gt; The asset account to be used to keep the inventory balance resulting from transactions with this stock item.'
+    defaultWarehouseInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: General information tab &gt; Warehouse defaults section &gt; Default warehouse &gt; The default warehouse used to store the stock item with the specified item ID.
+    priceManagerInInventoryDto:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      description: The Price/cost information tab &gt; Price management section &gt; Price manager &gt; The manager responsible for the product pricing.
+    itemClassInInventoryDto:
+      properties:
+        type:
+          enum:
+          - NonStockItem
+          - LaborItem
+          - ServiceItem
+          - ChargeItem
+          - ExpenseItem
+          - FinishedGoodItem
+          - ComponentPartItem
+          - SubassemblyItem
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDto'
+        id:
+          type: string
+          description: The identifier.
+        description:
+          type: string
+          description: The description.
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; Item class* &gt; The item class to which the stock item is assigned.'
+    expenseImportAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Expense account, import &gt; The income account to be used for this stock item to record import expenses.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

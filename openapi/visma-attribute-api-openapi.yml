@@ -1,0 +1,574 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Attribute API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Attribute
+paths:
+  /v1/attribute/{attributeId}:
+    get:
+      tags:
+      - Attribute
+      summary: Get specific Attribute
+      operationId: Attribute_GetAttributeByattributeId
+      parameters:
+      - name: attributeId
+        in: path
+        description: Identifies the attribute
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttributeDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AttributeDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - Attribute
+      summary: Updates an attribute
+      description: Response Message has StatusCode NoContent if PUT operation succeed
+      operationId: Attribute_PutByattributeId
+      parameters:
+      - name: attributeId
+        in: path
+        description: Identifies the attribute to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the fields and field values to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+        required: true
+        x-bodyName: attributeUpdateDto
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    delete:
+      tags:
+      - Attribute
+      summary: Deletes an attribute
+      description: Response Message has StatusCode NoContent if DEL operation succeed
+      operationId: Attribute_DeleteByattributeId
+      parameters:
+      - name: attributeId
+        in: path
+        description: Identifies the attribute to delete
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/attribute:
+    get:
+      tags:
+      - Attribute
+      summary: 'Get a range of General ledger attributes - screen ID: CS205000.'
+      operationId: Attribute_GetAttributes
+      parameters:
+      - name: attributeID
+        in: query
+        schema:
+          type: string
+      - name: controlType
+        in: query
+        schema:
+          type: string
+      - name: internal
+        in: query
+        schema:
+          type: boolean
+      - name: greaterThanValue
+        in: query
+        description: Greater than value. The item which is the object for this, varies from API to API.
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the creation date and time. Use it to retrieve all records that have been created since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttributeDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttributeDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - Attribute
+      summary: Creates an attribute
+      description: Response Message has StatusCode Created if POST operation succeed
+      operationId: Attribute_Post
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the fields and field values to be set on created attribute
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AttributeUpdateDto'
+        required: true
+        x-bodyName: attributeUpdateDto
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    AttributeUpdateDto:
+      type: object
+      properties:
+        attributeID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        internal:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        controlType:
+          $ref: '#/components/schemas/DtoValueOfAttributeControlType'
+        entryMask:
+          $ref: '#/components/schemas/DtoValueOfString'
+        regExp:
+          $ref: '#/components/schemas/DtoValueOfString'
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeDetailUpdateDto'
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfAttributeControlType:
+      type: object
+      properties:
+        value:
+          enum:
+          - Text
+          - Combo
+          - MultiSelectCombo
+          - Lookup
+          - Checkbox
+          - Datetime
+          type: string
+    DtoValueOfNullableOfInt16:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    AttributeDto:
+      type: object
+      properties:
+        attributeID:
+          type: string
+        description:
+          type: string
+        controlType:
+          enum:
+          - Text
+          - Combo
+          - MultiSelectCombo
+          - Lookup
+          - Checkbox
+          - Datetime
+          type: string
+        internal:
+          type: boolean
+        entryMask:
+          type: string
+        regExp:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeDetailDto'
+        createdDateTime:
+          type: string
+          format: date-time
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents an attribute in AttributeController. Used for getting data.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    AttributeDetailDto:
+      type: object
+      properties:
+        valueId:
+          type: string
+        description:
+          type: string
+        sortOrder:
+          type: integer
+          format: int32
+        disabled:
+          type: boolean
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    AttributeDetailUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        valueId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        sortOrder:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt16'
+        disabled:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

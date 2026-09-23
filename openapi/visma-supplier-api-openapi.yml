@@ -1,0 +1,3845 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Supplier API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Supplier
+paths:
+  /v1/supplier/supplierClass:
+    get:
+      tags:
+      - Supplier
+      summary: Get supplier classes
+      operationId: Supplier_GetAllSupplierClasses
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierClassDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierClassDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/supplierClass/{supplierClassId}:
+    get:
+      tags:
+      - Supplier
+      summary: Get a specific supplier class
+      description: 'Data for a single supplier class.
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: Supplier_GetSpecificSupplierClassBysupplierClassId
+      parameters:
+      - name: supplierClassId
+        in: path
+        description: Identifies the supplier class
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierClassDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SupplierClassDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/balance:
+    get:
+      tags:
+      - Supplier
+      summary: Get the balance of a range of suppliers
+      operationId: Supplier_GetAllSupplierBalance
+      parameters:
+      - name: greaterThanValue
+        in: query
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierBalanceDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierBalanceDto'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierBalanceDto'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierBalanceDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/POBalance:
+    get:
+      tags:
+      - Supplier
+      summary: Get the PO balance of a range of suppliers
+      operationId: Supplier_GetAllSupplierPOBalance
+      parameters:
+      - name: greaterThanValue
+        in: query
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierPOBalanceDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierPOBalanceDto'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierPOBalanceDto'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierPOBalanceDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/{supplierCd}:
+    get:
+      tags:
+      - Supplier
+      summary: Get a specific supplier
+      description: 'Data for a single supplier.
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: Supplier_GetBysupplierCd
+      parameters:
+      - name: supplierCd
+        in: path
+        description: Identifies the supplier
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SupplierDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - Supplier
+      summary: Update a specific supplier
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed.
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed.
+
+
+        The response headers include an ETag after a successful PUT operation.'
+      operationId: Supplier_PutBysupplierCd
+      parameters:
+      - name: supplierCd
+        in: path
+        description: Identifies the supplier to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: The data to update for supplier
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+        required: true
+        x-bodyName: supplier
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Supplier version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier:
+    get:
+      tags:
+      - Supplier
+      summary: Get a range of suppliers - ScreenId=AP303000
+      operationId: Supplier_GetAll
+      parameters:
+      - name: greaterThanValue
+        in: query
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Contains supplier name.
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          enum:
+          - Active
+          - OnHold
+          - HoldPayments
+          - Inactive
+          - OneTime
+          type: string
+      - name: vatRegistrationId
+        in: query
+        schema:
+          type: string
+      - name: corporateId
+        in: query
+        schema:
+          type: string
+      - name: attributes
+        in: query
+        schema:
+          type: string
+      - name: expandAccountInformation
+        in: query
+        schema:
+          type: boolean
+      - name: expandNote
+        in: query
+        schema:
+          type: boolean
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - Supplier
+      summary: Create a supplier
+      description: 'Response Message has StatusCode Created if POST operation succeed.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        The response headers include an ETag after a successful POST operation.'
+      operationId: Supplier_Post
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Define the data for the supplier to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdateDto'
+        required: true
+        x-bodyName: supplier
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/inboxrules:
+    get:
+      tags:
+      - Supplier
+      summary: Export the suppliers inbox rules for the current company as a JSON file
+      operationId: Supplier_GetInboxRulesAsync
+      parameters:
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/{supplierNumber}/invoice:
+    get:
+      tags:
+      - Supplier
+      summary: Get a range of invoices for a specific supplier Request page size must be lower…
+      operationId: Supplier_GetAllInvoicesForSupplierBysupplierNumber
+      parameters:
+      - name: supplierNumber
+        in: path
+        description: Identifies the supplier for which to return data
+        required: true
+        schema:
+          type: string
+      - name: expandAttachment
+        in: query
+        description: Set to true if you want to see all attachments regarding this document.
+        schema:
+          type: boolean
+      - name: expandLandedCosts
+        in: query
+        description: Expland landed cost lines
+        schema:
+          type: boolean
+      - name: documentType
+        in: query
+        description: By type of document.
+        schema:
+          enum:
+          - Invoice
+          - CreditAdj
+          - DebitAdj
+          - Prepayment
+          - Refund
+          - Payment
+          type: string
+      - name: released
+        in: query
+        description: Parameter for showing if invoice has been released or not.
+        schema:
+          type: integer
+          format: int32
+      - name: project
+        in: query
+        description: Filter by the project with which the document is associated.
+        schema:
+          type: string
+      - name: expandApproval
+        in: query
+        description: Set to true to include approval information.
+        schema:
+          type: boolean
+      - name: expandNote
+        in: query
+        description: Set to true to include description.
+        schema:
+          type: boolean
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: status
+        in: query
+        description: The status of the document
+        schema:
+          enum:
+          - Hold
+          - Balanced
+          - Voided
+          - Scheduled
+          - Open
+          - Closed
+          - Printed
+          - Prebooked
+          - Reserved
+          type: string
+      - name: expandLinePrebookAccounts
+        in: query
+        description: Expland line-level pre-booking account and sub-account information.
+        schema:
+          type: boolean
+      - name: branch
+        in: query
+        description: Filter by Branch
+        schema:
+          type: string
+      - name: financialPeriod
+        in: query
+        description: Filter by Financial Period, format YYYYPP
+        schema:
+          type: string
+      - name: dueDate
+        in: query
+        description: 'This value indicates the date the document is due for payment. Use it to retrieve all records that have the Due date since that time, up to the future.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+
+          _Note:_ __DueDate__ and __DueDateConditionCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+          format: date-time
+      - name: dueDateCondition
+        in: query
+        description: 'This value represents the condition to be applied to the Due Date when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __DueDate__ and __DueDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: docDate
+        in: query
+        description: 'This value indicates the document date. Use it to retrieve all records that have the Document Date since that time, up to the future.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+
+          _Note:_ __Docate__ and __DocDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+          format: date-time
+      - name: docDateCondition
+        in: query
+        description: 'This value represents the condition to be applied to the Document Date when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __DocumentDate__ and __DocumentDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: item
+        in: query
+        description: Filter by Item used into the document lines
+        schema:
+          type: string
+      - name: balance
+        in: query
+        description: 'This value represents balance of the payment remaining to be applied and released. Only released applications will count towards the balance.
+
+
+          _Note:_ __Balance__ and __BalanceCondition__ are __mutually inclusive__.'
+        schema:
+          type: number
+          format: double
+      - name: balanceCondition
+        in: query
+        description: 'This value represents the condition to be applied to the Balance when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __Balance__ and __BalanceCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: greaterThanValue
+        in: query
+        description: Greater than value. The item which is the object for this, varies from API to API.
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the creation date and time. Use it to retrieve all records that have been created since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierInvoiceDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierInvoiceDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/{supplierNumber}/document:
+    get:
+      tags:
+      - Supplier
+      summary: Gets a range of documents for a specific supplier
+      operationId: Supplier_GetAllDocumentsForSupplierBysupplierNumber
+      parameters:
+      - name: supplierNumber
+        in: path
+        description: Identifies the supplier for which to return data
+        required: true
+        schema:
+          type: string
+      - name: documentType
+        in: query
+        description: By type of document.
+        schema:
+          enum:
+          - Invoice
+          - CreditAdj
+          - DebitAdj
+          - Prepayment
+          - Refund
+          - Payment
+          type: string
+      - name: released
+        in: query
+        description: Parameter for showing if invoice has been released or not.
+        schema:
+          type: integer
+          format: int32
+      - name: project
+        in: query
+        description: Filter by the project with which the document is associated.
+        schema:
+          type: string
+      - name: expandApproval
+        in: query
+        description: Set to true to include approval information.
+        schema:
+          type: boolean
+      - name: expandNote
+        in: query
+        description: Set to true to include description.
+        schema:
+          type: boolean
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: status
+        in: query
+        description: The status of the document
+        schema:
+          enum:
+          - Hold
+          - Balanced
+          - Voided
+          - Scheduled
+          - Open
+          - Closed
+          - Printed
+          - Prebooked
+          - Reserved
+          type: string
+      - name: expandLinePrebookAccounts
+        in: query
+        description: Expland line-level pre-booking account and sub-account information.
+        schema:
+          type: boolean
+      - name: branch
+        in: query
+        description: Filter by Branch
+        schema:
+          type: string
+      - name: financialPeriod
+        in: query
+        description: Filter by Financial Period, format YYYYPP
+        schema:
+          type: string
+      - name: dueDate
+        in: query
+        description: 'This value indicates the date the document is due for payment. Use it to retrieve all records that have the Due date since that time, up to the future.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+
+          _Note:_ __DueDate__ and __DueDateConditionCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+          format: date-time
+      - name: dueDateCondition
+        in: query
+        description: 'This value represents the condition to be applied to the Due Date when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __DueDate__ and __DueDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: docDate
+        in: query
+        description: 'This value indicates the document date. Use it to retrieve all records that have the Document Date since that time, up to the future.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+
+          _Note:_ __Docate__ and __DocDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+          format: date-time
+      - name: docDateCondition
+        in: query
+        description: 'This value represents the condition to be applied to the Document Date when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __DocumentDate__ and __DocumentDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: item
+        in: query
+        description: Filter by Item used into the document lines
+        schema:
+          type: string
+      - name: balance
+        in: query
+        description: 'This value represents balance of the payment remaining to be applied and released. Only released applications will count towards the balance.
+
+
+          _Note:_ __Balance__ and __BalanceCondition__ are __mutually inclusive__.'
+        schema:
+          type: number
+          format: double
+      - name: balanceCondition
+        in: query
+        description: 'This value represents the condition to be applied to the Balance when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __Balance__ and __BalanceCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: greaterThanValue
+        in: query
+        description: Greater than value. The item which is the object for this, varies from API to API.
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the creation date and time. Use it to retrieve all records that have been created since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierDocumentDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplierDocumentDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/{supplierCd}/balance:
+    get:
+      tags:
+      - Supplier
+      summary: Get a specific supplier's PO balance
+      operationId: Supplier_GetSupplierBalanceBysupplierCd
+      parameters:
+      - name: supplierCd
+        in: path
+        description: Indentifies the supplier for witch to return data
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierBalanceDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SupplierBalanceDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SupplierBalanceDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SupplierBalanceDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/{supplierCd}/POBalance:
+    get:
+      tags:
+      - Supplier
+      summary: Get a specific supplier's PO balance
+      operationId: Supplier_GetSupplierPOBalanceBysupplierCd
+      parameters:
+      - name: supplierCd
+        in: path
+        description: Indentifies the supplier for witch to return data
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierPOBalanceDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SupplierPOBalanceDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SupplierPOBalanceDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SupplierPOBalanceDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/supplier/{supplierCd}/contact:
+    get:
+      tags:
+      - Supplier
+      summary: Get a range of a Supplier of a specific supplier
+      operationId: Supplier_GetAllContactForSupplierBysupplierCd
+      parameters:
+      - name: supplierCd
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: displayName
+        in: query
+        schema:
+          type: string
+      - name: active
+        in: query
+        schema:
+          type: string
+      - name: firstName
+        in: query
+        schema:
+          type: string
+      - name: lastName
+        in: query
+        schema:
+          type: string
+      - name: businessAccount
+        in: query
+        schema:
+          type: string
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: greaterThanValue
+        in: query
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    DtoValueOfSupplierChargeBearer:
+      type: object
+      properties:
+        value:
+          enum:
+          - Payer
+          - Beneficiary
+          - Shared
+          - ServiceLevel
+          type: string
+    SupplierDto:
+      type: object
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: 'Mandatory field: The top part &gt; Supplier ID* &gt; The ID of the supplier account.'
+        name:
+          type: string
+          description: 'Mandatory field: The top part &gt; Supplier name* &gt; The name of the supplier to appear in the system, which may be a trade name or a doing-business-as (DBA) name.'
+        status:
+          enum:
+          - Active
+          - OnHold
+          - HoldPayments
+          - Inactive
+          - OneTime
+          type: string
+          description: 'Mandatory field: The top part &gt; Status* &gt; The status of the supplier account.'
+        mainAddress:
+          $ref: '#/components/schemas/mainAddressInSupplierDto'
+        mainContact:
+          $ref: '#/components/schemas/mainContactInSupplierDto'
+        accountReference:
+          type: string
+          description: General information tab &gt; Main contact section &gt; Account ref. &gt; An optional text field that can contain a reference to your company's account number in the supplier's system.
+        parentRecord:
+          $ref: '#/components/schemas/parentRecordInSupplierDto'
+        supplierClass:
+          $ref: '#/components/schemas/supplierClassInSupplierDto'
+        creditTerms:
+          $ref: '#/components/schemas/creditTermsInSupplierDto'
+        documentLanguage:
+          type: string
+          description: General information tab &gt; Financial settings section &gt; Document language &gt; The language of the documents to be printed to the suppliers of the class.
+        currencyId:
+          type: string
+          description: General information tab &gt; Financial settings section &gt; Currency ID &gt; The currency that is used in operations with the supplier.
+        remitAddress:
+          $ref: '#/components/schemas/remitAddressInSupplierDto'
+        remitContact:
+          $ref: '#/components/schemas/remitContactInSupplierDto'
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethodInSupplierDto'
+        cashAccount:
+          type: string
+          description: Payment settings tab &gt; Payment settings section &gt; Cash account &gt; The cash account to be used for operations with the supplier. You must select a cash account.
+        chargeBearer:
+          enum:
+          - Payer
+          - Beneficiary
+          - Shared
+          - ServiceLevel
+          type: string
+          description: Payment settings tab &gt; Payment settings section &gt; Charge bearer &gt; The party that will pay possible expenses connected with the payment.
+        accountUsedForPayment:
+          enum:
+          - IBAN
+          - BBAN
+          - BANKGIRO
+          - PLUSGIRO
+          type: string
+          description: Payment settings tab &gt; Payment settings section &gt; Account used for payment &gt; The bank account to be used for payments to the supplier.
+        paymentBy:
+          enum:
+          - DueDate
+          - DiscountDate
+          type: string
+          description: Payment settings tab &gt; Payment settings section &gt; Payment by &gt; An option that defines how to calculate the date when this supplier should be paid.
+        paymentLeadTime:
+          type: integer
+          description: Payment settings tab &gt; Payment settings section &gt; Payment lead time (days) &gt; The number of days required for the payment to be delivered to the supplier's location.
+          format: int32
+        paymentRefDisplayMask:
+          type: string
+          description: Payment settings tab &gt; Payment settings section &gt; Payment ref. display mask &gt; This is a rule (mask) for how the payment reference number will be displayed.
+        paySeparately:
+          type: boolean
+          description: Payment settings tab &gt; Payment settings section &gt; Pay separately &gt; A check box that indicates (if selected) that each supplier document should be paid by a separate payment.
+        supplierAddress:
+          $ref: '#/components/schemas/supplierAddressInSupplierDto'
+        supplierContact:
+          $ref: '#/components/schemas/supplierContactInSupplierDto'
+        location:
+          $ref: '#/components/schemas/locationInSupplierDto'
+        vatRegistrationId:
+          type: string
+          description: Purchase settings tab &gt; Default location settings section &gt; VAT registration ID &gt; The supplier's VAT registration ID associated with the location.
+        corporateId:
+          type: string
+          description: Purchase settings tab &gt; Default location settings section &gt; National insurance no. &gt; The supplier’s national insurance number associated with the location.
+        vatZone:
+          $ref: '#/components/schemas/vatZoneInSupplierDto'
+        glAccounts:
+          $ref: '#/components/schemas/glAccountsInSupplierDto'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeIdValueDto'
+          description: Attributes tab &gt;
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        supplierPaymentMethodDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierPaymentMethodDetailDto'
+          description: This class represents a Payment Method Detail in SupplierController. Used to get data for SupplierPaymentMethodDetails of a Supplier.
+        retainageApply:
+          type: boolean
+          description: Payment settings tab &gt; Retainage settings section &gt; Apply retainage &gt; A check box that indicates (if selected) that by default, invoices with retainage are created for the supplier in the Purchase invoices window.
+        retainageCashAccountID:
+          type: string
+          description: Payment settings tab &gt; Retainage settings section &gt; Retainage cash account &gt; The cash account to be used to record retainages for this supplier.
+        retainagePct:
+          type: number
+          description: Payment settings tab &gt; Retainage settings section &gt; Retainage (%) &gt; The default percent to be retained in invoices for the supplier.
+          format: double
+        note:
+          type: string
+        numberOfEmployees:
+          type: integer
+          description: Legal requirements that all companies with more than 250 employees keep track of their business accounts
+          format: int32
+        naceCode:
+          type: string
+          description: General information tab &gt; Main contact section &gt; Industry Code ID &gt; The supplier's NACE code
+        landedCostSupplier:
+          type: boolean
+          description: General information tab &gt; SupplierProperties &gt; Landed Cost Supplier &gt; Indicates if the supplier is a landed cost supplier or not
+        currencyOverride:
+          type: boolean
+          description: General information tab &gt; Financial settings section &gt; Enable currency override
+        currencyRateOverride:
+          type: boolean
+          description: General information tab &gt; Financial settings section &gt; Enable rate override
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a supplier in SupplierController. Used by getting data.
+    mainContactInSupplierDto:
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: General information tab &gt; Main contact section &gt;
+    WithoutWithVatDto:
+      type: object
+      properties:
+        withoutVat:
+          type: number
+          format: double
+        withVat:
+          type: number
+          format: double
+    prebookSubaccountInSupplierInvoiceLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Prebook subaccount used on the line. Note that this feature is not available in all countries.
+    ClassAttributeDetailDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    expenseEUAccountInSupplierGlAccountsDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Expence EU account &gt; The EU expense account used to record expenses made to the suppliers of this class.
+    subaccountInSupplierDocumentDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: Document details tab &gt; Subaccount* &gt; The corresponding subaccount to be used for invoices and adjustments.'
+    SupplierDescriptionDto:
+      type: object
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    paymentMethodInSupplierDocumentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Financial details tab &gt; Payment method &gt; The payment method used for the payment.
+    AttributeIdValueDto:
+      type: object
+      properties:
+        id:
+          type: string
+        value:
+          type: string
+          description: Value &gt; The value of the attribute.
+        description:
+          type: string
+          description: Attribute &gt; The description of the attribute.
+    expenseAccountNonTaxInSupplierGlAccountsDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Expence acct, non-taxable &gt; The non-taxable expense account used to record expenses made to the suppliers of this class.
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    AddressUpdateDto:
+      type: object
+      properties:
+        addressLine1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postalCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        city:
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        county:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfPaymentBy:
+      type: object
+      properties:
+        value:
+          enum:
+          - DueDate
+          - DiscountDate
+          type: string
+    prebookAccountInSupplierInvoiceLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Prebook account used on the line. Note that this feature is not available in all countries.
+    accountInSupplierDocumentDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Document details tab &gt; Account* &gt; The expense account to be updated by this transaction.'
+    SupplierInvoiceLineDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: The table &gt; Number at the left indicating the line number of the table.
+          format: int32
+        inventoryNumber:
+          type: string
+          description: The table &gt; Item ID &gt; The unique ID of the particular item or service delivered by the supplier.
+        externalInventoryId:
+          type: string
+          description: The table &gt; External inventory id &gt; External inventory number
+        stockItem:
+          type: boolean
+          description: Background information indicating whether the item is a stock item or not.
+        transactionDescription:
+          type: string
+          description: The table &gt; Transaction descr. &gt; Any description relevant to the transaction. An alphanumeric string of up to 30 characters may be used.
+        quantity:
+          type: number
+          description: The table &gt; Quantity &gt; The quantity of the item or service to be delivered by the supplier.
+          format: double
+        uom:
+          type: string
+          description: The table &gt; UoM &gt; The unit of measure for the item.
+        unitCost:
+          type: number
+          description: The table &gt; Unit cost &gt; The unit cost of the item.
+          format: double
+        unitCostInCurrency:
+          type: number
+          description: Background calculation giving you the Unit cost in the selected currency.This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        cost:
+          type: number
+          description: The table &gt; Cost &gt; The unit cost of the item or service received from the supplier.
+          format: double
+        costInCurrency:
+          type: number
+          description: Background calculation giving you the Cost in the selected currency.This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        discountPercent:
+          type: number
+          description: The table &gt; Discount percent &gt; The percent of the line-level discount that has been applied manually or automatically.
+          format: double
+        discountAmount:
+          type: number
+          description: The table &gt; Discount amount &gt; The amount of the line-level discount that has been applied manually or automatically to this line.
+          format: double
+        discountAmountInCurrency:
+          type: number
+          description: Background calculation giving you the Discount amount in the selected currency.This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        discountUnitCost:
+          type: number
+          description: Background calculation giving you the Discount unit cost in the default currency.
+          format: double
+        discountUnitCostInCurrency:
+          type: number
+          description: Background calculation giving you the Discount unit cost in the selected currency.This field is applicable if the amount is given in a another currency than your default.
+          format: double
+        manualDiscount:
+          type: boolean
+          description: The table &gt; Manual discount &gt; A check box that indicates (if selected) that the discount has been applied manually.
+        account:
+          $ref: '#/components/schemas/accountInSupplierInvoiceLineDto'
+        subaccount:
+          $ref: '#/components/schemas/subaccountInSupplierInvoiceLineDto'
+        prebookAccount:
+          $ref: '#/components/schemas/prebookAccountInSupplierInvoiceLineDto'
+        prebookSubaccount:
+          $ref: '#/components/schemas/prebookSubaccountInSupplierInvoiceLineDto'
+        deferralSchedule:
+          type: integer
+          description: The table &gt; Original deferral schedule &gt; A read-only column filled in by the system in the Debit adjustment documents created by the reversing process.It shows the ID of the deferral schedule associated with the original document (such as a purchase invoice).
+          format: int32
+        deferralScheduleNbr:
+          type: string
+          description: The public CD/Code of the deferral schedule visible to user
+        deferralCode:
+          type: string
+          description: The table &gt; Deferral code &gt; The deferral code assigned to the stock item or non-stock item specified in this document line.
+        vatCode:
+          $ref: '#/components/schemas/vatCodeInSupplierInvoiceLineDto'
+        poNumber:
+          type: string
+          description: The table &gt; Purchase order number &gt; The number of the purchase order linked to this line of the invoice.
+        poLineNr:
+          type: integer
+          description: The table &gt; Purchase order line &gt; The line number of the purchase order line linked to this line of the invoice.
+          format: int32
+        poReceiptNbr:
+          type: string
+          description: The table &gt; Purchase order receipt no. &gt; The number of the purchase receipt linked to this line of the invoice.
+        poReceiptLineNbr:
+          type: integer
+          description: The table &gt; Purchase order receipt line &gt; The line number of the purchase receipt's line that is linked to this line of the invoice.
+          format: int32
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInSupplierInvoiceLineDto'
+        note:
+          type: string
+          description: The table &gt; Icon Notes &gt; Pop-up window for providing any user-defined text connected with to invoice.
+        splitHierarchy:
+          type: string
+          description: The table &gt; Split hierarchy &gt; The number of the original row that has been split.
+        project:
+          $ref: '#/components/schemas/projectInSupplierInvoiceLineDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInSupplierInvoiceLineDto'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+          description: The data containing information about the document attachments
+        retainagePct:
+          type: number
+          format: double
+        curyRetainageAmt:
+          type: number
+          format: double
+        termStartDate:
+          type: string
+          format: date-time
+        termEndDate:
+          type: string
+          format: date-time
+    SupplierGlAccountsUpdateDto:
+      type: object
+      properties:
+        supplierAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        supplierSubaccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseAccountNonTax:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseEUAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseAccountImport:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseSubaccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+    supplierAddressInSupplierDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: Purchase settings tab &gt; Shipping address section &gt;
+    DtoValueOfAddressUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/AddressUpdateDto'
+    DtoValueOfSupplierStatus:
+      type: object
+      properties:
+        value:
+          enum:
+          - Active
+          - OnHold
+          - HoldPayments
+          - Inactive
+          - OneTime
+          type: string
+    TaxCategoryNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    TaxDetailDto:
+      type: object
+      properties:
+        taxId:
+          type: string
+          description: 'Mandatory field: VAT ID* &gt; The ID of the VAT applied to the document.'
+        recordId:
+          type: integer
+          description: The id as stored in the database. It can be used when we want to update a VAT record.
+          format: int32
+        vatId:
+          $ref: '#/components/schemas/vatIdInTaxDetailDto'
+        vatRate:
+          type: number
+          description: VAT rate &gt; The rate of the VAT.
+          format: double
+        taxableAmount:
+          type: number
+          description: Taxable amount &gt; The taxable amount for the VAT, which is calculated at the document level.
+          format: double
+        vatAmount:
+          type: number
+          description: VAT &gt; The VAT amount for the specific VAT, which is calculated at the document level.
+          format: double
+        expenseAmount:
+          type: number
+          description: Expense Amount for the VAT type that has been added.
+          format: double
+      description: This class represents a VAT Detail Line. Used for getting data.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    ContactDto:
+      type: object
+      properties:
+        displayName:
+          type: string
+        active:
+          type: boolean
+          description: The top part &gt; Active &gt; A check box that indicates (if selected) that the contact is active.
+        title:
+          enum:
+          - Doctor
+          - Miss
+          - Mr
+          - Mrs
+          - Ms
+          - Prof
+          type: string
+          description: The top part &gt; First name &gt; The contact's courtesy title.
+        firstName:
+          type: string
+          description: The top part &gt; First name &gt; The first name of the contact.
+        lastName:
+          type: string
+          description: 'Mandatory field: The top part &gt; Last name* &gt; The last name of the contact.'
+        position:
+          type: string
+          description: The top part &gt; Job title &gt; The contact’s job title or position.
+        businessAccount:
+          type: string
+          description: The top part &gt; Business account &gt; The business account associated with the contact.
+        businessAccountType:
+          type: string
+          description: The top part &gt; Business account &gt; The business account type of the business account associated with the contact.
+        sameAsAccount:
+          type: boolean
+          description: The Details tab &gt; Same as in account &gt; A check box that indicates (if selected) that the contact's address is the same as the address of the business account.
+        address:
+          $ref: '#/components/schemas/addressInContactDto'
+        email:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Email &gt; The email address of the contact.
+        web:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Web &gt; The website of the contact, if any.
+        phone1:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Business 1/Business 2/Business 3/Business assistant 1/Business fax /Home/Home fax/Mobile &gt; The primary phone number of the contact. Select the type from the drop down.
+        phone2:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Business 1/Business 2/Business 3/Business assistant 1/Business fax /Home/Home fax/Mobile &gt; The primary phone number of the contact. Select the type from the drop down.
+        phone3:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Business 1/Business 2/Business 3/Business assistant 1/Business fax /Home/Home fax/Mobile &gt; The primary phone number of the contact. Select the type from the drop down.
+        fax:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Business fax &gt; The fax number of the contact.
+        contactMethod:
+          enum:
+          - Any
+          - Email
+          - Mail
+          - Fax
+          - Phone
+          type: string
+          description: CRM section not available in Visma.net ERP
+        doNotCall:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        doNotFax:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        doNotEmail:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        doNotMail:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        noMassMail:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        noMarketing:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        lastModifiedDateTime:
+          type: string
+          description: 'Background information: The date and time when the details of the contact were last updated.'
+          format: date-time
+        contactId:
+          type: integer
+          description: The top part &gt; Contact ID &gt; The unique identifier of the contact, which the system generates automatically.
+          format: int32
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a contact in ContactController. Used by getting data.
+    DtoValueOfAccountUsedForPayment:
+      type: object
+      properties:
+        value:
+          enum:
+          - IBAN
+          - BBAN
+          - BANKGIRO
+          - PLUSGIRO
+          type: string
+    DtoValueOfContactInfoUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/ContactInfoUpdateDto'
+    glAccountsInSupplierDto:
+      properties:
+        supplierAccount:
+          $ref: '#/components/schemas/supplierAccountInSupplierGlAccountsDto'
+        supplierSubaccount:
+          $ref: '#/components/schemas/supplierSubaccountInSupplierGlAccountsDto'
+        expenseAccount:
+          $ref: '#/components/schemas/expenseAccountInSupplierGlAccountsDto'
+        expenseAccountNonTax:
+          $ref: '#/components/schemas/expenseAccountNonTaxInSupplierGlAccountsDto'
+        expenseEUAccount:
+          $ref: '#/components/schemas/expenseEUAccountInSupplierGlAccountsDto'
+        expenseAccountImport:
+          $ref: '#/components/schemas/expenseAccountImportInSupplierGlAccountsDto'
+        expenseSubaccount:
+          $ref: '#/components/schemas/expenseSubaccountInSupplierGlAccountsDto'
+      description: General ledger accounts tab &gt;
+    DtoValueOfNullableOfInt16:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    SupplierClassDto:
+      type: object
+      properties:
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDto'
+        paymentMethodId:
+          type: string
+        paymentMethodDescription:
+          type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    parentRecordInSupplierDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: General information tab &gt; Main contact section &gt; Parent account &gt; The parent supplier's account, which you can select from the list of existing supplier accounts.
+    SupplierUpdateDto:
+      type: object
+      properties:
+        number:
+          $ref: '#/components/schemas/DtoValueOfString'
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        status:
+          $ref: '#/components/schemas/DtoValueOfSupplierStatus'
+        accountReference:
+          $ref: '#/components/schemas/DtoValueOfString'
+        numberOfEmployees:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        parentRecordNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        supplierClassId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        overrideWithClassValues:
+          type: boolean
+        creditTermsId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        documentLanguage:
+          $ref: '#/components/schemas/DtoValueOfString'
+        currencyId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        currencyOverride:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        currencyRateOverride:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        paymentMethodId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        cashAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        paymentLeadTime:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt16'
+        paymentRefDisplayMask:
+          $ref: '#/components/schemas/DtoValueOfString'
+        paySeparately:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        vatRegistrationId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        corporateId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        vatZoneId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        chargeBearer:
+          $ref: '#/components/schemas/DtoValueOfSupplierChargeBearer'
+        accountUsedForPayment:
+          $ref: '#/components/schemas/DtoValueOfAccountUsedForPayment'
+        paymentBy:
+          $ref: '#/components/schemas/DtoValueOfPaymentBy'
+        mainAddress:
+          $ref: '#/components/schemas/DtoValueOfAddressUpdateDto'
+        mainContact:
+          $ref: '#/components/schemas/DtoValueOfContactInfoUpdateDto'
+        remitAddress:
+          $ref: '#/components/schemas/DtoValueOfAddressUpdateDto'
+        remitContact:
+          $ref: '#/components/schemas/DtoValueOfContactInfoUpdateDto'
+        supplierAddress:
+          $ref: '#/components/schemas/DtoValueOfAddressUpdateDto'
+        supplierContact:
+          $ref: '#/components/schemas/DtoValueOfContactInfoUpdateDto'
+        glAccounts:
+          $ref: '#/components/schemas/DtoValueOfSupplierGlAccountsUpdateDto'
+        supplierPaymentMethodDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierPaymentMethodDetailUpdateDto'
+        attributeLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeLineUpdateDto'
+        retainageCashAccountID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        retainageApply:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        retainagePct:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        naceCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        landedCostSupplier:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+      description: This class represents a supplier in SupplierController. Used to create and update supplier.
+    accountInSupplierInvoiceLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'The table &gt; Mandatory field: Account* &gt; The purchase account used for the invoice line.'
+    paymentMethodInSupplierDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Payment settings tab &gt; Payment settings section &gt; Payment method &gt; The default payment method to be used for the supplier.
+    vatZoneInSupplierDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        description:
+          type: string
+          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultVatCategory:
+          type: string
+          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultTaxCategory:
+          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Purchase settings tab &gt; Default location settings section &gt; VAT zone &gt; The VAT zone of the supplier's default location.
+    SupplierBalanceDto:
+      type: object
+      properties:
+        branchNumber:
+          type: string
+        supplier:
+          $ref: '#/components/schemas/SupplierDescriptionDto'
+        balance:
+          type: number
+          format: double
+        unreleasedPurchasesNotInApproval:
+          $ref: '#/components/schemas/WithoutWithVatDto'
+        totalSentForApproval:
+          $ref: '#/components/schemas/WithoutWithVatDto'
+        totalPurchaseInvoicePeriod:
+          $ref: '#/components/schemas/WithoutWithVatDto'
+        totalPurchaseInvoiceYear:
+          $ref: '#/components/schemas/WithoutWithVatDto'
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+    subaccountInSupplierInvoiceLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'The table &gt; Mandatory field: Subaccount* &gt; The corresponding subaccount used for this invoice line.'
+    remitContactInSupplierDto:
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: Payment settings tab &gt; Remittance contact section &gt;
+    locationInSupplierDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Purchase settings tab &gt; Default location settings section &gt;
+    locationInSupplierInvoiceDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: The Top part &gt; Location* &gt; The supplier location associated with the purchase.
+    expenseAccountInSupplierGlAccountsDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Expense account &gt; The expense account used to record expenses incurred for the supplier.
+    supplierContactInSupplierDto:
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: Purchase settings tab &gt; Shipping contact information section &gt;
+    ContactInfoUpdateDto:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        attention:
+          $ref: '#/components/schemas/DtoValueOfString'
+        email:
+          $ref: '#/components/schemas/DtoValueOfString'
+        web:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        fax:
+          $ref: '#/components/schemas/DtoValueOfString'
+    SupplierPaymentMethodDetailUpdateDto:
+      type: object
+      properties:
+        paymentMethodDetailDescription:
+          type: string
+        paymentMethodDetailValue:
+          $ref: '#/components/schemas/DtoValueOfString'
+      description: This class represents a Payment Method Detail in SupplierController. Used to update SupplierPaymentMethodDetails when creating or updating a Supplier.
+    creditTermsInSupplierInvoiceDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Top part &gt; Terms &gt; The credit terms associated with the supplier (unavailable for prepayments and debit adjustments)
+    supplierAccountInSupplierGlAccountsDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Supplier account &gt; The liability account used to record the balance of supplier ledger transactions related to the supplier.'
+    locationInSupplierDocumentDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: The Top part &gt; Location* &gt; The supplier location associated with the purchase.
+    supplierSubaccountInSupplierGlAccountsDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Supplier sub &gt; The corresponding subaccount used to record the balance of supplier ledger transactions related to the supplier.
+    countryInAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    branchNumberInSupplierInvoiceLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'The table &gt; Mandatory field: Branch* &gt; The branch that purchases the line item or service.
+
+        Note: The field type has been changed from string to BranchNumberDto, please consider doing changes accordingly.'
+    attributeIdInAttributeLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The ID of the attribute on the line.
+    branchInSupplierDocumentDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Branch is deprecated, please use BranchNumber instead.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    approvalDetailsInSupplierInvoiceDto:
+      properties:
+        attachmentID:
+          type: string
+          description: The Approval details tab &gt; Default document &gt; The default document that includes the payments requiring approval.
+        comment:
+          type: string
+          description: The Approval details tab &gt; Comment &gt; The comment connected with the approval of the payments.
+      description: The Approval details tab &gt;
+    supplierTaxZoneInSupplierInvoiceDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        description:
+          type: string
+          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultVatCategory:
+          type: string
+          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultTaxCategory:
+          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: The Financial details tab &gt; The VAT section &gt; Supplier VAT Zone &gt; The VAT zone of the supplier, which is specified in the  AP303000 window.
+    expenseSubaccountInSupplierGlAccountsDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Expense sub &gt; The corresponding subaccount used to record expenses incurred for the supplier.
+    SupplierPaymentMethodDetailDto:
+      type: object
+      properties:
+        paymentMethodDetailDescription:
+          type: string
+          description: The description of the payment method detail.
+        paymentMethodDetailValue:
+          type: string
+          description: The ID of the payment method detail.
+        paymentMethodDetailBankingDetailType:
+          type: string
+          description: Payment method banking detail type
+        paymentMethodDetailID:
+          type: string
+          description: payment method detail ID
+      description: This class represents a Payment Method Detail in SupplierController. Used to get data for SupplierPaymentMethodDetails of a Supplier.
+    SupplierInvoiceDto:
+      type: object
+      properties:
+        taxDetailLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxDetailDto'
+          description: The VAT details tab &gt;
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+        approvalDetails:
+          $ref: '#/components/schemas/approvalDetailsInSupplierInvoiceDto'
+        invoiceLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierInvoiceLineDto'
+          description: Transaction lines
+        landedCosts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierInvoiceLandedCostDto'
+          description: The Landed cost lines tab &gt;
+        hold:
+          type: boolean
+          description: The Top part &gt; Hold &gt; A check box that indicates that the status of the supplier ledger document is On hold.
+        exchangeRate:
+          type: number
+          description: The Top part &gt; Currency &gt; The currency of the document.
+          format: double
+        paymentRefNo:
+          type: string
+          description: The Top part &gt; Payment ref.no &gt; The payment reference number of the document.
+        originalReferenceNumber:
+          type: string
+          description: The original reference number of the document.
+        creditTerms:
+          $ref: '#/components/schemas/creditTermsInSupplierInvoiceDto'
+        retainageApply:
+          type: boolean
+          description: The Top part &gt; Apply retainage &gt; A check box that indicates (if selected) that this invoice is an invoice with retainage.
+        cashDiscountDate:
+          type: string
+          description: The Top part &gt; Cash discount date &gt; The end date of the cash discount period, which the system calculates by using the supplier's credit terms.
+          format: date-time
+        detailTotal:
+          type: number
+          description: The Top part &gt; Detail total &gt; The document total as specified in the Document details tab.
+          format: double
+        detailTotalInCurrency:
+          type: number
+          description: Background calculation giving you the Detail total in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        discountTotal:
+          type: number
+          description: The Top part &gt; Discount total &gt; The discount total calculated for the document. This total includes discounts of the Group and Document levels.
+          format: double
+        discountTotalInCurrency:
+          type: number
+          description: Background calculation giving you the Discount total in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        vatTaxableTotal:
+          type: number
+          description: The Top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
+          format: double
+        vatTaxableTotalInCurrency:
+          type: number
+          description: Background calculation giving you the VAT taxable total in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The Top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
+          format: double
+        vatExemptTotalInCurrency:
+          type: number
+          description: Background calculation giving you the VAT exempt total in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        withholdingTax:
+          type: number
+          description: The Top part &gt; With. tax &gt; The amount of withholding tax calculated for the document, if applicable.
+          format: double
+        withholdingTaxInCurrency:
+          type: number
+          description: Background calculation giving you the With. tax in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        buyerReference:
+          type: string
+          description: The Top part &gt; Supplier ref. &gt; The document's original reference number as assigned by the supplier (for informational purposes).
+        roundingDiff:
+          type: number
+          description: The Top part &gt; Rounding diff. &gt; The difference between the original invoice amount (including the VAT amount calculated by the system) and rounded invoice amount (including the VAT amount modified by a user for VAT-inclusive items).
+          format: double
+        roundingDiffInCurrency:
+          type: number
+          description: Background calculation giving you the Rounding diff. in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        amount:
+          type: number
+          description: The Top part &gt; Amount &gt; The amount to be paid for the document. Equal to the amount (or to the sum of amounts) shown in the Amount column of the Document details tab.
+          format: double
+        vatAmount:
+          type: number
+          description: The Top part &gt; VAT amount &gt; The VAT amount to be paid for the document. Enter this amount manually according to the VAT amount specified in the original document.
+          format: double
+        taxCalculationMode:
+          enum:
+          - TaxSetting
+          - Gross
+          - Net
+          type: string
+          description: The Financial details tab &gt; The VAT section &gt; VAT calculation mode &gt; The VAT calculation mode, which defines which amounts (VAT-inclusive or VAT-exclusive) should be entered in the detail lines of a document (TaxSetting, Gross, Net)
+        supplierTaxZone:
+          $ref: '#/components/schemas/supplierTaxZoneInSupplierInvoiceDto'
+        paySelected:
+          type: boolean
+          description: The Financial details tab &gt; The Payment information section &gt; Approved for payment &gt; When set to true indicates that the document is approved for payment.
+        curyRetainageTotal:
+          type: number
+          format: double
+        curyRetainageUnreleasedAmt:
+          type: number
+          format: double
+        documentVersionNumber:
+          type: integer
+          format: int64
+        supplier:
+          $ref: '#/components/schemas/supplierInSupplierInvoiceDto'
+        documentType:
+          enum:
+          - Check
+          - CreditAdj
+          - DebitAdj
+          - Invoice
+          - Prepayment
+          - QuickCheck
+          - Refund
+          - VoidCheck
+          - VoidQuickCheck
+          type: string
+          description: 'The top part &gt; Top part &gt; Type &gt; The type of the document. The following types are available: Purchase invoice, credit adjustment, purchase credit note, prepayment.'
+        referenceNumber:
+          type: string
+        postPeriod:
+          type: string
+          description: The Top part &gt; Post period* &gt; The post period of the payment document. Format MMYYYY.
+        financialPeriod:
+          type: string
+          description: The financial period to which the transactions recorded in the document should be posted. Format YYYYMM.
+        date:
+          type: string
+          description: The Top part &gt; Date* &gt; The date of the original supplier ledger document; by default, it is the current date, which can be changed.
+          format: date-time
+        origInvoiceDate:
+          type: string
+          description: The Top part &gt; OrigInvoiceDate* &gt; The original invoice date of the original supplier ledger document; by default, it is the current date, which can be changed.
+          format: date-time
+        dueDate:
+          type: string
+          description: The Top part &gt; Due date* &gt; The date when payment for the document is due in accordance with the supplier's credit terms.
+          format: date-time
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: The Top part &gt; Approval status &gt; The status of the document in Visma.net Approval. [New, Canceled, SentToApproval, ReceivedByApproval, InProgressApproval, RejectedInApproval, ApprovedInApproval, ActiveWorkflowApproval.
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Voided
+          - Scheduled
+          - Open
+          - Closed
+          - Printed
+          - Prebooked
+          - Reserved
+          type: string
+          description: The Top part &gt; Document status &gt; A read-only field that shows the status of the supplier ledger document:[Hold, Balanced, Voided, Scheduled, Open, Closed, Printed, Prebooked, Reserved]
+        currencyId:
+          type: string
+          description: The Top part &gt; Currency &gt; The currency of the document.
+        balance:
+          type: number
+          description: The Top part &gt; Balance &gt; The balance of the supplier ledger document after VAT (if inclusive) and the discount as specified in the tabs below.
+          format: double
+        balanceInCurrency:
+          type: number
+          description: Background calculation giving you the Balance in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        cashDiscount:
+          type: number
+          description: The Top part &gt; Cash discount &gt; The cash discount amount that has been or will be taken in the document, which the system calculates based in the specified credit terms.
+          format: double
+        cashDiscountInCurrency:
+          type: number
+          description: Background calculation giving you the Cash discount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethodInSupplierInvoiceDto'
+        supplierReference:
+          type: string
+          description: The Top part &gt; Supplier ref. &gt; The document's original reference number as assigned by the supplier (for informational purposes).
+        description:
+          type: string
+          description: The Top part &gt; Description &gt; A user-provided description for this supplier ledger document.
+        createdDateTime:
+          type: string
+          format: date-time
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        note:
+          type: string
+          description: The table &gt; Document details tab and Applications tab &gt; Icon Notes &gt; Pop-up window for providing any user-defined text connected with to invoice.
+        closedFinancialPeriod:
+          type: string
+          description: Format YYYYMM.
+        location:
+          $ref: '#/components/schemas/locationInSupplierInvoiceDto'
+        vatTotal:
+          type: number
+          description: The Top part &gt; VAT total &gt; The total amount of tax paid in the document.
+          format: double
+        vatTotalInCurrency:
+          type: number
+          description: Background calculation giving you the VAT total in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        branchNumber:
+          $ref: '#/components/schemas/BranchNumberDto'
+        payDate:
+          type: string
+          description: The Financial details tab &gt; The Payment information section &gt; Pay date* &gt; The date when the invoice should be paid. The date is the difference between the document due date or discount date and the number of days specified in the Payment lead time field in AP303000.
+          format: date-time
+        paymentMessage:
+          type: string
+          description: The Financial details tab &gt; The Payment information section &gt; Payment message &gt; The message connected with the payment.
+        cashAccount:
+          type: string
+          description: Financial details tab &gt; The payment information section &gt; Cash account &gt; The cash account associated with the payment method.
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a ApInvoice in SupplierInvoiceController. Used by getting data.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    paymentMethodInSupplierInvoiceDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Financial details tab &gt; Payment method &gt; The payment method used for the payment.
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+    vatIdInTaxDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT ID &gt; The ID of the specific VAT applied.
+    expenseAccountImportInSupplierGlAccountsDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Expense account, import &gt; The import expense account used to record expenses made to the suppliers of this class.
+    supplierInSupplierPOBalanceDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: The name of the supplier
+    AttributeLineUpdateDto:
+      type: object
+      properties:
+        attributeId:
+          $ref: '#/components/schemas/attributeIdInAttributeLineUpdateDto'
+        attributeValue:
+          $ref: '#/components/schemas/DtoValueOfString'
+    projectTaskInSupplierInvoiceLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; Project task &gt; The project task associated with the invoice line.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    mainAddressInSupplierDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: General information tab &gt; Main address section &gt;
+    SupplierPOBalanceDto:
+      type: object
+      properties:
+        supplier:
+          $ref: '#/components/schemas/supplierInSupplierPOBalanceDto'
+        totalPOOnHoldOrderTotal:
+          type: number
+          description: The total amount of order on hold
+          format: double
+        totalPOOnHoldLineTotal:
+          type: number
+          description: The total amount of the order line on hold
+          format: double
+        totalOpenPOOrderTotal:
+          type: number
+          description: The total open amount of the order
+          format: double
+        totalOpenPOLineTotal:
+          type: number
+          description: The total open amount of the order line
+          format: double
+        totalClosedPOOrderTotal:
+          type: number
+          description: The total closed amount of the order
+          format: double
+        totalClosedPOLineTotal:
+          type: number
+          description: The total closed amount of the order line
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: The date and time when the purchase order was last modified.
+          format: date-time
+    vatCodeInSupplierInvoiceLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; VAT category &gt; The VAT category (if applied) for the transaction. Unless you specify otherwise, it is the default VAT category of the supplier location's VAT zone.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfSupplierGlAccountsUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/SupplierGlAccountsUpdateDto'
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    remitAddressInSupplierDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: Payment settings tab &gt; Remittance address section &gt;
+    SupplierDocumentDto:
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/accountInSupplierDocumentDto'
+        subaccount:
+          $ref: '#/components/schemas/subaccountInSupplierDocumentDto'
+        amount:
+          type: number
+          description: Document details tab &gt; Amount &gt; Read-only. The total amount for the specified quantity of items or services of this type (after the discount has been taken).
+          format: double
+        amountInCurrency:
+          type: number
+          description: An automatic calculation of the amount with the currency set as default for supplier.
+          format: double
+        branch:
+          $ref: '#/components/schemas/branchInSupplierDocumentDto'
+        supplier:
+          $ref: '#/components/schemas/supplierInSupplierDocumentDto'
+        documentType:
+          enum:
+          - Check
+          - CreditAdj
+          - DebitAdj
+          - Invoice
+          - Prepayment
+          - QuickCheck
+          - Refund
+          - VoidCheck
+          - VoidQuickCheck
+          type: string
+          description: 'The top part &gt; Top part &gt; Type &gt; The type of the document. The following types are available: Purchase invoice, credit adjustment, purchase credit note, prepayment.'
+        referenceNumber:
+          type: string
+        postPeriod:
+          type: string
+          description: The Top part &gt; Post period* &gt; The post period of the payment document. Format MMYYYY.
+        financialPeriod:
+          type: string
+          description: The financial period to which the transactions recorded in the document should be posted. Format YYYYMM.
+        date:
+          type: string
+          description: The Top part &gt; Date* &gt; The date of the original supplier ledger document; by default, it is the current date, which can be changed.
+          format: date-time
+        origInvoiceDate:
+          type: string
+          description: The Top part &gt; OrigInvoiceDate* &gt; The original invoice date of the original supplier ledger document; by default, it is the current date, which can be changed.
+          format: date-time
+        dueDate:
+          type: string
+          description: The Top part &gt; Due date* &gt; The date when payment for the document is due in accordance with the supplier's credit terms.
+          format: date-time
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: The Top part &gt; Approval status &gt; The status of the document in Visma.net Approval. [New, Canceled, SentToApproval, ReceivedByApproval, InProgressApproval, RejectedInApproval, ApprovedInApproval, ActiveWorkflowApproval.
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Voided
+          - Scheduled
+          - Open
+          - Closed
+          - Printed
+          - Prebooked
+          - Reserved
+          type: string
+          description: The Top part &gt; Document status &gt; A read-only field that shows the status of the supplier ledger document:[Hold, Balanced, Voided, Scheduled, Open, Closed, Printed, Prebooked, Reserved]
+        currencyId:
+          type: string
+          description: The Top part &gt; Currency &gt; The currency of the document.
+        balance:
+          type: number
+          description: The Top part &gt; Balance &gt; The balance of the supplier ledger document after VAT (if inclusive) and the discount as specified in the tabs below.
+          format: double
+        balanceInCurrency:
+          type: number
+          description: Background calculation giving you the Balance in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        cashDiscount:
+          type: number
+          description: The Top part &gt; Cash discount &gt; The cash discount amount that has been or will be taken in the document, which the system calculates based in the specified credit terms.
+          format: double
+        cashDiscountInCurrency:
+          type: number
+          description: Background calculation giving you the Cash discount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethodInSupplierDocumentDto'
+        supplierReference:
+          type: string
+          description: The Top part &gt; Supplier ref. &gt; The document's original reference number as assigned by the supplier (for informational purposes).
+        description:
+          type: string
+          description: The Top part &gt; Description &gt; A user-provided description for this supplier ledger document.
+        createdDateTime:
+          type: string
+          format: date-time
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        note:
+          type: string
+          description: The table &gt; Document details tab and Applications tab &gt; Icon Notes &gt; Pop-up window for providing any user-defined text connected with to invoice.
+        closedFinancialPeriod:
+          type: string
+          description: Format YYYYMM.
+        location:
+          $ref: '#/components/schemas/locationInSupplierDocumentDto'
+        vatTotal:
+          type: number
+          description: The Top part &gt; VAT total &gt; The total amount of tax paid in the document.
+          format: double
+        vatTotalInCurrency:
+          type: number
+          description: Background calculation giving you the VAT total in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        branchNumber:
+          $ref: '#/components/schemas/BranchNumberDto'
+        payDate:
+          type: string
+          description: The Financial details tab &gt; The Payment information section &gt; Pay date* &gt; The date when the invoice should be paid. The date is the difference between the document due date or discount date and the number of days specified in the Payment lead time field in AP303000.
+          format: date-time
+        paymentMessage:
+          type: string
+          description: The Financial details tab &gt; The Payment information section &gt; Payment message &gt; The message connected with the payment.
+        cashAccount:
+          type: string
+          description: Financial details tab &gt; The payment information section &gt; Cash account &gt; The cash account associated with the payment method.
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    SupplierInvoiceLandedCostDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: Landed Costs Tab &gt; Number at the left indicating the line number of the table.
+          format: int32
+        landedCostCodeId:
+          type: string
+          description: Landed Costs Tab &gt; Landed cost code &gt; The Landed Cost Code ID lf the Landed Cost Code
+        description:
+          type: string
+          description: Landed Costs Tab &gt; Description &gt; The description of the landed cost
+        amount:
+          type: number
+          description: Landed Costs Tab &gt; Amount &gt; The amount of the landed cost
+          format: double
+        vatCategoryId:
+          type: string
+          description: Landed Costs Tab &gt; VAT Category &gt; The ID of VAT cateogry
+        purchaseReceiptType:
+          enum:
+          - PoReceipt
+          - PoReturn
+          - TransferReceipt
+          type: string
+          description: Landed Costs Tab &gt; Purchase Receipt Type &gt; The purchase receipt type
+        purcahseOrderReceiptNumber:
+          type: string
+          description: Landed Costs Tab &gt; Purchase order receipt no. &gt; The purchase order receipt number
+        inventoryId:
+          type: string
+          description: Landed Costs Tab &gt; Item ID &gt; The ID of the inventory item
+        siteId:
+          type: string
+          description: Landed Costs Tab &gt; Warehouse &gt; The ID of the warehouse
+        locationId:
+          type: string
+          description: Landed Costs Tab &gt; Location &gt; The ID of the warehouse location
+    creditTermsInSupplierDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: General information tab &gt; Financial settings section &gt; Terms &gt; The type of credit terms used in operations with the supplier.
+    ClassAttributeDto:
+      type: object
+      properties:
+        attributeId:
+          type: string
+          description: The Attributes tab &gt; Attribute ID &gt; The identifier of the attribute.
+        description:
+          type: string
+          description: The Attributes tab &gt; Description &gt; A read-only column that displays the detailed description of the attribute.
+        sortOrder:
+          type: integer
+          description: The Attributes tab &gt; Sort order &gt; A number that represents the order of the attribute in the list of class attributes.The lower the number, the higher the attribute will be in the list of class attributes.
+          format: int32
+        required:
+          type: boolean
+          description: The Attributes tab &gt; Required &gt; This check box indicates (if selected) that the attribute value is required for items of the class.
+        attributeType:
+          enum:
+          - Text
+          - Combo
+          - MultiSelectCombo
+          - Lookup
+          - Checkbox
+          - Datetime
+          type: string
+        defaultValue:
+          type: string
+          description: The Attributes tab &gt; Default value &gt; The default value of the attribute.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDetailDto'
+    supplierInSupplierInvoiceDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal id of the supplier
+          format: int64
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Top part &gt; Supplier* &gt; The identifier of the supplier referred to in the document.
+    projectInSupplierInvoiceLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; Project &gt; The project associated with the invoice line.
+    supplierClassInSupplierDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: General information tab &gt; Financial settings section &gt; Supplier class* &gt; The class of the supplier.'
+    addressInContactDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: The Details tab &gt; Address section &gt;
+    supplierInSupplierDocumentDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal id of the supplier
+          format: int64
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Top part &gt; Supplier* &gt; The identifier of the supplier referred to in the document.
+    countyInAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

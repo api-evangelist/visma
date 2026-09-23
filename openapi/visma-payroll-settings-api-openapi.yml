@@ -1,0 +1,347 @@
+openapi: 3.2.0
+info:
+  title: Visma Payroll Settings API
+  contact:
+    email: api@spiris.se
+  version: '1.0'
+  description: 'Operations tagged PayrollSettings across 2 of this provider''s published API definitions: visma-payroll-api-v1-openapi-original.json, visma-payroll-api-v2-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: Payroll Settings
+  description: Managing company payroll settings, including configuration of payroll periods, tax settings, and other payroll-related preferences.
+paths:
+  /v1/payrollsettings:
+    get:
+      tags:
+      - Payroll Settings
+      summary: Get payroll settings
+      description: Get the payroll settings or NotFound status if using modifiedSinceUtc parameter and no results have been found after that date.
+      parameters:
+      - name: modifiedSinceUtc
+        in: query
+        description: Only return payroll settings if they have been changed after the date. Otherwise returns NotFound status.
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollSettingsApi'
+        '404':
+          description: Not found
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1Payrollsettings
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/payrollsettings:
+    get:
+      tags:
+      - Payroll Settings
+      summary: Get payroll settings
+      description: Get the payroll settings or NotFound status if using modifiedSinceUtc parameter and no results have been found after that date.
+      parameters:
+      - name: modifiedSinceUtc
+        in: query
+        description: Only return payroll settings if they have been changed after the date. Otherwise returns NotFound status.
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayrollSettingsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2Payrollsettings
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+components:
+  schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PayrollSettingsApi:
+      type: object
+      properties:
+        CompanyName:
+          type:
+          - string
+          - 'null'
+          description: Name of the company associated with the payroll settings
+        CompanyRegistrationNumber:
+          type:
+          - string
+          - 'null'
+          description: Company registration number (organisationsnummer) used for tax and government reporting
+        UsesVatOnExpense:
+          type: boolean
+          description: Indicates whether VAT is applied on expense reimbursements
+        UsesMyPayslip:
+          type: boolean
+          description: Indicates whether the My Payslip digital payslip service is enabled for employees
+        UsesVLA:
+          type: boolean
+          description: Indicates whether the company uses VLA (work environment agreement) reporting
+        UsesTravelAndExpense:
+          type: boolean
+          description: Indicates whether the travel and expense management feature is enabled
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the payroll settings were last modified
+          format: date-time
+        MonthlySalaryPaymentPeriod:
+          type: integer
+          description: 'Defines which period monthly salary covers.<br/>Possible values: 1 - CurrentMonth, 2 - PreviousMonth, 3 - UntilDateOfMonth'
+          format: int32
+        MonthlySalaryDeviationPeriod:
+          type: integer
+          description: 'Defines which period deviations are reported for monthly salaried employees.<br/>Possible values: 1 - PreviousMonth, 2 - UntilDateOfMonth'
+          format: int32
+        HourlyWagePaymentPeriod:
+          type: integer
+          description: 'Defines which period hourly wage payments cover.<br/>Possible values: 1 - PreviousMonth, 2 - UntilDateOfMonth'
+          format: int32
+        HourlyWageDeviationPeriod:
+          type: integer
+          description: 'Defines which period deviations are reported for hourly wage employees.<br/>Possible values: 1 - PreviousMonth, 2 - UntilDateOfMonth'
+          format: int32
+        MonthlySalaryPaymentPeriodUntilDay:
+          type:
+          - integer
+          - 'null'
+          description: Day of the month up to which the monthly salary payment period extends. Only applicable when MonthlySalaryPaymentPeriod is set to UntilDateOfMonth
+          format: int32
+        HourlyWagePaymentPeriodUntilDay:
+          type:
+          - integer
+          - 'null'
+          description: Day of the month up to which the hourly wage payment period extends. Only applicable when HourlyWagePaymentPeriod is set to UntilDateOfMonth
+          format: int32
+        MonthlySalaryPaymentPeriodBlueCollar:
+          type: integer
+          description: 'Defines which period monthly salary covers for blue collar employees.<br/>Possible values: 1 - CurrentMonth, 2 - PreviousMonth, 3 - UntilDateOfMonth'
+          format: int32
+        MonthlySalaryDeviationPeriodBlueCollar:
+          type: integer
+          description: 'Defines which period deviations are reported for monthly salaried blue collar employees.<br/>Possible values: 1 - PreviousMonth, 2 - UntilDateOfMonth'
+          format: int32
+        HourlyWagePaymentPeriodBlueCollar:
+          type: integer
+          description: 'Defines which period hourly wage payments cover for blue collar employees.<br/>Possible values: 1 - PreviousMonth, 2 - UntilDateOfMonth'
+          format: int32
+        HourlyWageDeviationPeriodBlueCollar:
+          type: integer
+          description: 'Defines which period deviations are reported for hourly wage blue collar employees.<br/>Possible values: 1 - PreviousMonth, 2 - UntilDateOfMonth'
+          format: int32
+        MonthlySalaryPaymentPeriodUntilDayBlueCollar:
+          type:
+          - integer
+          - 'null'
+          description: Day of the month up to which the monthly salary payment period extends for blue collar employees. Only applicable when MonthlySalaryPaymentPeriodBlueCollar is set to UntilDateOfMonth
+          format: int32
+        HourlyWagePaymentPeriodUntilDayBlueCollar:
+          type:
+          - integer
+          - 'null'
+          description: Day of the month up to which the hourly wage payment period extends for blue collar employees. Only applicable when HourlyWagePaymentPeriodBlueCollar is set to UntilDateOfMonth
+          format: int32
+        HolidayIntermittentMethod:
+          type:
+          - integer
+          - 'null'
+          description: 'Method used for calculating intermittent holiday pay and days<br/>Possible values: 0 - Net, 1 - Gross'
+          format: int32
+      additionalProperties: false
+    PayrollSettingsResponse:
+      type: object
+      properties:
+        CompanyName:
+          type:
+          - string
+          - 'null'
+          description: Name of the company associated with the payroll settings
+        CompanyRegistrationNumber:
+          type:
+          - string
+          - 'null'
+          description: Company registration number (organisationsnummer) used for tax and government reporting
+        UsesVatOnExpense:
+          type: boolean
+          description: Indicates whether VAT is applied on expense reimbursements
+        UsesMyPayslip:
+          type: boolean
+          description: Indicates whether the My Payslip digital payslip service is enabled for employees
+        UsesVLA:
+          type: boolean
+          description: Indicates whether the company uses VLA (work environment agreement) reporting
+        UsesTravelAndExpense:
+          type: boolean
+          description: Indicates whether the travel and expense management feature is enabled
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the payroll settings were last modified
+          format: date-time
+        MonthlySalaryPaymentPeriod:
+          type: integer
+          description: 'Defines which period monthly salary covers.<br/>Possible values: 1 - CurrentMonth, 2 - PreviousMonth, 3 - UntilDateOfMonth'
+          format: int32
+        MonthlySalaryDeviationPeriod:
+          type: integer
+          description: 'Defines which period deviations (e.g., absences, overtime) are reported for monthly salaried employees.<br/>Possible values: 1 - PreviousMonth, 2 - UntilDateOfMonth'
+          format: int32
+        HourlyWagePaymentPeriod:
+          type: integer
+          description: 'Defines which period hourly wage payments cover.<br/>Possible values: 1 - PreviousMonth, 2 - UntilDateOfMonth'
+          format: int32
+        HourlyWageDeviationPeriod:
+          type: integer
+          description: 'Defines which period deviations (e.g., absences, overtime) are reported for hourly wage employees.<br/>Possible values: 1 - PreviousMonth, 2 - UntilDateOfMonth'
+          format: int32
+        MonthlySalaryPaymentPeriodUntilDay:
+          type:
+          - integer
+          - 'null'
+          description: Day of the month up to which the monthly salary payment period extends. Only applicable when MonthlySalaryPaymentPeriod is set to UntilDateOfMonth
+          format: int32
+        HourlyWagePaymentPeriodUntilDay:
+          type:
+          - integer
+          - 'null'
+          description: Day of the month up to which the hourly wage payment period extends. Only applicable when HourlyWagePaymentPeriod is set to UntilDateOfMonth
+          format: int32
+      additionalProperties: false
+x-refined-from:
+- visma-payroll-api-v1-openapi-original.json
+- visma-payroll-api-v2-openapi-original.json
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

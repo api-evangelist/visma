@@ -1,0 +1,699 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Customer Ledger…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: CustomerLedgerItems
+  description: 'A record of a financial transaction affecting a customer account, such as invoices, payments, or credit notes.
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Solo'
+paths:
+  /customerledgeritems:
+    get:
+      tags:
+      - CustomerLedgerItems
+      summary: Get customer ledger items
+      description: 'Get all customer ledger items, or add query parameters to filter the results. The response includes details such as amounts, due dates, and associated vouchers.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfCustomerLedgerItemApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCustomerledgeritems
+      x-operation-id-source: derived
+    post:
+      tags:
+      - CustomerLedgerItems
+      summary: Create a customer ledger item
+      description: 'Create a new customer ledger item linked to an existing manual voucher. This allows you to manually register customer receivables or credits that are already accounted for in a voucher. The voucher must be of type manual voucher or SIE import.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerLedgerItemApi'
+      responses:
+        '201':
+          description: Customer ledger item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerLedgerItemApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postCustomerledgeritems
+      x-operation-id-source: derived
+  /customerledgeritems/{customerLedgerItemId}:
+    get:
+      tags:
+      - CustomerLedgerItems
+      summary: Get a customer ledger item
+      description: 'Get a specific customer ledger item by its unique identifier. The response includes the detailed information about the outstanding amount between your company and a customer, including the associated voucher details.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: customerLedgerItemId
+        in: path
+        description: Id of the item to get
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerLedgerItemApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCustomerledgeritemsByCustomerLedgerItemId
+      x-operation-id-source: derived
+  /customerledgeritems/customerledgeritemswithvoucher:
+    post:
+      tags:
+      - CustomerLedgerItems
+      summary: Create a customer ledger item with voucher
+      description: 'Create a new customer ledger item together with its associated voucher in a single operation.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: useAutomaticVatCalculation
+        in: query
+        description: Set to true to automatically calculate VAT amounts
+        schema:
+          type: boolean
+          default: false
+      - name: useDefaultVatCodes
+        in: query
+        description: Set to false to override default VAT codes
+        schema:
+          type: boolean
+          default: true
+      - name: useDefaultVoucherSeries
+        in: query
+        description: Set to false to override default voucher series
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerLedgerItemWithVoucherApi'
+      responses:
+        '201':
+          description: Customer ledger item with voucher created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerLedgerItemApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postCustomerledgeritemsCustomerledgeritemswithvoucher
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CustomerLedgerItemWithVoucherApi:
+      required:
+      - CurrencyCode
+      - CustomerId
+      - DueDate
+      - InvoiceDate
+      - InvoiceNumber
+      - IsCreditInvoice
+      - RemainingAmountInvoiceCurrency
+      - TotalAmountInvoiceCurrency
+      - Voucher
+      type: object
+      properties:
+        CurrencyCode:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: 'Maximum length: 3 characters'
+        CurrencyRate:
+          type: number
+          format: double
+        CurrencyRateUnit:
+          type: integer
+          format: int32
+        CustomerId:
+          type: string
+          description: 'Source: Get from /v2/customers.'
+          format: uuid
+        DueDate:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+          format: date-time
+        Id:
+          type: string
+          description: Unique Id provided by eAccounting
+          format: uuid
+          readOnly: true
+        InvoiceDate:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+          format: date-time
+        InvoiceNumber:
+          type: integer
+          description: The number of the invoice to create
+          format: int32
+        ModifiedUtc:
+          type: string
+          format: date-time
+          readOnly: true
+        PaymentReferenceNumber:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Maximum length: 50 characters'
+        RemainingAmountInvoiceCurrency:
+          maximum: 99999999.99
+          minimum: -99999999.99
+          type: number
+          description: 'Remaining amount in invoice currency. Precision: 2 decimals'
+          format: double
+        RoundingsAmountInvoiceCurrency:
+          type: number
+          description: 'Rounding amount in invoice currency. Precision: 2 decimals'
+          format: double
+        TotalAmountInvoiceCurrency:
+          maximum: 99999999.99
+          minimum: -99999999.99
+          type: number
+          description: 'Total amount in invoice currency. Precision: 2 decimals'
+          format: double
+        VATAmountInvoiceCurrency:
+          type: number
+          description: 'VAT amount in invoice currency. Precision: 2 decimals'
+          format: double
+        IsCreditInvoice:
+          type: boolean
+        Voucher:
+          $ref: '#/components/schemas/VoucherApi'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfCustomerLedgerItemApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerLedgerItemApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    VoucherApi:
+      required:
+      - Rows
+      - VoucherDate
+      - VoucherText
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        VoucherDate:
+          type: string
+          description: 'Bookkeeping date. Format: yyyy-mm-dd'
+          format: date-time
+        VoucherText:
+          maxLength: 1000
+          minLength: 0
+          type: string
+          description: Voucher's description
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoucherRowApi'
+          description: The accounting rows/lines of the voucher
+        NumberAndNumberSeries:
+          type:
+          - string
+          - 'null'
+          description: Returns the voucher number
+          readOnly: true
+        NumberSeries:
+          type:
+          - string
+          - 'null'
+          description: Returns the number series. Use parameter useDefaultVoucherSeries with false value to set Series.
+        ImportedVoucherNumber:
+          type:
+          - string
+          - 'null'
+          description: Returns original voucher number if the voucher is imported from another system.
+          readOnly: true
+        Attachments:
+          $ref: '#/components/schemas/AttachmentLinkApi'
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: The UTC date and time when the voucher was last modified.
+          format: date-time
+          readOnly: true
+        VoucherType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>2 = ManualVoucher,<br/>5 = BankAccountTransferDeposit,<br/>6 = BankAccountTransferWithDrawal,<br/>7 = PurchaseReceipt,<br/>8 = VatReport,<br/>9 = SieImport,<br/>10 = BankTransactionDeposit,<br/>11 = BankTransactionWithdrawal,<br/>12 = SupplierInvoiceDebit,<br/>13 = SupplierInvoiceCredit,<br/>14 = CustomerInvoiceDebit,<br/>15 = CustomerInvoiceCredit,<br/>16 = ClaimOnCardAcquirer,<br/>17 = TaxReturn,<br/>18 = AllocationPeriod,<br/>19 = AllocationPeriodCorrection,<br/>20 = InventoryEvent,<br/>21 = EmployerReport,<br/>22 = Payslip,<br/>23 = CustomerQuickInvoiceDebit,<br/>24 = CustomerQuickInvoiceCredit,<br/>25 = SupplierQuickInvoiceDebit,<br/>26 = SupplierQuickInvoiceCredit,<br/>27 = IZettleVoucher,<br/>28 = StockValuation,<br/>29 = ClaimOnSpotFactoring,<br/>30 = RecourseFactoring,<br/>32 = DirectDebit,<br/>33 = DirectDebitCorrection,<br/>34 = PaymentLinks
+          format: int32
+        SourceId:
+          type:
+          - string
+          - 'null'
+          description: The source of the voucher, e.g. invoice id.
+          format: uuid
+          readOnly: true
+        CreatedUtc:
+          type: string
+          description: The UTC date and time when the voucher was created.
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    VoucherRowApi:
+      required:
+      - AccountNumber
+      type: object
+      properties:
+        AccountNumber:
+          maximum: 9999999999
+          minimum: 1
+          type: integer
+          description: The account number for this row. Must be between 1 and 9999999999
+          format: int64
+        AccountDescription:
+          type:
+          - string
+          - 'null'
+          description: Account number description
+          readOnly: true
+        DebitAmount:
+          maximum: 10000000000
+          minimum: 0
+          type: number
+          description: The debit amount for this row. Maximum 2 decimal places
+          format: double
+        CreditAmount:
+          maximum: 10000000000
+          minimum: 0
+          type: number
+          description: The credit amount for this row. Maximum 2 decimal places
+          format: double
+        TransactionText:
+          maxLength: 60
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Transaction text used in searchable column in Account Analysis. Maximum length: 60 characters'
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'The first cost center item identifier. Source: Get from /v2/costcenters'
+          format: uuid
+          readOnly: true
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'The second cost center item identifier. Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'The third cost center item identifier. Source: Get from /v2/costcenters'
+          format: uuid
+        VatCodeId:
+          type:
+          - string
+          - 'null'
+          description: The VAT code identifier returned from the provided account number
+          format: uuid
+        VatCodeAndPercent:
+          type:
+          - string
+          - 'null'
+          description: 'The VAT code and percentage in the format ''Code (Percentage)''. Example: ''MVA 25%'''
+        VatAmount:
+          type:
+          - number
+          - 'null'
+          description: The VAT amount for this row. Only for Denmark and Netherlands
+          format: double
+        Quantity:
+          type:
+          - number
+          - 'null'
+          description: The quantity for this row. Maximum 2 decimal places. This feature is for Dutch companies with agriculture support only
+          format: double
+        Weight:
+          type:
+          - number
+          - 'null'
+          description: The weight for this row. Maximum 2 decimal places. This feature is for Dutch companies with agriculture support only
+          format: double
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: 'The delivery date. Format: YYYY-MM-DD. This feature is for Dutch companies with agriculture support only'
+          format: date-time
+        HarvestYear:
+          type:
+          - integer
+          - 'null'
+          description: The harvest year. This feature is for Dutch companies with agriculture support only
+          format: int32
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: The project identifier. Get from /v2/projects
+          format: uuid
+      additionalProperties: false
+    AttachmentLinkApi:
+      required:
+      - AttachmentIds
+      - DocumentType
+      type: object
+      properties:
+        DocumentId:
+          type: string
+          description: 'The id from the system of the corresponding linked document. Source: Get from endpoints corresponding to your document type'
+          format: uuid
+        DocumentType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = SupplierInvoice,<br/>2 = Receipt,<br/>3 = Voucher,<br/>4 = SupplierInvoiceDraft,<br/>5 = AllocationPeriod,<br/>6 = Transfer,<br/>8 = BankTransaction,<br/>9 = VoucherDraft
+          format: int32
+        AttachmentIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of guids representing the attachment ids fetched from the system
+      additionalProperties: false
+    CustomerLedgerItemApi:
+      required:
+      - CurrencyCode
+      - CustomerId
+      - DueDate
+      - InvoiceDate
+      - InvoiceNumber
+      - IsCreditInvoice
+      - RemainingAmountInvoiceCurrency
+      - TotalAmountInvoiceCurrency
+      - VoucherId
+      type: object
+      properties:
+        CurrencyCode:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: 'Maximum length: 3 characters'
+        CurrencyRate:
+          type: number
+          format: double
+        CurrencyRateUnit:
+          type: integer
+          format: int32
+        CustomerId:
+          type: string
+          description: 'Source: Get from /v2/customers.'
+          format: uuid
+        DueDate:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+          format: date-time
+        Id:
+          type: string
+          description: Unique Id provided by eAccounting
+          format: uuid
+          readOnly: true
+        InvoiceDate:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+          format: date-time
+        InvoiceNumber:
+          type: integer
+          description: Invoice number for this ledger item
+          format: int32
+        IsCreditInvoice:
+          type: boolean
+        ModifiedUtc:
+          type: string
+          format: date-time
+          readOnly: true
+        PaymentReferenceNumber:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Maximum length: 50 characters'
+        RemainingAmountInvoiceCurrency:
+          maximum: 99999999.99
+          minimum: -99999999.99
+          type: number
+          description: 2 decimal precision.
+          format: double
+        RoundingsAmountInvoiceCurrency:
+          type: number
+          description: 2 decimal precision.
+          format: double
+        TotalAmountInvoiceCurrency:
+          maximum: 99999999.99
+          minimum: -99999999.99
+          type: number
+          description: 2 decimal precision.
+          format: double
+        VATAmountInvoiceCurrency:
+          type: number
+          description: 2 decimal precision.
+          format: double
+        VoucherId:
+          type: string
+          description: 'Source: Get from /v2/vouchers.'
+          format: uuid
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

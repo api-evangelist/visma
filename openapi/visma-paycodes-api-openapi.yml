@@ -1,0 +1,645 @@
+openapi: 3.2.0
+info:
+  title: Visma Paycodes API
+  contact:
+    email: api@spiris.se
+  version: '1.0'
+  description: 'Operations tagged Paycodes across 2 of this provider''s published API definitions: visma-payroll-api-v1-openapi-original.json, visma-payroll-api-v2-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: Paycodes
+  description: Managing paycodes in your company's payroll system. You can retrieve all paycodes, paycode by specified id and specific travel and expense paycodes, other additional deduction paycodes.
+paths:
+  /v1/paycodes:
+    get:
+      tags:
+      - Paycodes
+      summary: Gets paycodes
+      description: Get all paycodes. Use query parameters to filter the results.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfPaycodeApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1Paycodes
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/paycodes/{paycodeId}:
+    get:
+      tags:
+      - Paycodes
+      summary: Gets a paycode by id
+      description: Get a specific paycode by its unique identifier. Use query parameters to select specific properties in the response.
+      parameters:
+      - name: paycodeId
+        in: path
+        description: Id of desired paycode
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaycodeApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1PaycodesByPaycodeId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/paycodes/travelandexpense:
+    get:
+      tags:
+      - Paycodes
+      summary: Gets paycodes to use for travel and expense shortcut
+      description: 'Gets paycodes to use for travel and expense shortcut.
+
+        Use query parameters to select specific properties in the response.
+
+        Response containing lists of paycodes grouped by these categories: ReimbursmentPaycodes, AllowancePaycodes, BenefitPaycodes, CompensationPaycodes.'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelAndExpensePaycodesApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1PaycodesTravelandexpense
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/paycodes/otheradditiondeduction:
+    get:
+      tags:
+      - Paycodes
+      summary: Gets paycodes to use for other addition deduction shortcut
+      description: 'Gets paycodes to use for other addition deduction shortcut.
+
+        Use query parameters to select specific properties in the response.
+
+        Response containing lists of paycodes grouped by these categories: CompensationPaycodes, DeductionPaycodes, BenefitPaycodes, AdjustmentTaxPaycodes'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OtherAdditionDeductionPaycodesApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1PaycodesOtheradditiondeduction
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/paycodes:
+    get:
+      tags:
+      - Paycodes
+      summary: Gets paycodes
+      description: Get all paycodes. Use query parameters to filter the results.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfPayCodeResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2Paycodes
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/paycodes/{paycodeId}:
+    get:
+      tags:
+      - Paycodes
+      summary: Gets a paycode by id
+      description: Get a specific paycode by its unique identifier. Use query parameters to select specific properties in the response.
+      parameters:
+      - name: paycodeId
+        in: path
+        description: Id of desired paycode
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayCodeResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2PaycodesByPaycodeId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/paycodes/travelandexpense:
+    get:
+      tags:
+      - Paycodes
+      summary: Gets paycodes to use for travel and expense shortcut
+      description: 'Gets paycodes to use for travel and expense shortcut.
+
+        Use query parameters to select specific properties in the response.
+
+        Response containing lists of paycodes grouped by these categories: ReimbursmentPaycodes, AllowancePaycodes, BenefitPaycodes, CompensationPaycodes.'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelAndExpensePaycodesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2PaycodesTravelandexpense
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/paycodes/otheradditiondeduction:
+    get:
+      tags:
+      - Paycodes
+      summary: Gets paycodes to use for other addition deduction shortcut
+      description: 'Gets paycodes to use for other addition deduction shortcut.
+
+        Use query parameters to select specific properties in the response.
+
+        Response containing lists of paycodes grouped by these categories: CompensationPaycodes, DeductionPaycodes, BenefitPaycodes, AdjustmentTaxPaycodes'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OtherAdditionDeductionPaycodesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2PaycodesOtheradditiondeduction
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+components:
+  schemas:
+    PaycodeApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the paycode
+          format: uuid
+        PaycodeNumber:
+          type:
+          - string
+          - 'null'
+          description: The numeric code that identifies the paycode
+        PaycodeName:
+          type:
+          - string
+          - 'null'
+          description: Display name of the paycode
+        PaycodeTypeName:
+          type:
+          - string
+          - 'null'
+          description: Name of the paycode type category
+        PaycodeTypeId:
+          type: string
+          description: Unique identifier of the paycode type category
+          format: uuid
+        Formula:
+          type:
+          - string
+          - 'null'
+          description: Calculation formula used to compute the paycode amount
+        CanBeUsedByBlueCollars:
+          type: boolean
+          description: Indicates whether the paycode is applicable to blue-collar employees
+        CanBeUsedByWhiteCollars:
+          type: boolean
+          description: Indicates whether the paycode is applicable to white-collar employees
+        CanBeUsedForMonthlySalary:
+          type: boolean
+          description: Indicates whether the paycode is applicable to employees with monthly salary
+        CanBeUsedForHourlySalary:
+          type: boolean
+          description: Indicates whether the paycode is applicable to employees with hourly salary
+        CanBeUsedByLimitedEmployees:
+          type: boolean
+          description: Indicates whether the paycode is applicable to limited employees
+        VisibleOnPayslipPrint:
+          type: boolean
+          description: Indicates whether the paycode is visible on the printed payslip
+        ModifiedUtc:
+          type: string
+          description: Date and time in UTC when the paycode was last modified
+          format: date-time
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    TravelAndExpensePaycodesApi:
+      type: object
+      properties:
+        ReimbursmentPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for reimbursement of travel and expense costs
+        CompensationPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for travel and expense compensation
+        AllowancePaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for travel and expense allowances
+        BenefitPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for travel and expense benefits
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfPaycodeApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+      additionalProperties: false
+    OtherAdditionDeductionPaycodesApi:
+      type: object
+      properties:
+        CompensationPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for other compensation additions
+        DeductionPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for salary deductions
+        BenefitPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for employee benefits
+        AdjustmentTaxPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for tax adjustments
+      additionalProperties: false
+    OtherAdditionDeductionPaycodesResponse:
+      type: object
+      properties:
+        CompensationPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for other compensation additions
+        DeductionPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for salary deductions
+        BenefitPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for employee benefits
+        AdjustmentTaxPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for tax adjustments
+      additionalProperties: false
+    PaginatedResponseOfPayCodeResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+      additionalProperties: false
+    TravelAndExpensePaycodesResponse:
+      type: object
+      properties:
+        ReimbursmentPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for reimbursement of travel and expense costs
+        CompensationPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for travel and expense compensation
+        AllowancePaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for travel and expense allowances
+        BenefitPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for travel and expense benefits
+      additionalProperties: false
+    PayCodeResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the paycode
+          format: uuid
+        PaycodeNumber:
+          type:
+          - string
+          - 'null'
+          description: The numeric code that identifies the paycode
+        PaycodeName:
+          type:
+          - string
+          - 'null'
+          description: Display name of the paycode
+        PaycodeTypeName:
+          type:
+          - string
+          - 'null'
+          description: Name of the paycode type category
+        PaycodeTypeId:
+          type: string
+          description: Unique identifier of the paycode type category
+          format: uuid
+        Formula:
+          type:
+          - string
+          - 'null'
+          description: Calculation formula used to compute the paycode amount
+        CanBeUsedByBlueCollars:
+          type: boolean
+          description: Indicates whether the paycode is applicable to blue-collar employees
+        CanBeUsedByWhiteCollars:
+          type: boolean
+          description: Indicates whether the paycode is applicable to white-collar employees
+        CanBeUsedForMonthlySalary:
+          type: boolean
+          description: Indicates whether the paycode is applicable to employees with monthly salary
+        CanBeUsedForHourlySalary:
+          type: boolean
+          description: Indicates whether the paycode is applicable to employees with hourly salary
+        CanBeUsedByLimitedEmployees:
+          type: boolean
+          description: Indicates whether the paycode is applicable to limited employees
+        VisibleOnPayslipPrint:
+          type: boolean
+          description: Indicates whether the paycode is visible on the printed payslip
+        ModifiedUtc:
+          type: string
+          description: Date and time in UTC when the paycode was last modified
+          format: date-time
+      additionalProperties: false
+x-refined-from:
+- visma-payroll-api-v1-openapi-original.json
+- visma-payroll-api-v2-openapi-original.json
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

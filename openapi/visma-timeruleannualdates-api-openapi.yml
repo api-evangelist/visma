@@ -1,0 +1,410 @@
+openapi: 3.2.0
+info:
+  title: Visma Time Rule Annual Dates API
+  contact:
+    email: api@spiris.se
+  version: '1.0'
+  description: 'Operations tagged TimeRuleAnnualDates across 2 of this provider''s published API definitions: visma-payroll-api-v1-openapi-original.json, visma-payroll-api-v2-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: TimeRuleAnnualDates
+  description: Operations for managing time rule annual dates for company. Time rule annual dates are used to define specific dates that are relevant for time rules, such as holidays or special events.
+paths:
+  /v1/timeruleannualdates:
+    get:
+      tags:
+      - TimeRuleAnnualDates
+      summary: Get time rule annual dates
+      description: Get all time rule annual dates or add query parameters to filter the results. The response will include a collection of matched time rule annual dates with their information such as unique identifier, name, etc.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfTimeRuleAnnualDateApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1Timeruleannualdates
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/timeruleannualdates/{timeRuleAnnualDateId}:
+    get:
+      tags:
+      - TimeRuleAnnualDates
+      summary: Get time rule annual date by unique identifier
+      description: Get time rule annual date by specific identifier. The response will include a time rule annual date (if it's found) information such as unique identifier, name, etc.
+      parameters:
+      - name: timeRuleAnnualDateId
+        in: path
+        description: Time rule annual date unique identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeRuleAnnualDateApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1TimeruleannualdatesByTimeRuleAnnualDateId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/timeruleannualdates:
+    get:
+      tags:
+      - TimeRuleAnnualDates
+      summary: Get time rule annual dates
+      description: Get all time rule annual dates or add query parameters to filter the results. The response will include a collection of matched time rule annual dates with their information such as unique identifier, name, etc.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfTimeRuleAnnualDateResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2Timeruleannualdates
+      x-operation-id-source: derived
+    post:
+      tags:
+      - TimeRuleAnnualDates
+      summary: Create an annual date for time rule
+      description: Create a new time rule annual date for a company. The annual date will be registered based on supplied information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TimeRuleAnnualDateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeRuleAnnualDateResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postV2Timeruleannualdates
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/timeruleannualdates/{timeRuleAnnualDateId}:
+    get:
+      tags:
+      - TimeRuleAnnualDates
+      summary: Get time rule annual date by unique identifier
+      description: Get time rule annual date by specific identifier. The response will include a time rule annual date (if it's found) information such as unique identifier, name, etc.
+      parameters:
+      - name: timeRuleAnnualDateId
+        in: path
+        description: Time rule annual date unique identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeRuleAnnualDateResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2TimeruleannualdatesByTimeRuleAnnualDateId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    TimeRuleAnnualDateApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the time rule annual date record
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the time rule annual date
+        Month:
+          type: integer
+          description: Month of the year for the time rule annual date (1-12)
+          format: int32
+        Day:
+          type: integer
+          description: Day of the month for the time rule annual date (1-31)
+          format: int32
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the time rule annual date record was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the time rule annual date record was last modified (UTC)
+          format: date-time
+        IsDeleted:
+          type: boolean
+          description: Indicates whether the time rule annual date record is marked as deleted
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfTimeRuleAnnualDateApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeRuleAnnualDateApi'
+      additionalProperties: false
+    TimeRuleAnnualDateResponse:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the time rule annual date record
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the time rule annual date
+        Month:
+          type: integer
+          description: Month of the year for the time rule annual date (1-12)
+          format: int32
+        Day:
+          type: integer
+          description: Day of the month for the time rule annual date (1-31)
+          format: int32
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the time rule annual date record was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the time rule annual date record was last modified (UTC)
+          format: date-time
+      additionalProperties: false
+    TimeRuleAnnualDateRequest:
+      required:
+      - Day
+      - Month
+      - Name
+      type: object
+      properties:
+        Name:
+          minLength: 1
+          type: string
+          description: Name of the time rule annual date
+        Month:
+          type: integer
+          description: Month of the year for the time rule annual date (1-12)
+          format: int32
+        Day:
+          type: integer
+          description: Day of the month for the time rule annual date (1-31)
+          format: int32
+      additionalProperties: false
+    PaginatedResponseOfTimeRuleAnnualDateResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeRuleAnnualDateResponse'
+      additionalProperties: false
+x-refined-from:
+- visma-payroll-api-v1-openapi-original.json
+- visma-payroll-api-v2-openapi-original.json
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

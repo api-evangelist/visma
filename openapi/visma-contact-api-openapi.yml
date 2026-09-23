@@ -1,0 +1,645 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Contact API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Contact
+paths:
+  /v1/contact/{contactId}:
+    get:
+      tags:
+      - Contact
+      summary: Get a specific Contact
+      description: 'Data for Contact
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: Contact_GetBycontactId
+      parameters:
+      - name: contactId
+        in: path
+        description: Identifies the Contact
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ContactDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - Contact
+      summary: Update a specific Contact
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed
+
+
+        In this endpoint, If-Match can be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: Contact_PutBycontactId
+      parameters:
+      - name: contactId
+        in: path
+        description: Identifies the Contact to update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Contact to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+        required: true
+        x-bodyName: contact
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Contact version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/contact:
+    get:
+      tags:
+      - Contact
+      summary: Get a range of Contacts - ScreenId=CR302000
+      operationId: Contact_GetAllContacts
+      parameters:
+      - name: displayName
+        in: query
+        schema:
+          type: string
+      - name: active
+        in: query
+        schema:
+          type: string
+      - name: firstName
+        in: query
+        schema:
+          type: string
+      - name: lastName
+        in: query
+        schema:
+          type: string
+      - name: businessAccount
+        in: query
+        schema:
+          type: string
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: greaterThanValue
+        in: query
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - Contact
+      summary: Create a Contact
+      description: 'Response Message has StatusCode Created if POST operation succeed
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        The response headers include an ETag after a successful POST operation.'
+      operationId: Contact_CreateContact
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Contact to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContactUpdateDto'
+        required: true
+        x-bodyName: contact
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    addressInContactDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: The Details tab &gt; Address section &gt;
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    DtoValueOfAddressUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/AddressUpdateDto'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfEmployeeTitles:
+      type: object
+      properties:
+        value:
+          enum:
+          - Doctor
+          - Miss
+          - Mr
+          - Mrs
+          - Ms
+          - Prof
+          type: string
+    ContactDto:
+      type: object
+      properties:
+        displayName:
+          type: string
+        active:
+          type: boolean
+          description: The top part &gt; Active &gt; A check box that indicates (if selected) that the contact is active.
+        title:
+          enum:
+          - Doctor
+          - Miss
+          - Mr
+          - Mrs
+          - Ms
+          - Prof
+          type: string
+          description: The top part &gt; First name &gt; The contact's courtesy title.
+        firstName:
+          type: string
+          description: The top part &gt; First name &gt; The first name of the contact.
+        lastName:
+          type: string
+          description: 'Mandatory field: The top part &gt; Last name* &gt; The last name of the contact.'
+        position:
+          type: string
+          description: The top part &gt; Job title &gt; The contact’s job title or position.
+        businessAccount:
+          type: string
+          description: The top part &gt; Business account &gt; The business account associated with the contact.
+        businessAccountType:
+          type: string
+          description: The top part &gt; Business account &gt; The business account type of the business account associated with the contact.
+        sameAsAccount:
+          type: boolean
+          description: The Details tab &gt; Same as in account &gt; A check box that indicates (if selected) that the contact's address is the same as the address of the business account.
+        address:
+          $ref: '#/components/schemas/addressInContactDto'
+        email:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Email &gt; The email address of the contact.
+        web:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Web &gt; The website of the contact, if any.
+        phone1:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Business 1/Business 2/Business 3/Business assistant 1/Business fax /Home/Home fax/Mobile &gt; The primary phone number of the contact. Select the type from the drop down.
+        phone2:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Business 1/Business 2/Business 3/Business assistant 1/Business fax /Home/Home fax/Mobile &gt; The primary phone number of the contact. Select the type from the drop down.
+        phone3:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Business 1/Business 2/Business 3/Business assistant 1/Business fax /Home/Home fax/Mobile &gt; The primary phone number of the contact. Select the type from the drop down.
+        fax:
+          type: string
+          description: The Details tab &gt; Contact section &gt; Business fax &gt; The fax number of the contact.
+        contactMethod:
+          enum:
+          - Any
+          - Email
+          - Mail
+          - Fax
+          - Phone
+          type: string
+          description: CRM section not available in Visma.net ERP
+        doNotCall:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        doNotFax:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        doNotEmail:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        doNotMail:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        noMassMail:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        noMarketing:
+          type: boolean
+          description: CRM section not available in Visma.net ERP
+        lastModifiedDateTime:
+          type: string
+          description: 'Background information: The date and time when the details of the contact were last updated.'
+          format: date-time
+        contactId:
+          type: integer
+          description: The top part &gt; Contact ID &gt; The unique identifier of the contact, which the system generates automatically.
+          format: int32
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a contact in ContactController. Used by getting data.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfContactMethods:
+      type: object
+      properties:
+        value:
+          enum:
+          - Any
+          - Email
+          - Mail
+          - Fax
+          - Phone
+          type: string
+    AddressUpdateDto:
+      type: object
+      properties:
+        addressLine1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postalCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        city:
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        county:
+          $ref: '#/components/schemas/DtoValueOfString'
+    ContactUpdateDto:
+      type: object
+      properties:
+        active:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        title:
+          $ref: '#/components/schemas/DtoValueOfEmployeeTitles'
+        firstName:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lastName:
+          $ref: '#/components/schemas/DtoValueOfString'
+        position:
+          $ref: '#/components/schemas/DtoValueOfString'
+        businessAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        sameAsAccount:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        address:
+          $ref: '#/components/schemas/DtoValueOfAddressUpdateDto'
+        email:
+          $ref: '#/components/schemas/DtoValueOfString'
+        web:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        fax:
+          $ref: '#/components/schemas/DtoValueOfString'
+        contactMethod:
+          $ref: '#/components/schemas/DtoValueOfContactMethods'
+        doNotCall:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        doNotFax:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        doNotEmail:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        doNotMail:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        noMassMail:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        noMarketing:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+    countryInAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    countyInAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

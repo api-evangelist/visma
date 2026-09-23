@@ -1,0 +1,288 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Blob API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Blob
+paths:
+  /v1/blob/download/{blobId}:
+    get:
+      tags:
+      - Blob
+      summary: Get a specific blob (attachment)
+      operationId: Blob_GetByblobId
+      parameters:
+      - name: blobId
+        in: path
+        description: Identifies the blob (attachment)
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stream'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Stream'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Stream'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Stream'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/blob/presignedurl:
+    get:
+      tags:
+      - Blob
+      summary: Get a presigned URL to download a specific blob (attachment)
+      operationId: Blob_GetPresignedUrl
+      parameters:
+      - name: blobId
+        in: query
+        description: Identifies the blob (attachment)
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: includeMetadata
+        in: query
+        description: Optional. If true, includes blob metadata in the response. Default is false.
+        schema:
+          type: boolean
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresignedUrlResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PresignedUrlResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PresignedUrlResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PresignedUrlResponse'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/blob/metadata/{blobId}:
+    get:
+      tags:
+      - Blob
+      summary: Get metadata for a specific blob (attachment)
+      operationId: Blob_GetMetadataByblobId
+      parameters:
+      - name: blobId
+        in: path
+        description: Identifies the blob (attachment)
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlobMetadata'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BlobMetadata'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BlobMetadata'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BlobMetadata'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    Stream:
+      type: object
+      properties:
+        canRead:
+          type: boolean
+          readOnly: true
+        canSeek:
+          type: boolean
+          readOnly: true
+        canTimeout:
+          type: boolean
+          readOnly: true
+        canWrite:
+          type: boolean
+          readOnly: true
+        length:
+          type: integer
+          format: int64
+          readOnly: true
+        position:
+          type: integer
+          format: int64
+        readTimeout:
+          type: integer
+          format: int32
+        writeTimeout:
+          type: integer
+          format: int32
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    BlobMetadata:
+      type: object
+      properties:
+        blobId:
+          type: string
+          format: uuid
+        blobName:
+          type: string
+        contentType:
+          type: string
+        mD5Hash:
+          type: string
+        fileChecksum:
+          type: string
+        size:
+          type: integer
+          format: int64
+        countryCode:
+          type: string
+        createdDateTimeUtc:
+          type: string
+          format: date-time
+    PresignedUrlResponse:
+      type: object
+      properties:
+        preSignedUrl:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/BlobMetadata'
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

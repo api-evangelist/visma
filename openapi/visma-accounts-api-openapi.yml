@@ -1,0 +1,544 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Accounts API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Accounts
+  description: 'The bookkeeping accounts used to categorize financial transactions within your company.
+
+    Overview of Accounts Functionality: Accounts
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Bookkeeping
+
+    * Solo
+
+    * Payroll'
+paths:
+  /accounts:
+    get:
+      tags:
+      - Accounts
+      summary: Get accounts
+      description: 'Get all accounts, or add query parameters to filter the results. The response will include a list of accounts with their details, such as account name, number, VAT code information, and fiscal year details.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfAccountApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getAccounts
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Accounts
+      summary: Create account
+      description: 'Create a new account to a specified fiscal year. Use the FiscalYearId property to specify the fiscal year. Account types can be set automatically or provided manually depending on the useDefaultAccountType parameter.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting'
+      parameters:
+      - name: useDefaultAccountType
+        in: query
+        description: If true, the system will provide the standard account type
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountApi'
+      responses:
+        '201':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountApi'
+        '400':
+          description: Account can't be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postAccounts
+      x-operation-id-source: derived
+  /accounts/standardaccounts:
+    get:
+      tags:
+      - Accounts
+      summary: Get standard accounts
+      description: 'Get a list of the predefined standard accounts. This endpoint is only available for Dutch companies and returns the account types and their corresponding account numbers.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfStandardAccountApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getAccountsStandardaccounts
+      x-operation-id-source: derived
+  /accounts/{fiscalyearId}:
+    get:
+      tags:
+      - Accounts
+      summary: Get accounts by fiscal year
+      description: 'Get a list of accounts for a specific fiscal year, or add query parameters to filter the results.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: fiscalyearId
+        in: path
+        description: The fiscal year Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfAccountApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getAccountsByFiscalyearId
+      x-operation-id-source: derived
+  /accounts/{fiscalyearId}/{accountNumber}:
+    get:
+      tags:
+      - Accounts
+      summary: Get single account
+      description: 'Get a specific account from a given fiscal year by specifying the account number. The response includes detailed account information and description if available.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: fiscalyearId
+        in: path
+        description: The fiscal year Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: accountNumber
+        in: path
+        description: The account number
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Account not found
+      operationId: getAccountsByFiscalyearIdByAccountNumber
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Accounts
+      summary: Replace account
+      description: 'Replace an existing account''s data in a given fiscal year, with the provided new data.
+
+        This operation will only update the account in the specified fiscal year.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting'
+      parameters:
+      - name: fiscalyearId
+        in: path
+        description: The fiscal year ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: accountNumber
+        in: path
+        description: The account number
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountApi'
+      responses:
+        '200':
+          description: Account replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountApi'
+        '400':
+          description: Account can't be replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Account not found
+      operationId: putAccountsByFiscalyearIdByAccountNumber
+      x-operation-id-source: derived
+components:
+  schemas:
+    StandardAccountApi:
+      type: object
+      properties:
+        AccountType:
+          type:
+          - string
+          - 'null'
+          description: The account type
+        AccountNumber:
+          type:
+          - integer
+          - 'null'
+          description: The account number
+          format: int64
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    AccountApi:
+      required:
+      - FiscalYearId
+      - IsActive
+      - Name
+      - Number
+      type: object
+      properties:
+        Name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: The name of the account, maximum 100 characters
+        Number:
+          minLength: 1
+          type: string
+          description: The account number
+        VatCodeId:
+          type:
+          - string
+          - 'null'
+          description: The Id of the VAT code that is associated with the account. Can be null if account does not have a vat code
+          format: uuid
+        VatCodeDescription:
+          type:
+          - string
+          - 'null'
+          description: Describes what kind of VAT that is associated with the account
+          readOnly: true
+        FiscalYearId:
+          type: string
+          description: The Id of the Fiscal year that the account belongs to
+          format: uuid
+        ReferenceCode:
+          type:
+          - string
+          - 'null'
+          description: Returns the reference code on the account. This feature is for dutch companies only
+          readOnly: true
+        Type:
+          type: integer
+          description: Returns account type number. This feature is for dutch companies only
+          format: int32
+          readOnly: true
+        TypeDescription:
+          type:
+          - string
+          - 'null'
+          description: Returns account type description
+          readOnly: true
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the account was last modified
+          format: date-time
+          readOnly: true
+        CreatedUtc:
+          type: string
+          description: UTC timestamp when the account was created
+          format: date-time
+          readOnly: true
+        IsActive:
+          type: boolean
+          description: If the account is active or not
+        AllowTransactionText:
+          type: boolean
+          description: If the account is allowed to have transaction text to it
+        IsFirstCostCenterMandatory:
+          type: boolean
+          description: If the account must have first cost center to it
+        IsProjectAllowed:
+          type: boolean
+          description: If the account is allowed to have projects connected to it
+        IsCostCenterAllowed:
+          type: boolean
+          description: If the account is allowed to have cost centers connected to it
+        IsBlockedForManualBooking:
+          type: boolean
+          description: If the account is blocked for manual bookkeeping. Automatic bookkeeping will always be available, no matter the setting on this property
+        Description:
+          type:
+          - string
+          - 'null'
+          description: If the account has account search information connected to it, will be shown as description
+          readOnly: true
+      additionalProperties: false
+    PaginatedResponseOfStandardAccountApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StandardAccountApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfAccountApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountApi'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

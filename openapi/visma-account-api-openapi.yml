@@ -1,0 +1,550 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Account API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Account
+paths:
+  /v1/account/{accountCd}:
+    get:
+      tags:
+      - Account
+      summary: Get a specific Account - ScreenId=GL202500
+      description: 'Data for Account
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: Account_GetByaccountCd
+      parameters:
+      - name: accountCd
+        in: path
+        description: Return the Information from Chart of account for the specified AccountCD
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - Account
+      summary: Updates an account
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed
+
+
+        The response headers include an ETag after a successful PUT operation'
+      operationId: Account_PutByaccountCd
+      parameters:
+      - name: accountCd
+        in: path
+        description: Identifies the account to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the fields and field values to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+        required: true
+        x-bodyName: accountUpdateDto
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Account version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/account:
+    get:
+      tags:
+      - Account
+      summary: Get a range of General ledger accounts - ScreenId=GL202500
+      description: Data for Account
+      operationId: Account_GetAll
+      parameters:
+      - name: active
+        in: query
+        description: Set to True to select active accounts.
+        schema:
+          type: boolean
+      - name: includeAccountClassDescription
+        in: query
+        description: Set to True to include AccountClass description.
+        schema:
+          type: boolean
+      - name: greaterThanValue
+        in: query
+        description: Enter the from-value for Account no.
+        schema:
+          type: string
+      - name: publicCode
+        in: query
+        description: Filter by the Public code 1, authorities mapped code to the account.
+        schema:
+          type: string
+      - name: externalCode1
+        in: query
+        description: Filter by External code 1 (field used for sorting and inquiries.)
+        schema:
+          type: string
+      - name: externalCode2
+        in: query
+        description: Filter by External code 2 (field used for sorting and inquiries.)
+        schema:
+          type: string
+      - name: analysisCode
+        in: query
+        description: Filter by Analysis code (field used for sorting and inquiries.)
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions.
+        schema:
+          type: integer
+          format: int32
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - Account
+      summary: Creates an account
+      description: 'Response Message has StatusCode Created if POST operation succeed
+
+
+        The response headers include an ETag after a successful POST operation.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed'
+      operationId: Account_Post
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the fields and field values to be set on created account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateDto'
+        required: true
+        x-bodyName: accountUpdateDto
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    DtoValueOfAccountTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+    AccountUpdateDto:
+      type: object
+      properties:
+        accountCD:
+          $ref: '#/components/schemas/DtoValueOfString'
+        active:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        accountClass:
+          $ref: '#/components/schemas/DtoValueOfString'
+        analysisCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        currency:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        extenalCode1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        externalCode2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        accountGroupCD:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postOption:
+          $ref: '#/components/schemas/DtoValueOfString'
+        publicCode1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        type:
+          $ref: '#/components/schemas/DtoValueOfAccountTypes'
+        useDefaultSub:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        taxCategory:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    analisysCodeInfoInAccountDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Table SigmaBIAnalysisCodes &gt; The information row connected through the AnalysisCode
+    externalCode1InfoInAccountDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Table SigmaExternalCodes1 &gt; The information row connected through the ExternalCode1
+    AccountDto:
+      type: object
+      properties:
+        accountID:
+          type: integer
+          description: The table &gt; AccountID &gt; The Account ID is the actual ID that the account have in the database and are used in other tables as the relation between the Chart of accounts table and other tables.
+          format: int32
+        accountCD:
+          type: string
+          description: 'Mandatory field: The table &gt; Account* &gt; The unique identifier of the general ledger account in the system.'
+        accountGroupCD:
+          type: string
+          description: The table &gt; Account group &gt; The account group (used in project management if the Projects module has been activated) that includes this account.
+        accountClass:
+          type: string
+          description: The table &gt; Account class &gt; Optional. The account class to which the account is assigned.
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: 'The table &gt; Type &gt; The type of account: Asset, Liability, Income, or Expense.'
+        active:
+          type: boolean
+          description: The table &gt; Active &gt; A check box that indicates that the account is active.
+        description:
+          type: string
+          description: The table &gt; Description &gt; An alphanumeric string of up to 30 characters that describes the account.
+        accountClassDescription:
+          type: string
+          description: The table &gt; Desc &gt; An alphanumeric string of up to 30 characters that describes the AccountClass.
+        useDefaultSub:
+          type: boolean
+          description: The table &gt; Use default sub &gt; A check box that causes the system (if selected) to set the default subaccount as the Subaccount if the account is selected.
+        postOption:
+          type: string
+          description: The table &gt; Post option &gt; An option that defines how transactions created in other workspaces are posted to this account. Summary (default) or Detail.
+        currency:
+          type: string
+          description: 'The table &gt; Currency &gt; Optional: This column appears only if support for multiple currencies has been activated for the system.'
+        taxCategory:
+          type: string
+          description: The table &gt; VAT category &gt; A tax category that you define for the selected account. When you create a journal transaction manually in the GL301000 window, based on this VAT category, the taxable amount will be calculated for the journal entry.
+        cashAccount:
+          type: boolean
+          description: The table &gt; Cash account &gt; A check box that indicates (if selected) that the account has a cash account or multiple cash accounts linked to it.
+        publicCode1:
+          type: string
+          description: The table &gt; Public code 1 &gt; The authorities valid code mapped to the account. Used for example in SAF-T and in some nationals reporting to the authorities.
+        lastModifiedDateTime:
+          type: string
+          description: This information is not visible in the window.  It is collected from the system.
+          format: date-time
+        externalCode1Info:
+          $ref: '#/components/schemas/externalCode1InfoInAccountDto'
+        externalCode2Info:
+          $ref: '#/components/schemas/externalCode2InfoInAccountDto'
+        analisysCodeInfo:
+          $ref: '#/components/schemas/analisysCodeInfoInAccountDto'
+        controlAccountModule:
+          type: string
+        allowManualEntry:
+          type: boolean
+        timeStamp:
+          type: string
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    externalCode2InfoInAccountDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Table SigmaExternalCodes2 &gt; The information row connected through the ExternalCode2
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

@@ -1,0 +1,1988 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Sales Order Basic API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: SalesOrderBasic
+paths:
+  /v1/salesorderbasic/{orderNbr}:
+    get:
+      tags:
+      - SalesOrderBasic
+      summary: Get a specific SO Order
+      description: 'Data for a single Sales Order Basic. OBS: End of life March 31 2026. REPLACED BY v3 ENDPOINT. SEE https://salesorder.visma.net/swagger/index.html'
+      operationId: SalesOrderBasic_GetByorderNbr
+      parameters:
+      - name: orderNbr
+        in: path
+        description: Identifies the Sales Order Number
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesOrderBasicDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SalesOrderBasicDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - SalesOrderBasic
+      summary: Update a specific Sale Order
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed. Response Message has StatusCode BadRequest if PUT operation failed. OBS: End of life March 31 2026. REPLACED BY v3 ENDPOINT. SEE https://salesorder.visma.net/swagger/index.html'
+      operationId: SalesOrderBasic_PutByorderNbr
+      parameters:
+      - name: orderNbr
+        in: path
+        description: Identifies the Sale Order to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Sale Order to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+        required: true
+        x-bodyName: saleOrderUpdateDto
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+  /v1/salesorderbasic/{orderType}/{orderNbr}:
+    get:
+      tags:
+      - SalesOrderBasic
+      summary: Get a specific type of Order
+      description: 'Data for a single Sales Order Basic. OBS: End of life March 31 2026. REPLACED BY v3 ENDPOINT. SEE https://salesorder.visma.net/swagger/index.html'
+      operationId: SalesOrderBasic_GetOrderByTypeByorderTypeorderNbr
+      parameters:
+      - name: orderType
+        in: path
+        description: Identifies the Sales Order Type
+        required: true
+        schema:
+          type: string
+      - name: orderNbr
+        in: path
+        description: Identifies the Sales Order Number
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesOrderBasicDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SalesOrderBasicDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+  /v1/salesorderbasic:
+    get:
+      tags:
+      - SalesOrderBasic
+      summary: Get a range of Sale Orders - ScreenId=SO301000 Request page size must be lower…
+      description: 'Data for all Sales Order Basic. OBS: End of life March 31 2026. REPLACED BY v3 ENDPOINT. SEE https://salesorder.visma.net/swagger/index.html'
+      operationId: SalesOrderBasic_GetAllOrders
+      parameters:
+      - name: orderType
+        in: query
+        description: Filter by Order type.
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Select to filter on status on order.
+        schema:
+          enum:
+          - Open
+          - Hold
+          - CreditHold
+          - Completed
+          - Cancelled
+          - BackOrder
+          - Shipping
+          - Invoiced
+          - PendingApproval
+          - Voided
+          type: string
+      - name: greaterThanValue
+        in: query
+        description: Filter on Order no. greater than value.
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        description: This field has been deprecated and will be removed in future versions. The OrderBy parameter has no effect on the result.
+        schema:
+          type: string
+      - name: showNotes
+        in: query
+        description: Set to true to include notes.
+        schema:
+          type: boolean
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesOrderBasicDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesOrderBasicDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - SalesOrderBasic
+      summary: Create a Sale Order
+      description: 'Response Message has StatusCode Created if POST operation succeed. Response Message has StatusCode BadRequest or InternalServerError if POST operation failed. OBS: End of life March 31 2026. REPLACED BY v3 ENDPOINT. SEE https://salesorder.visma.net/swagger/index.html'
+      operationId: SalesOrderBasic_Post
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Sale Order to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SalesOrderBasicUpdateDto'
+        required: true
+        x-bodyName: saleOrderUpdateDto
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+  /v1/salesorderbasic/{saleOrderNumber}/action/createShipment:
+    post:
+      tags:
+      - SalesOrderBasic
+      summary: Crete shipment operation
+      description: The action result dto contains information about the result of running the action
+      operationId: SalesOrderBasic_CreateShipmentActionBysaleOrderNumber
+      parameters:
+      - name: saleOrderNumber
+        in: path
+        description: Reference number of the sale oreder from which the shipment will be created
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the action
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentActionDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentActionDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentActionDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentActionDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateShipmentActionDto'
+        required: true
+        x-bodyName: createShipmentActionDto
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateShipmentActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CreateShipmentActionResultDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/salesorderbasic/{orderNumber}/attachment:
+    post:
+      tags:
+      - SalesOrderBasic
+      summary: Creates an attachment and associates it with a sales order.
+      description: Response Message has StatusCode Created if POST operation succeed
+      operationId: SalesOrderBasic_CreateHeaderAttachmentByorderNumber
+      parameters:
+      - name: orderNumber
+        in: path
+        description: Identifies the sales order
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+  /v1/salesorderbasic/orderType/{orderType}/{orderNumber}/attachment:
+    post:
+      tags:
+      - SalesOrderBasic
+      summary: Creates an attachment and associates it with a sales order on a specific order…
+      description: Response Message has StatusCode Created if POST operation succeed
+      operationId: SalesOrderBasic_CreateHeaderAttachmentByorderNumberorderType
+      parameters:
+      - name: orderNumber
+        in: path
+        description: Identifies the sales order
+        required: true
+        schema:
+          type: string
+      - name: orderType
+        in: path
+        description: Identifies the sales order type
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/salesorderbasic/{orderNumber}/{lineNumber}/attachment:
+    post:
+      tags:
+      - SalesOrderBasic
+      summary: Creates an attachment and associates it with a certain sales order line.
+      description: Response Message has StatusCode Created if POST operation succeed
+      operationId: SalesOrderBasic_CreateLineAttachmentByorderNumberlineNumber
+      parameters:
+      - name: orderNumber
+        in: path
+        description: Identifies the sales order
+        required: true
+        schema:
+          type: string
+      - name: lineNumber
+        in: path
+        description: Specifies line number
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      deprecated: true
+      security:
+      - interactiveapi: []
+  /v1/salesorderbasic/orderType/{orderType}/{orderNumber}/{lineNumber}/attachment:
+    post:
+      tags:
+      - SalesOrderBasic
+      summary: Creates an attachment and associates it with a certain sales order line on a…
+      description: Response Message has StatusCode Created if POST operation succeed
+      operationId: SalesOrderBasic_CreateLineAttachmentByorderNumberorderTypelineNumber
+      parameters:
+      - name: orderNumber
+        in: path
+        description: Identifies the sales order
+        required: true
+        schema:
+          type: string
+      - name: orderType
+        in: path
+        description: Identifies the sales order type
+        required: true
+        schema:
+          type: string
+      - name: lineNumber
+        in: path
+        description: Specifies line number
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/salesorderbasic/{orderType}/{orderNumber}/{lineNumber}/attachment/{fileId}:
+    delete:
+      tags:
+      - SalesOrderBasic
+      summary: Delete an attachment and remove associates it with a certain sales order line…
+      description: Response Message has StatusCode OK if DELETE operation succeed
+      operationId: SalesOrderBasic_DeleteLineAttachmentByorderNumberorderTypelineNumberfileId
+      parameters:
+      - name: orderNumber
+        in: path
+        description: Identifies the sales order
+        required: true
+        schema:
+          type: string
+      - name: orderType
+        in: path
+        description: Identifies the sales order type
+        required: true
+        schema:
+          type: string
+      - name: lineNumber
+        in: path
+        description: Specifies line number
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: fileId
+        in: path
+        description: Specifies the id of the file
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/salesorderbasic/{orderType}/{orderNumber}/attachment/{fileId}:
+    delete:
+      tags:
+      - SalesOrderBasic
+      summary: Delete an attachment and remove associates it with a certain sales order on a…
+      description: Response Message has StatusCode OK if DELETE operation succeed
+      operationId: SalesOrderBasic_DeleteOrderAttachmentByorderNumberorderTypefileId
+      parameters:
+      - name: orderNumber
+        in: path
+        description: Identifies the sales order
+        required: true
+        schema:
+          type: string
+      - name: orderType
+        in: path
+        description: Identifies the sales order type
+        required: true
+        schema:
+          type: string
+      - name: fileId
+        in: path
+        description: Specifies the id of the file
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    CreateShipmentActionDto:
+      required:
+      - orderType
+      - shipmentDate
+      - shipmentWarehouse
+      type: object
+      properties:
+        orderType:
+          type: string
+          description: Mandatory field
+        returnShipmentDto:
+          type: boolean
+        shipmentDate:
+          type: string
+          description: Mandatory field
+          format: date-time
+        shipmentWarehouse:
+          type: string
+          description: Mandatory field
+        operation:
+          type: string
+          description: 'Operation Type. Possible values: I or R, I = Issue, R = Receipt. If not set it will take the default one defined on Order Type.'
+    shipViaInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; Ship via &gt; The carrier used for shipping the goods.
+    WarehouseIdDescriptionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    locationInAllocationsDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Location &gt; The location in the warehouse.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+    locationInShipmentDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location to receive the shipment.'
+    vatRegistrationIdInSalesOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field if Customer or GLN is not specified.
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    ShipmentDto:
+      type: object
+      properties:
+        timeStamp:
+          type: string
+          format: byte
+        shipmentNumber:
+          type: string
+          description: The top part &gt; Shipment no &gt; The unique reference number of the document, which is automatically generated by the system.
+        shipmentType:
+          enum:
+          - Issue
+          - DropShip
+          - Transfer
+          type: string
+          description: 'The top part &gt; Type &gt; The type of the shipment document, which can be one of the following options: Shipment, Transfer.'
+        status:
+          enum:
+          - Open
+          - Hold
+          - Completed
+          - Cancelled
+          - Confirmed
+          - Invoiced
+          - Receipted
+          - AutoGenerated
+          - PartiallyInvoiced
+          type: string
+          description: The top part &gt; Status &gt; The status of the document.
+        hold:
+          type: boolean
+          description: The top part &gt; Hold &gt; This check box indicates (if selected) that the documents cannot be processed further until the check box is cleared.
+        operation:
+          enum:
+          - Issue
+          - Receipt
+          type: string
+          description: 'The top part &gt; Operation &gt; The operation to be performed in the Inventory workspace for this shipment: Issue or Receipt.'
+        shipmentDate:
+          type: string
+          description: 'Mandatory field: The top part &gt; Shipment date* &gt; The date when the document has been created.'
+          format: date-time
+        customer:
+          $ref: '#/components/schemas/customerInShipmentDto'
+        location:
+          $ref: '#/components/schemas/locationInShipmentDto'
+        fromWarehouse:
+          $ref: '#/components/schemas/fromWarehouseInShipmentDto'
+        toWarehouse:
+          $ref: '#/components/schemas/toWarehouseInShipmentDto'
+        currencyId:
+          type: string
+          description: Delivery settings tab &gt; Freight currency &gt; By default, it is the currency of the sales order, but you can change it if needed.
+        owner:
+          $ref: '#/components/schemas/ownerInShipmentDto'
+        shippedQuantity:
+          type: number
+          description: The top part &gt; Shipped quantity &gt; The quantity of goods shipped.
+          format: double
+        shippedWeight:
+          type: number
+          description: The top part &gt; Shipped weight &gt; The weight of the goods shipped.
+          format: double
+        shippedVolume:
+          type: number
+          description: The top part &gt; Shipped volume &gt; The total volume of the items in the shipment.
+          format: double
+        packages:
+          type: integer
+          description: The top part &gt; Packages &gt; The number of boxes included in this shipment.
+          format: int32
+        packagesWeight:
+          type: number
+          description: The top part &gt; Package weight &gt; The total weight of the shipment that includes the weight of boxes (for boxes determined automatically).
+          format: double
+        packagesVolume:
+          type: number
+          description: The top part &gt; Package volume &gt; The total volume of the shipment that includes the volume of boxes (for boxes determined automatically).
+          format: double
+        controlQuantity:
+          type: number
+          description: The top part &gt; Control quantity &gt; The control value, which you manually enter as a value equal to the shipped quantity if the Validate shipment total on confirmation check box has been selected in the Sales orders preferences (SO101000) window.
+          format: double
+        deliveryAddress:
+          $ref: '#/components/schemas/deliveryAddressInShipmentDto'
+        deliveryContact:
+          $ref: '#/components/schemas/deliveryContactInShipmentDto'
+        shipVia:
+          $ref: '#/components/schemas/shipViaInShipmentDto'
+        fobPoint:
+          $ref: '#/components/schemas/fobPointInShipmentDto'
+        shippingTerms:
+          $ref: '#/components/schemas/shippingTermsInShipmentDto'
+        shippingZone:
+          $ref: '#/components/schemas/shippingZoneInShipmentDto'
+        residentialDelivery:
+          type: boolean
+          description: Delivery settings tab &gt; Shipping information section &gt; Residential delivery &gt; This check box indicates (if selected) that the shipping address is a residential one.
+        saturdayDelivery:
+          type: boolean
+          description: Delivery settings tab &gt; Shipping information section &gt; Saturday delivery &gt; This check box indicates delivery on saturday.
+        useCustomerAccount:
+          type: boolean
+        insurance:
+          type: boolean
+          description: Delivery settings tab &gt; Shipping information section &gt; Insurance &gt; This check box indicates (if selected) that insurance is required for the shipment.
+        freightCost:
+          type: number
+          description: Delivery settings tab &gt; Shipping information section &gt; Freight cost &gt; The freight cost of the shipment.
+          format: double
+        freightAmt:
+          type: number
+          description: Delivery settings tab &gt; Shipping information section &gt; Freight amt. &gt; The amount of freight the customer will be charged for the shipment.
+          format: double
+        transactionType:
+          $ref: '#/components/schemas/transactionTypeInShipmentDto'
+        modeOfTrasport:
+          $ref: '#/components/schemas/modeOfTrasportInShipmentDto'
+        container:
+          type: boolean
+          description: Delivery settings tab &gt; Intrastat section &gt; Container &gt; This check box indicates (if selected) that the shipment gets marked as shipped in container for Intrastat reporting purposes.
+        shipmentDetailLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentDetailLineDto'
+          description: Document details tab &gt;
+        shipmentOrderLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentOrderLineDto'
+          description: Orders tab &gt;
+        shipmentPackageLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackageDetailLineDto'
+          description: Packages tab &gt;
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        note:
+          type: string
+        customStr1:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr2:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr3:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr4:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr5:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customDec1:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customDec2:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customInt1:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customInt2:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customDateTimeUTC1:
+          type: string
+          description: A free custom colum of type DateTime - in UTC timezone
+          format: date-time
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a Shipment in ShipmentController. Used by getting data.
+    shippingZoneInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; Shipping zone ID &gt; The shipping zone of the customer.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    ShipmentDetailLineDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: Document details tab &gt; The line number indicating sequence.
+          format: int32
+        orderType:
+          type: string
+          description: Document details tab &gt; The type of the document, which is one of the predefined order types or a custom order type.
+        orderNbr:
+          type: string
+          description: Document details tab &gt; Order no. &gt; The reference number of the document.
+        inventoryNumber:
+          type: string
+          description: Document details tab &gt; Item ID &gt; The ID of the item being shipped.
+        freeItem:
+          type: boolean
+          description: Document details tab &gt; Free item &gt; The free item earned by the customer, if applicable. (This column does not appear for transfer.)
+        warehouse:
+          $ref: '#/components/schemas/warehouseInShipmentDetailLineDto'
+        location:
+          $ref: '#/components/schemas/locationInShipmentDetailLineDto'
+        uom:
+          type: string
+          description: Document details tab &gt; UoM &gt; The unit of measure used for the item in shipment.
+        shippedQty:
+          type: number
+          description: Document details tab &gt; Shipped qty. &gt; The quantity of the item shipped with the specified properties.
+          format: double
+        orderedQty:
+          type: number
+          description: Document details tab &gt; Ordered qty. &gt; The quantity of the item ordered with the specified properties.
+          format: double
+        openQty:
+          type: number
+          description: Document details tab &gt; Open qty. &gt; The number of items with the specified quantities still to be shipped.
+          format: double
+        lotSerialNbr:
+          type: string
+          description: Document details tab &gt; Lot/serial no. &gt; The lot or serial number of particular items of the item.
+        expirationDate:
+          type: string
+          description: Document details tab &gt; Expiration date &gt; The expiration date of the item, if it is traced for this item ID.
+          format: date-time
+        reasonCode:
+          type: string
+          description: Document details tab &gt; Reason code &gt; The reason code used for shipments.
+        description:
+          type: string
+          description: Document details tab &gt; Description &gt; A short description for the shipment.
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationsDto'
+          description: Document details tab &gt; Allocations button &gt; Opens the Allocations dialog box, so that you can specify the locations, or lot or serial numbers for the units of the of the item.
+        orderLineNbr:
+          type: integer
+          description: Document details tab &gt; Order line no. &gt; Read only. The order's line number that matches this shipment line.
+          format: int32
+        note:
+          type: string
+        externalLink:
+          type: string
+        alternateID:
+          type: string
+        customStr1:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr2:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr3:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr4:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr5:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customDec1:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customDec2:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customInt1:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customInt2:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customDateTimeUTC1:
+          type: string
+          description: A free custom colum of type DateTime - in UTC timezone
+          format: date-time
+    ownerInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: The top part &gt; Owner &gt; The user assigned to approve the document.
+    shippingTermsInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; Shipping terms &gt; The shipping terms used in relations with the customer.
+    locationInSalesOrderBasicDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location from which the goods or services have been ordered or, if the sales order is created from an opportunity, the customer location specified for the opportunity.'
+    SalesOrderBasicLineUpdateDto:
+      required:
+      - inventoryNumber
+      type: object
+      properties:
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        inventoryId:
+          $ref: '#/components/schemas/inventoryIdInSalesOrderBasicLineUpdateDto'
+        inventoryNumber:
+          $ref: '#/components/schemas/inventoryNumberInSalesOrderBasicLineUpdateDto'
+        warehouse:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        unitCost:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        unitPrice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountPercent:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        manualDiscount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        discUnitPrice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        lineDescription:
+          $ref: '#/components/schemas/DtoValueOfString'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+      description: This class represent a Sales Order Line in Sales Order Controller. Used to pass data to server for creating or updating an order line
+    orderTypeInSalesOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field
+    countryInShipmentAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    warehouseInShipmentDetailLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Document details tab &gt; Warehouse* &gt; The warehouse from which the items is shipped.'
+    inventoryIdInSalesOrderBasicLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: InventoryId is deprecated, please use InventoryNumber instead.
+    CreateShipmentActionResultDto:
+      type: object
+      properties:
+        referenceNumber:
+          type: string
+        shipmentDto:
+          $ref: '#/components/schemas/ShipmentDto'
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    deliveryContactInShipmentDto:
+      properties:
+        overrideContact:
+          type: boolean
+          description: Override contact &gt; A check box that you select to not use+ the default contact information and to type new contact information.
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: Delivery settings tab &gt; Delivery address contact section &gt;
+    locationInShipmentDetailLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Document details tab &gt; Location &gt; The location in the warehouse from which the item is shipped.
+    fobPointInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; FOB point &gt; The point where obligation of goods passes to the customer.
+    fromWarehouseInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Warehouse ID* &gt; The warehouse from which the goods should be shipped.'
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    SalesOrderBasicUpdateDto:
+      required:
+      - orderType
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesOrderBasicLineUpdateDto'
+        orderType:
+          $ref: '#/components/schemas/orderTypeInSalesOrderBasicUpdateDto'
+        orderNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        date:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        requestOn:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        customerOrder:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerRefNo:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customer:
+          $ref: '#/components/schemas/customerInSalesOrderBasicUpdateDto'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        contactId:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        gln:
+          $ref: '#/components/schemas/glnInSalesOrderBasicUpdateDto'
+        vatRegistrationId:
+          $ref: '#/components/schemas/vatRegistrationIdInSalesOrderBasicUpdateDto'
+        currency:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        recalculateShipment:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+      description: This class represent a Sales Order in Sales Order Controller. Used to pass data to server for creating or updating an order
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    customerInSalesOrderBasicDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: The top part &gt; Customer &gt; The customer that has ordered the goods or services.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    countyInShipmentAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    modeOfTrasportInShipmentDto:
+      properties:
+        id:
+          type: integer
+          description: Click on the magnifier. &gt; The identifier.
+          format: int32
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Intrastat section &gt; Mode of transportation &gt; The method of transportation.
+    SalesOrderDocumentLineDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          description: Document details tab &gt; Line no. &gt; The line number of the document.
+          format: int32
+        sortOrder:
+          type: integer
+          description: Document details tab &gt; Line order &gt; The order number of the document line. The system regenerates this number automatically when you reorder the lines in the table.
+          format: int32
+        inventory:
+          $ref: '#/components/schemas/InventoryNumberDescriptionDto'
+        warehouse:
+          $ref: '#/components/schemas/WarehouseIdDescriptionDto'
+        uom:
+          type: string
+          description: 'Mandatory field: Document details tab &gt; UoM* &gt; The unit of measure (UoM) used for the item with this item ID.'
+        quantity:
+          type: number
+          description: Document details tab &gt; Quantity &gt; The quantity of the item sold, measured in the UoM.
+          format: double
+        qtyOnShipments:
+          type: number
+          description: Document details tab &gt; Qty. on shipments &gt; A read-only column that displays the quantity of the stock item being prepared for shipment and already shipped for this order.
+          format: double
+        openQty:
+          type: number
+          description: Document details tab &gt; Open qty. &gt; The quantity of the item to be shipped; that is, the total quantity minus the quantity shipped according to closed shipment documents.
+          format: double
+        unitCost:
+          type: number
+          description: Document details tab &gt; Unit Cost &gt; The cost of the unit on the sales order.
+          format: double
+        unitPrice:
+          type: number
+          description: Document details tab &gt; Unit price &gt; The price of the unit on the sales order.
+          format: double
+        unitPriceInBaseCurrency:
+          type: number
+          format: double
+        discountCode:
+          type: string
+          description: 'Mandatory field: Document details tab &gt; Discount details tab &gt; Discount code* &gt; The code of the discount that has been applied to this line.'
+        discountPercent:
+          type: number
+          description: Document details tab &gt; Discount percent &gt; The percent of the line-level discount that has been applied manually or automatically to this line item (if the item is not a free item).
+          format: double
+        discountAmount:
+          type: number
+          description: Document details tab &gt; Discount amount &gt; The amount of the line-level discount that has been applied manually or automatically to this line item (if the item is not a free item).
+          format: double
+        manualDiscount:
+          type: boolean
+          description: Document details tab &gt; Manual discount &gt; A check box that indicates (if selected) that the discount has been applied manually.
+        discUnitPrice:
+          type: number
+          description: Document details tab &gt; Disc. unit price &gt; The unit price, which has been recalculated after the application of discounts.
+          format: double
+        extPrice:
+          type: number
+          description: Document details tab &gt; Extended cost &gt; The extended price, which is the unit price multiplied by the quantity.
+          format: double
+        unbilledAmount:
+          type: number
+          description: Document details tab &gt; Amount not yet invoiced &gt; The amount of cancelled shipments and cancelled remainders.
+          format: double
+        lineDescription:
+          type: string
+          description: Document details tab &gt; Line description &gt; The description of the unit.
+        branchNumber:
+          $ref: '#/components/schemas/BranchNumberDto'
+        note:
+          type: string
+          description: Tables in tab &gt; Icon Notes &gt; Pop-up window for providing any user-defined text connected to the order.
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+          description: The data containing information about the document attachments
+      description: This class represents a SOOrder in SOOrderController. Used by getting data.
+    SalesOrderBasicDto:
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesOrderDocumentLineDto'
+        orderType:
+          type: string
+          description: 'Mandatory field: The top part &gt; Order type &gt; The type of the document, which is one of the predefined order types or a custom order type created by using the (SO201000) window.'
+        orderNo:
+          type: string
+          description: 'The top part &gt; Order no.: &gt; The reference number of the document.'
+        status:
+          enum:
+          - Open
+          - Hold
+          - CreditHold
+          - Completed
+          - Cancelled
+          - BackOrder
+          - Shipping
+          - Invoiced
+          - PendingApproval
+          - Voided
+          type: string
+          description: 'The top part &gt; Status &gt; The status of the document, which can be one of the following options: On hold, Credit hold, Pending aååroval, Rejected, Open, Cancelled, Shipping, Back order, Invoiced, Completed.'
+        hold:
+          type: boolean
+          description: The top part &gt; Hold &gt; A check box that you select if the document is on hold and should not be processed further at this time.
+        date:
+          type: string
+          description: 'Mandatory field: The top part &gt; Date* &gt;  The date of the document.'
+          format: date-time
+        requestOn:
+          type: string
+          description: 'Mandatory field: The top part &gt; Requested on &gt; The date when the customer wants to receive the goods; this date provides the default values for the Requested on dates for order lines.'
+          format: date-time
+        customerOrder:
+          type: string
+          description: The top part &gt; Customer order &gt; The reference number of the original customer document that the sales order is based on.
+        customerRefNo:
+          type: string
+          description: The top part &gt; External reference &gt; The reference number of the sales order in a third-party application if Visma.net Financials is integrated with such an application and imports the sales orders from it.
+        customer:
+          $ref: '#/components/schemas/customerInSalesOrderBasicDto'
+        contactId:
+          type: integer
+          description: The top part &gt; Contact &gt; The contact person of the customer.
+          format: int32
+        location:
+          $ref: '#/components/schemas/locationInSalesOrderBasicDto'
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency of the document.
+        description:
+          type: string
+          description: The top part &gt; Description &gt; A brief description of the document.
+        orderTotal:
+          type: number
+          description: 'The top part &gt; Order total &gt; The total amount of the document, which is calculated as follows:
+
+            Line Total + Misc.Charges + Freight + Premium Freight – Discount Total+ Tax Total'
+          format: double
+        orderTotalInBaseCurrency:
+          type: number
+          format: double
+        vatTaxableTotal:
+          type: number
+          description: The top part &gt; VAT taxable total &gt; The document total that is subject to VAT.
+          format: double
+        vatTaxableTotalInBaseCurrency:
+          type: number
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
+          format: double
+        vatExemptTotalInBaseCurrency:
+          type: number
+          format: double
+        taxTotal:
+          type: number
+          description: The top part &gt; VAT total &gt; The total amount of tax paid on the document.
+          format: double
+        taxTotalInBaseCurrency:
+          type: number
+          format: double
+        exchangeRate:
+          type: number
+          format: double
+        discountTotal:
+          type: number
+          format: double
+        discountTotalInBaseCurrency:
+          type: number
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: Background information collected from the system.
+          format: date-time
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInSalesOrderBasicDto'
+        note:
+          type: string
+          description: Icon Notes on top of the window &gt; Pop-up window for providing any user-defined text connected to the order.
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+          description: The data containing information about the document attachments
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a SOOrder in SOOrderController. Used by getting data.
+    glnInSalesOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field if Customer or VatRegistrationId is not specified.
+    deliveryAddressInShipmentDto:
+      properties:
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box that you select to not include the default address information and to type new address information.
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInShipmentAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInShipmentAddressDto'
+      description: Delivery settings tab &gt; Delivery address section &gt;
+    ShipmentOrderLineDto:
+      type: object
+      properties:
+        orderType:
+          type: string
+          description: Orders tab &gt; Order typer &gt; The type of the order.
+        orderNbr:
+          type: string
+          description: Orders tab &gt; Order no. &gt; The reference number of the sales or transfer order.
+        shippedQty:
+          type: number
+          description: Orders tab &gt; Shipped qty. &gt; The quantity of goods shipped in accordance with the order.
+          format: double
+        shippedWeight:
+          type: number
+          description: Orders tab &gt; Shipped weight &gt; The weight of the goods shipped in accordance with the order.
+          format: double
+        shippedVolume:
+          type: number
+          description: Orders tab &gt; Shipped volume &gt; The volume of the goods shipped in accordance with the sales or transfer order.
+          format: double
+        invoiceType:
+          type: string
+          description: Orders tab &gt; Invoice type &gt; The type of invoice for the goods shipped for the sales order.
+        invoiceNbr:
+          type: string
+          description: Orders tab &gt; Invoice no. &gt; The reference number of the invoice for the goods shipped.
+        inventoryDocType:
+          type: string
+          description: Orders tab &gt; Inventory doc. type &gt; The type of the inventory document that lists the items for this shipment.
+        inventoryRefNbr:
+          type: string
+          description: Orders tab &gt; Inventory ref. no. &gt; The reference number of the inventory document that lists the items for this shipment.
+        note:
+          type: string
+    toWarehouseInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; To warehouse &gt; The warehouse to which the goods should be shipped in case of a transfer.
+    PackageDetailLineDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: Packages tab &gt; Line number. The sequence of the lines.
+          format: int32
+        confirmed:
+          type: boolean
+          description: Packages tab &gt; Confirmed &gt; This check box indicates (if selected) that shipping of the package specified on the line has been confirmed.
+        boxId:
+          type: string
+          description: 'Mandatory field: Packages tab &gt; Box ID* &gt; The box used for the package.'
+        type:
+          type: string
+          description: 'Packages tab &gt; Type &gt; The type of package: Auto or Manual.'
+        description:
+          type: string
+          description: Packages tab &gt; Description &gt; The description of the item or description of the box contents.
+        weight:
+          type: number
+          description: Packages tab &gt; Weight &gt; The gross weight of the package.
+          format: double
+        uom:
+          type: string
+          description: Packages tab &gt; UoM &gt; The unit of measure in which the weight of the package is specified.
+        volume:
+          type: number
+          description: Packages tab &gt; Volume &gt; The gross volume of the package.
+          format: double
+        volumeUOM:
+          type: string
+          description: Packages tab &gt; VolumeUoM &gt; The unit of measure in which the volume of the package is specified.
+        declaredValue:
+          type: number
+          description: Packages tab &gt; Declared value &gt; The amount of the package specified for insurance, you can edit the value if needed.
+          format: double
+        coDAmount:
+          type: number
+          description: Packages tab &gt; Cost of delivery amount &gt; The amount to be charged on delivery of the package, you can edit the value if needed.
+          format: double
+        trackingNumber:
+          type: string
+          description: Packages tab &gt; Tracking number &gt; The tracking number provided for the package by the carrier if integration with carrier is configured.
+        customRefNbr1:
+          type: string
+          description: Packages tab &gt; Customer ref. no. 1 &gt; An auxiliary reference number to appear on the carrier label for the box.
+        customRefNbr2:
+          type: string
+          description: Packages tab &gt; Customer ref. no. 2 &gt; An additional auxiliary reference number to appear on the carrier label for the box.
+    InventoryNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    inventoryNumberInSalesOrderBasicLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field
+    customerInSalesOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field if GLN or VatRegistrationId is not specified.
+    branchNumberInSalesOrderBasicDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Document details tab &gt; Branch* &gt; The branch of the company.'
+    transactionTypeInShipmentDto:
+      properties:
+        id:
+          type: integer
+          description: Click on the magnifier. &gt; The identifier.
+          format: int32
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Intrastat section &gt; Transaction type &gt; The 1-digit code that describes the nature of the transaction (according to EU regulations for Intrastat reporting).
+    customerInShipmentDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: The top part &gt; Customer &gt; The customer to whom the goods specified in the document should be shipped. (This field does not appear for transfers.)
+    AllocationsDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          description: Line no. &gt; The line of the purchase order that contains the selected item.
+          format: int32
+        itemId:
+          type: string
+          description: ItemId &gt; The id of the item.
+        location:
+          $ref: '#/components/schemas/locationInAllocationsDto'
+        lotSerialNumber:
+          type: string
+          description: Lot/Serial no. &gt; The lot or serial number of the item.
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
+          format: double
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
+        expirationDate:
+          type: string
+          description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
+          format: date-time
+        description:
+          type: string
+          description: Description &gt; The description of the stock item.
+      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptController. Used for getting data.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

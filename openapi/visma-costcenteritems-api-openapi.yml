@@ -1,0 +1,333 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Cost Center…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: CostCenterItems
+  description: 'Items that belong to cost centers, used for project tracking and cost allocation.
+
+    Overview of Cost Center Items Functionality: Cost Centers
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping
+
+    * Invoicing
+
+    * Payroll'
+paths:
+  /costcenteritems/{itemId}:
+    get:
+      tags:
+      - CostCenterItems
+      summary: Get a specific cost center item
+      description: 'Get a specific cost center item by its unique identifier. The response will include the item''s details such as name, short name, and status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * vls:api'
+      parameters:
+      - name: itemId
+        in: path
+        description: The unique identifier of the cost center item to retrieve.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostCenterItemApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Not Found
+        '401':
+          description: Unauthorized. Access denied.
+        '403':
+          description: Forbidden. The company is not active, or the startup guide is not completed.
+      operationId: getCostcenteritemsByItemId
+      x-operation-id-source: derived
+  /costcenteritems:
+    post:
+      tags:
+      - CostCenterItems
+      summary: Create a single cost center item
+      description: 'Create a new cost center item within an existing cost center. The item will be assigned a unique identifier and can be used for project tracking and cost allocation.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:sales
+
+        * vls:api'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostCenterItemApi'
+      responses:
+        '201':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostCenterItemApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '401':
+          description: Unauthorized. Access denied.
+        '403':
+          description: Forbidden. The company is not active, or the startup guide is not completed.
+      operationId: postCostcenteritems
+      x-operation-id-source: derived
+  /costcenteritems/{costCenterItemId}:
+    put:
+      tags:
+      - CostCenterItems
+      summary: Replace the data in a cost center item
+      description: 'Replace an existing cost center item''s data with the provided new data.
+
+        The cost center assignment cannot be changed through this operation.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:sales
+
+        * vls:api'
+      parameters:
+      - name: costCenterItemId
+        in: path
+        description: The unique identifier of the cost center item to update.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostCenterItemApi'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostCenterItemApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Not Found
+        '401':
+          description: Unauthorized. Access denied.
+        '403':
+          description: Forbidden. The company is not active, or the startup guide is not completed.
+      operationId: putCostcenteritemsByCostCenterItemId
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CostCenterItemApi:
+      required:
+      - CostCenterId
+      - IsActive
+      - Name
+      - ShortName
+      type: object
+      properties:
+        CostCenterId:
+          type: string
+          description: The unique identifier of the cost center this item belongs to. Get from /v2/costcenters endpoint.
+          format: uuid
+        Id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier assigned by eAccounting (read-only).
+          format: uuid
+          readOnly: true
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: The name of the cost center item. Maximum 50 characters.
+        ShortName:
+          maxLength: 9
+          minLength: 0
+          type: string
+          description: The short name or code for the cost center item. Maximum 9 characters.
+        IsActive:
+          type: boolean
+          description: Indicates whether the cost center item is active or inactive.
+        CreatedUtc:
+          type: string
+          description: The UTC timestamp when this cost center item was created (read-only).
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

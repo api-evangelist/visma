@@ -1,0 +1,1347 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Expense Claim API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: ExpenseClaim
+paths:
+  /v1/expenseClaim/{expenseClaimNbr}:
+    get:
+      tags:
+      - ExpenseClaim
+      summary: Get a specific Expense Claim
+      description: 'Data for a single expense claim
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: ExpenseClaim_GetExpenseClaimByexpenseClaimNbr
+      parameters:
+      - name: expenseClaimNbr
+        in: path
+        description: Identifies the expense claim
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseClaimDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseClaimDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - ExpenseClaim
+      summary: Update a specific ExpenseClaim
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed.
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed.
+
+
+        The response headers include an ETag after a successful PUT operation.'
+      operationId: ExpenseClaim_PutByexpenseClaimNbr
+      parameters:
+      - name: expenseClaimNbr
+        in: path
+        description: Identifies the ExpenseClaim to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the ExpenseClaim to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseClaimUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseClaimUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExpenseClaimUpdateDto'
+        required: true
+        x-bodyName: expenseClaim
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Expense Claim version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    delete:
+      tags:
+      - ExpenseClaim
+      summary: Deletes a specific ExpenseClaim
+      description: Response Message has StatusCode NoContent if DELETE operation succeed
+      operationId: ExpenseClaim_DeleteByexpenseClaimNbr
+      parameters:
+      - name: expenseClaimNbr
+        in: path
+        description: Identifies the ExpenseClaim to delete
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/expenseClaim:
+    get:
+      tags:
+      - ExpenseClaim
+      summary: Get a range of Expense Claims, a filter needs to be specified.
+      operationId: ExpenseClaim_GetAll
+      parameters:
+      - name: status
+        in: query
+        description: The status of the document.
+        schema:
+          enum:
+          - Hold
+          - PendingApproval
+          - Approved
+          - Rejected
+          - Released
+          type: string
+      - name: date
+        in: query
+        description: The date of the document
+        schema:
+          type: string
+          format: date-time
+      - name: customer
+        in: query
+        description: The customer from the document
+        schema:
+          type: string
+      - name: departmentId
+        in: query
+        description: Identifies the department
+        schema:
+          type: string
+      - name: greaterThanValue
+        in: query
+        description: Greater-than value. The item which is the object for this, varies from API to API.
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        description: This field has been deprecated and will be removed in future versions. The OrderBy parameter has no effect on the result.
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExpenseClaimDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExpenseClaimDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - ExpenseClaim
+      summary: Create an ExpenseClaim
+      description: 'Response Message has StatusCode Created if POST operation succeed.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        The response headers include an ETag after a successful POST operation.'
+      operationId: ExpenseClaim_CreateExpenseClaim
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the ExpenseClaim to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseClaimUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseClaimUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExpenseClaimUpdateDto'
+        required: true
+        x-bodyName: expenseClaim
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/expenseClaim/{expenseClaim}/action/hold:
+    post:
+      tags:
+      - ExpenseClaim
+      summary: Put ExpenseClaim on hold
+      description: 'The action result dto contains information about the result of running the action.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        In this endpoint, If-Match can also be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: ExpenseClaim_PutExpenseClaimOnHoldByexpenseClaim
+      parameters:
+      - name: expenseClaim
+        in: path
+        description: Reference number of the ExpenseClaim to be put on hold
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutExpenseClaimOnHoldActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PutExpenseClaimOnHoldActionResultDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PutExpenseClaimOnHoldActionResultDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PutExpenseClaimOnHoldActionResultDto'
+        '412':
+          description: Expense Claim version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+            application/xml: {}
+            text/xml: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/expenseClaim/{expenseClaim}/action/submit:
+    post:
+      tags:
+      - ExpenseClaim
+      summary: Submit Expense Claim operation
+      description: 'The action result dto contains information about the result of running the action.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        In this endpoint, If-Match can also be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: ExpenseClaim_SubmitExpenseClaimByexpenseClaim
+      parameters:
+      - name: expenseClaim
+        in: path
+        description: Reference number of the Expense Claim to be submitted
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitExpenseClaimActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SubmitExpenseClaimActionResultDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SubmitExpenseClaimActionResultDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SubmitExpenseClaimActionResultDto'
+        '412':
+          description: Expense Claim version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+            application/xml: {}
+            text/xml: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/expenseClaim/{expenseClaim}/action/approval:
+    post:
+      tags:
+      - ExpenseClaim
+      summary: Send Expense Claim to approval
+      description: 'The action result dto contains information about the result of running the action.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        In this endpoint, If-Match can also be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: ExpenseClaim_SendExpenseClaimToApprovalByexpenseClaim
+      parameters:
+      - name: expenseClaim
+        in: path
+        description: Reference number of the Expense Claim to be sent to approval
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendExpenseClaimToApprovalActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SendExpenseClaimToApprovalActionResultDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SendExpenseClaimToApprovalActionResultDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SendExpenseClaimToApprovalActionResultDto'
+        '412':
+          description: Expense Claim version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+            application/xml: {}
+            text/xml: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    projectInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The project or customer contract associated with the expense claim, if the work performed was for a project or contract. Project Task The task associated with the contract or project.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    PutExpenseClaimOnHoldActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    quantityInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity of this expense item.
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+    customerInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The identifier of the customer associated with the expense.
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    dateInExpenseClaimUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: The date when the claim was entered.
+    customerInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Customer &gt; The identifier of the customer associated with the expense.
+    SendExpenseClaimToApprovalActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    descriptionInExpenseClaimUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A description of the claim.
+    projectTaskInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The task associated with the contract or project.
+    descriptionInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A description of the transaction.
+    expenseAccountInExpenseClaimDetailDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Expense account &gt; The expense account to which the system should record the part of the expense to be paid back to the employee.'
+    dateInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: The date when the expense was incurred.
+    claimDetailIdInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: Identifies the expense claim detail line to update
+    uomInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The unit of measure in which the quantity is shown.
+    branchInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Branch &gt; The branch that will reimburse the expenses to the employee.'
+    expenseSubaccountInExpenseClaimDetailDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'MAndatory field: Expense sub. &gt; The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.'
+    employeePartInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The part of the total amount that will not be paid back to the employee. The percentage depends on the company policy.
+    unitCostInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The cost of a unit of the item.
+    salesAccountInExpenseClaimDetailDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Sales account &gt; The sales account to which the system should record the part of the amount to charge the customer for. This is applicable only when a customer has been specified.
+    projectInExpenseClaimDetailDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Project &gt; The project or customer contract associated with the expense claim, if the work performed was for a project or contract. Project Task The task associated with the contract or project.'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    refNbrInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The identifier of the transaction.
+    customerInExpenseClaimDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The top part &gt; Customer &gt; The applicable customer.
+    expenseAccountInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The expense account to which the system should record the part of the expense to be paid back to the employee.
+    taxCategoryInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The tax category associated with the expense item.
+    locationInExpenseClaimDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Location &gt; The company location associated with the claim.
+    invoiceableInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: The currency of the expense receipt. However, if you enter a claim line directly, the currency value is read-only and matching the claim currency.
+    projectTaskInExpenseClaimDetailDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The task associated with the contract or project.
+    ExpenseClaimDetailUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        claimDetailId:
+          $ref: '#/components/schemas/claimDetailIdInExpenseClaimDetailUpdateDto'
+        date:
+          $ref: '#/components/schemas/dateInExpenseClaimDetailUpdateDto'
+        expenseItem:
+          $ref: '#/components/schemas/expenseItemInExpenseClaimDetailUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInExpenseClaimDetailUpdateDto'
+        quantity:
+          $ref: '#/components/schemas/quantityInExpenseClaimDetailUpdateDto'
+        uom:
+          $ref: '#/components/schemas/uomInExpenseClaimDetailUpdateDto'
+        unitCost:
+          $ref: '#/components/schemas/unitCostInExpenseClaimDetailUpdateDto'
+        invoiceable:
+          $ref: '#/components/schemas/invoiceableInExpenseClaimDetailUpdateDto'
+        project:
+          $ref: '#/components/schemas/projectInExpenseClaimDetailUpdateDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInExpenseClaimDetailUpdateDto'
+        expenseAccount:
+          $ref: '#/components/schemas/expenseAccountInExpenseClaimDetailUpdateDto'
+        expenseSubaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+          description: The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.
+        branch:
+          $ref: '#/components/schemas/branchInExpenseClaimDetailUpdateDto'
+        taxCategory:
+          $ref: '#/components/schemas/taxCategoryInExpenseClaimDetailUpdateDto'
+        refNbr:
+          $ref: '#/components/schemas/refNbrInExpenseClaimDetailUpdateDto'
+        employeePart:
+          $ref: '#/components/schemas/employeePartInExpenseClaimDetailUpdateDto'
+        customer:
+          $ref: '#/components/schemas/customerInExpenseClaimDetailUpdateDto'
+        location:
+          $ref: '#/components/schemas/locationInExpenseClaimDetailUpdateDto'
+    expenseItemInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The expense identifier, if an expense of this type is listed as an inventory nonstock item.
+    locationInExpenseClaimDetailDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Location &gt; The identifier of the customer location associated with the expense.
+    expenseItemInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Expense item* &gt; The expense identifier, if an expense of this type is listed as an inventory nonstock item.'
+    ExpenseClaimDto:
+      type: object
+      properties:
+        refNbr:
+          type: string
+          description: The top part &gt; Ref. no. &gt; The unique reference number of the expense claim document.
+        status:
+          enum:
+          - Hold
+          - PendingApproval
+          - Approved
+          - Rejected
+          - Released
+          type: string
+          description: 'The top part &gt; Status &gt; The current status of the expense claim: On Hold/Pending Approval/Approved/Rejected/Released.'
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: The top part &gt; Approval status &gt; The status of the claim in Approval.
+        date:
+          type: string
+          description: 'Mandatory field: The top part &gt; Date* &gt; The date when the claim was entered.'
+          format: date-time
+        description:
+          type: string
+          description: 'Mandatory field: The top part &gt; Description &gt; A description of the claim.'
+        claimedBy:
+          $ref: '#/components/schemas/claimedByInExpenseClaimDto'
+        claimTotal:
+          type: number
+          description: The top part &gt; Claim total &gt; The total amount of the claim.
+          format: double
+        vatTaxableTotal:
+          type: number
+          description: The top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
+          format: double
+        customer:
+          $ref: '#/components/schemas/customerInExpenseClaimDto'
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency of the claim.
+        approvalDate:
+          type: string
+          description: The top part &gt; Approval date &gt; The date when the claim was approved.
+          format: date-time
+        department:
+          $ref: '#/components/schemas/departmentInExpenseClaimDto'
+        location:
+          $ref: '#/components/schemas/locationInExpenseClaimDto'
+        lastModifiedDateTime:
+          type: string
+          description: 'System generated information: The lastest time the expense claim was modified'
+          format: date-time
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseClaimDetailDto'
+          description: Expence claim details tab &gt;
+        approvalStatusText:
+          type: string
+          description: The top part &gt; Approval status &gt; A text field.
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a Expense Claim in ExpenseClaimController. Used for getting data.
+    ExpenseClaimUpdateDto:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/dateInExpenseClaimUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInExpenseClaimUpdateDto'
+        claimedBy:
+          $ref: '#/components/schemas/claimedByInExpenseClaimUpdateDto'
+        customer:
+          $ref: '#/components/schemas/customerInExpenseClaimUpdateDto'
+        customerUpdateAnswer:
+          enum:
+          - SelectedCustomer
+          - AllLines
+          - Nothing
+          type: string
+          description: If the customer is updated the claim details customer information can be updated using the provided answer. By default 'SelectedCustomer' is selected.
+        location:
+          $ref: '#/components/schemas/locationInExpenseClaimUpdateDto'
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseClaimDetailUpdateDto'
+          description: Expense Claim detail information
+    branchInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The branch that will reimburse the expenses to the employee.
+    claimedByInExpenseClaimUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The employee who is claiming the expenses. If the claim is released, an Accounts Payable bill will be generated to this employee.
+    departmentInExpenseClaimDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Department ID &gt; The department associated with the expense claim.'
+    locationInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The identifier of the customer location associated with the expense.
+    SubmitExpenseClaimActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    taxCategoryInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT category &gt; The VAT category associated with the expense item.
+    ExpenseClaimDetailDto:
+      type: object
+      properties:
+        claimDetailId:
+          type: integer
+          description: Identifies the expense claim detail id, necessary when updating detail information
+          format: int32
+        lineId:
+          type: string
+          description: The expense claim line id
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        date:
+          type: string
+          description: 'Mandatory field: Date &gt; The date when the expense was incurred.'
+          format: date-time
+        expenseItem:
+          $ref: '#/components/schemas/expenseItemInExpenseClaimDetailDto'
+        description:
+          type: string
+          description: 'Mandatory field: Description* &gt; A description of the transaction.'
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of this expense item.
+          format: double
+        uom:
+          type: string
+          description: 'Mandatory field: UoM &gt; The unit of measure in which the quantity is shown.'
+        unitCost:
+          type: number
+          description: Unit cost &gt; The cost of a unit of the item.
+          format: double
+        currency:
+          type: string
+          description: Currency &gt; The currency of the expense receipt. However, if you enter a claim line directly, the currency value is read-only and matching the claim currency.
+        totalAmount:
+          type: number
+          description: Amount &gt; The total amount paid for the expense item in the specified quantity.
+          format: double
+        invoiceable:
+          type: boolean
+          description: Invoicable &gt; A check box that, if selected, indicates that the claim amount is invoiceable to the customer (the total amount minus the employee's part).
+        claimAmount:
+          type: number
+          description: Claim amount &gt; The amount claimed by the employee, which is calculated as the total claim amount minus the employee part.
+          format: double
+        amountInClaimCurr:
+          type: number
+          description: Amount in claim currency &gt; The amount claimed by the employee, which is expressed in the currency of the expense claim.
+          format: double
+        project:
+          $ref: '#/components/schemas/projectInExpenseClaimDetailDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInExpenseClaimDetailDto'
+        expenseAccount:
+          $ref: '#/components/schemas/expenseAccountInExpenseClaimDetailDto'
+        expenseSubaccount:
+          $ref: '#/components/schemas/expenseSubaccountInExpenseClaimDetailDto'
+        branch:
+          $ref: '#/components/schemas/branchInExpenseClaimDetailDto'
+        taxCategory:
+          $ref: '#/components/schemas/taxCategoryInExpenseClaimDetailDto'
+        refNbr:
+          type: string
+          description: Ref. no. &gt; The identifier of the transaction.
+        salesAccount:
+          $ref: '#/components/schemas/salesAccountInExpenseClaimDetailDto'
+        salesSubaccount:
+          $ref: '#/components/schemas/salesSubaccountInExpenseClaimDetailDto'
+        employeePart:
+          type: number
+          description: Employee part &gt; The part of the total amount that will not be paid back to the employee. The percentage depends on the company policy.
+          format: double
+        customer:
+          $ref: '#/components/schemas/customerInExpenseClaimDetailDto'
+        location:
+          $ref: '#/components/schemas/locationInExpenseClaimDetailDto'
+        arReferenceNbr:
+          type: string
+          description: REef.no. customer &gt; The reference number of the customer ledger document.
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: Approval status &gt; The approval status, which indicates whether the detail row requires approval and, if it does, what the current state of approval is.
+        approvalStatusText:
+          type: string
+          description: Last approval comment &gt; The approval status text suitable for display
+        approver:
+          type: string
+          description: Pending approver &gt; The identifier of the person authorized to approve the activity, if approval is required. This is either the approver of the project task or, if no approver is assigned to the project task, the project manager.
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+          description: Expense claim detail line attachtments
+    claimedByInExpenseClaimDto:
+      properties:
+        internalId:
+          type: string
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: The top part &gt; Claimed by &gt; The employee who is claiming the expenses. If the claim is released, an Accounts Payable bill will be generated to this employee.'
+    customerInExpenseClaimUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The applicable customer.
+    salesSubaccountInExpenseClaimDetailDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Sales sub. &gt; The corresponding subaccount the system uses to record the amount to charge the customer for. This is applicable only when a customer has been specified.
+    locationInExpenseClaimUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The company location associated with the claim.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

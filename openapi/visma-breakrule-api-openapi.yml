@@ -1,0 +1,474 @@
+openapi: 3.2.0
+info:
+  title: Visma Break Rule API
+  contact:
+    email: api@spiris.se
+  version: '1.0'
+  description: 'Operations tagged BreakRule across 2 of this provider''s published API definitions: visma-payroll-api-v1-openapi-original.json, visma-payroll-api-v2-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: BreakRule
+  description: Creating or getting break rules of the company.
+paths:
+  /v1/breakrules:
+    get:
+      tags:
+      - BreakRule
+      summary: Get break rules
+      description: Get all break rules or add query parameters to filter the results. The response will include a paginated list of break rules.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfBreakRuleApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1Breakrules
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/breakrules/{breakRuleId}:
+    get:
+      tags:
+      - BreakRule
+      summary: Get break rule by id
+      description: Gets a specific break rule by ID. Query options can be applied to customize the response. The response contains the requested break rule.
+      parameters:
+      - name: breakRuleId
+        in: path
+        description: The Id of the break rule
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BreakRuleApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1BreakrulesByBreakRuleId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/breakrules:
+    get:
+      tags:
+      - BreakRule
+      summary: Get break rules
+      description: Get all break rules or add query parameters to filter the results. The response will include a paginated list of break rules.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfBreakRuleResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2Breakrules
+      x-operation-id-source: derived
+    post:
+      tags:
+      - BreakRule
+      summary: Create a break rule
+      description: Create a break rule with properties specified in the request body
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateBreakRuleRequest'
+      responses:
+        '201':
+          description: Resource created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BreakRuleResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postV2Breakrules
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/breakrules/{breakRuleId}:
+    get:
+      tags:
+      - BreakRule
+      summary: Get break rule by id
+      description: Gets a specific break rule by ID. Query options can be applied to customize the response. The response contains the requested break rule.
+      parameters:
+      - name: breakRuleId
+        in: path
+        description: The Id of the break rule
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BreakRuleResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2BreakrulesByBreakRuleId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfBreakRuleApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BreakRuleApi'
+      additionalProperties: false
+    BreakRuleApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the break rule
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the break rule
+        StartTime:
+          type:
+          - string
+          - 'null'
+          description: Start time of the break period in HH:mm format
+        EndTime:
+          type:
+          - string
+          - 'null'
+          description: End time of the break period in HH:mm format
+        MinLengthInMinutes:
+          type: integer
+          description: Minimum length of the break in minutes
+          format: int32
+        NormalLengthInMinutes:
+          type: integer
+          description: Normal expected length of the break in minutes
+          format: int32
+        Type:
+          type:
+          - integer
+          - 'null'
+          description: 'Type of break<br/>Possible values: 0 - Lunch, 1 - FirstBreak, 2 - SecondBreak'
+          format: int32
+        Comment:
+          type:
+          - string
+          - 'null'
+          description: Additional comments or notes about the break rule
+        CreatedUtc:
+          type: string
+          description: Timestamp when the break rule was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp when the break rule was last modified (UTC)
+          format: date-time
+        IsDeleted:
+          type: boolean
+          description: Indicates whether the break rule is marked as deleted
+      additionalProperties: false
+    CreateBreakRuleRequest:
+      required:
+      - EndTime
+      - MinLengthInMinutes
+      - Name
+      - NormalLengthInMinutes
+      - StartTime
+      - Type
+      type: object
+      properties:
+        Name:
+          minLength: 1
+          type: string
+          description: Name of the break rule
+        StartTime:
+          minLength: 1
+          type: string
+          description: Start time of the break period in HH:mm format
+        EndTime:
+          minLength: 1
+          type: string
+          description: End time of the break period in HH:mm format
+        MinLengthInMinutes:
+          maximum: 1440
+          minimum: 0
+          type: integer
+          description: Minimum length of the break in minutes. Must be between 0 and 1440 (24 hours)
+          format: int32
+        NormalLengthInMinutes:
+          maximum: 1440
+          minimum: 0
+          type: integer
+          description: Normal expected length of the break in minutes. Must be between 0 and 1440 (24 hours)
+          format: int32
+        Type:
+          type: integer
+          description: 'Type of break<br/>Possible values: 0 - Lunch, 1 - FirstBreak, 2 - SecondBreak'
+          format: int32
+        Comment:
+          type:
+          - string
+          - 'null'
+          description: Additional comments or notes about the break rule
+      additionalProperties: false
+    BreakRuleResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the break rule
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the break rule
+        StartTime:
+          type:
+          - string
+          - 'null'
+          description: Start time of the break period in HH:mm format
+        EndTime:
+          type:
+          - string
+          - 'null'
+          description: End time of the break period in HH:mm format
+        MinLengthInMinutes:
+          type: integer
+          description: Minimum length of the break in minutes
+          format: int32
+        NormalLengthInMinutes:
+          type: integer
+          description: Normal expected length of the break in minutes
+          format: int32
+        Type:
+          type:
+          - integer
+          - 'null'
+          description: 'Type of break<br/>Possible values: 0 - Lunch, 1 - FirstBreak, 2 - SecondBreak'
+          format: int32
+        Comment:
+          type:
+          - string
+          - 'null'
+          description: Additional comments or notes about the break rule
+        CreatedUtc:
+          type: string
+          description: Timestamp when the break rule was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp when the break rule was last modified (UTC)
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfBreakRuleResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BreakRuleResponse'
+      additionalProperties: false
+x-refined-from:
+- visma-payroll-api-v1-openapi-original.json
+- visma-payroll-api-v2-openapi-original.json
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

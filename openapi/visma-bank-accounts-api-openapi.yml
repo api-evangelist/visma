@@ -1,0 +1,491 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Bank Accounts API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Bank Accounts
+  description: 'Bank accounts associated with your company for handling financial transactions.
+
+    Overview of Bank Account Functionality: Bank Accounts
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping
+
+    * Invoicing
+
+    * Solo
+
+    * Payroll'
+paths:
+  /bankaccounts:
+    get:
+      tags:
+      - Bank Accounts
+      summary: Get bank accounts
+      description: 'Get all bank accounts, or add query parameters to filter the results. The response will include a list of bank accounts with their details, such as account type, bank information, and current balance.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfBankAccountApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getBankaccounts
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Bank Accounts
+      summary: Create a bank account
+      description: 'Create a new bank account for your company.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccountApi'
+      responses:
+        '201':
+          description: Bank account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccountApi'
+        '400':
+          description: Bank account can't be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postBankaccounts
+      x-operation-id-source: derived
+  /bankaccounts/{bankAccountId}:
+    get:
+      tags:
+      - Bank Accounts
+      summary: Get a bank account
+      description: 'Get a specific bank account by its unique identifier. The response will include detailed information about the bank account, including its type, bank details, balance information, and any associated properties.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      parameters:
+      - name: bankAccountId
+        in: path
+        description: This represents the Id of the Bank Account.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccountApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Bank account not found
+      operationId: getBankaccountsByBankAccountId
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Bank Accounts
+      summary: Replace a bank account
+      description: 'Replace an existing bank account''s data with the provided new data. The bank account must already exist in the system.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase'
+      parameters:
+      - name: bankAccountId
+        in: path
+        description: This represents the Id of the Bank Account.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccountApi'
+      responses:
+        '200':
+          description: Bank account replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccountApi'
+        '400':
+          description: Bank account can't be replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Bank account not found
+      operationId: putBankaccountsByBankAccountId
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Bank Accounts
+      summary: Delete a bank account
+      description: 'Delete a specified bank account. Only bank accounts without any linked transactions can be deleted. To hide a bank account that has transactions, set the `isActive` property to `false` in a PUT request.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase'
+      parameters:
+      - name: bankAccountId
+        in: path
+        description: This represents the Id of the Bank Account.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '404':
+          description: Bank account not found
+        '400':
+          description: Bank account can't be deleted
+      operationId: deleteBankaccountsByBankAccountId
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    BalanceAndDateApi:
+      type: object
+      properties:
+        Balance:
+          type: number
+          description: The balance amount
+          format: double
+        Date:
+          type: string
+          description: The date when this balance was recorded
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    BankAccountApi:
+      required:
+      - BankAccountType
+      - LedgerAccountNumber
+      - Name
+      type: object
+      properties:
+        Bank:
+          type:
+          - string
+          - 'null'
+          description: Bank identifier. Not required for dutch companies and bank accounts of cash or tax account type.
+          format: uuid
+        BankAccountType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = ChequeAccount,<br/>2 = CashAccount,<br/>3 = SavingsAccount,<br/>4 = CurrencyAccount,<br/>5 = DigitalWalletAccount,<br/>6 = CashCreditAccount,<br/>7 = TaxAccount<br/><br/>Type of bank account.
+          format: int32
+        BankAccountTypeDescription:
+          type:
+          - string
+          - 'null'
+          description: Description of the bank account type
+          readOnly: true
+        Bban:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Bank account number (BBAN). Not required for cash or tax account types.
+        Iban:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: International Bank Account Number (IBAN).
+        Name:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Name of the bank account.
+        NameEnglish:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: English name of the bank account.
+        Id:
+          type: string
+          description: Unique identifier provided by the system
+          format: uuid
+          readOnly: true
+        IsActive:
+          type: boolean
+          description: Indicates if the bank account is active
+        LedgerAccountNumber:
+          type: integer
+          description: The general ledger account number
+          format: int64
+        HasActiveBankAgreement:
+          type: boolean
+          description: Indicates if the bank account has an active bank agreement
+        IsDefaultChequeAccount:
+          type: boolean
+          description: Indicates if this is the default cheque account. Only used when having several cheque accounts.
+        CurrencyCode:
+          type:
+          - string
+          - 'null'
+          description: 'Currency code for the bank account. Default value: Base currency of the company.'
+          readOnly: true
+        ModifiedUtc:
+          type: string
+          description: Last modification timestamp in UTC
+          format: date-time
+          readOnly: true
+        Balance:
+          $ref: '#/components/schemas/BalanceAndDateApi'
+        BankAccountHolderName:
+          type:
+          - string
+          - 'null'
+          description: Bank account holder name. Used for dutch companies.
+        IsEnabledDirectDebit:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if the bank account is used for direct debit. Applicable for NL only. This property is ignored in PUT and POST operations.
+          readOnly: true
+        DirectDebitCreditorId:
+          type:
+          - string
+          - 'null'
+          description: Creditor identifier from the direct debit contract. Applicable for NL only. This property is ignored in PUT and POST operations.
+          readOnly: true
+        DirectDebitBatchBooking:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if batch booking is enabled for Direct debit. Applicable for NL only. This property is ignored in PUT and POST operations.
+          readOnly: true
+        DirectDebitSendDirectlyToBank:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if automatic direct debit service is used. Applicable for NL only. This property is ignored in PUT and POST operations.
+          readOnly: true
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfBankAccountApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccountApi'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

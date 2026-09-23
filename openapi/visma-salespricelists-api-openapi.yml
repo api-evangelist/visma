@@ -1,0 +1,618 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Sales Price…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: SalesPriceLists
+  description: 'A list of sales prices for products or services.
+
+    Overview of Sales Price List Functionality: Sales Price List
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro'
+paths:
+  /salespricelists:
+    get:
+      tags:
+      - SalesPriceLists
+      summary: Get sales price lists
+      description: 'Get all sales price lists, or add query parameters to filter the results. The response will include a list of sales price lists with their details, such as name, currency, status, and notes.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfSalesPriceListApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSalespricelists
+      x-operation-id-source: derived
+    post:
+      tags:
+      - SalesPriceLists
+      summary: Create a sales price list
+      description: 'Create a new sales price list.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesPriceListApi'
+      responses:
+        '201':
+          description: Sales price list created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesPriceListApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postSalespricelists
+      x-operation-id-source: derived
+  /salespricelists/{salesPriceListId}:
+    get:
+      tags:
+      - SalesPriceLists
+      summary: Get a specific sales price list based on id
+      description: 'Get a specific sales price list by its unique identifier. The response will include the details of the sales price list, such as name, currency, status, and notes.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: salesPriceListId
+        in: path
+        description: This represents the Id of the sales price list you want to get
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesPriceListApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSalespricelistsBySalesPriceListId
+      x-operation-id-source: derived
+    put:
+      tags:
+      - SalesPriceLists
+      summary: Update a sales price list
+      description: 'Replace an existing sales price list''s data with the provided new data.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: salesPriceListId
+        in: path
+        description: This represents the Id of the sales price list you want to update
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesPriceListApi'
+      responses:
+        '200':
+          description: Sales price list updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesPriceListApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putSalespricelistsBySalesPriceListId
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - SalesPriceLists
+      summary: Delete a sales price list
+      description: 'Delete a specified sales price list. Only price lists without any customers linked to them can be deleted. To hide a price list that is in use, set the `IsActive` property to `false` in a PUT request.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: salesPriceListId
+        in: path
+        description: This represents the Id of the sales price list you want to delete
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Sales price list deleted successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteSalespricelistsBySalesPriceListId
+      x-operation-id-source: derived
+  /salespricelists/prices:
+    get:
+      tags:
+      - SalesPriceLists
+      summary: Get sales prices
+      description: 'Get all sales prices from the company. The response will include a paginated list of sales prices with details such as article Id, price list Id, net price, and gross price.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfSalesPriceListRowApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSalespricelistsPrices
+      x-operation-id-source: derived
+  /salespricelists/prices/{salesPriceListId}:
+    get:
+      tags:
+      - SalesPriceLists
+      summary: Get sales prices in a price list
+      description: 'Get sales prices in a price list. The response will include a paginated list of sales prices with details such as article Id, price list Id, net price, and gross price.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: salesPriceListId
+        in: path
+        description: This represents the id of the sales price list
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfSalesPriceListRowApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSalespricelistsPricesBySalesPriceListId
+      x-operation-id-source: derived
+  /salespricelists/prices/{salesPriceListId}/{articleId}:
+    get:
+      tags:
+      - SalesPriceLists
+      summary: Get a specific sales price for an article in a price list
+      description: 'Get a specific sales price for an article in a price list. The response will include the sales price details such as net price, gross price, and currency code.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: salesPriceListId
+        in: path
+        description: This represents the id of the sales price list
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: articleId
+        in: path
+        description: This represents the id of the article
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesPriceListRowApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSalespricelistsPricesBySalesPriceListIdByArticleId
+      x-operation-id-source: derived
+  /salespricelists/{salesPriceListId}/prices:
+    put:
+      tags:
+      - SalesPriceLists
+      summary: Update article prices in a sales price list
+      description: 'Update article prices within a sales price list. You can update up to 1000 price list rows at once. Optionally, you can choose to update recurring invoices that use this price list.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: salesPriceListId
+        in: path
+        description: This represents the Id of the sales price list
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: updateRecurringInvoices
+        in: query
+        description: Whether to update recurring invoices
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SalesPriceListRowApi'
+      responses:
+        '200':
+          description: Sales prices updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfSalesPriceListRowApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putSalespricelistsBySalesPriceListIdPrices
+      x-operation-id-source: derived
+components:
+  schemas:
+    PaginatedResponseOfSalesPriceListApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesPriceListApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    SalesPriceListRowApi:
+      type: object
+      properties:
+        SalesPriceListId:
+          type: string
+          description: Unique identifier of the sales price list
+          format: uuid
+          readOnly: true
+        ArticleId:
+          type: string
+          description: Unique identifier of the article
+          format: uuid
+        NetPrice:
+          type: number
+          description: Net price for the article in this price list
+          format: double
+        GrossPrice:
+          type: number
+          description: Gross price for the article in this price list
+          format: double
+          readOnly: true
+        CurrencyCode:
+          maxLength: 3
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Currency code for the price. Maximum 3 characters.
+          readOnly: true
+        ChangedUtc:
+          type:
+          - string
+          - 'null'
+          description: Timestamp when the sales price was last changed manually
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+      description: Sales price list row
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    SalesPriceListApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the sales price list
+          format: uuid
+          readOnly: true
+        Name:
+          maxLength: 70
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Name of the sales price list. Maximum 70 characters.
+        Number:
+          type: integer
+          description: Unique and auto-incremented number of the sales price list
+          format: int32
+          readOnly: true
+        CurrencyCode:
+          maxLength: 3
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Currency code for the price list. Maximum 3 characters. Default value depends on the company's base currency.
+        Note:
+          type:
+          - string
+          - 'null'
+          description: Additional notes for the sales price list
+        IsStandard:
+          type: boolean
+          description: Indicates if this is the standard price list created by default when upgrading to Pro variant
+          readOnly: true
+        IsActive:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if the price list is active
+        ChangedUtc:
+          type: string
+          description: Last changed timestamp in UTC
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+      description: Sales price list
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfSalesPriceListRowApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesPriceListRowApi'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

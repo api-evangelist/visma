@@ -1,0 +1,315 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Documents API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Documents
+  description: 'Documents represent uploaded or generated files, such as VAT reports PDF''s and backgrounds.
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping
+
+    * Invoicing
+
+    * Solo'
+paths:
+  /documents/{id}:
+    get:
+      tags:
+      - Documents
+      summary: Get a document by id
+      description: 'Get a specific document by its unique identifier. This endpoint is primarily used to retrieve VAT report PDFs. The response includes document metadata such as content type, size, title, and a temporary URL for accessing the document content. Available for Swedish and Dutch companies only.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the document to retrieve
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getDocumentsById
+      x-operation-id-source: derived
+  /backgrounds:
+    get:
+      tags:
+      - Documents
+      summary: Get all available document backgrounds
+      description: 'Get all available document backgrounds for the current company. This endpoint returns a list of background templates that can be used for various document types like invoices, quotes, and orders. Each background includes metadata and a temporary URL for accessing the document template.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfDocumentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getBackgrounds
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DocumentApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the document
+          format: uuid
+          readOnly: true
+        ContentType:
+          type:
+          - string
+          - 'null'
+          description: MIME content type of the document
+        CreatedUtc:
+          type: string
+          description: Date and time when the document was created (UTC)
+          format: date-time
+          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Full name of the document including extension
+        NameWithoutExtension:
+          type:
+          - string
+          - 'null'
+          description: Name of the document without the file extension
+        Size:
+          type: integer
+          description: Size of the document in bytes
+          format: int32
+        Type:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = SupplierInvoiceDraftAttachment,<br/>1 = SupplierInvoiceAttachment,<br/>2 = SupplierInvoiceXml,<br/>10 = CustomerInvoiceXml,<br/>11 = CustomerInvoicePdf,<br/>12 = CustomerInvoicePaymentReminderPdf,<br/>13 = CompanyLogo,<br/>14 = DocumentBackgroundPdf,<br/>15 = DocumentBackgroundImage,<br/>16 = DeletedDocumentBackground,<br/>20 = PhotoReceipt,<br/>21 = PhotoSupplierInvoice,<br/>30 = AutoInvoiceAssembly,<br/>40 = FinvoiceReceiverInfoXml,<br/>41 = VatReportPdf<br/><br/>Type of the document - see DocumentTypeApi enum for available values.
+          format: int32
+        TemporaryUrl:
+          type:
+          - string
+          - 'null'
+          description: Temporary URL for accessing the document. This URL will expire and should not be stored.
+        Title:
+          type:
+          - string
+          - 'null'
+          description: Title or descriptive name of the document
+      additionalProperties: false
+    PaginatedResponseOfDocumentApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

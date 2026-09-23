@@ -1,0 +1,506 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Customer Payment Method API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: CustomerPaymentMethod
+paths:
+  /v1/customerpaymentmethod/{customerId}/{customerPaymentMethodId}:
+    get:
+      tags:
+      - CustomerPaymentMethod
+      summary: Get one specific Customer payment method for one specific customer.
+      description: 'Data for Customer payment method
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: CustomerPaymentMethod_GetCustomerPaymentMethodBycustomerIdcustomerPaymentMethodId
+      parameters:
+      - name: customerId
+        in: path
+        description: Identifies the Customer
+        required: true
+        schema:
+          type: string
+      - name: customerPaymentMethodId
+        in: path
+        description: Identifies the Customer payment method
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPaymentMethodDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPaymentMethodDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - CustomerPaymentMethod
+      summary: Update a specific Customer payment method
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed
+
+
+        In this endpoint, If-Match can be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: CustomerPaymentMethod_UpdateCustomerPaymentMethodBycustomerIdcustomerPaymentMethodId
+      parameters:
+      - name: customerId
+        in: path
+        description: Identifies the Customer
+        required: true
+        schema:
+          type: string
+      - name: customerPaymentMethodId
+        in: path
+        description: Identifies the Customer payment method to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Customer payment method to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerPaymentMethodUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CustomerPaymentMethodUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerPaymentMethodUpdateDto'
+        required: true
+        x-bodyName: paymentMethod
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Customer payment method version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/customerpaymentmethod/{customerId}:
+    get:
+      tags:
+      - CustomerPaymentMethod
+      summary: Get all Customer payment methods for one specific customer.
+      operationId: CustomerPaymentMethod_GetCustomerPaymentMethodsBycustomerId
+      parameters:
+      - name: customerId
+        in: path
+        description: Identifies the Customer
+        required: true
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerPaymentMethodDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerPaymentMethodDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/customerpaymentmethod:
+    get:
+      tags:
+      - CustomerPaymentMethod
+      summary: Get Customer payment methods
+      operationId: CustomerPaymentMethod_GetCustomerPaymentMethods
+      parameters:
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerPaymentMethodsDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerPaymentMethodsDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - CustomerPaymentMethod
+      summary: Create a Customer payment method
+      description: 'Response Message has StatusCode Created if POST operation succeed
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        The response headers include an ETag after a successful POST operation.'
+      operationId: CustomerPaymentMethod_CreateCustomerPaymentMethod
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Customer payment method to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerPaymentMethodCreateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CustomerPaymentMethodCreateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerPaymentMethodCreateDto'
+        required: true
+        x-bodyName: paymentMethod
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    CustomerPaymentMethodDetailDto:
+      type: object
+      properties:
+        detailId:
+          type: string
+        description:
+          type: string
+          description: Payment method details tab &gt; Description &gt; A description of the selected payment method.
+        value:
+          type: string
+          description: Payment method details tab &gt; Value &gt; The value you enter. This must match the input validation mask set for the column.
+    CustomerPaymentMethodCreateDto:
+      type: object
+      properties:
+        customerId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        paymentMethodId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        active:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        cashAccountId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        paymentMethodDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerPaymentMethodDetailUpdateDto'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    CustomerPaymentMethodDto:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/customerInCustomerPaymentMethodDto'
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethodInCustomerPaymentMethodDto'
+        active:
+          type: boolean
+          description: The top part &gt; Active &gt; A check box that indicates (if selected) that the selected customer payment method is active (that is, available for recording payments).
+        cashAccount:
+          $ref: '#/components/schemas/cashAccountInCustomerPaymentMethodDto'
+        cardOrAccountNo:
+          type: string
+          description: The top part &gt; Card/account no. &gt; The identifier for the customer's payment method.
+        paymentMethodDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerPaymentMethodDetailDto'
+          description: Payment method details tab &gt; The specific elements on this tab depend on the selected payment method, which is defined in the window.
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+    paymentMethodInCustomerPaymentMethodDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Payment method* &gt; The payment method used as a template for a customer payment method you are currently viewing; select a payment method to use its settings for creating a new customer payment method.'
+    cashAccountInCustomerPaymentMethodDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Cash account &gt; The cash account to accrue customer payments made by this payment method, if it differs from the default cash account specified for the payment method selected.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    CustomerPaymentMethodsDto:
+      type: object
+      properties:
+        customerId:
+          type: string
+        paymentMethods:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerPaymentMethodDto'
+    CustomerPaymentMethodUpdateDto:
+      type: object
+      properties:
+        active:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        cashAccountId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        paymentMethodDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerPaymentMethodDetailUpdateDto'
+    CustomerPaymentMethodDetailUpdateDto:
+      type: object
+      properties:
+        detailId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        value:
+          $ref: '#/components/schemas/DtoValueOfString'
+    customerInCustomerPaymentMethodDto:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Customer* &gt; The customer whose payment method you want to view or add; select a customer from the list of customers defined in the system.'
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

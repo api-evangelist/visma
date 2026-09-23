@@ -1,0 +1,203 @@
+openapi: 3.2.0
+info:
+  title: Spiris Lön API V1 Work Day Override API
+  description: Visit our complete Spiris Lön/Cloud Payroll API docs for how to get started, more information about authentication, error handling, query customization and more.
+  contact:
+    email: api@spiris.se
+  version: v1
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: WorkDayOverride
+  description: Operations for managing work day overrides for employees. Work day override allows to specify different working times/duration for specific days.
+paths:
+  /v1/workdayoverrides:
+    get:
+      tags:
+      - WorkDayOverride
+      summary: Get work day overrides
+      description: Get all work day overrides or add query parameters to filter the results. The response will include a collection of matched work day overrides with their information such as unique identifier, date, working times/duration, etc.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfWorkDayOverrideApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1Workdayoverrides
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    WorkDayOverrideApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+        EmployeeId:
+          type: string
+          description: The unique identifier of the employee that the work day is registered for
+          format: uuid
+        DateToOverride:
+          type: string
+          description: Date that is overridden
+          format: date-time
+        StartTime:
+          type:
+          - string
+          - 'null'
+          description: 'Work day start time (format: HH:mm). Null indicates a free day.'
+        EndTime:
+          type:
+          - string
+          - 'null'
+          description: 'Work day end time (format: HH:mm). Null indicates a free day.'
+        LunchBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a lunch break
+          format: uuid
+        FirstCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a first coffee break
+          format: uuid
+        SecondCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a second coffee break
+          format: uuid
+        FullTimeStartTime:
+          type:
+          - string
+          - 'null'
+          description: 'Full-time work day start time (format: HH:mm)'
+        FullTimeEndTime:
+          type:
+          - string
+          - 'null'
+          description: 'Full-time work day end time (format: HH:mm)'
+        FullTimeLunchBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a lunch break for full-time work day
+          format: uuid
+        FullTimeFirstCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a first coffee break for full-time work day
+          format: uuid
+        FullTimeSecondCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a second coffee break for full-time work day
+          format: uuid
+        IsDeleted:
+          type: boolean
+          description: Indicates whether the work day override is marked as deleted
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the work day override was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the work day override was last modified (UTC)
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfWorkDayOverrideApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkDayOverrideApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false

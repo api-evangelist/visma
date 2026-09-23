@@ -1,0 +1,416 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Projects API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Projects
+  description: 'Projects that track work and expenses for specific customers or initiatives.
+
+    Overview of Project Functionality: Projects
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping
+
+    * Invoicing
+
+    * Payroll'
+paths:
+  /projects:
+    get:
+      tags:
+      - Projects
+      summary: Get projects
+      description: 'Get all projects, or add query parameters to filter the results. The response will include a list of projects with their details, such as name, number, start date, and associated customer.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfProjectApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getProjects
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Projects
+      summary: Create a project
+      description: 'Create a new project. The project number must be unique. You can optionally associate the project with a customer.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectApi'
+      responses:
+        '201':
+          description: Project created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postProjects
+      x-operation-id-source: derived
+  /projects/{id}:
+    get:
+      tags:
+      - Projects
+      summary: Get a project
+      description: 'Get a specific project by its unique identifier. The response will include the project details, such as name, number, start date, and associated customer.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the project to retrieve
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Project not found
+      operationId: getProjectsById
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Projects
+      summary: Replace a project
+      description: 'Replace an existing project''s data with the provided new data. The project number must be unique if changed.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting'
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the project to replace
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectApi'
+      responses:
+        '201':
+          description: Project replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Project not found
+      operationId: putProjectsById
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfProjectApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectApi'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ProjectApi:
+      required:
+      - Name
+      - Number
+      - StartDate
+      - Status
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Number:
+          maxLength: 9
+          minLength: 0
+          type: string
+          description: Project number.
+        Name:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Project name.
+        StartDate:
+          type: string
+          description: Project start date
+          format: date-time
+        EndDate:
+          type:
+          - string
+          - 'null'
+          description: Project end date
+          format: date-time
+        CustomerId:
+          type:
+          - string
+          - 'null'
+          description: 'Customer Id. Source: Get from /v2/customers'
+          format: uuid
+        CustomerName:
+          type:
+          - string
+          - 'null'
+          description: Customer name depending on CustomerId
+          readOnly: true
+        Notes:
+          maxLength: 500
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Project notes.
+        Status:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = Ongoing,<br/>2 = Finished<br/><br/>Project status.
+          format: int32
+        ModifiedUtc:
+          type: string
+          description: Is automatically set
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

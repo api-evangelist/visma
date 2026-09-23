@@ -1,0 +1,934 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Quote Drafts API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: QuoteDrafts
+  description: 'A preliminary version of a quote that can be edited and finalized before becoming an official quote.
+
+    Overview of Quotes Functionality: Quotes
+
+
+    ___
+
+
+    Requires any of the following modules:
+
+    * sales_standard
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing'
+paths:
+  /quotedrafts:
+    get:
+      tags:
+      - QuoteDrafts
+      summary: Get all quote drafts
+      description: 'Get all quote drafts, or add query parameters to filter the results. The response will include a list of quote drafts with their details, such as customer information, rows, totals, and status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfQuoteApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getQuotedrafts
+      x-operation-id-source: derived
+    post:
+      tags:
+      - QuoteDrafts
+      summary: Create a quote draft
+      description: 'Create a new quote draft.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteApi'
+      responses:
+        '201':
+          description: Quote draft created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postQuotedrafts
+      x-operation-id-source: derived
+  /quotedrafts/{id}:
+    get:
+      tags:
+      - QuoteDrafts
+      summary: Get a specific quote draft based on id
+      description: 'Get a specific quote draft by its unique identifier. The response will include the quote draft''s details, such as customer information, rows, totals, and status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the quote draft you want to get
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getQuotedraftsById
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - QuoteDrafts
+      summary: Delete a quote draft
+      description: 'Delete a quote draft.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the quote draft you want to delete
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Quote draft deleted successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteQuotedraftsById
+      x-operation-id-source: derived
+    put:
+      tags:
+      - QuoteDrafts
+      summary: Update a quote draft
+      description: 'Replace an existing quote draft''s data with the provided new data.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the quote draft you want to update
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteApi'
+      responses:
+        '200':
+          description: Quote draft updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putQuotedraftsById
+      x-operation-id-source: derived
+  /quotedrafts/{id}/convert:
+    put:
+      tags:
+      - QuoteDrafts
+      summary: Convert a quote draft to a quote
+      description: 'Converts a quote draft to a quote.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the quote draft you want to convert
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Quote draft converted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putQuotedraftsByIdConvert
+      x-operation-id-source: derived
+components:
+  schemas:
+    SalesDocumentRotRutReductionPersonApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Ssn:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Social security number
+        Amount:
+          type: number
+          format: double
+      additionalProperties: false
+    QuoteRowApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system for every row
+          format: uuid
+          readOnly: true
+        ArticleId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/articles'
+          format: uuid
+        IsServiceArticle:
+          type: boolean
+          description: True if the sales category of the article on the row is goods, false otherwise
+          readOnly: true
+        UnitId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/units/{id}'
+          format: uuid
+          readOnly: true
+        Text:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: For non text rows, default value will be the article's name; for text rows, there should be at least one character in place
+        UnitPrice:
+          type: number
+          description: 'Format: 2 decimals allowed if the customer and currency are domestic or 4 decimals if customer or currency is foreign'
+          format: double
+        Amount:
+          type: number
+          description: 'Total amount of row. Format: 2 decimals'
+          format: double
+        IsDiscountInFixedAmount:
+          type: boolean
+          description: True if the discount on the row is a fixed amount, false otherwise
+          readOnly: true
+        DiscountFixedAmount:
+          type:
+          - number
+          - 'null'
+          description: 'Fixed amount discount on the row. Only applicable if IsDiscountInFixedAmount is true. Format: 2 decimals'
+          format: double
+          readOnly: true
+        DiscountPercentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: 'Percentage discount n the row. Format: 4 decimals'
+          format: double
+        Quantity:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+        WorkCostType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>RotConstructionWork = 1,<br/>RotElectricalWork = 2,<br/>RotGlassSheetMetalWork = 3,<br/>RotGroundWork = 4,<br/>RotBrickWork = 5,<br/>RotPaintDecorateWork = 6,<br/>RotPlumbWork = 7,<br/>RutCleanJobWork = 9,<br/>RutCareClothTextile = 10,<br/>RutSnowRemove = 12,<br/>RutGarden = 13,<br/>RutBabySitting = 14,<br/>RutOtherCare = 15,<br/>RutRemovalServices = 18,<br/>RutITServices = 19,<br/>RotHeatPump = 20,<br/>RotHeatPump2 = 21,<br/>RutHomeAppliances = 22,<br/>RotSolarHeatingSystem = 23,<br/>RotWoodBoiler = 24,<br/>RotFuelBoiler = 25,<br/>RutLaundry = 26,<br/>RutFurnishing = 27,<br/>RutGoodsTransport = 28,<br/>RutHomeSupervision = 29<br/><br/>Only used for Rot/Rut.
+          format: int32
+        IsWorkCost:
+          type: boolean
+          description: Only used for Rot/Rut
+          readOnly: true
+        WorkHours:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        MaterialCosts:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        IsVatFree:
+          type: boolean
+          description: True if the row has been marked VAT free
+        VatRate:
+          type:
+          - number
+          - 'null'
+          description: When row is a text row the value is null. Default value is also null
+          format: double
+          readOnly: true
+        LineNumber:
+          type: integer
+          description: Unique line number for this row
+          format: int32
+          readOnly: true
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Get from /v2/projects
+          format: uuid
+        IsTextRow:
+          type: boolean
+          description: True if this is a text row. False otherwise
+          readOnly: true
+        ArticleNumber:
+          type:
+          - string
+          - 'null'
+          description: Article number on the row
+          readOnly: true
+        GreenTechnologyType:
+          maximum: 3
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>SolarCellInstallation = 1,<br/>ElectricEnergyStorageInstallation = 2,<br/>ElectricVehicleChargingPointInstallation = 3<br/><br/>Type of green technology for the row.
+          format: int32
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        PurchasePrice:
+          type: number
+          description: Purchase price for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+        FreightCosts:
+          type: number
+          description: Freight costs for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfQuoteApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteApi'
+      additionalProperties: false
+    TermsOfPaymentApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system. For v2/quotes and v2/quotedrafts endpoints Id is editable
+          format: uuid
+          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the terms of payment
+        NameEnglish:
+          type:
+          - string
+          - 'null'
+          description: English name of the terms of payment
+        NumberOfDays:
+          type: integer
+          description: Number of days to pay
+          format: int32
+        TermsOfPaymentTypeId:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = CurrentMonth,<br/>2 = Cash,<br/>3 = CardPayment,<br/>4 = DigitalWallet,<br/>5 = PaymentServiceProvider<br/><br/>Type of terms of payment, possible values are.
+          format: int32
+        TermsOfPaymentTypeText:
+          type:
+          - string
+          - 'null'
+        AvailableForSales:
+          type: boolean
+          description: True if this terms of payment can be used on sales documents, false otherwise
+        AvailableForPurchase:
+          type: boolean
+          description: True if this terms of payment can be used on purchase documents, false otherwise
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    QuoteApi:
+      required:
+      - CustomerId
+      - DueDate
+      - QuoteDate
+      type: object
+      properties:
+        ApprovedDate:
+          type:
+          - string
+          - 'null'
+          description: 'Default: null. Value will be set if the quote is approved'
+          format: date-time
+          readOnly: true
+        BackgroundId:
+          type:
+          - string
+          - 'null'
+          description: Represents the identifier for the background image or template used on the PDF printout
+          format: uuid
+          readOnly: true
+        BuyersOrderReference:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Reference for the customer of the quote
+        CompanyReference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Equivalent for property OurReference in OrderApi and CustomerInvoiceApi models
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        CreatedUtc:
+          type: string
+          format: date-time
+          readOnly: true
+        CurrencyCode:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        CurrencyRate:
+          type: number
+          format: double
+          readOnly: true
+        CustomerId:
+          type: string
+          description: Id of the customer for this quote
+          format: uuid
+        CustomerIsPrivatePerson:
+          type: boolean
+          description: True if the customer of this quote is a private individual, false otherwise
+          readOnly: true
+        CustomerName:
+          type:
+          - string
+          - 'null'
+          description: The selected customer's name
+          readOnly: true
+        CustomerNumber:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        CustomerReference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Equivalent for property YourReference in OrderApi and CustomerInvoiceApi models
+        DeliveryAddress1:
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+          readOnly: true
+        DeliveryAddress2:
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+          readOnly: true
+        DeliveryCity:
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+          readOnly: true
+        DeliveryCountryCode:
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+          readOnly: true
+        DeliveryCustomerName:
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+          readOnly: true
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: Expected date format YYYY-MM-DD. Default value is null
+          format: date-time
+        DeliveryMethodCode:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        DeliveryMethodName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        DeliveryPostalCode:
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+          readOnly: true
+        DeliveryTermCode:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        DeliveryTermName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        QuoteDate:
+          type: string
+          description: Expected date format YYYY-MM-DD.
+          format: date-time
+        DueDate:
+          type: string
+          description: Expected date format YYYY-MM-DD.
+          format: date-time
+        EuThirdParty:
+          type: boolean
+          description: Indicates whether the transaction is an EU triangulation sale (resale of goods through an intermediary within the EU)
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        IncludesVat:
+          type: boolean
+          description: True if company settings checkbox "ShowPricesExclVatPC" is checked and customer type is "Private", otherwise false
+          readOnly: true
+        InvoiceAddress1:
+          type:
+          - string
+          - 'null'
+          description: If the value is null it will be filled with the value from the customer
+          readOnly: true
+        InvoiceAddress2:
+          type:
+          - string
+          - 'null'
+          description: If the value is null it will be filled with the value from the customer
+          readOnly: true
+        InvoiceCity:
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+          readOnly: true
+        InvoiceCountryCode:
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+          readOnly: true
+        InvoiceCustomerName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        InvoicePostalCode:
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+          readOnly: true
+        IsDomestic:
+          type: boolean
+          readOnly: true
+        IsNotDelivered:
+          type: boolean
+          readOnly: true
+        MessageThreads:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch messages via GET /v2/messagethreads/{messageThreadId}
+          readOnly: true
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date and time of the last document modification
+          format: date-time
+          readOnly: true
+        Notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch notes via GET /v2/notes/{notesId}
+          readOnly: true
+        Number:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          readOnly: true
+        Persons:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SalesDocumentRotRutReductionPersonApi'
+          description: Only available for ROT/RUT or Green Technology
+        RotPropertyType:
+          type:
+          - integer
+          - 'null'
+          description: <strong>Possible values:</strong><br/>1 = Apartment,<br/>2 = Property<br/><br/>Leave blank or set to null if you do not intend to use ROT or Green Technology functionality.
+          format: int32
+        RotReducedInvoicingAmount:
+          type: number
+          description: 'Format: 2 decimals'
+          format: double
+        MaxAllowedTaxReductionAmount:
+          type: number
+          description: 'Default: maximum allowed tax reduction amount'
+          format: double
+          readOnly: true
+        RotReducedInvoicingAutomaticDistribution:
+          type: boolean
+          description: True if quote uses automatic distribution of rot/rut deduction, false otherwise
+          readOnly: true
+        RotReducedInvoicingOrgNumber:
+          type:
+          - string
+          - 'null'
+        RotReducedInvoicingPercent:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+          readOnly: true
+        RotReducedInvoicingPropertyName:
+          type:
+          - string
+          - 'null'
+        RotReducedInvoicingType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = Rot,<br/>2 = Rut
+          format: int32
+        RoundingsAmount:
+          type: number
+          format: double
+          readOnly: true
+        Rows:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuoteRowApi'
+        SalesDocumentAttachments:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch SalesDocumentAttachments via GET /v2/salesdocumentattachments/{attachmentId}
+          readOnly: true
+        Status:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Draft,<br/>1 = Ongoing,<br/>2 = Approved,<br/>3 = Invoiced,<br/>4 = OrderCreated<br/><br/>Status of the quote. Possible values are.
+          format: int32
+          readOnly: true
+        TermsOfPayment:
+          $ref: '#/components/schemas/TermsOfPaymentApi'
+        TotalAmount:
+          type: number
+          format: double
+          readOnly: true
+        UsesGreenTechnology:
+          type: boolean
+          description: <strong>Possible values:</strong><br/>True = This quote uses green technology<br/>False = Otherwise
+        VatAmount:
+          type: number
+          format: double
+          readOnly: true
+      additionalProperties: false
+    ContributionMarginApi:
+      type: object
+      properties:
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: Amount of contribution margin
+          format: double
+        Percentage:
+          type:
+          - number
+          - 'null'
+          description: Percentage of contribution margin
+          format: double
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

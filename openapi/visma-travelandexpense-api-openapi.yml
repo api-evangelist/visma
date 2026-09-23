@@ -1,0 +1,719 @@
+openapi: 3.2.0
+info:
+  title: Visma Travel And Expense API
+  contact:
+    email: api@spiris.se
+  version: '1.0'
+  description: 'Operations tagged TravelAndExpense across 2 of this provider''s published API definitions: visma-payroll-api-v1-openapi-original.json, visma-payroll-api-v2-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: TravelAndExpense
+  description: Operations for managing travel and expense shortcuts for employees. Travel and expense shortcuts allow tracking of employee travel and other expenses based on supplied pay code numbers.
+paths:
+  /v1/shortcuts/travelandexpense:
+    post:
+      tags:
+      - TravelAndExpense
+      summary: Create a travel and expense shortcut
+      description: Create a new travel and expense shortcut for an employee. The shortcut will be registered for specified date based on provided rows.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TravelAndExpenseApi'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelAndExpenseApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postV1ShortcutsTravelandexpense
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/shortcuts/travelandexpense/{travelAndExpenseId}:
+    get:
+      tags:
+      - TravelAndExpense
+      summary: Get a travel and expense shortcut by id
+      description: Get a specific travel and expense shortcut by its unique identifier. Use query parameters to select specific properties in the response.
+      parameters:
+      - name: travelAndExpenseId
+        in: path
+        description: The travel and expense shortcut id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelAndExpenseApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1ShortcutsTravelandexpenseByTravelAndExpenseId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/shortcuts/travelandexpense/{startDate}/{endDate}:
+    get:
+      tags:
+      - TravelAndExpense
+      summary: Get travel and expense shortcuts between dates
+      description: Get all travel and expense shortcuts within a specified date range. Use query parameters to filter the results or include only shortcuts created by the same client.
+      parameters:
+      - name: startDate
+        in: path
+        description: Start date in format yyyy-MM-dd
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        in: path
+        description: End date in format yyyy-MM-dd
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: includeOnlySameClientShortcuts
+        in: query
+        description: If true, only includes shortcuts created by the same client
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TravelAndExpenseApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1ShortcutsTravelandexpenseByStartDateByEndDate
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/shortcuts/travelandexpense/{id}:
+    put:
+      tags:
+      - TravelAndExpense
+      summary: Update a travel and expense shortcut
+      description: Update an existing travel and expense shortcut by replacing its content. Only shortcuts that have not been read (imported by a payroll administrator) can be updated. The shortcut must belong to the same third-party client that created it.
+      parameters:
+      - name: id
+        in: path
+        description: The shortcut id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TravelAndExpenseApi'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelAndExpenseApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putV1ShortcutsTravelandexpenseById
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/shortcuts/travelandexpense:
+    post:
+      tags:
+      - TravelAndExpense
+      summary: Create a travel and expense shortcut
+      description: Create a new travel and expense shortcut for an employee. The shortcut will be registered for specified date based on provided rows.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TravelAndExpenseRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelAndExpenseResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postV2ShortcutsTravelandexpense
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/shortcuts/travelandexpense/{shortcutId}:
+    get:
+      tags:
+      - TravelAndExpense
+      summary: Get a travel and expense shortcut by id
+      description: Get a specific travel and expense shortcut by its unique identifier. Use query parameters to select specific properties in the response.
+      parameters:
+      - name: shortcutId
+        in: path
+        description: The travel and expense shortcut id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelAndExpenseResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2ShortcutsTravelandexpenseByShortcutId
+      x-operation-id-source: derived
+    put:
+      tags:
+      - TravelAndExpense
+      summary: Update a travel and expense shortcut
+      description: Update an existing travel and expense shortcut by replacing its content. Only shortcuts that have not been read (imported by a payroll administrator) can be updated. The shortcut must belong to the same third-party client that created it.
+      parameters:
+      - name: shortcutId
+        in: path
+        description: The shortcut id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/TravelAndExpenseRequest'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelAndExpenseResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putV2ShortcutsTravelandexpenseByShortcutId
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - TravelAndExpense
+      summary: Delete a travel and expense shortcut
+      description: Delete a travel and expense shortcut by its unique identifier. Only shortcuts that have not been read (imported by a payroll administrator) can be deleted. The shortcut must belong to the same third-party client that created it.
+      parameters:
+      - name: shortcutId
+        in: path
+        description: The shortcut id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteV2ShortcutsTravelandexpenseByShortcutId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/shortcuts/travelandexpense/{startDate}/{endDate}:
+    get:
+      tags:
+      - TravelAndExpense
+      summary: Get travel and expense shortcuts between dates
+      description: Get all travel and expense shortcuts within a specified date range. Use query parameters to filter the results or include only shortcuts created by the same client.
+      parameters:
+      - name: startDate
+        in: path
+        description: Start date in format yyyy-MM-dd
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        in: path
+        description: End date in format yyyy-MM-dd
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: includeOnlySameClientShortcuts
+        in: query
+        description: If true, only includes shortcuts created by the same client
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TravelAndExpenseResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2ShortcutsTravelandexpenseByStartDateByEndDate
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+components:
+  schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    TravelAndExpenseRowApi:
+      required:
+      - PaycodeNumber
+      type: object
+      properties:
+        PaycodeNumber:
+          minLength: 1
+          type: string
+          description: 'Pay code number. Source: Get from /v1/paycodes'
+        Quantity:
+          type: number
+          description: Addition/deduction quantity. Only required for allowance, mile compensation and benefit paycodes. Must be left empty otherwise. Max 2 decimals.
+          format: double
+        UnitPrice:
+          type:
+          - number
+          - 'null'
+          description: Addition/deduction unit price. Only for allowance and benefit paycodes, if not mile compensation and the paycode doesn't have a formula set. Must be left empty otherwise. If paycode is mile compensation, unit price can be overridden. Max 2 decimals.
+          format: double
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: Addition/deduction amount. Only required for reimbursement paycodes. Must be left empty otherwise. Max 2 decimals.
+          format: double
+        VatAmount:
+          maximum: 1000000000
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Value-added tax amount. Only for reimbursement paycodes when the company uses VAT on outlay. Max 2 decimals.
+          format: double
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'Cost center item ID 1. Source: Get from eAccounting API, /v2/costcenters'
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'Cost center item ID 2. Source: Get from eAccounting API, /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'Cost center item ID 3. Source: Get from eAccounting API, /v2/costcenters'
+          format: uuid
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: 'Project ID. Source: Get from eAccounting API, /v2/projects'
+          format: uuid
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    TravelAndExpenseApi:
+      required:
+      - Date
+      - EmployeeId
+      - Rows
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+          readOnly: true
+        EmployeeId:
+          type: string
+          description: 'The ID of the employee that the shortcut is registered for. Source: Get from /v1/employees'
+          format: uuid
+        Date:
+          type: string
+          description: The date for the shortcut
+          format: date-time
+        ReportLink:
+          type:
+          - string
+          - 'null'
+          description: 'Report link (format: absolute HTTPS URL)'
+        Comment:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Optional comment for the shortcut
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelAndExpenseRowApi'
+          description: Travel and other Expenses
+      additionalProperties: false
+    TravelAndExpenseRequest:
+      required:
+      - Date
+      - EmployeeId
+      - Rows
+      type: object
+      properties:
+        EmployeeId:
+          type: string
+          description: 'The ID of the employee that the shortcut should be registered for. Source: get from /v2/employees.'
+          format: uuid
+        Date:
+          type: string
+          description: 'The date for the shortcut (format: yyyy-MM-dd)'
+          format: date-time
+        ReportLink:
+          type:
+          - string
+          - 'null'
+          description: 'Report link (format: URL, https is required)'
+        Comment:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Optional comment for the shortcut
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelAndExpenseRowRequest'
+          description: Travel and other Expenses
+      additionalProperties: false
+    TravelAndExpenseRowResponse:
+      required:
+      - PaycodeNumber
+      type: object
+      properties:
+        PaycodeNumber:
+          type:
+          - string
+          - 'null'
+          description: Pay code number
+        Quantity:
+          type: number
+          description: Addition/deduction quantity
+          format: double
+        UnitPrice:
+          type:
+          - number
+          - 'null'
+          description: Addition/deduction unit price
+          format: double
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: Addition/deduction amount
+          format: double
+        VatAmount:
+          type:
+          - number
+          - 'null'
+          description: Value-added tax amount
+          format: double
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Project ID
+          format: uuid
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: Cost center item ID 1
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: Cost center item ID 2
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: Cost center item ID 3
+          format: uuid
+      additionalProperties: false
+    TravelAndExpenseRowRequest:
+      required:
+      - PaycodeNumber
+      type: object
+      properties:
+        PaycodeNumber:
+          minLength: 1
+          type: string
+          description: 'Pay code number. Source: get from /v2/paycodes.'
+        Quantity:
+          type: number
+          description: 'Expense quantity (format: max 2 decimals). Required only for allowance, mile compensation and benefit paycodes.'
+          format: double
+        UnitPrice:
+          type:
+          - number
+          - 'null'
+          description: 'Expense unit price (format: max 2 decimals). Required only for allowance and benefit paycodes, if not mile compensation and the paycode doesn''t have a formula set. If paycode is mile compensation it''s possible to override unit price.'
+          format: double
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: 'Expense amount (format: max 2 decimals). Required only for reimbursement paycodes.'
+          format: double
+        VatAmount:
+          maximum: 1000000000
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: 'Value-added tax amount (format: max 2 decimals). Required only for reimbursement paycodes and when the company uses vat on outlay.'
+          format: double
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: 'Project ID. Source: get from eAccounting API, /v2/projects.'
+          format: uuid
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'Cost center item ID 1. Source: get from eAccounting API, /v2/costcenters.'
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'Cost center item ID 2. Source: get from eAccounting API, /v2/costcenters.'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'Cost center item ID 3. Source: get from eAccounting API, /v2/costcenters.'
+          format: uuid
+      additionalProperties: false
+    TravelAndExpenseResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+        EmployeeId:
+          type: string
+          description: The ID of the employee that the shortcut is registered for
+          format: uuid
+        Date:
+          type: string
+          description: 'The date for the shortcut (format: yyyy-MM-dd)'
+          format: date-time
+        ReportLink:
+          type:
+          - string
+          - 'null'
+          description: 'Report link (format: URL)'
+        Comment:
+          type:
+          - string
+          - 'null'
+          description: Optional comment for the shortcut
+        Rows:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TravelAndExpenseRowResponse'
+          description: Travel and other Expenses
+      additionalProperties: false
+x-refined-from:
+- visma-payroll-api-v1-openapi-original.json
+- visma-payroll-api-v2-openapi-original.json
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

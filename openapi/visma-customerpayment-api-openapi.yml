@@ -1,0 +1,1236 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Customer Payment API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: CustomerPayment
+paths:
+  /v1/customerPayment/{paymentNumber}:
+    get:
+      tags:
+      - CustomerPayment
+      summary: Get a specific Payment
+      description: 'Data for Payment
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: CustomerPayment_GetBypaymentNumber
+      parameters:
+      - name: paymentNumber
+        in: path
+        description: Identifies the Payment
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PaymentDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - CustomerPayment
+      summary: Update a specific Payment
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed
+
+
+        In this endpoint, If-Match can be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: CustomerPayment_PutBypaymentNumber
+      parameters:
+      - name: paymentNumber
+        in: path
+        description: Identifies the Payment to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Payment to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+        required: true
+        x-bodyName: payment
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Customer invoice version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/customerPayment:
+    get:
+      tags:
+      - CustomerPayment
+      summary: Get a range of Payments.
+      operationId: CustomerPayment_GetAllPayments
+      parameters:
+      - name: paymentNbr
+        in: query
+        description: Payment number
+        schema:
+          type: string
+      - name: paymentType
+        in: query
+        description: Select Type
+        schema:
+          enum:
+          - Payment
+          - CreditNote
+          - Prepayment
+          - Refund
+          - VoidPayment
+          - SmallBalanceWo
+          - VoidRefund
+          - Undefined
+          type: string
+      - name: customer
+        in: query
+        description: Enter Customer
+        schema:
+          type: string
+      - name: greaterThanValue
+        in: query
+        description: Enter the from-value for Ref. no.
+        schema:
+          type: string
+      - name: invoiceRefNbr
+        in: query
+        description: Enter Invoice Ref Nbr
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: The status of the document. Use the dropdown to select status.
+        schema:
+          enum:
+          - Hold
+          - Balanced
+          - Voided
+          - Scheduled
+          - Open
+          - Closed
+          - PendingPrint
+          - PendingEmail
+          - CreditHold
+          - CcHold
+          - Reserved
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        description: Enter field to order your records by.
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: branch
+        in: query
+        description: Filter by Branch
+        schema:
+          type: string
+      - name: docDate
+        in: query
+        description: 'This value indicates the document date. Use it to retrieve all records that have the Document Date since that time, up to the future.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd```
+
+
+          _Note:_ __DocDate__ and __DocDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+          format: date-time
+      - name: docDateCondition
+        in: query
+        description: 'This value represents the condition to be applied to the Document Date when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __DocDate__ and __DocDateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: financialPeriod
+        in: query
+        description: Filter by financial period, format YYYYPP
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - CustomerPayment
+      summary: Create a Payment
+      description: 'Response Message has StatusCode Created if POST operation succeed
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        The response headers include an ETag after a successful POST operation.'
+      operationId: CustomerPayment_CreatePayment
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Payment to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PaymentUpdateDto'
+        required: true
+        x-bodyName: payment
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/customerPayment/{paymentNumber}/action/release:
+    post:
+      tags:
+      - CustomerPayment
+      summary: Release payment operation
+      description: 'The action result dto contains information about the result of running the action
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        In this endpoint, If-Match can be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: CustomerPayment_ReleasePaymentBypaymentNumber
+      parameters:
+      - name: paymentNumber
+        in: path
+        description: Reference number of the payment to be released
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Contains the type of the payment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleasePaymentActionDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReleasePaymentActionDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ReleasePaymentActionDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ReleasePaymentActionDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReleasePaymentActionDto'
+        required: true
+        x-bodyName: releaseActionDto
+      responses:
+        '412':
+          description: Customer invoice version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+            application/xml: {}
+            text/xml: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/customerPayment/{paymentNumber}/action/void:
+    post:
+      tags:
+      - CustomerPayment
+      summary: Void payment operation
+      description: 'The action result dto contains information about the result of running the action
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        In this endpoint, If-Match can be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: CustomerPayment_VoidPaymentBypaymentNumber
+      parameters:
+      - name: paymentNumber
+        in: path
+        description: Reference number of the payment to be released
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Contains the type of the payment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidPaymentActionDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/VoidPaymentActionDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/VoidPaymentActionDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/VoidPaymentActionDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VoidPaymentActionDto'
+        required: true
+        x-bodyName: voidActionDto
+      responses:
+        '412':
+          description: Customer invoice version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    currencyInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The top part &gt; Currency &gt; The currency of the payment document. Once the customer is selected, the system inserts the customer's default currency.
+    DtoValueOfCustomerDocumentTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Invoice
+          - DebitNote
+          - CreditNote
+          - Payment
+          - VoidPayment
+          - Prepayment
+          - Refund
+          - FinCharge
+          - SmallBalanceWo
+          - SmallCreditWo
+          - CashSale
+          - CashReturn
+          - Undefined
+          - NoUpdate
+          type: string
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    PaymentDto:
+      type: object
+      properties:
+        type:
+          enum:
+          - Payment
+          - CreditNote
+          - Prepayment
+          - Refund
+          - VoidPayment
+          - SmallBalanceWo
+          - VoidRefund
+          - Undefined
+          type: string
+          description: 'The top part &gt; Type &gt; The type of a document. The following types are available: Payment, CreditNote, Prepayment, Customer refund, Void payment, Balance write-off'
+        refNbr:
+          type: string
+          description: "The top part &gt; Ref.no &gt; The unique identifier for the payment. This number is automatically generated by the system for a new payment document, based on the number series\tin the AR101000 window."
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Voided
+          - Scheduled
+          - Open
+          - Closed
+          - PendingPrint
+          - PendingEmail
+          - CreditHold
+          - CcHold
+          - Reserved
+          type: string
+          description: The top part &gt; Status &gt; The status of the customer payment, which for a new document is either Balanced or On hold. [On hold, Balanced, Voided, Scheduled, Open, Closed, Pending print, Pending email, Credit hold, CcHold, Reserved]
+        hold:
+          type: boolean
+          description: The top part &gt; Hold &gt;  A check box that indicates (if selected) that the document is a draft with the On hold status. This check box is unavailable for debit adjustments.
+        applicationDate:
+          type: string
+          description: 'Mandatory field: The top part &gt; Date* &gt; The date when a payment is applied to a document (invoice or note). The field display the current business date for tunapplied or partially applied payments and the latest application date for the closed payment'
+          format: date-time
+        applicationPeriod:
+          type: string
+          description: 'Mandatory field: The top part &gt; Financial period* &gt; The period to which the payment should be applied, which the system fills in based on the date.'
+        paymentRef:
+          type: string
+          description: 'Mandatory field: The top part &gt; Payment ref.* &gt; A secondary payment reference identifier, which can be a system-generated number or an external reference number entered manually.'
+        customer:
+          $ref: '#/components/schemas/customerInPaymentDto'
+        location:
+          $ref: '#/components/schemas/locationInPaymentDto'
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethodInPaymentDto'
+        cashAccount:
+          type: string
+          description: 'Mandatory field: The top part &gt; Cash account* &gt; The default cash account associated with the payment method; this field is not available for credit notes.'
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency of the payment document.
+        paymentAmount:
+          type: number
+          description: The top part &gt; Payment amount &gt; The total of the payment that is entered manually.
+          format: double
+        invoiceText:
+          type: string
+          description: The top part &gt; Invoice text &gt; A user-defined description of the payment. 50 alphanumeric characters.
+        appliedToDocuments:
+          type: number
+          description: The top part &gt; Applied to documents &gt; The total of the documents to which payment is to be applied.
+          format: double
+        appliedToOrders:
+          type: number
+          description: The top part &gt; Applied to orders &gt; The total of the orders for which payment is reserved, minus the amount transferred to invoice.
+          format: double
+        availableBalance:
+          type: number
+          description: The top part &gt; Available balance &gt; The amount that has not been applied.
+          format: double
+        writeOffAmount:
+          type: number
+          description: The top part &gt; Write-off amount &gt; The amount that has been written off.
+          format: double
+        financeCharges:
+          type: number
+          description: The top part &gt; Finance charges &gt; The total on all finance charges applied to this document.
+          format: double
+        deductedCharges:
+          type: number
+          description: The top part &gt; Deducted charges &gt; The total amount of bank charges deducted by bank from the payment amount on your cash account (bank account).
+          format: double
+        branch:
+          type: string
+        lastModifiedDateTime:
+          type: string
+          description: Systemgenerated information.
+          format: date-time
+        paymentLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentLineDto'
+          description: Documents to apply tab &gt;
+        ordersToApply:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderToApplyDto'
+          description: Orders to apply tab &gt;
+        financialDetails:
+          $ref: '#/components/schemas/financialDetailsInPaymentDto'
+        paymentAmountInCurrency:
+          type: number
+          description: Payment amount calculated in your default (base) currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        availableBalanceInCurrency:
+          type: number
+          description: Available Balance calculated in your default (base) currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a Payment in PaymentController. Used by getting data.
+    locationInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location associated with the sale. Once the customer is selected, this field displays the customer''s default location.'
+    holdInPaymentUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: The top part &gt; Hold &gt; A check box that indicates (if selected) that the document is a draft with the On hold status.
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    financialDetailsInPaymentDto:
+      properties:
+        paymentDate:
+          type: string
+          description: Financial Details tab &gt; Payment date
+          format: date-time
+      description: Financial Details
+    paymentRefInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Mandatory field: The top part &gt; Payment ref.* &gt; A secondary payment reference identifier, which can be a system-generated number or an external reference number entered manually.'
+    PaymentOrdersLinesUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        orderType:
+          $ref: '#/components/schemas/DtoValueOfString'
+        orderNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        appliedToOrder:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+    PaymentLineDto:
+      type: object
+      properties:
+        documentType:
+          enum:
+          - Invoice
+          - DebitNote
+          - CreditNote
+          - Payment
+          - VoidPayment
+          - Prepayment
+          - Refund
+          - FinCharge
+          - SmallBalanceWo
+          - SmallCreditWo
+          - CashSale
+          - CashReturn
+          - Undefined
+          - NoUpdate
+          type: string
+          description: Doc. type &gt; The type of document to which the payment is applied.
+        refNbr:
+          type: string
+          description: 'Mandatory field: Ref. no.* &gt; The reference number of the invoice or note to which the payment is applied.'
+        amountPaid:
+          type: number
+          description: Amount paid &gt; The amount to be paid which is displayed in the currency of the document that is selected in the window.
+          format: double
+        cashDiscountTaken:
+          type: number
+          description: Cash discount taken &gt; The cash discount to be taken.
+          format: double
+        balanceWriteOff:
+          type: number
+          description: Balance write-off &gt; The amount to be written off.
+          format: double
+        writeOffReasonCode:
+          $ref: '#/components/schemas/writeOffReasonCodeInPaymentLineDto'
+        date:
+          type: string
+          description: Date &gt; The creation date of the customer ledger document.
+          format: date-time
+        dueDate:
+          type: string
+          description: Due date &gt; The due date of the customer ledger document.
+          format: date-time
+        cashDiscountDate:
+          type: string
+          description: Cash disount date &gt; The date through which the customer can take a cash discount.
+          format: date-time
+        balance:
+          type: number
+          description: Balance &gt; The balance of the document after the cash discount is taken and the amount is paid.
+          format: double
+        cashDiscountBalance:
+          type: number
+          description: Cash discount balance &gt; The unused amount of the cash discount, in case of partial payment.
+          format: double
+        description:
+          type: string
+          description: Description &gt; A description of the document.
+        currency:
+          type: string
+          description: Currency &gt; The currency of the customer ledger document.
+        postPeriod:
+          type: string
+          description: Post period &gt; The financial period to which the transactions recorded in the document should be posted. Format MMYYYY.
+        customerOrder:
+          type: string
+          description: Customer order &gt; A reference to a document of the customer, such as a purchase order number.
+        crossRate:
+          type: number
+          description: Cross rate &gt; A cross rate that you can optionally specify between the currency of the payment and currency of the original document.
+          format: double
+    writeOffReasonCodeInPaymentLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Write-off reason code &gt; A reason code that defines an account and subaccount to be used for writing off credits or balances.
+    customerInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Mandatory field: The top part &gt; Customer* &gt; The customer who issued the payment.'
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    PaymentLinesUpdateDto:
+      type: object
+      properties:
+        cashDiscountTaken:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        balanceWriteOff:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        writeOffReasonCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        crossRate:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        documentType:
+          $ref: '#/components/schemas/DtoValueOfCustomerDocumentTypes'
+        refNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amountPaid:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    OrderToApplyDto:
+      type: object
+      properties:
+        orderType:
+          type: string
+          description: 'Mandatory field: Order type* &gt; The order type for which the payment is to be reserved.'
+        orderNo:
+          type: string
+          description: 'Mandatory field: Order no.* &gt; The reference number of the order for which the payment is reserved.'
+        status:
+          enum:
+          - Open
+          - Hold
+          - CreditHold
+          - Completed
+          - Cancelled
+          - BackOrder
+          - Shipping
+          - Invoiced
+          - PendingApproval
+          - Voided
+          type: string
+          description: Status &gt; The status of the document, which is assigned automatically.
+        appliedToOrder:
+          type: number
+          description: Applied to order &gt; The total amount reserved for the order.
+          format: double
+        transferredToInvoice:
+          type: number
+          description: Transferred to invoice &gt; The amount that has been applied to invoice.
+          format: double
+        date:
+          type: string
+          description: Date &gt; The creation date of the order.
+          format: date-time
+        dueDate:
+          type: string
+          description: Due date &gt; The due date of the order.
+          format: date-time
+        cashDiscountDate:
+          type: string
+          description: Cash discount date &gt; The date through which the customer can take a cash discount.
+          format: date-time
+        balance:
+          type: number
+          description: Balance &gt; The balance of the order after the cash discount is taken and the amount is paid.
+          format: double
+        description:
+          type: string
+          description: Description &gt; A description of the order.
+        orderTotal:
+          type: number
+          description: Order total &gt; The total amount of the document.
+          format: double
+        currency:
+          type: string
+          description: Currency &gt; The currency of the document.
+        invoiceNbr:
+          type: string
+          description: Invoice no. &gt; The reference number of the invoice generated for the order.
+        invoiceDate:
+          type: string
+          description: Invoice date &gt; The date of the invoice.
+          format: date-time
+      description: This class represents an OrderToApply in Payments
+    applicationDateInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: 'Mandatory field: The top part &gt; Date* &gt; The date when a payment is applied to a document (invoice or note). The current business date for unapplied or partially applied payments and the latest application date for the closed payment.'
+    VoidPaymentActionDto:
+      type: object
+      properties:
+        type:
+          enum:
+          - Payment
+          - CreditNote
+          - Prepayment
+          - Refund
+          - VoidPayment
+          - SmallBalanceWo
+          - VoidRefund
+          - Undefined
+          type: string
+        returnVoidPayment:
+          type: boolean
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    locationInPaymentDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location associated with the sale.'
+    customerInPaymentDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: The top part &gt; Customer* &gt; The customer who issued the payment.'
+    invoiceTextInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The top part &gt; Invoice text &gt; A user-defined description of the payment.
+    applicationPeriodInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Mandatory field: The top part &gt; Financial period* &gt; The financial period to which the payment should be applied, which the system fills in based on the date.'
+    referenceNumberInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The top part &gt; Ref. no &gt; Reference number for the document. Can be used when manual numbering is enabled.
+    cashAccountInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Mandatory field: The top part &gt; Cash account* &gt; The default cash account associated with the payment method.'
+    typeInPaymentUpdateDto:
+      properties:
+        value:
+          enum:
+          - Payment
+          - CreditNote
+          - Prepayment
+          - Refund
+          - VoidPayment
+          - SmallBalanceWo
+          - VoidRefund
+          - Undefined
+          type: string
+      description: 'The top part &gt; Type &gt; The type of a document: Payment, Credit note, Prepayment, Customer refund, Void payment, Balance write-off.'
+    paymentMethodInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The top part &gt; Payment method &gt; The customer's default payment method.
+    DtoValueOfNullableOfPaymentTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Payment
+          - CreditNote
+          - Prepayment
+          - Refund
+          - VoidPayment
+          - SmallBalanceWo
+          - VoidRefund
+          - Undefined
+          type: string
+    ReleasePaymentActionDto:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/DtoValueOfNullableOfPaymentTypes'
+    paymentAmountInPaymentUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The top part &gt; Payment amount &gt; The total of the documents to which payment is to be applied.
+    paymentMethodInPaymentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Payment method &gt; The customer's default payment method; this field is not available for credit notes.
+    FinanceChargesUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        entryType:
+          $ref: '#/components/schemas/DtoValueOfString'
+        offsetAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        offsetSubAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+    PaymentUpdateDto:
+      type: object
+      properties:
+        referenceNumber:
+          $ref: '#/components/schemas/referenceNumberInPaymentUpdateDto'
+        type:
+          $ref: '#/components/schemas/typeInPaymentUpdateDto'
+        hold:
+          $ref: '#/components/schemas/holdInPaymentUpdateDto'
+        applicationDate:
+          $ref: '#/components/schemas/applicationDateInPaymentUpdateDto'
+        applicationPeriod:
+          $ref: '#/components/schemas/applicationPeriodInPaymentUpdateDto'
+        paymentRef:
+          $ref: '#/components/schemas/paymentRefInPaymentUpdateDto'
+        customer:
+          $ref: '#/components/schemas/customerInPaymentUpdateDto'
+        location:
+          $ref: '#/components/schemas/locationInPaymentUpdateDto'
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethodInPaymentUpdateDto'
+        cashAccount:
+          $ref: '#/components/schemas/cashAccountInPaymentUpdateDto'
+        currency:
+          $ref: '#/components/schemas/currencyInPaymentUpdateDto'
+        paymentAmount:
+          $ref: '#/components/schemas/paymentAmountInPaymentUpdateDto'
+        invoiceText:
+          $ref: '#/components/schemas/invoiceTextInPaymentUpdateDto'
+        branch:
+          $ref: '#/components/schemas/DtoValueOfString'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        ordersToApply:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentOrdersLinesUpdateDto'
+          description: The top part &gt; Applied to orders &gt; The total of the orders for which payment is reserved, minus the amount transferred to invoice.
+        financeCharges:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinanceChargesUpdateDto'
+          description: Financial Charges
+        paymentLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentLinesUpdateDto'
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

@@ -1,0 +1,1999 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Orders API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Orders
+  description: 'A confirmed request for products or services to be delivered.
+
+    Overview of Orders Functionality: Orders
+
+
+    ___
+
+
+    Requires any of the following modules:
+
+    * sales_standard
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing'
+paths:
+  /orders:
+    get:
+      tags:
+      - Orders
+      summary: Get orders
+      description: 'Get all orders, or add query parameters to filter the results. The response will include a list of orders with their details, such as customer information, rows, totals, and status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfOrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getOrders
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Orders
+      summary: Create an order
+      description: 'Create a new order.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderApi'
+      responses:
+        '201':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postOrders
+      x-operation-id-source: derived
+  /orders/{id}:
+    get:
+      tags:
+      - Orders
+      summary: Get a specific order based on Id
+      description: 'Get a specific order by its unique identifier. The response will include the order details, such as customer information, rows, totals, and status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to get
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getOrdersById
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Orders
+      summary: Update an order
+      description: 'Replace an existing order''s data with the provided data.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to update
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderApi'
+      responses:
+        '200':
+          description: Order updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putOrdersById
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Orders
+      summary: Delete an order
+      description: 'Delete an order. Orders that are shipped or invoiced cannot be deleted.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to delete
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Order deleted successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteOrdersById
+      x-operation-id-source: derived
+  /orders/{id}/converteddrafttoorder:
+    post:
+      tags:
+      - Orders
+      summary: Convert order draft to order
+      description: 'Convert an order draft to an order. Returns the converted order.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order draft you want to convert
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Order converted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postOrdersByIdConverteddrafttoorder
+      x-operation-id-source: derived
+  /orders/{id}/completed:
+    post:
+      tags:
+      - Orders
+      summary: Complete an order
+      description: 'Mark an ongoing order as completed.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to complete
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Order completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postOrdersByIdCompleted
+      x-operation-id-source: derived
+  /orders/{id}/voided:
+    post:
+      tags:
+      - Orders
+      summary: Void an order
+      description: 'Void a shipped order by reverting it to ongoing status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to void
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Order voided successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postOrdersByIdVoided
+      x-operation-id-source: derived
+  /orders/{id}/backorder:
+    post:
+      tags:
+      - Orders
+      summary: Create a backorder
+      description: 'Create a backorder from an existing order for items that couldn''t be delivered.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to create a backorder for
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Backorder created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postOrdersByIdBackorder
+      x-operation-id-source: derived
+  /orders/{id}/convert:
+    post:
+      tags:
+      - Orders
+      summary: Convert an order to an invoice
+      description: 'Convert an order to a customer invoice. Returns the invoice that was created.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to convert
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderConversionApi'
+      responses:
+        '200':
+          description: Order converted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerInvoiceApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postOrdersByIdConvert
+      x-operation-id-source: derived
+  /orders/{id}/print:
+    get:
+      tags:
+      - Orders
+      summary: Print an order as pdf
+      description: 'Print an order as PDF.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to print
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getOrdersByIdPrint
+      x-operation-id-source: derived
+  /orders/{id}/deliverynote/print:
+    get:
+      tags:
+      - Orders
+      summary: Print a delivery note for an order as pdf
+      description: 'Print a delivery note for an order as PDF.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to print a delivery note for
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getOrdersByIdDeliverynotePrint
+      x-operation-id-source: derived
+  /orders/{id}/email:
+    post:
+      tags:
+      - Orders
+      summary: Send an order as email
+      description: 'Send an order as email.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the order you want to send
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailApi'
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postOrdersByIdEmail
+      x-operation-id-source: derived
+components:
+  schemas:
+    OrderConversionApi:
+      type: object
+      properties:
+        WorkHouseOtherCosts:
+          type:
+          - number
+          - 'null'
+          description: Only used for ROT/RUT work house other costs
+          format: double
+      additionalProperties: false
+    SalesDocumentRotRutReductionPersonApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Ssn:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Social security number
+        Amount:
+          type: number
+          format: double
+      additionalProperties: false
+    EmailApi:
+      type: object
+      properties:
+        Email:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the customer's email address
+        CcRecipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Default value is the customer's cc email addresses (if omitted or empty list). Set to null to skip using any CC addresses.
+        Subject:
+          type:
+          - string
+          - 'null'
+          description: 'The default email subject found in the system followed by the company''s name.The special pattern #### in the subject text will be replaced by the sales document number (quote, order or invoice).This allows you to create a subject that contains the sales document number without querying for the document first'
+        Message:
+          type:
+          - string
+          - 'null'
+          description: Default value is the the domestic or foreign company text from /v2/companysettings
+      additionalProperties: false
+    CreditedByApi:
+      type: object
+      properties:
+        CreditInvoiceId:
+          type: string
+          description: The Id of the customer invoice
+          format: uuid
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfOrderApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderApi'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CustomerInvoiceVatApi:
+      type: object
+      properties:
+        AmountInvoiceCurrency:
+          type: number
+          format: double
+          readOnly: true
+        VatAmountInvoiceCurrency:
+          type: number
+          format: double
+          readOnly: true
+        VatPercent:
+          type: number
+          format: double
+          readOnly: true
+      additionalProperties: false
+    OrderApi:
+      required:
+      - CurrencyCode
+      - CustomerId
+      - EuThirdParty
+      - OrderDate
+      - ReverseChargeOnConstructionServices
+      - RotReducedInvoicingType
+      - Status
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Amount:
+          type: number
+          description: 'Format: 2 decimals'
+          format: double
+        CustomerId:
+          type: string
+          description: Id of the customer for this order
+          format: uuid
+        CurrencyCode:
+          maxLength: 3
+          minLength: 0
+          type: string
+        CreatedUtc:
+          type: string
+          format: date-time
+          readOnly: true
+        VatAmount:
+          type: number
+          format: double
+        RoundingsAmount:
+          type: number
+          format: double
+        DeliveredAmount:
+          type: number
+          description: 'Format: 2 decimals'
+          format: double
+        DeliveredVatAmount:
+          type: number
+          description: 'Format: 2 decimals'
+          format: double
+        DeliveredRoundingsAmount:
+          type: number
+          description: 'Format: 2 decimals'
+          format: double
+        DeliveryCustomerName:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryAddress1:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryAddress2:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryPostalCode:
+          maxLength: 10
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryCity:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        YourReference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Equivalent for property YourReference in CustomerInvoiceApi models
+        OurReference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Equivalent for property OurReference in CustomerInvoiceApi models
+        BuyersOrderReference:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Reference for the customer of the order
+        InvoiceAddress1:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: If the value is null it will be filled with the value from the customer
+        InvoiceAddress2:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: If the value is null it will be filled with the value from the customer
+        InvoiceCity:
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+        InvoiceCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+        InvoiceCustomerName:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        CustomerNumber:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        CustomerName:
+          type:
+          - string
+          - 'null'
+          description: The selected customer's name
+          readOnly: true
+        InvoicePostalCode:
+          maxLength: 10
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+        DeliveryMethodName:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        DeliveryMethodCode:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        DeliveryTermName:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        DeliveryTermId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          readOnly: true
+        DeliveryMethodId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          readOnly: true
+        DeliveryTermCode:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        TermsOfPaymentId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        EuThirdParty:
+          type: boolean
+          description: Indicates whether the transaction is an EU triangulation sale (resale of goods through an intermediary within the EU)
+        CustomerIsPrivatePerson:
+          type: boolean
+          description: True if the customer of this order is a private individual, false otherwise
+          readOnly: true
+        IncludesVat:
+          type: boolean
+          description: True if company settings checkbox "ShowPricesExclVatPC" is checked and customer type is "Private", otherwise false
+          readOnly: true
+        OrderDate:
+          type: string
+          description: Expected date format YYYY-MM-DD
+          format: date-time
+        Status:
+          maximum: 4
+          minimum: 1
+          type: integer
+          description: <strong>Possible values:</strong><br/>Draft = 1,<br/>Ongoing = 2,<br/>Shipped = 3,<br/>Invoiced = 4<br/><br/>Status of the order.
+          format: int32
+        Number:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          readOnly: true
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Date and time of the last document modification
+          format: date-time
+          readOnly: true
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: Expected date format YYYY-MM-DD. Default value is null
+          format: date-time
+        HouseWorkAmount:
+          type: number
+          description: Amount of Rot/Rut deduction on the order
+          format: double
+        HouseWorkAutomaticDistribution:
+          type: boolean
+          description: True if the order uses automatic distribution of tax deduction. False otherwise
+        HouseWorkCorporateIdentityNumber:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Corporate identity number used for deduction
+        HouseWorkPropertyName:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Name of the property used for deduction if applicable
+        SalesDocumentAttachments:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch SalesDocumentAttachments via GET /v2/salesdocumentattachments/{attachmentId}
+          readOnly: true
+        MessageThreads:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch messages via GET /v2/messagethreads/{messageThreadId}
+          readOnly: true
+        Notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch notes via GET /v2/notes/{notesId}
+          readOnly: true
+        Rows:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/OrderRowApi'
+        ShippedDateTime:
+          type:
+          - string
+          - 'null'
+          description: Expected date format YYYY-MM-DD. Default value is null
+          format: date-time
+        RotReducedInvoicingType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = Rot,<br/>2 = Rut
+          format: int32
+        MaxAllowedTaxReductionAmount:
+          type: number
+          description: 'Default: maximum allowed tax reduction amount'
+          format: double
+          readOnly: true
+        RotReducedInvoicingPercent:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+          readOnly: true
+        RotPropertyType:
+          type:
+          - integer
+          - 'null'
+          description: <strong>Possible values:</strong><br/>1 = Apartment,<br/>2 = Property<br/><br/>Leave blank or set to null if you do not intend to use ROT or Green Technology functionality.
+          format: int32
+        Persons:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SalesDocumentRotRutReductionPersonApi'
+        ReverseChargeOnConstructionServices:
+          type: boolean
+          description: <strong>Possible values:</strong><br/>True = this order contains reverse charge on construction services<br/>False = otherwise
+        UsesGreenTechnology:
+          type: boolean
+          description: <strong>Possible values:</strong><br/>True = This order uses green technology<br/>False = Otherwise
+        IsNotDelivered:
+          type: boolean
+          readOnly: true
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        CreatedFromQuoteId:
+          type:
+          - string
+          - 'null'
+          description: Id of the quote this order was created from. Is null if order wasn't created by converting a quote
+          format: uuid
+          readOnly: true
+        BackgroundId:
+          type:
+          - string
+          - 'null'
+          description: Represents the identifier for the background image or template used on the PDF printout
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+    OrderRowApi:
+      required:
+      - EligibleForReverseChargeOnVat
+      - IsTextRow
+      - IsWorkCost
+      - LineNumber
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system for every row
+          format: uuid
+          readOnly: true
+        LineNumber:
+          maximum: 1000
+          minimum: 0
+          type: integer
+          description: Number of the line in order on the row
+          format: int32
+        DeliveredQuantity:
+          type: number
+          description: 'Format: 2 decimals'
+          format: double
+        ArticleId:
+          type:
+          - string
+          - 'null'
+          description: Set for article rows. It is null for text rows
+          format: uuid
+        IsServiceArticle:
+          type: boolean
+          description: True if the article is a service article. False otherwise
+          readOnly: true
+        UnitId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/units/{id}'
+          format: uuid
+          readOnly: true
+        ArticleNumber:
+          maxLength: 40
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        IsTextRow:
+          type: boolean
+          description: True if this is a text row. False otherwise
+        Text:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Default: For non text rows, default value will be the article''s name; for text rows, there should be at least one character in place'
+        UnitPrice:
+          type: number
+          description: 'Format: 2 decimals allowed if the customer and currency are domestic or 4 decimals if customer or currency is foreign'
+          format: double
+        Amount:
+          type: number
+          description: 'Returns a total amount of row. Format: 2 decimals'
+          format: double
+        IsDiscountInFixedAmount:
+          type: boolean
+          description: True if the discount on the row is a fixed amount, false otherwise
+          readOnly: true
+        DiscountFixedAmount:
+          type:
+          - number
+          - 'null'
+          description: 'Fixed amount discount on the row. Only applicable if IsDiscountInFixedAmount is true. Format: 2 decimals'
+          format: double
+          readOnly: true
+        DiscountPercentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: 'Percentage discount on the row. Format: 4 decimals'
+          format: double
+        Quantity:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+        WorkCostType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>RotConstructionWork = 1,<br/>RotElectricalWork = 2,<br/>RotGlassSheetMetalWork = 3,<br/>RotGroundWork = 4,<br/>RotBrickWork = 5,<br/>RotPaintDecorateWork = 6,<br/>RotPlumbWork = 7,<br/>RutCleanJobWork = 9,<br/>RutCareClothTextile = 10,<br/>RutSnowRemove = 12,<br/>RutGarden = 13,<br/>RutBabySitting = 14,<br/>RutOtherCare = 15,<br/>RutRemovalServices = 18,<br/>RutITServices = 19,<br/>RotHeatPump = 20,<br/>RotHeatPump2 = 21,<br/>RutHomeAppliances = 22,<br/>RotSolarHeatingSystem = 23,<br/>RotWoodBoiler = 24,<br/>RotFuelBoiler = 25,<br/>RutLaundry = 26,<br/>RutFurnishing = 27,<br/>RutGoodsTransport = 28,<br/>RutHomeSupervision = 29<br/><br/>Only used for Rot/Rut.
+          format: int32
+        IsWorkCost:
+          type: boolean
+          description: Only used for Rot/Rut
+        WorkHours:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        MaterialCosts:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        EligibleForReverseChargeOnVat:
+          type: boolean
+          description: True if this row is eligible for reverse charge on VAT. False otherwise
+        VatRate:
+          type:
+          - number
+          - 'null'
+          description: When row is a text row the value is null. Default value is also null
+          format: double
+          readOnly: true
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Get from /v2/projects
+          format: uuid
+        GreenTechnologyType:
+          maximum: 3
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>SolarCellInstallation = 1,<br/>ElectricEnergyStorageInstallation = 2,<br/>ElectricVehicleChargingPointInstallation = 3<br/><br/>Type of green technology for the row.
+          format: int32
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        PurchasePrice:
+          type: number
+          description: Purchase price for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+        FreightCosts:
+          type: number
+          description: Freight costs for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+      additionalProperties: false
+    CustomerInvoiceApi:
+      required:
+      - CustomerId
+      - EuThirdParty
+      - RotReducedInvoicingType
+      - Rows
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        EuThirdParty:
+          type: boolean
+          description: Default is false. True only if EU intermediary, VAT triangulation rules apply. Only if EU company is invoicing to a company from a different EU country, may set to True if desired.
+        IsCreditInvoice:
+          type: boolean
+        CurrencyCode:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        CurrencyRate:
+          type:
+          - number
+          - 'null'
+          description: 'Default: Automatic calculation of the currency rate. Enter this value to provide a custom rate'
+          format: double
+        CreatedByUserId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          readOnly: true
+        TotalAmount:
+          type: number
+          description: Total amount on this invoice expressed in base currency
+          format: double
+          readOnly: true
+        TotalVatAmount:
+          type: number
+          description: Total VAT amount on this invoice expressed in base currency
+          format: double
+          readOnly: true
+        TotalRoundings:
+          type: number
+          description: Total roundings amount on this invoice expressed in base currency
+          format: double
+          readOnly: true
+        TotalAmountInvoiceCurrency:
+          type: number
+          description: Total amount on this invoice expressed in the invoice currecy
+          format: double
+          readOnly: true
+        TotalVatAmountInvoiceCurrency:
+          type: number
+          description: Total VAT amount on this invoice expressed in the invoice currency
+          format: double
+          readOnly: true
+        SetOffAmountInvoiceCurrency:
+          type: number
+          description: Total credited amount on this invoice expressed in the invoice currency
+          format: double
+          readOnly: true
+        CustomerId:
+          type: string
+          format: uuid
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerInvoiceRowApi'
+        VatSpecification:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerInvoiceVatApi'
+          description: Contains a summary of amounts for each VAT rate
+          readOnly: true
+        InvoiceDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        DueDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        RotReducedInvoicingType:
+          maximum: 2
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = Rot,<br/>2 = Rut
+          format: int32
+        MaxAllowedTaxReductionAmount:
+          type: number
+          description: 'Default: maximum allowed tax reduction amount'
+          format: double
+          readOnly: true
+        RotReducedInvoicingAmount:
+          type:
+          - number
+          - 'null'
+          description: Default is automatic tax reduction calculation. Used for the manual input of the deducted tax reduction
+          format: double
+        RotReducedInvoicingPercent:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+          readOnly: true
+        RotReducedInvoicingPropertyName:
+          type:
+          - string
+          - 'null'
+          description: Used for providing a custom name. Is required when RotPropertyType or UsesGreenTechnology is set
+        RotReducedInvoicingOrgNumber:
+          maxLength: 11
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        Persons:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SalesDocumentRotRutReductionPersonApi'
+          description: 'Purpose: Required for ROT, RUT or Green Technology invoices only'
+        RotReducedInvoicingAutomaticDistribution:
+          type: boolean
+          readOnly: true
+        ElectronicReference:
+          type:
+          - string
+          - 'null'
+          description: Optional reference for sending invoices electronically
+        SubscriptionNumber:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ContractNumber:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ElectronicAddress:
+          type:
+          - string
+          - 'null'
+          description: Electronic address for sending invoices electronically
+          readOnly: true
+        EdiServiceDelivererId:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        OurReference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        YourReference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        BuyersOrderReference:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Used when sending electronic invoices. Can be null or empty
+        InvoiceCustomerName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        InvoiceAddress1:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: If the value is null it will be filled with the value from the customer
+        InvoiceAddress2:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: If the value is null it will be filled with the value from the customer
+        InvoicePostalCode:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+        InvoiceCity:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+        InvoiceCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+        DeliveryCustomerName:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryAddress1:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryAddress2:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryPostalCode:
+          maxLength: 10
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryCity:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        DeliveryMethodName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        DeliveryTermName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        DeliveryMethodCode:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        DeliveryTermCode:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        CustomerIsPrivatePerson:
+          type: boolean
+          description: True if the customer of this invoice is a private individual, false otherwise
+          readOnly: true
+        TermsOfPaymentId:
+          type: string
+          description: Specify a different terms of payment for the invoice. If not filled customer's terms of payment will be used
+          format: uuid
+        CustomerEmail:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        InvoiceNumber:
+          type: integer
+          format: int32
+          readOnly: true
+        CustomerNumber:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        CustomerName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        PaymentReferenceNumber:
+          type:
+          - string
+          - 'null'
+          description: Empty if UsesPaymentReferenceNumber not activated on the company. Use /v2/companysettings
+          readOnly: true
+        RotPropertyType:
+          maximum: 2
+          minimum: 1
+          type:
+          - integer
+          - 'null'
+          description: <strong>Possible values:</strong><br/>1 = Apartment,<br/>2 = Property<br/><br/>Leave blank or set to null if you do not intend to use ROT or Green Technology functionality.
+          format: int32
+        SalesDocumentAttachments:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Attachments for the customer invoice. Use POST /v2/salesdocumentattachments/customerinvoice to upload attachments.
+          readOnly: true
+        MessageThreads:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch messages via GET /v2/messagethreads/{messageThreadId}
+          readOnly: true
+        Notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch notes via GET /v2/notes/{noteId}
+          readOnly: true
+        HasAutoInvoiceError:
+          type: boolean
+          description: True if there was an error when trying to send the invoice via AutoInvoice, false otherwise
+          readOnly: true
+        IsNotDelivered:
+          type: boolean
+          description: True if sending by email has failed, false otherwise
+          readOnly: true
+        ReverseChargeOnConstructionServices:
+          type: boolean
+          description: True if this invoice contains reverse charge on construction services. False otherwise
+          readOnly: true
+        WorkHouseOtherCosts:
+          type:
+          - number
+          - 'null'
+          format: double
+        RemainingAmount:
+          type: number
+          description: Remaining amount to be paid on the invoice expressed in base currency
+          format: double
+          readOnly: true
+        RemainingAmountInvoiceCurrency:
+          type: number
+          description: Remaining amount to be paid on the invoice expressed in invoice currency
+          format: double
+          readOnly: true
+        ReferringInvoiceId:
+          type:
+          - string
+          - 'null'
+          description: Id of the invoice that serves as source for this invoice
+          format: uuid
+          readOnly: true
+        CreatedFromOrderId:
+          type:
+          - string
+          - 'null'
+          description: Id of the order this invoice was created from, if the invoice was created by converting an order
+          format: uuid
+          readOnly: true
+        CreatedFromQuoteId:
+          type:
+          - string
+          - 'null'
+          description: Id of the quote this invoice was created from, if the invoice was created by converting a quote
+          format: uuid
+          readOnly: true
+        CreatedFromDraftId:
+          type:
+          - string
+          - 'null'
+          description: If a valid customer invoice draft Id is provided, it will be bookkeeped using the option entered in the SendType property.
+          format: uuid
+        VoucherNumber:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        VoucherId:
+          type: string
+          format: uuid
+          readOnly: true
+        CreatedUtc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        ReversedConstructionVatInvoicing:
+          type: boolean
+          readOnly: true
+        IncludesVat:
+          type: boolean
+          description: True if company settings checkbox "ShowPricesExclVatPC" is checked and customer type is "Private", otherwise false
+          readOnly: true
+        SendType:
+          type:
+          - integer
+          - 'null'
+          description: '<strong>Possible values:</strong><br/>0 = None,<br/>1 = AutoInvoiceElectronic,<br/>2 = AutoInvoicePrint,<br/>3 = AutoInvoiceB2C (not available for Swedish customers),<br/>4 = Kivra<br/><br/>Used for sending the invoice via Autoinvoice. Default: None.'
+          format: int32
+        PaymentReminderIssued:
+          type: boolean
+          description: True if a payment reminder has been sent for the overdue invoice, otherwise false. To send a payment reminder please use the v2/customerinvoices/{invoiceId}/paymentreminders endpoint
+          readOnly: true
+        PaymentRemindersCount:
+          type: integer
+          description: Number of payment reminders sent for the overdue invoice.
+          format: int32
+          readOnly: true
+        LastPaymentReminderSentDate:
+          type:
+          - string
+          - 'null'
+          description: Last payment reminder date for the overdue invoice. Null if no payment reminder has been sent.
+          format: date-time
+          readOnly: true
+        UsesGreenTechnology:
+          type: boolean
+          description: <strong>Possible values:</strong><br/>True = This order uses green technology<br/>False = Otherwise
+        IsSold:
+          type: boolean
+          description: True if the customer invoice was sold using an integration with factoring partner, false otherwise.
+          readOnly: true
+        FactoringInvoiceStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Unknown,<br/>1 = Applied (applies for soft offers),<br/>2 = Withdrawn (applies for soft offers),<br/>3 = Rejected (applies for soft offers),<br/>4 = Sold,<br/>5 = Approved (applies for soft offers),<br/>6 = FirstReminderSent,<br/>7 = DebtCollection,<br/>8 = Reclaimed,<br/>9 = FullyPaid,<br/>10 = Closed,<br/>11 = SecondReminderSent
+          format: int32
+          readOnly: true
+        PaymentDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        PaymentStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Paid,<br/>1 = Unpaid,<br/>2 = Overdue
+          format: int32
+          readOnly: true
+        CreditedBy:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CreditedByApi'
+          description: Credit customer invoices created based on the customer invoice. Only applicable when IsCreditInvoice is false
+          readOnly: true
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        IsDirectDebit:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether direct debit should be applied, based on IsDirectDebitEnabled from customer settings
+        IsQuickInvoice:
+          type: boolean
+          description: Indicates if the invoice was created from journal entries posted manually or imported from another program.
+          readOnly: true
+        IsCollectiveInvoice:
+          type: boolean
+          description: Indicates if the invoice was created from more than one order document.
+          readOnly: true
+        CollectiveCustomerInvoiceRowsRelationToOrders:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CollectiveCustomerInvoiceRelationToOrderApi'
+          description: Describes the relation between the collective invoice rows and the orders that the invoice is generated from.
+          readOnly: true
+        ReplaceUnitPriceWhenZero:
+          type: boolean
+          description: <strong>Possible values:</strong><br/>True = replaces row unit prices that are equal to zero with article's unit price<br/>False = always uses the value on the row
+        TaxDeductionStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = ApplicableForDeductionExport,<br/>2 = ExportedToTaxAuthority,<br/>3 = RejectedByTaxAuthority
+          format: int32
+          readOnly: true
+        BackgroundId:
+          type:
+          - string
+          - 'null'
+          description: Identifier for the background image or template used on the PDF printout
+          format: uuid
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CustomerInvoiceRowApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system for every row
+          format: uuid
+          readOnly: true
+        ArticleNumber:
+          type:
+          - string
+          - 'null'
+          description: Number of the article on the row
+          readOnly: true
+        ArticleId:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Null if text row'
+          format: uuid
+        IsServiceArticle:
+          type: boolean
+          description: True if the article is a service article. False otherwise
+          readOnly: true
+        AmountNoVat:
+          type: number
+          description: Amount on the row excluding VAT
+          format: double
+          readOnly: true
+        PercentVat:
+          type: number
+          format: double
+          readOnly: true
+          deprecated: true
+        VatRate:
+          type:
+          - number
+          - 'null'
+          description: When row is a text row the value is null. Default value is also null
+          format: double
+          readOnly: true
+        LineNumber:
+          type: integer
+          description: Number of the line in order on the row
+          format: int32
+          readOnly: true
+        IsTextRow:
+          type: boolean
+          description: True if this is a text row. False otherwise
+          readOnly: true
+        Text:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Default: For non text rows, default value will be the article''s name; for text rows, there should be at least one character in place'
+        UnitPrice:
+          type: number
+          description: 'Format: 2 decimals allowed if the customer and currency are domestic or 4 decimals if customer or currency is foreign'
+          format: double
+        UnitAbbreviation:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        UnitAbbreviationEnglish:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        IsDiscountInFixedAmount:
+          type: boolean
+          description: True if the discount on the row is a fixed amount, false otherwise
+          readOnly: true
+        DiscountFixedAmount:
+          type:
+          - number
+          - 'null'
+          description: 'Fixed amount discount on the row. Only applicable if IsDiscountInFixedAmount is true. Format: 2 decimals'
+          format: double
+          readOnly: true
+        DiscountPercentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: 'Percentage discount n the row. Format: 4 decimals'
+          format: double
+        Quantity:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+        IsWorkCost:
+          type: boolean
+          description: Only used for Rot/Rut
+          readOnly: true
+        IsVatFree:
+          type: boolean
+          description: True if this row is marked as VAT free. False otherwise
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        UnitId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/units/{id}'
+          format: uuid
+          readOnly: true
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Get from /v2/projects
+          format: uuid
+        WorkCostType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>RotConstructionWork = 1,<br/>RotElectricalWork = 2,<br/>RotGlassSheetMetalWork = 3,<br/>RotGroundWork = 4,<br/>RotBrickWork = 5,<br/>RotPaintDecorateWork = 6,<br/>RotPlumbWork = 7,<br/>RutCleanJobWork = 9,<br/>RutCareClothTextile = 10,<br/>RutSnowRemove = 12,<br/>RutGarden = 13,<br/>RutBabySitting = 14,<br/>RutOtherCare = 15,<br/>RutRemovalServices = 18,<br/>RutITServices = 19,<br/>RotHeatPump = 20,<br/>RotHeatPump2 = 21,<br/>RutHomeAppliances = 22,<br/>RotSolarHeatingSystem = 23,<br/>RotWoodBoiler = 24,<br/>RotFuelBoiler = 25,<br/>RutLaundry = 26,<br/>RutFurnishing = 27,<br/>RutGoodsTransport = 28,<br/>RutHomeSupervision = 29<br/><br/>Only used for Rot/Rut.
+          format: int32
+        WorkHours:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        MaterialCosts:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        GreenTechnologyType:
+          maximum: 3
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>SolarCellInstallation = 1,<br/>ElectricEnergyStorageInstallation = 2,<br/>ElectricVehicleChargingPointInstallation = 3<br/><br/>Type of green technology for the row.
+          format: int32
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        PurchasePrice:
+          type: number
+          description: Purchase price for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+        FreightCosts:
+          type: number
+          description: Freight costs for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+        Amount:
+          type: number
+          description: 'Returns a total amount of row. Format: 2 decimals'
+          format: double
+          readOnly: true
+      additionalProperties: false
+    CollectiveCustomerInvoiceRelationToOrderApi:
+      type: object
+      properties:
+        OrderId:
+          type: string
+          description: Unique Id provided by the system for order
+          format: uuid
+        OrderNumber:
+          type:
+          - integer
+          - 'null'
+          description: Order document number
+          format: int32
+        OrderReference:
+          type:
+          - string
+          - 'null'
+          description: Buyers order reference
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: Delivery date set in order document
+          format: date-time
+        RelatedInvoiceRows:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: List of invoice row numbers related to the order
+      additionalProperties: false
+    ContributionMarginApi:
+      type: object
+      properties:
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: Amount of contribution margin
+          format: double
+        Percentage:
+          type:
+          - number
+          - 'null'
+          description: Percentage of contribution margin
+          format: double
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

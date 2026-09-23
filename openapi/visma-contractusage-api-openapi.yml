@@ -1,0 +1,386 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Contract Usage API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: ContractUsage
+paths:
+  /v1/contractUsage/{contractId}:
+    get:
+      tags:
+      - ContractUsage
+      summary: Get a specific Contract Usage
+      description: 'Data for the Contract Usage
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: ContractUsage_GetSpecificBycontractId
+      parameters:
+      - name: contractId
+        in: path
+        description: Identify the Contract Usage
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractUsageDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ContractUsageDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - ContractUsage
+      summary: Update a specific Contract Usage
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed
+
+
+        In this endpoint, If-Match can be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: ContractUsage_PutBycontractId
+      parameters:
+      - name: contractId
+        in: path
+        description: Identifies the Contract Usage to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Contract Usage to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContractUsageUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ContractUsageUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ContractUsageUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ContractUsageUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContractUsageUpdateDto'
+        required: true
+        x-bodyName: contractUsage
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Customer contract version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/contractUsage:
+    get:
+      tags:
+      - ContractUsage
+      summary: Get a range of Contract Usage - ScreenId=CT303000
+      operationId: ContractUsage_GetAll
+      parameters:
+      - name: greaterThanValue
+        in: query
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: lastModifiedDateTime
+        in: query
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContractUsageDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContractUsageDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    ContractUsageLineUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        transactionNumber:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        branch:
+          $ref: '#/components/schemas/DtoValueOfString'
+        inventory:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        date:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+      description: This class represent a Contract Usage Line in Contract Usage Controller. Used to pass data to server for creating or updating an Contract Usage Line
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    itemInContractUsageLineDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Both tabs
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    ContractUsageUpdateDto:
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContractUsageLineUpdateDto'
+      description: This class represent a Contract Usage in Contract Usage Controller. Used to pass data to server for creating or updating an Contract Usage
+    ContractUsageLineDto:
+      type: object
+      properties:
+        transactionNumber:
+          type: integer
+          format: int32
+        billed:
+          type: boolean
+          description: Information indicating that the contract is collected from the Transaction history tab and the contract is invoiced. Not indicated on screen CT303000.
+        branch:
+          $ref: '#/components/schemas/branchInContractUsageLineDto'
+        item:
+          $ref: '#/components/schemas/itemInContractUsageLineDto'
+        description:
+          type: string
+          description: Both tabs &gt; Description &gt; A description of the non-stock item.
+        uom:
+          type: string
+          description: Both tabs &gt; UoM &gt; The unit of measure used for the item.
+        quantity:
+          type: number
+          description: Both tabs &gt; Quantity &gt; A number of units used for the item.
+          format: double
+        date:
+          type: string
+          description: 'Mandatory field: Both tabs &gt; Date* &gt; The date of the activity, case, applied labour, or other usage (for the item).'
+          format: date-time
+        type:
+          type: string
+          description: Transaction history tab &gt; Type &gt; The type of the customer ledger document.
+        referenceNbr:
+          type: string
+          description: Transaction history tab &gt; Ref. no. &gt; The reference number of the document/invoice.
+        billingDate:
+          type: string
+          description: Transaction history tab &gt; Invoicing date &gt; The date when the invoice was issued.
+          format: date-time
+        lastModifiedDateTime:
+          type: string
+          description: A system generated date/time that indicates the last change for the document.
+          format: date-time
+    branchInContractUsageLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Both tabs &gt; Branch &gt;
+    ContractUsageDto:
+      type: object
+      properties:
+        contract:
+          type: string
+        transaction:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContractUsageLineDto'
+          description: Transactions not yet invoiced tab or Transaction history tab
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

@@ -1,0 +1,1170 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Project Transaction API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: ProjectTransaction
+paths:
+  /v1/projecttransaction/{refNbr}:
+    get:
+      tags:
+      - ProjectTransaction
+      summary: Get a specific Project transaction document
+      description: 'Data for project transaction
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: ProjectTransaction_GetByrefNbr
+      parameters:
+      - name: refNbr
+        in: path
+        description: Identifies the project transaction document
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectTransactionDocumentDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProjectTransactionDocumentDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - ProjectTransaction
+      summary: Update a specific Project transaction document
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed.
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed.
+
+
+        The response headers include an ETag after a successful PUT operation.'
+      operationId: ProjectTransaction_PutByrefNbr
+      parameters:
+      - name: refNbr
+        in: path
+        description: Identifies the Project transaction document to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Project transaction document to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+        required: true
+        x-bodyName: projectTransactionDocumentUpdateDto
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Project transaction document version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/projecttransaction:
+    get:
+      tags:
+      - ProjectTransaction
+      summary: Get a range of Project transaction documents - ScreenId=PM304000
+      description: Data for Project transactions
+      operationId: ProjectTransaction_GetAll
+      parameters:
+      - name: module
+        in: query
+        description: Select to filter on module; e.g. AR, AP, IN etc.
+        schema:
+          enum:
+          - ModuleGL
+          - ModuleAP
+          - ModuleAR
+          - ModuleCA
+          - ModuleCM
+          - ModuleIN
+          - ModuleSO
+          - ModulePO
+          - ModuleDR
+          - ModuleFA
+          - ModuleEP
+          - ModulePM
+          - ModuleTX
+          - ModuleCR
+          type: string
+      - name: status
+        in: query
+        description: The status of the document.
+        schema:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          type: string
+      - name: project
+        in: query
+        description: Filter on project ID.
+        schema:
+          type: string
+      - name: projectTask
+        in: query
+        description: Filter on Task ID.
+        schema:
+          type: string
+      - name: billable
+        in: query
+        description: Filter invoiceable project tasks.
+        schema:
+          type: boolean
+      - name: branch
+        in: query
+        description: Filter on branch for the project transation.
+        schema:
+          type: string
+      - name: date
+        in: query
+        description: Filter on the registration date for the project transaction.
+        schema:
+          type: string
+          format: date-time
+      - name: fromPeriod
+        in: query
+        description: Mandatory. Start date for the task.
+        schema:
+          type: string
+      - name: toPeriod
+        in: query
+        description: Mandatory. End date for the task.
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: expandNote
+        in: query
+        description: Expands project transaction notes
+        schema:
+          type: boolean
+      - name: greaterThanValue
+        in: query
+        description: Greater than value. The item which is the object for this, varies from API to API.
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the creation date and time. Use it to retrieve all records that have been created since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectTransactionDocumentDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectTransactionDocumentDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - ProjectTransaction
+      summary: Create a project transaction document and lines
+      description: 'Response Message has StatusCode Created if POST operation succeed
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        The response headers include an ETag after a successful POST operation.'
+      operationId: ProjectTransaction_Post
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Define the data for the project transaction to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectTransactionDocumentUpdateDto'
+        required: true
+        x-bodyName: projectTransactionDocumentUpdateDto
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    projectTaskInProjectTransactionLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The project task associated with the transaction.
+    locationInProjectTransactionLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Location &gt; The location of the customer or supplier.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    debitAccountInProjectTransactionLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Debit account &gt; For released transactions, the account the transaction debited when it was released; for unreleased transactions, the account the transaction debits if it is released (mainly for the transactions that originate in the Projects module).
+    contactInEmployeeDto:
+      properties:
+        employeeContact:
+          type: string
+          description: Employee contact &gt; The link to the contact record associated with the employee.
+        title:
+          enum:
+          - Doctor
+          - Miss
+          - Mr
+          - Mrs
+          - Ms
+          - Prof
+          type: string
+          description: Title &gt; The courtesy title to be used for the employee.
+        firstName:
+          type: string
+          description: First name &gt; The first name of the employee.
+        midName:
+          type: string
+          description: Middle name &gt; The middle name of the employee.
+        lastName:
+          type: string
+          description: 'Mandatory field: Last name* &gt; The last name of the employee.'
+        phone3:
+          type: string
+          description: Phone 3 &gt; An additional phone number of the employee.
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: General information tab &gt; Contact section &gt;
+    DtoValueOfNullableOfProjectTransactionStatus:
+      type: object
+      properties:
+        value:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          type: string
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    employeeInProjectTransactionLineDto:
+      properties:
+        employeeUserId:
+          type: string
+          description: Employee internal user ID. This is the ID of the user linked to the employee
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        employeeId:
+          type: integer
+          description: 'Mandatory field: The top part &gt; Employee ID* &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEE segmented key.'
+          format: int32
+        employeeNumber:
+          type: string
+          description: General information tab &gt; Employee settings section &gt; Employee ref. no. &gt; A reference number for the employee.
+        employeeName:
+          type: string
+          description: The top part &gt; Employee name &gt; The name of this employee.
+        status:
+          enum:
+          - Active
+          - OnHold
+          - HoldPayments
+          - Inactive
+          - OneTime
+          type: string
+          description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
+        department:
+          type: string
+          description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
+        contact:
+          $ref: '#/components/schemas/contactInEmployeeDto'
+        address:
+          $ref: '#/components/schemas/addressInEmployeeDto'
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        employeeClass:
+          $ref: '#/components/schemas/employeeClassInEmployeeDto'
+        branch:
+          $ref: '#/components/schemas/BranchNumberDto'
+        calendarID:
+          type: string
+        employeeLogin:
+          type: string
+        workGroupDescription:
+          type: array
+          items:
+            type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Employee &gt; The employee associated with the transaction, such as the employee who worked on the project for the customer.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfInt64:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int64
+    ProjectTransactionDocumentUpdateDto:
+      type: object
+      properties:
+        refNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        status:
+          $ref: '#/components/schemas/DtoValueOfNullableOfProjectTransactionStatus'
+        module:
+          $ref: '#/components/schemas/DtoValueOfNullableOfJournalTransactionModule'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectTransactionLineUpdateDto'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+    countryInAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    debitSubaccountInProjectTransactionLineDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Debit subaccount &gt; For released transactions, the subaccount the transaction debited when it was released; for unreleased transactions, the subaccount the transaction debits if it is released.
+    projectInProjectTransactionLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project &gt; The project associated with the transaction.
+    addressInEmployeeDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: General information tab &gt; Address info section &gt;
+    ProjectTransactionLineDto:
+      type: object
+      properties:
+        tranId:
+          type: integer
+          format: int64
+        date:
+          type: string
+          description: Date &gt; The date the transaction was created.
+          format: date-time
+        inventoryId:
+          $ref: '#/components/schemas/inventoryIdInProjectTransactionLineDto'
+        description:
+          type: string
+          description: Description &gt; The description of the transaction.
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure used to estimate the quantity for the transaction, such as HOUR or BOX.
+        quantity:
+          type: number
+          description: "Quantity &gt; \tThe quantity for the transaction, such as the number of service hours provided to the customer."
+          format: double
+        unitRate:
+          type: number
+          description: Unit rate &gt; The price of the item or the rate of the service.
+          format: double
+        amount:
+          type: number
+          description: Amount &gt; The amount of the transaction.
+          format: double
+        billable:
+          type: boolean
+          description: Invoiceable &gt; A check box indicating whether the transaction is used in calculating the amount charged to the customer for the project task.
+        released:
+          type: boolean
+          description: Released &gt; A check box indicating whether the transaction has been released.
+        allocated:
+          type: boolean
+          description: Allocated &gt; A check box that indicates whether the amounts of the transactions were allocated for the project.
+        billableQuantity:
+          type: number
+          description: Qty. that can be invoiced &gt; The total invoiceable quantity for the transactions listed in the table.
+          format: double
+        financialPeriod:
+          type: string
+          description: Period &gt; The financial period associated with the transaction.
+        batchNbr:
+          type: string
+          description: Batch no. &gt; The batch number of the transaction in the General ledger workspace.
+        useBillableQty:
+          type: boolean
+          description: Use the quantity that can be invoiced in the amount formula &gt; A check box that you select if you want the system to use the invoiceable quantity (the Invoiceable quantity column) instead of the overall quantity (the Quantity column) of the transaction when calculating the amount of transaction.
+        startDate:
+          type: string
+          description: Start date &gt; The start date for this transaction.
+          format: date-time
+        endDate:
+          type: string
+          description: End date &gt; The end date for this transaction
+          format: date-time
+        lastModifiedDateTime:
+          type: string
+          description: System generated information
+          format: date-time
+        earningType:
+          $ref: '#/components/schemas/earningTypeInProjectTransactionLineDto'
+        overtimeMultiplier:
+          type: number
+          description: Multiplier &gt; The multiplier by which the unit rate is multiplied when the labour cost is calculated.
+          format: double
+        project:
+          $ref: '#/components/schemas/projectInProjectTransactionLineDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInProjectTransactionLineDto'
+        debitAccount:
+          $ref: '#/components/schemas/debitAccountInProjectTransactionLineDto'
+        debitSubaccount:
+          $ref: '#/components/schemas/debitSubaccountInProjectTransactionLineDto'
+        creditAccount:
+          $ref: '#/components/schemas/creditAccountInProjectTransactionLineDto'
+        creditSubaccount:
+          $ref: '#/components/schemas/creditSubaccountInProjectTransactionLineDto'
+        branch:
+          $ref: '#/components/schemas/branchInProjectTransactionLineDto'
+        employee:
+          $ref: '#/components/schemas/employeeInProjectTransactionLineDto'
+        customerVendor:
+          $ref: '#/components/schemas/customerVendorInProjectTransactionLineDto'
+        accountGroup:
+          $ref: '#/components/schemas/accountGroupInProjectTransactionLineDto'
+        debitAccountGroup:
+          $ref: '#/components/schemas/debitAccountGroupInProjectTransactionLineDto'
+        creditAccountGroup:
+          $ref: '#/components/schemas/creditAccountGroupInProjectTransactionLineDto'
+        location:
+          $ref: '#/components/schemas/locationInProjectTransactionLineDto'
+        note:
+          type: string
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfNullableOfJournalTransactionModule:
+      type: object
+      properties:
+        value:
+          enum:
+          - ModuleGL
+          - ModuleAP
+          - ModuleAR
+          - ModuleCA
+          - ModuleCM
+          - ModuleIN
+          - ModuleSO
+          - ModulePO
+          - ModuleDR
+          - ModuleFA
+          - ModuleEP
+          - ModulePM
+          - ModuleTX
+          - ModuleCR
+          type: string
+    debitAccountGroupInProjectTransactionLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Debit Account group &gt; The account group of the debit side account of the transaction. This field has been deprecated and will be removed in future versions. Use DebitAccountGroup.
+    creditAccountGroupInProjectTransactionLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Debit Account group &gt; The account group of the credit side account of the transaction.
+    branchInProjectTransactionLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Branch &gt; The branch in which the transaction was created.
+    earningTypeInProjectTransactionLineDto:
+      properties:
+        code:
+          type: string
+          description: 'Mandatory field: Code* &gt; The unique ID of the type of hour.'
+        description:
+          type: string
+          description: 'Mandatory field: Description &gt; The brief description of the type of hour.'
+        isOvertime:
+          type: boolean
+          description: Overtime &gt; A check box that indicates (if selected) that the type of hour is treated as overtime.
+        isBillable:
+          type: boolean
+          description: Invoicable &gt; A check box that indicates (if selected) that the type is treated as invoiceable by default.
+        isActive:
+          type: boolean
+          description: Active &gt; A check box that indicates (if selected) that the type of hour is active and can be used.
+        overtimeMultiplier:
+          type: number
+          description: Multiplier &gt; The value by which the employee cost for this type of hour is multiplied when the time activity is released.
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+      description: Earning type &gt; The earning type specified for the transaction to calculate the labour cost.
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    customerVendorInProjectTransactionLineDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: Customer/supplier &gt; The name of the supplier (if the transaction originated in the Supplier ledger workspace) or customer (if the transaction originated in another workspace).
+    creditAccountInProjectTransactionLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Credit account &gt; For released transactions, the account the transaction credited when it was released; for unreleased transactions, the account the transaction credits if it is released.
+    accountGroupInProjectTransactionLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Account group &gt; The account group of the debit side account of the transaction.
+    ProjectTransactionLineUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        tranId:
+          $ref: '#/components/schemas/DtoValueOfInt64'
+        date:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        inventoryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        billableQuantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        unitRate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        billable:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        financialPeriod:
+          $ref: '#/components/schemas/DtoValueOfString'
+        batchNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        useBillableQty:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        project:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectTask:
+          $ref: '#/components/schemas/DtoValueOfString'
+        debitAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        debitSubaccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        creditAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        creditSubaccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branch:
+          $ref: '#/components/schemas/DtoValueOfString'
+        employee:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerVendor:
+          $ref: '#/components/schemas/DtoValueOfString'
+        accountGroup:
+          $ref: '#/components/schemas/DtoValueOfString'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+    creditSubaccountInProjectTransactionLineDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: "Credit subaccount &gt; \tFor released transactions, the subaccount the transaction credited when it was released; for unreleased transactions, the subaccount the transaction credits if it is released."
+    ProjectTransactionDocumentDto:
+      type: object
+      properties:
+        refNbr:
+          type: string
+          description: The top part &gt; Ref. no. &gt; The reference number of the transaction.
+        description:
+          type: string
+          description: The top part &gt; Description &gt; The description provided for the transaction.
+        origDocNbr:
+          type: string
+          description: The top part &gt; Orig. doc. no. &gt; The reference number of the underlying document for the transaction.
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          type: string
+          description: 'The top part &gt; Status &gt; The status of the transaction. The following statuses are possible: Balanced, Released.'
+        module:
+          enum:
+          - ModuleGL
+          - ModuleAP
+          - ModuleAR
+          - ModuleCA
+          - ModuleCM
+          - ModuleIN
+          - ModuleSO
+          - ModulePO
+          - ModuleDR
+          - ModuleFA
+          - ModuleEP
+          - ModulePM
+          - ModuleTX
+          - ModuleCR
+          type: string
+          description: The top part &gt; Module &gt; The module you create the transactions in.
+        origDocType:
+          enum:
+          - Allocation
+          - Timecard
+          - Case
+          - ExpenseClaim
+          - EquipmentTimecard
+          - AllocationReversal
+          - Reversal
+          - CreditMemo
+          - UnbilledRemainder
+          - ProformaBilling
+          type: string
+          description: 'The top part &gt; Orig. doc. no. &gt; The type of the document the transaction is based on. It has one of the following values: Allocation, Time card, Case, Expense claim, Allocation reversal, Reversal, Credit note.'
+        note:
+          type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectTransactionLineDto'
+          description: The table &gt;
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    inventoryIdInProjectTransactionLineDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Item ID &gt; The identifier of the stock or non-stock item associated with the transaction.
+    employeeClassInEmployeeDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Additional information about Employee User
+
+        ///'
+    countyInAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

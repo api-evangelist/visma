@@ -1,0 +1,773 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Warehouse API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Warehouse
+paths:
+  /v1/warehouse/{warehouseID}:
+    get:
+      tags:
+      - Warehouse
+      summary: Get a specific Warehouse
+      operationId: Warehouse_GetBywarehouseID
+      parameters:
+      - name: warehouseID
+        in: path
+        description: Identifies the Warehouse
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WarehouseDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/WarehouseDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/warehouse:
+    get:
+      tags:
+      - Warehouse
+      summary: Get a range of Warehouses - ScreenId=IN204000
+      operationId: Warehouse_GetAll
+      parameters:
+      - name: active
+        in: query
+        description: Selects only the warehouses that are active/inactive.
+        schema:
+          type: boolean
+      - name: branch
+        in: query
+        description: Selects only the warehouses for the specified branch.
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WarehouseDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WarehouseDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/warehouse/{warehouseID}/location:
+    post:
+      tags:
+      - Warehouse
+      summary: Post new location - ScreenId=IN204000
+      operationId: Warehouse_PostBywarehouseID
+      parameters:
+      - name: warehouseID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+        required: true
+        x-bodyName: locationDto
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/warehouse/{warehouseID}/location/{locationID}:
+    put:
+      tags:
+      - Warehouse
+      summary: Update location - ScreenId=IN204000
+      operationId: Warehouse_PutBywarehouseIDlocationID
+      parameters:
+      - name: warehouseID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: locationID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WarehouseLocationUpdateDto'
+        required: true
+        x-bodyName: locationDto
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    countyInWarehouseAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county where the warehouse is located.
+    receiptLocationInWarehouseDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Location table tab &gt; Receiving location &gt; The warehouse location to be used to receive goods.
+    replenishmentClassInWarehouseDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Replenishment class &gt; The replenishment class associated with this warehouse.
+    projectTaskInWarehouseLocationDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The project task to associate with this location by default.
+    primaryItemInWarehouseLocationDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Primary item &gt; The primary item for this location, which is the item that is received the most often or stored here in the highest volumes.
+    returnLocationInWarehouseDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Location table tab &gt; RMA location &gt; The RMA warehouse location.
+    WarehouseDto:
+      type: object
+      properties:
+        warehouseID:
+          type: string
+          description: 'Mandatory field: The top part &gt; Warehouse ID* &gt; The unique ID of the warehouse.'
+        branch:
+          $ref: '#/components/schemas/branchInWarehouseDto'
+        replenishmentClass:
+          $ref: '#/components/schemas/replenishmentClassInWarehouseDto'
+        active:
+          type: boolean
+          description: The top part &gt; Active &gt; This check box indicates (if selected) that the warehouse is active.
+        lockSitePICountEntry:
+          type: boolean
+          description: The top part &gt; Freeze the inventory when the stocktaking is in data entry state &gt; This check box indicates (if selected) that the inventory in the warehouse will be frozen during the stocktaking and data entry stages of stocktaking.
+        description:
+          type: string
+          description: The top part &gt; Description &gt; A brief description of the warehouse.
+        locationEntry:
+          enum:
+          - Validate
+          - Warn
+          - NoValidate
+          type: string
+          description: The top part &gt; Location entry &gt; An option indicating whether warehouse locations can be added directly on any inventory document or only by using this window.
+        avgDefaultCost:
+          enum:
+          - AverageCost
+          - LastCost
+          type: string
+          description: The top part &gt; Avg. default return cost &gt; For items with the Average valuation method, the option that defines which of costs should be used for returns and receipts.
+        fifoDefaultCost:
+          enum:
+          - AverageCost
+          - LastCost
+          type: string
+          description: The top part &gt; FIFO default returns cost &gt; For items with the FIFO valuation method, the option that defines which of costs should be used for returns and receipts.
+        receiptLocation:
+          $ref: '#/components/schemas/receiptLocationInWarehouseDto'
+        shipLocation:
+          $ref: '#/components/schemas/shipLocationInWarehouseDto'
+        returnLocation:
+          $ref: '#/components/schemas/returnLocationInWarehouseDto'
+        dropShipLocation:
+          $ref: '#/components/schemas/dropShipLocationInWarehouseDto'
+        contact:
+          $ref: '#/components/schemas/contactInWarehouseDto'
+        address:
+          $ref: '#/components/schemas/addressInWarehouseDto'
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/WarehouseLocationDto'
+          description: Location table tab &gt; The location table &gt;
+        timestamp:
+          type: string
+          description: Timestamp of the warehouse record
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a Warehouse in WarehouseController. Used for getting data.
+    branchInWarehouseDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: The top part &gt; Branch* &gt; The branch associated with the company.'
+    assemblyValidInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Assembly allowed &gt; You select this check box if assembly operations are allowed at this location.
+    WarehouseLocationUpdateDto:
+      type: object
+      properties:
+        locationId:
+          $ref: '#/components/schemas/locationIdInWarehouseLocationUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInWarehouseLocationUpdateDto'
+        active:
+          $ref: '#/components/schemas/activeInWarehouseLocationUpdateDto'
+        inclQtyAvail:
+          $ref: '#/components/schemas/inclQtyAvailInWarehouseLocationUpdateDto'
+        isCosted:
+          $ref: '#/components/schemas/isCostedInWarehouseLocationUpdateDto'
+        salesValid:
+          $ref: '#/components/schemas/salesValidInWarehouseLocationUpdateDto'
+        receiptsValid:
+          $ref: '#/components/schemas/receiptsValidInWarehouseLocationUpdateDto'
+        transfersValid:
+          $ref: '#/components/schemas/transfersValidInWarehouseLocationUpdateDto'
+        assemblyValid:
+          $ref: '#/components/schemas/assemblyValidInWarehouseLocationUpdateDto'
+        pickPriority:
+          $ref: '#/components/schemas/pickPriorityInWarehouseLocationUpdateDto'
+        primaryItemValid:
+          $ref: '#/components/schemas/primaryItemValidInWarehouseLocationUpdateDto'
+        primaryItemId:
+          $ref: '#/components/schemas/primaryItemIdInWarehouseLocationUpdateDto'
+        primaryItemClassId:
+          $ref: '#/components/schemas/primaryItemClassIdInWarehouseLocationUpdateDto'
+        projectId:
+          $ref: '#/components/schemas/projectIdInWarehouseLocationUpdateDto'
+        projectTaskId:
+          $ref: '#/components/schemas/projectTaskIdInWarehouseLocationUpdateDto'
+    ClassAttributeDetailDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    activeInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Active &gt; This check box indicates whether this location is active.
+    receiptsValidInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Receipts allowed &gt; You select this check box if receipts are allowed at this location.
+    pickPriorityInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: Pick priority &gt; The order of which location should have priority.
+    WarehouseLocationDto:
+      type: object
+      properties:
+        locationId:
+          type: string
+          description: Location ID &gt; The unique ID of the warehouse location.
+        description:
+          type: string
+          description: Description &gt; A brief description of the warehouse location.
+        active:
+          type: boolean
+          description: Active &gt; This check box indicates whether this location is active.
+        inclQtyAvail:
+          type: boolean
+          description: Include in qty. available &gt; You select this check box if the quantities of goods available at this location will be included in the quantities of available goods and used in inventory transactions, such as issues and transfers.
+        isCosted:
+          type: boolean
+          description: Cost separately &gt; You select this check box if the costs for goods available at this location will be calculated separately from costs calculated at the system-level; that is, for FIFO and specific valuation methods, separate cost layers will be created for this location.
+        salesValid:
+          type: boolean
+          description: Sales allowed &gt; You select this check box if sales are allowed from this location.
+        receiptsValid:
+          type: boolean
+          description: Receipts allowed &gt; You select this check box if receipts are allowed at this location.
+        transfersValid:
+          type: boolean
+          description: Transfers allowed &gt; You select this check box if transfers are allowed for this location.
+        assemblyValid:
+          type: boolean
+          description: Assembly allowed &gt; You select this check box if assembly operations are allowed at this location.
+        primaryItemValid:
+          enum:
+          - PrimaryNothing
+          - PrimaryItemWarning
+          - PrimaryItemError
+          - PrimaryItemClassWarning
+          - PrimaryItemClassError
+          type: string
+          description: Primary item validation &gt; An option indicating whether the operations with the primary item should be validated for this location and how.
+        primaryItem:
+          $ref: '#/components/schemas/primaryItemInWarehouseLocationDto'
+        primaryItemClass:
+          $ref: '#/components/schemas/primaryItemClassInWarehouseLocationDto'
+        project:
+          $ref: '#/components/schemas/projectInWarehouseLocationDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInWarehouseLocationDto'
+    inclQtyAvailInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Include in qty. available &gt; You select this check box if the quantities of goods available at this location will be included in the quantities of available goods and used in inventory transactions, such as issues and transfers.
+    contactInWarehouseDto:
+      properties:
+        contactId:
+          type: integer
+          description: Information retrieved from the system.
+          format: int32
+        companyName:
+          type: string
+          description: Company name &gt; The legal business name of the warehouse to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The department or person to be noted on the attention line, if this line is used by your company.
+        email:
+          type: string
+          description: Email &gt; The email address of the contact person assigned to this warehouse.
+        web:
+          type: string
+          description: Web &gt; The URL of the web page where information about the warehouse is published.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The primary phone number of the contact person assigned to this warehouse.
+        phone2:
+          type: string
+          description: "Phone 2 &gt; \tA secondary phone number of the contact person assigned to this warehouse."
+        fax:
+          type: string
+          description: Fax &gt; The fax number of the contact person assigned to this warehouse.
+      description: Address information tab &gt; Contact section &gt;
+    primaryItemClassIdInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Primary item class &gt; The primary item class for this location; items of this class are received the most often or stored here in the highest volumes.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    primaryItemIdInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Primary item &gt; The primary item for this location, which is the item that is received the most often or stored here in the highest volumes.
+    projectTaskIdInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Project task &gt; The project task to associate with this location by default.
+    countryInWarehouseAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country where the warehouse is located.
+    locationIdInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Location ID &gt; The unique ID of the warehouse location.
+    isCostedInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Cost separately &gt; You select this check box if the costs for goods available at this location will be calculated separately from costs calculated at the system-level; that is, for FIFO and specific valuation methods, separate cost layers will be created for this location.
+    projectInWarehouseLocationDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project &gt; The project to associate with this location by default.
+    shipLocationInWarehouseDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Location table tab &gt; Shipping location &gt; The warehouse location to be used to ship goods.
+    primaryItemClassInWarehouseLocationDto:
+      properties:
+        type:
+          enum:
+          - NonStockItem
+          - LaborItem
+          - ServiceItem
+          - ChargeItem
+          - ExpenseItem
+          - FinishedGoodItem
+          - ComponentPartItem
+          - SubassemblyItem
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDto'
+        id:
+          type: string
+          description: The identifier.
+        description:
+          type: string
+          description: The description.
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Primary item class &gt; The primary item class for this location; items of this class are received the most often or stored here in the highest volumes.
+    dropShipLocationInWarehouseDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Location table tab &gt; Drop-ship location &gt; The warehouse location used to account for drop shipments.
+    salesValidInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Sales allowed &gt; You select this check box if sales are allowed from this location.
+    addressInWarehouseDto:
+      properties:
+        addressId:
+          type: integer
+          description: Information retrieved from the system.
+          format: int32
+        addressType:
+          type: string
+          description: Information retrieved from the system.
+        validated:
+          type: boolean
+          description: Information retrieved from the system.
+        addressLine1:
+          type: string
+          description: Address ! &gt; The first line in the address of the warehouse.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line in the warehouse address.
+        city:
+          type: string
+          description: City &gt; The city of the warehouse address.
+        country:
+          $ref: '#/components/schemas/countryInWarehouseAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInWarehouseAddressDto'
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode relevant for the warehouse address.
+      description: Address information tab &gt; Address section &gt;
+    ClassAttributeDto:
+      type: object
+      properties:
+        attributeId:
+          type: string
+          description: The Attributes tab &gt; Attribute ID &gt; The identifier of the attribute.
+        description:
+          type: string
+          description: The Attributes tab &gt; Description &gt; A read-only column that displays the detailed description of the attribute.
+        sortOrder:
+          type: integer
+          description: The Attributes tab &gt; Sort order &gt; A number that represents the order of the attribute in the list of class attributes.The lower the number, the higher the attribute will be in the list of class attributes.
+          format: int32
+        required:
+          type: boolean
+          description: The Attributes tab &gt; Required &gt; This check box indicates (if selected) that the attribute value is required for items of the class.
+        attributeType:
+          enum:
+          - Text
+          - Combo
+          - MultiSelectCombo
+          - Lookup
+          - Checkbox
+          - Datetime
+          type: string
+        defaultValue:
+          type: string
+          description: The Attributes tab &gt; Default value &gt; The default value of the attribute.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDetailDto'
+    projectIdInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Project &gt; The project to associate with this location by default.
+    descriptionInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Description &gt; A brief description of the warehouse location.
+    transfersValidInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Transfers allowed &gt; You select this check box if transfers are allowed for this location.
+    primaryItemValidInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          enum:
+          - PrimaryNothing
+          - PrimaryItemWarning
+          - PrimaryItemError
+          - PrimaryItemClassWarning
+          - PrimaryItemClassError
+          type: string
+      description: Primary item validation &gt; An option indicating whether the operations with the primary item should be validated for this location and how.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

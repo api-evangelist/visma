@@ -1,0 +1,1257 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Time Card API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Time Card
+paths:
+  /v1/timeCard/{referenceNumber}:
+    get:
+      tags:
+      - Time Card
+      summary: Get a specific employee time card
+      description: 'Data for a single employee time card
+
+
+        The response headers include an ETag after a successful GET operation.'
+      operationId: TimeCard_GetEmployeeTimeCardByreferenceNumber
+      parameters:
+      - name: referenceNumber
+        in: path
+        description: Identifies the time card
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeCardDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TimeCardDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - Time Card
+      summary: Updates a specific time card
+      description: 'Response Message has StatusCode NoContent if PUT operation succeed.
+
+
+        Response Message has StatusCode BadRequest if PUT operation failed.
+
+
+        The response headers include an ETag after a successful PUT operation.'
+      operationId: TimeCard_UpdateTimeCardByreferenceNumber
+      parameters:
+      - name: referenceNumber
+        in: path
+        description: Identifies the time card to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the update is successful, the server responds with 204 No Content and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      requestBody:
+        description: The data to update the time card with
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeCardUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TimeCardUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimeCardUpdateDto'
+        required: true
+        x-bodyName: timeCardUpdateDto
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '412':
+          description: Timecard version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/timeCard:
+    get:
+      tags:
+      - Time Card
+      summary: Get all employee time cards, a filter needs to be specified - ScreenId=EP305000
+      operationId: TimeCard_GetAllEmployeeTimeCards
+      parameters:
+      - name: status
+        in: query
+        description: The status of the document.
+        schema:
+          enum:
+          - Hold
+          - Open
+          - Approved
+          - Rejected
+          - Released
+          type: string
+      - name: week
+        in: query
+        description: Identifies the week number of the time card
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Identifies the type of the time card (Normal, Corrected, NormalCorrected)
+        schema:
+          enum:
+          - Normal
+          - Correction
+          - NormalCorrected
+          type: string
+      - name: greaterThanValue
+        in: query
+        description: Greater-than value. The item which is the object for this, varies from API to API.
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        description: This field has been deprecated and will be removed in future versions. The OrderBy parameter has no effect on the result.
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: employeeCd
+        in: query
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeCardDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeCardDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - Time Card
+      summary: Creates a time card
+      description: 'Response Message has StatusCode Created if POST operation succeed.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        The response headers include an ETag after a successful POST operation.'
+      operationId: TimeCard_CreateTimeCard
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the time card to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeCardUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TimeCardUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimeCardUpdateDto'
+        required: true
+        x-bodyName: timeCardUpdateDto
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/timeCard/{timeCardCd}/action/submit:
+    post:
+      tags:
+      - Time Card
+      summary: Submit time card operation
+      description: 'The action result dto contains information about the result of running the action.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        In this endpoint, If-Match can also be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: TimeCard_SubmitTimeCardBytimeCardCd
+      parameters:
+      - name: timeCardCd
+        in: path
+        description: Reference number of the time card to be submitted
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitTimeCardActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SubmitTimeCardActionResultDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SubmitTimeCardActionResultDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SubmitTimeCardActionResultDto'
+        '412':
+          description: Timecard version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+            application/xml: {}
+            text/xml: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/timeCard/{timeCardCd}/action/approval:
+    post:
+      tags:
+      - Time Card
+      summary: Send time card to approval
+      description: 'The action result dto contains information about the result of running the action.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        In this endpoint, If-Match can also be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: TimeCard_SendTimeCardToApprovalBytimeCardCd
+      parameters:
+      - name: timeCardCd
+        in: path
+        description: Reference number of the time card to be sent to approval
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendTimeCardToApprovalActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SendTimeCardToApprovalActionResultDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SendTimeCardToApprovalActionResultDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SendTimeCardToApprovalActionResultDto'
+        '412':
+          description: Timecard version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+            application/xml: {}
+            text/xml: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/timeCard/{timeCardCd}/action/hold:
+    post:
+      tags:
+      - Time Card
+      summary: Put timecard on hold
+      description: 'The action result dto contains information about the result of running the action.
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed.
+
+
+        In this endpoint, If-Match can also be checked against resource current version when calling with ''erp-api-background'' HTTP header.'
+      operationId: TimeCard_PutTimeCardOnHoldBytimeCardCd
+      parameters:
+      - name: timeCardCd
+        in: path
+        description: Reference number of the time card to be put on hold
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      - name: If-Match
+        in: header
+        description: 'The If-Match HTTP header allows clients to update a resource only if its current version matches a specific ETag. This mechanism helps prevent conflicts when multiple clients attempt to modify the same resource simultaneously.
+
+          The If-Match header should be included in the request headers using the following syntax: If-Match: "etag_value"
+
+          * If the POST operation is successful, the server responds with 200 OK and includes the new ETag value in the response headers.
+
+          * If the ETag on the server does not match the value provided in the If-Match header, the server responds with 412 Precondition Failed.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutTimeCardOnHoldActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PutTimeCardOnHoldActionResultDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PutTimeCardOnHoldActionResultDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PutTimeCardOnHoldActionResultDto'
+        '412':
+          description: Timecard version version does not match with If-Match header
+          content:
+            application/json: {}
+            text/json: {}
+            application/xml: {}
+            text/xml: {}
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    monInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Monday, including overtime.
+    TimeCardUpdateDto:
+      type: object
+      properties:
+        refNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        employee:
+          $ref: '#/components/schemas/DtoValueOfString'
+        summary:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeCardSummaryUpdateDto'
+          description: Time Card summary information
+        materials:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeCardMaterialsUpdateDto'
+          description: Time Card Materials information
+    earningTypeInTimeCardSummaryDto:
+      properties:
+        code:
+          type: string
+          description: 'Mandatory field: Code* &gt; The unique ID of the type of hour.'
+        description:
+          type: string
+          description: 'Mandatory field: Description &gt; The brief description of the type of hour.'
+        isOvertime:
+          type: boolean
+          description: Overtime &gt; A check box that indicates (if selected) that the type of hour is treated as overtime.
+        isBillable:
+          type: boolean
+          description: Invoicable &gt; A check box that indicates (if selected) that the type is treated as invoiceable by default.
+        isActive:
+          type: boolean
+          description: Active &gt; A check box that indicates (if selected) that the type of hour is active and can be used.
+        overtimeMultiplier:
+          type: number
+          description: Multiplier &gt; The value by which the employee cost for this type of hour is multiplied when the time activity is released.
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+      description: Earning type &gt; The type of the work time spent by the employee
+    descriptionInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The description of the reported quantity.
+    descriptionInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The description of the reported work hours.
+    wedInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Wednesday.
+    thuInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Thursday, including overtime.
+    tueInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Tuesday.
+    projectTaskInTimeCardSummaryDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The project task that the employee worked on.
+    friInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Friday.
+    wedInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Wednesday, including overtime.
+    projectInTimeCardSummaryDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
+    TimeCardMaterialsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        itemId:
+          $ref: '#/components/schemas/itemIdInTimeCardMaterialsUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInTimeCardMaterialsUpdateDto'
+        uoM:
+          $ref: '#/components/schemas/uoMInTimeCardMaterialsUpdateDto'
+        project:
+          $ref: '#/components/schemas/projectInTimeCardMaterialsUpdateDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInTimeCardMaterialsUpdateDto'
+        mon:
+          $ref: '#/components/schemas/monInTimeCardMaterialsUpdateDto'
+        tue:
+          $ref: '#/components/schemas/tueInTimeCardMaterialsUpdateDto'
+        wed:
+          $ref: '#/components/schemas/wedInTimeCardMaterialsUpdateDto'
+        thu:
+          $ref: '#/components/schemas/thuInTimeCardMaterialsUpdateDto'
+        fri:
+          $ref: '#/components/schemas/friInTimeCardMaterialsUpdateDto'
+        sat:
+          $ref: '#/components/schemas/satInTimeCardMaterialsUpdateDto'
+        sun:
+          $ref: '#/components/schemas/sunInTimeCardMaterialsUpdateDto'
+    TimeCardSummaryUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        earningType:
+          $ref: '#/components/schemas/earningTypeInTimeCardSummaryUpdateDto'
+        project:
+          $ref: '#/components/schemas/projectInTimeCardSummaryUpdateDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInTimeCardSummaryUpdateDto'
+        mon:
+          $ref: '#/components/schemas/monInTimeCardSummaryUpdateDto'
+        tue:
+          $ref: '#/components/schemas/tueInTimeCardSummaryUpdateDto'
+        wed:
+          $ref: '#/components/schemas/wedInTimeCardSummaryUpdateDto'
+        thu:
+          $ref: '#/components/schemas/thuInTimeCardSummaryUpdateDto'
+        fri:
+          $ref: '#/components/schemas/friInTimeCardSummaryUpdateDto'
+        sat:
+          $ref: '#/components/schemas/satInTimeCardSummaryUpdateDto'
+        sun:
+          $ref: '#/components/schemas/sunInTimeCardSummaryUpdateDto'
+        invoiceable:
+          $ref: '#/components/schemas/invoiceableInTimeCardSummaryUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInTimeCardSummaryUpdateDto'
+    projectInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The project that the employee worked on.
+    employeeInTimeCardDto:
+      properties:
+        internalId:
+          type: string
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: The top part &gt; Employee &gt; The name of the employee whose time card is currently open.
+    TimeCardMaterialsDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: The time card line number
+          format: int32
+        itemId:
+          type: string
+          description: Item Id
+        description:
+          type: string
+          description: Description &gt; The description of the reported quantity.
+        uoM:
+          type: string
+          description: The unit of measure of item
+        project:
+          $ref: '#/components/schemas/projectInTimeCardMaterialsDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInTimeCardMaterialsDto'
+        mon:
+          type: number
+          description: Mon &gt; The quantity reported for Monday.
+          format: double
+        tue:
+          type: number
+          description: Tue &gt; The quantity reported for Tuesday.
+          format: double
+        wed:
+          type: number
+          description: Wed &gt; The quantity reported for Wednesday.
+          format: double
+        thu:
+          type: number
+          description: Thu &gt; The quantity reported for Thursday.
+          format: double
+        fri:
+          type: number
+          description: Fri &gt; The quantity reported for Friday.
+          format: double
+        sat:
+          type: number
+          description: Sat &gt; The quantity reported for Saturday.
+          format: double
+        sun:
+          type: number
+          description: Sun &gt; The quantity reported for Sunday.
+          format: double
+        totalQty:
+          type: number
+          description: Total Qty
+          format: double
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+    TimeCardDto:
+      type: object
+      properties:
+        refNbr:
+          type: string
+          description: The top part &gt; Ref. no. &gt; The unique reference number of the time card, which Acumatica ERP automatically assigns according to the numbering sequence specified as the Time Card Numbering Sequence on the Time and Expenses Preferences (EP.10.10.00) form.
+        status:
+          enum:
+          - Hold
+          - Open
+          - Approved
+          - Rejected
+          - Released
+          type: string
+          description: The top part &gt; Status &gt; The status of the time card
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: The top part &gt; Approval status &gt; The approval status of the time card
+        week:
+          $ref: '#/components/schemas/weekInTimeCardDto'
+        employee:
+          $ref: '#/components/schemas/employeeInTimeCardDto'
+        type:
+          enum:
+          - Normal
+          - Correction
+          - NormalCorrected
+          type: string
+          description: 'The top part &gt; Type &gt; The type of the time card. The following options are available:• Normal: Regular time card• Correction: Corrective time card, which is a time card that updates a released time card'
+        origRefNbr:
+          type: string
+          description: The top part &gt; Orig. ref. no. &gt; The reference number of the time card being corrected. This box is filled in only when Correction is specified in the Type box
+        timeSpent:
+          type: integer
+          description: 'The top part &gt; Regular column: Time spent &gt; The work hours spent by the employee during the week on activities with the Regular Hours earning type.'
+          format: int32
+        invoiceable:
+          type: integer
+          description: 'The top part &gt; Regular column: Invoicable &gt; The invoiceable work hours spent by the employee during the week'
+          format: int32
+        overtimeSpent:
+          type: integer
+          description: 'The top part &gt; Overtime column: Time spent &gt; The work hours spent by the employee during the week on activities with the Overtime earning type.'
+          format: int32
+        invoiceableOvertime:
+          type: integer
+          description: 'The top part &gt; Overtime column: Invoicable &gt; The invoiceable overtime spent by the employee during the week'
+          format: int32
+        totalTimeSpent:
+          type: integer
+          description: 'The top part &gt; Total column: Time spent &gt; The total working time (regular and overtime) for the week'
+          format: int32
+        invoiceableTotalTime:
+          type: integer
+          description: 'The top part &gt; Total column: Invoicable &gt; The total invoiceable working time (regular and overtime) for the week'
+          format: int32
+        lastModifiedDateTime:
+          type: string
+          description: 'System generated information: The last time the time card line was modified'
+          format: date-time
+        summary:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeCardSummaryDto'
+          description: Summary tab &gt; Time Card summary information
+        materials:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeCardMaterialsDto'
+          description: Summary tab &gt; Time Card materials information
+        approvalStatusText:
+          type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    tueInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Tuesday, including overtime.
+    itemIdInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Item Id
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    projectTaskInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The project task that the employee worked on.
+    projectInTimeCardMaterialsDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    satInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Saturday.
+    projectInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The project that the employee worked on.
+    projectTaskInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The project task that the employee worked on.
+    projectTaskInTimeCardMaterialsDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The project task that the employee worked on.
+    friInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Friday, including overtime.
+    satInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Saturday, including overtime.
+    sunInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Sunday.
+    SendTimeCardToApprovalActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    uoMInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The unit of measure of item
+    thuInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Thursday.
+    weekInTimeCardDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The top part &gt; Week &gt; The week for which the time card has been created.
+    TimeCardSummaryDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: The time card line number
+          format: int32
+        lineId:
+          type: string
+          description: The time card line id
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        earningType:
+          $ref: '#/components/schemas/earningTypeInTimeCardSummaryDto'
+        project:
+          $ref: '#/components/schemas/projectInTimeCardSummaryDto'
+        mon:
+          type: integer
+          description: Mon &gt; The work time reported for Monday, including overtime.
+          format: int32
+        tue:
+          type: integer
+          description: Tue &gt; The work time reported for Tuesday, including overtime.
+          format: int32
+        wed:
+          type: integer
+          description: Wed &gt; The work time reported for Wednesday, including overtime.
+          format: int32
+        thu:
+          type: integer
+          description: Thu &gt; The work time reported for Thursday, including overtime.
+          format: int32
+        fri:
+          type: integer
+          description: Fri &gt; The work time reported for Friday, including overtime.
+          format: int32
+        sat:
+          type: integer
+          description: Sat &gt; The work time reported for Saturday, including overtime.
+          format: int32
+        sun:
+          type: integer
+          description: Sun &gt; The work time reported for Sunday, including overtime.
+          format: int32
+        invoiceable:
+          type: boolean
+          description: Invoicable &gt; A check box that you select to indicate that these work hours are invoiceable.
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInTimeCardSummaryDto'
+        timeSpent:
+          type: integer
+          description: Time spent &gt; The work time (regular and overtime) that the employee spent on the project and task during the week.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the reported work hours.
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: Approval status &gt; The approval status, which indicates whether the summary row requires approval and, if it does, what the current state of approval is.
+        approver:
+          type: string
+          description: The identifier of the person authorized to approve the activity, if approval is required. This is either the approver of the project task or, if no approver is assigned to the project task, the project manager.
+        approvalStatusText:
+          type: string
+          description: last approval comment &gt; The approval status text suitable for display
+        lastModifiedDateTime:
+          type: string
+          description: The last time the time card line was modified
+          format: date-time
+    PutTimeCardOnHoldActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    invoiceableInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: A check box that you select to indicate that these work hours are invoiceable.
+    SubmitTimeCardActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    sunInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Sunday, including overtime.
+    earningTypeInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The type of the work time spent by the employee
+    monInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Monday.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

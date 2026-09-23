@@ -1,0 +1,383 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Vat Report API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: VatReport
+  description: 'VAT reports for your company, including periodic VAT returns, approval status, and reporting details.
+
+    Overview of VAT Report Functionality: VAT Reports
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping
+
+    * Solo
+
+    * InvoicingCollaboration'
+paths:
+  /vatreports:
+    get:
+      tags:
+      - VatReport
+      summary: Get vat reports
+      description: 'Get all VAT reports, or add query parameters to filter the results. The response will include a list of VAT reports with their periods, approval status, and total amounts.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfVatReportApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getVatreports
+      x-operation-id-source: derived
+  /vatreports/{id}:
+    get:
+      tags:
+      - VatReport
+      summary: Get a vat report by Id
+      description: 'Get a specific VAT report by its unique identifier. The response includes the report period, approval status, approval history, and total amount.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the Vat Report.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VatReportApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Not Found
+      operationId: getVatreportsById
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    VatReportApi:
+      required:
+      - EndDate
+      - Id
+      - Name
+      - StartDate
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the VAT report
+          format: uuid
+          readOnly: true
+        Name:
+          minLength: 1
+          type: string
+          description: The name of the VAT report
+          readOnly: true
+        StartDate:
+          type: string
+          description: The start date of the VAT report period
+          format: date-time
+          readOnly: true
+        EndDate:
+          type: string
+          description: The end date of the VAT report period
+          format: date-time
+          readOnly: true
+        DocumentApprovalStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Approved,<br/>2 = Rejected,<br/>3 = ReadyForApproval<br/><br/>The document approval status of the VAT report.
+          format: int32
+          readOnly: true
+        DocumentId:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Fetch the associated document. Can be null if the vat report does not have an associated file created. Use GET /v2/documents/{id}'
+          format: uuid
+          readOnly: true
+        CreatedUtc:
+          type:
+          - string
+          - 'null'
+          description: The UTC timestamp when the VAT report was created
+          format: date-time
+          readOnly: true
+        IsRegretted:
+          type: boolean
+          description: Indicates whether the vat report was undone
+          readOnly: true
+        RegrettedByUserId:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: If the vat report was undone this indicates the user id that did the action. Can be null if not undone. Use GET /v2/users'
+          format: uuid
+          readOnly: true
+        RegrettedDate:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: If the vat report was undone this indicates the date of the action. Can be null if not undone'
+          format: date-time
+          readOnly: true
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: The UTC timestamp when the VAT report was last modified
+          format: date-time
+          readOnly: true
+        SentForApprovalByUserId:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: If the vat report was sent for approval this indicates the user id that did the action. Can be null if not sent for approval. Use GET /v2/users'
+          format: uuid
+          readOnly: true
+        VoucherId:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Fetch the associated voucher. Can be null if there is no associated voucher. Use GET /v2/vouchers/{fiscalyearId}/{voucherId}'
+          format: uuid
+          readOnly: true
+        TotalAmount:
+          type: number
+          description: Predicted vat amount to pay or be refunded
+          format: double
+          readOnly: true
+        ApprovalEventsHistory:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/DocumentApprovalEventApi'
+          description: The history of approval events of the vat report
+          readOnly: true
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfVatReportApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VatReportApi'
+      additionalProperties: false
+    DocumentApprovalEventApi:
+      type: object
+      properties:
+        DocumentApprovalStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Approved,<br/>2 = Rejected,<br/>3 = ReadyForApproval<br/><br/>The document approval status for this event.
+          format: int32
+          readOnly: true
+        CreatedUtc:
+          type: string
+          description: The UTC timestamp when the approval event was created
+          format: date-time
+          readOnly: true
+        CreatedByUserId:
+          type: string
+          description: The user id that performed the approval action. Use GET /v2/users
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

@@ -1,0 +1,393 @@
+openapi: 3.2.0
+info:
+  title: Spiris Lön API V2 External Periods API
+  description: Visit our complete Spiris Lön/Cloud Payroll API docs for how to get started, more information about authentication, error handling, query customization and more.
+  contact:
+    email: api@spiris.se
+  version: v2
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: ExternalPeriods
+  description: Operations for reporting per-employee values for a deviation period from an external system.
+paths:
+  /v2/externalperiods:
+    get:
+      tags:
+      - ExternalPeriods
+      summary: Get external periods
+      description: Get external periods.
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfExternalPeriodResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2Externalperiods
+      x-operation-id-source: derived
+    post:
+      tags:
+      - ExternalPeriods
+      summary: Create an external period
+      description: 'Create an external period.
+
+
+        The request is validated as follows:
+
+
+        - A project/cost-center distribution is required.
+
+        - Within each of `Project`, `CostCenter1`, `CostCenter2` and `CostCenter3`, percentages must be non-negative and total at most 100%. An allocation with a percentage of 0 is kept and applied as a 0% row on the payslip; it is not discarded.
+
+        - Referenced projects and cost center items must exist on the company, and each cost center item must belong to the cost center dimension it is supplied under.
+
+        - For requests that carry a project/cost-center distribution, `DeviationPeriodToDate` must match the employee''s payroll period settings (the last day of a month, or the company''s configured payment period day).
+
+        - The period cannot be earlier than the employee''s latest locked payslip.
+
+
+        A validation failure returns `400 Bad Request` with a message describing the failing rule.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ExternalPeriodRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalPeriodResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postV2Externalperiods
+      x-operation-id-source: derived
+  /v2/externalperiods/{externalPeriodId}:
+    get:
+      tags:
+      - ExternalPeriods
+      summary: Get external period by unique identifier
+      description: Get external period by unique identifier.
+      parameters:
+      - name: externalPeriodId
+        in: path
+        description: The external period unique identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalPeriodResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2ExternalperiodsByExternalPeriodId
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - ExternalPeriods
+      summary: Delete an external period
+      description: Delete an external period.
+      parameters:
+      - name: externalPeriodId
+        in: path
+        description: The external period unique identifier
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteV2ExternalperiodsByExternalPeriodId
+      x-operation-id-source: derived
+  /v2/externalperiods/{employeeId}/{deviationDate}:
+    get:
+      tags:
+      - ExternalPeriods
+      summary: Get external period by employee and deviation date
+      description: Get external period by employee and deviation date.
+      parameters:
+      - name: employeeId
+        in: path
+        description: The unique identifier of the employee
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: deviationDate
+        in: path
+        description: The deviation date in format yyyy-MM-dd
+        required: true
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalPeriodResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2ExternalperiodsByEmployeeIdByDeviationDate
+      x-operation-id-source: derived
+components:
+  schemas:
+    ProjectCostCenterAllocationResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Project id or cost center item id for this allocation.
+          format: uuid
+        Percentage:
+          type: number
+          description: Allocation percentage for this entry.
+          format: double
+      additionalProperties: false
+    PaginatedResponseOfExternalPeriodResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalPeriodResponse'
+      additionalProperties: false
+    ProjectCostCenterDistributionRequest:
+      type: object
+      properties:
+        Project:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
+          description: 'Allocations on Project. The percentages within Project must total at most 100%. Each allocation Id is a project id. Source: Get from eAccounting API, /v2/projects'
+        CostCenter1:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
+          description: 'Allocations on cost center 1. The percentages within CostCenter1 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+        CostCenter2:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
+          description: 'Allocations on cost center 2. The percentages within CostCenter2 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+        CostCenter3:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
+          description: 'Allocations on cost center 3. The percentages within CostCenter3 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    ProjectCostCenterAllocationRequest:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Project id or cost center item id for this allocation.
+          format: uuid
+        Percentage:
+          type: number
+          description: Allocation percentage for this entry. Allocations with a percentage of 0 are ignored.
+          format: double
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ExternalPeriodRequest:
+      required:
+      - DeviationPeriodToDate
+      - EmployeeId
+      type: object
+      properties:
+        EmployeeId:
+          type: string
+          description: 'The unique identifier of the employee. Source: Get from /v2/employees'
+          format: uuid
+        DeviationPeriodToDate:
+          type: string
+          description: End date of the deviation period
+          format: date-time
+        ProjectCostCenterDistribution:
+          allOf:
+          - $ref: '#/components/schemas/ProjectCostCenterDistributionRequest'
+          description: Project/cost-center distribution for worked-time salary rows. The percentages within each of Project, CostCenter1, CostCenter2 and CostCenter3 must total at most 100%.
+      additionalProperties: false
+    ExternalPeriodResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+        EmployeeId:
+          type: string
+          description: The unique identifier of the employee
+          format: uuid
+        PayslipId:
+          type:
+          - string
+          - 'null'
+          description: If the period is picked up on a payslip, the payslip ID will be here
+          format: uuid
+        DeviationPeriodToDate:
+          type: string
+          description: End date of the deviation period
+          format: date-time
+        ProjectCostCenterDistribution:
+          allOf:
+          - $ref: '#/components/schemas/ProjectCostCenterDistributionResponse'
+          description: Project/cost-center distribution for worked-time salary rows
+        CreatedUtc:
+          type: string
+          description: Timestamp when the external period was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp when the external period was last modified (UTC)
+          format: date-time
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    ProjectCostCenterDistributionResponse:
+      type: object
+      properties:
+        Project:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
+          description: 'Allocations on Project. Each allocation Id is a project id. Source: Get from eAccounting API, /v2/projects'
+        CostCenter1:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
+          description: 'Allocations on cost center 1. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+        CostCenter2:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
+          description: 'Allocations on cost center 2. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+        CostCenter3:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
+          description: 'Allocations on cost center 3. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+      additionalProperties: false

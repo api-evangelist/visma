@@ -1,0 +1,319 @@
+openapi: 3.2.0
+info:
+  title: Spiris Lön API V1 Care Of Sick Children API
+  description: Visit our complete Spiris Lön/Cloud Payroll API docs for how to get started, more information about authentication, error handling, query customization and more.
+  contact:
+    email: api@spiris.se
+  version: v1
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: CareOfSickChildren
+  description: Operations for managing care of sick child shortcuts for employees. Care of sick child shortcuts allow tracking of employee leaves related to caring for sick children.
+paths:
+  /v1/shortcuts/careofsickchild:
+    post:
+      tags:
+      - CareOfSickChildren
+      summary: Create a care of sick child shortcut
+      description: Create a new care of sick child shortcut for an employee. The shortcut will be registered based on the specified registration method (time, hours, or percentage). If the end date is in a different month than the start date, the shortcut will be split into separate shortcuts for each month.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CareOfSickChildApi'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CareOfSickChildApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postV1ShortcutsCareofsickchild
+      x-operation-id-source: derived
+  /v1/shortcuts/careofsickchild/{careOfSickChildId}:
+    get:
+      tags:
+      - CareOfSickChildren
+      summary: Get a care of sick child shortcut by id
+      description: Get a specific care of sick child shortcut by its unique identifier. Use query parameters to select specific properties in the response.
+      parameters:
+      - name: careOfSickChildId
+        in: path
+        description: The care of sick child shortcut id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CareOfSickChildApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1ShortcutsCareofsickchildByCareOfSickChildId
+      x-operation-id-source: derived
+  /v1/shortcuts/careofsickchild/{startDate}/{endDate}:
+    get:
+      tags:
+      - CareOfSickChildren
+      summary: Get care of sick child shortcuts between dates
+      description: Get all care of sick child shortcuts within a specified date range. Use query parameters to filter the results or include only shortcuts created by the same client.
+      parameters:
+      - name: startDate
+        in: path
+        description: Start date in format yyyy-MM-dd
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        in: path
+        description: End date in format yyyy-MM-dd
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: includeOnlySameClientShortcuts
+        in: query
+        description: If true, only includes shortcuts created by the same client
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CareOfSickChildApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1ShortcutsCareofsickchildByStartDateByEndDate
+      x-operation-id-source: derived
+  /v1/shortcuts/careofsickchild/{id}:
+    put:
+      tags:
+      - CareOfSickChildren
+      summary: Update a care of sick child shortcut
+      description: Update an existing care of sick child shortcut by replacing its content. Only shortcuts that have not been read (imported by a payroll administrator) can be updated. The shortcut must belong to the same third-party client that created it.
+      parameters:
+      - name: id
+        in: path
+        description: The shortcut id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CareOfSickChildApi'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CareOfSickChildApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putV1ShortcutsCareofsickchildById
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ProjectCostCenterAllocationApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Project id or cost center item id for this allocation.
+          format: uuid
+        Percentage:
+          type: number
+          description: Allocation percentage for this entry.
+          format: double
+      additionalProperties: false
+    ProjectCostCenterDistributionApi:
+      type: object
+      properties:
+        Project:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
+          description: Allocations on Project. The percentages within Project must total at most 100%.
+        CostCenter1:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
+          description: Allocations on cost center 1. The percentages within CostCenter1 must total at most 100%.
+        CostCenter2:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
+          description: Allocations on cost center 2. The percentages within CostCenter2 must total at most 100%.
+        CostCenter3:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
+          description: Allocations on cost center 3. The percentages within CostCenter3 must total at most 100%.
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CareOfSickChildApi:
+      required:
+      - EmployeeId
+      - EndDate
+      - ShortcutRegistrationMethod
+      - StartDate
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+          readOnly: true
+        EmployeeId:
+          type: string
+          description: 'The ID of the employee that the shortcut is registered for. Source: Get from /v1/employees'
+          format: uuid
+        StartDate:
+          type: string
+          description: Start date for the shortcut
+          format: date-time
+        EndDate:
+          type: string
+          description: End date for the shortcut
+          format: date-time
+        ShortcutRegistrationMethod:
+          type: integer
+          description: 'Registration method for the shortcut<br/>Possible values: 0 - Time, 1 - Hours, 2 - Percentage'
+          format: int32
+        PercentOfDay:
+          type: number
+          description: The percentage of the day that the shortcut is registered for. Required when ShortcutRegistrationMethod is Percentage.
+          format: double
+        MinutesOfDay:
+          type: integer
+          description: The number of minutes the shortcut is registered for. Required when ShortcutRegistrationMethod is Hours.
+          format: int32
+        StartTime:
+          type:
+          - string
+          - 'null'
+          description: 'The start time the shortcut is registered for (format: HH:mm). Required when ShortcutRegistrationMethod is Time.'
+        EndTime:
+          type:
+          - string
+          - 'null'
+          description: 'The end time the shortcut is registered for (format: HH:mm). Required when ShortcutRegistrationMethod is Time.'
+        IsRead:
+          type: boolean
+          description: Indicates whether or not the shortcut has been read by the system. This happens when a payroll administrator has imported it.
+          readOnly: true
+        Comment:
+          type:
+          - string
+          - 'null'
+          description: Optional comment for the shortcut
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: 'Project ID. Source: Get from eAccounting API, /v2/projects'
+          format: uuid
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'Cost center item ID 1. Source: Get from eAccounting API, /v2/costcenters'
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'Cost center item ID 2. Source: Get from eAccounting API, /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'Cost center item ID 3. Source: Get from eAccounting API, /v2/costcenters'
+          format: uuid
+        ProjectCostCenterDistribution:
+          allOf:
+          - $ref: '#/components/schemas/ProjectCostCenterDistributionApi'
+          description: Percentage based distribution across projects and cost centers. When supplied on a request, ProjectId and CostCenterItemId1-3 are ignored. In a response, each of ProjectId and CostCenterItemId1-3 is only returned when its dimension holds a single allocation of 100%, and is null when the dimension is split across several allocations or allocated less than 100%. The percentages within each of Project, CostCenter1, CostCenter2 and CostCenter3 must total at most 100%.
+      additionalProperties: false

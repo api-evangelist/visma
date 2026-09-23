@@ -1,0 +1,463 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Bank…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Bank Transactions
+  description: 'Bank transactions represent individual financial movements in and out of your company''s bank accounts.
+
+    Overview of Bank Transaction Functionality: Bank Transactions
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping'
+paths:
+  /banktransactions/{bankAccountId}/matched:
+    get:
+      tags:
+      - Bank Transactions
+      summary: Get a list of matched bank transactions
+      description: 'Get all matched bank transactions for a specific bank account within a date range, or add query parameters to filter the results. Matched bank transactions are those that have been reconciled with business transactions in the accounting system.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      parameters:
+      - name: bankAccountId
+        in: path
+        description: The company bank account to which the requested transactions correspond
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fromDate
+        in: query
+        description: 'Default: First day of the current month'
+        schema:
+          type: string
+          format: date-time
+      - name: toDate
+        in: query
+        description: 'Default: Last day of the current month'
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfBankTransactionApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getBanktransactionsByBankAccountIdMatched
+      x-operation-id-source: derived
+  /banktransactions/{bankAccountId}/unmatched:
+    get:
+      tags:
+      - Bank Transactions
+      summary: Get a list of unmatched bank transactions
+      description: 'Get all unmatched bank transactions for a specific bank account within a date range, or add query parameters to filter the results. Unmatched bank transactions are those that have not yet been reconciled with business transactions in the accounting system.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      parameters:
+      - name: bankAccountId
+        in: path
+        description: The company bank account to which the requested transactions correspond
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: fromDate
+        in: query
+        description: 'Default: First day of the current month'
+        schema:
+          type: string
+          format: date-time
+      - name: toDate
+        in: query
+        description: 'Default: Last day of the current month'
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfBankTransactionApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getBanktransactionsByBankAccountIdUnmatched
+      x-operation-id-source: derived
+  /banktransactions/{bankAccountId}/{bankTransactionId}:
+    get:
+      tags:
+      - Bank Transactions
+      summary: Get a specific bank transaction
+      description: 'Get a specific bank transaction by its unique identifier. The response includes detailed information about the transaction and any associated reconciliation data.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      parameters:
+      - name: bankAccountId
+        in: path
+        description: The company bank account of the request transaction
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: bankTransactionId
+        in: path
+        description: The requested transaction id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankTransactionApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Bank transaction not found
+      operationId: getBanktransactionsByBankAccountIdByBankTransactionId
+      x-operation-id-source: derived
+components:
+  schemas:
+    BankTransactionRowApi:
+      type: object
+      properties:
+        PaymentVoucherId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/vouchers'
+          format: uuid
+        PaymentVoucherNumber:
+          type:
+          - string
+          - 'null'
+          description: Payment voucher number
+        AmountTransactionCurrency:
+          type: number
+          description: Amount in transaction currency
+          format: double
+        Number:
+          type:
+          - string
+          - 'null'
+          description: Depending on the Source property, it displays the number of the document associated to it
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Depending on the Source property, displays information like invoice customer or supplier name, or document description
+        Reference:
+          type:
+          - string
+          - 'null'
+          description: If the source is a customer or supplier invoice, it represents the OCR number of the specific invoice
+        Source:
+          type:
+          - string
+          - 'null'
+          description: The origin of the bank transaction
+        SourceId:
+          type: string
+          description: Represents the unique identifier of the Source property
+          format: uuid
+        VoucherId:
+          type: string
+          description: 'Source: Get from /v2/vouchers'
+          format: uuid
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    BankTransactionApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the bank transaction
+          format: uuid
+          readOnly: true
+        TransactionDate:
+          type: string
+          description: Date when the bank transaction occurred
+          format: date-time
+        IsReconciled:
+          type: boolean
+          description: True if the transaction has been matched
+        Reference:
+          type:
+          - string
+          - 'null'
+          description: Represents the invoice reference of the bank transaction
+        OriginalAmount:
+          type: number
+          description: The amount which represents the original amount of the bank transaction
+          format: double
+        ChargeAmount:
+          type: number
+          description: The amount which represents bank charges
+          format: double
+        ChargeCurrency:
+          type:
+          - string
+          - 'null'
+          description: The currency of the bank charges amount
+        TransactionAmount:
+          type: number
+          description: The total amount of the bank transaction, including bank charges
+          format: double
+        TransactionAmountCurrency:
+          type:
+          - string
+          - 'null'
+          description: The currency corresponding to the transaction amount
+        OriginalCurrency:
+          type:
+          - string
+          - 'null'
+          description: The currency corresponding to the original amount
+        Rows:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BankTransactionRowApi'
+          description: Represents the accounting transactions related to the bank transaction
+      additionalProperties: false
+    PaginatedResponseOfBankTransactionApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransactionApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

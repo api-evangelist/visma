@@ -1,0 +1,553 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Vouchers API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Vouchers
+  description: 'Transactions within your business organized by voucher entries with debit and credit rows.
+
+    Overview of Voucher Functionality: Vouchers
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping
+
+    * Invoicing
+
+    * Solo'
+paths:
+  /vouchers:
+    get:
+      tags:
+      - Vouchers
+      summary: Get vouchers
+      description: 'Get all vouchers, or add query parameters to filter the results. The response will include a list of vouchers with their details such as date, text, and associated voucher rows.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfVoucherApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getVouchers
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Vouchers
+      summary: Create a voucher
+      description: 'Create a new voucher. The voucher must have balanced debit and credit amounts.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting'
+      parameters:
+      - name: useAutomaticVatCalculation
+        in: query
+        description: 'Default value: false. Set to true and specify the sales or purchase gross amount and vat rows will be added automatically.'
+        schema:
+          type: boolean
+          default: false
+      - name: useDefaultVatCodes
+        in: query
+        description: 'Default value: True. Set to false and override default vatcodes on all rows in the request.'
+        schema:
+          type: boolean
+          default: true
+      - name: useDefaultVoucherSeries
+        in: query
+        description: 'Default value: True. Set to false and override default voucher series.'
+        schema:
+          type: boolean
+          default: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoucherApi'
+      responses:
+        '201':
+          description: Voucher created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoucherApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postVouchers
+      x-operation-id-source: derived
+  /vouchers/{fiscalyearId}:
+    get:
+      tags:
+      - Vouchers
+      summary: Get vouchers by fiscal year
+      description: 'Get all vouchers within a specific fiscal year.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: fiscalyearId
+        in: path
+        description: This represents the Id of the Fiscal Year.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfVoucherApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getVouchersByFiscalyearId
+      x-operation-id-source: derived
+  /vouchers/{fiscalyearId}/{voucherId}:
+    get:
+      tags:
+      - Vouchers
+      summary: Get a voucher
+      description: 'Get a specific voucher by its unique identifier. The response will include the voucher''s details such as date, text, and associated voucher rows.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: fiscalyearId
+        in: path
+        description: This represents the Id of the Fiscal Year.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: voucherId
+        in: path
+        description: This represents the Id of the Voucher.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoucherApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Voucher not found
+      operationId: getVouchersByFiscalyearIdByVoucherId
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfVoucherApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoucherApi'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    VoucherApi:
+      required:
+      - Rows
+      - VoucherDate
+      - VoucherText
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        VoucherDate:
+          type: string
+          description: 'Bookkeeping date. Format: yyyy-mm-dd'
+          format: date-time
+        VoucherText:
+          maxLength: 1000
+          minLength: 0
+          type: string
+          description: Voucher's description
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoucherRowApi'
+          description: The accounting rows/lines of the voucher
+        NumberAndNumberSeries:
+          type:
+          - string
+          - 'null'
+          description: Returns the voucher number
+          readOnly: true
+        NumberSeries:
+          type:
+          - string
+          - 'null'
+          description: Returns the number series. Use parameter useDefaultVoucherSeries with false value to set Series.
+        ImportedVoucherNumber:
+          type:
+          - string
+          - 'null'
+          description: Returns original voucher number if the voucher is imported from another system.
+          readOnly: true
+        Attachments:
+          $ref: '#/components/schemas/AttachmentLinkApi'
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: The UTC date and time when the voucher was last modified.
+          format: date-time
+          readOnly: true
+        VoucherType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>2 = ManualVoucher,<br/>5 = BankAccountTransferDeposit,<br/>6 = BankAccountTransferWithDrawal,<br/>7 = PurchaseReceipt,<br/>8 = VatReport,<br/>9 = SieImport,<br/>10 = BankTransactionDeposit,<br/>11 = BankTransactionWithdrawal,<br/>12 = SupplierInvoiceDebit,<br/>13 = SupplierInvoiceCredit,<br/>14 = CustomerInvoiceDebit,<br/>15 = CustomerInvoiceCredit,<br/>16 = ClaimOnCardAcquirer,<br/>17 = TaxReturn,<br/>18 = AllocationPeriod,<br/>19 = AllocationPeriodCorrection,<br/>20 = InventoryEvent,<br/>21 = EmployerReport,<br/>22 = Payslip,<br/>23 = CustomerQuickInvoiceDebit,<br/>24 = CustomerQuickInvoiceCredit,<br/>25 = SupplierQuickInvoiceDebit,<br/>26 = SupplierQuickInvoiceCredit,<br/>27 = IZettleVoucher,<br/>28 = StockValuation,<br/>29 = ClaimOnSpotFactoring,<br/>30 = RecourseFactoring,<br/>32 = DirectDebit,<br/>33 = DirectDebitCorrection,<br/>34 = PaymentLinks
+          format: int32
+        SourceId:
+          type:
+          - string
+          - 'null'
+          description: The source of the voucher, e.g. invoice id.
+          format: uuid
+          readOnly: true
+        CreatedUtc:
+          type: string
+          description: The UTC date and time when the voucher was created.
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    VoucherRowApi:
+      required:
+      - AccountNumber
+      type: object
+      properties:
+        AccountNumber:
+          maximum: 9999999999
+          minimum: 1
+          type: integer
+          description: The account number for this row. Must be between 1 and 9999999999
+          format: int64
+        AccountDescription:
+          type:
+          - string
+          - 'null'
+          description: Account number description
+          readOnly: true
+        DebitAmount:
+          maximum: 10000000000
+          minimum: 0
+          type: number
+          description: The debit amount for this row. Maximum 2 decimal places
+          format: double
+        CreditAmount:
+          maximum: 10000000000
+          minimum: 0
+          type: number
+          description: The credit amount for this row. Maximum 2 decimal places
+          format: double
+        TransactionText:
+          maxLength: 60
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Transaction text used in searchable column in Account Analysis. Maximum length: 60 characters'
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'The first cost center item identifier. Source: Get from /v2/costcenters'
+          format: uuid
+          readOnly: true
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'The second cost center item identifier. Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'The third cost center item identifier. Source: Get from /v2/costcenters'
+          format: uuid
+        VatCodeId:
+          type:
+          - string
+          - 'null'
+          description: The VAT code identifier returned from the provided account number
+          format: uuid
+        VatCodeAndPercent:
+          type:
+          - string
+          - 'null'
+          description: 'The VAT code and percentage in the format ''Code (Percentage)''. Example: ''MVA 25%'''
+        VatAmount:
+          type:
+          - number
+          - 'null'
+          description: The VAT amount for this row. Only for Denmark and Netherlands
+          format: double
+        Quantity:
+          type:
+          - number
+          - 'null'
+          description: The quantity for this row. Maximum 2 decimal places. This feature is for Dutch companies with agriculture support only
+          format: double
+        Weight:
+          type:
+          - number
+          - 'null'
+          description: The weight for this row. Maximum 2 decimal places. This feature is for Dutch companies with agriculture support only
+          format: double
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: 'The delivery date. Format: YYYY-MM-DD. This feature is for Dutch companies with agriculture support only'
+          format: date-time
+        HarvestYear:
+          type:
+          - integer
+          - 'null'
+          description: The harvest year. This feature is for Dutch companies with agriculture support only
+          format: int32
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: The project identifier. Get from /v2/projects
+          format: uuid
+      additionalProperties: false
+    AttachmentLinkApi:
+      required:
+      - AttachmentIds
+      - DocumentType
+      type: object
+      properties:
+        DocumentId:
+          type: string
+          description: 'The id from the system of the corresponding linked document. Source: Get from endpoints corresponding to your document type'
+          format: uuid
+        DocumentType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = SupplierInvoice,<br/>2 = Receipt,<br/>3 = Voucher,<br/>4 = SupplierInvoiceDraft,<br/>5 = AllocationPeriod,<br/>6 = Transfer,<br/>8 = BankTransaction,<br/>9 = VoucherDraft
+          format: int32
+        AttachmentIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of guids representing the attachment ids fetched from the system
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

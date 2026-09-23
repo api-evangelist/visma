@@ -1,0 +1,564 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Sales Person API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: SalesPerson
+paths:
+  /v1/salesperson/{salespersonCd}:
+    get:
+      tags:
+      - SalesPerson
+      summary: 'Get a specific Salesperson - screen ID: AR205000'
+      operationId: SalesPerson_GetSalespersonBysalespersonCd
+      parameters:
+      - name: salespersonCd
+        in: path
+        description: Identifies the Salesperson
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesPersonDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SalesPersonDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - SalesPerson
+      summary: Update a specific Salesperson
+      description: Response Message has StatusCode NoContent if PUT operation succeed
+      operationId: SalesPerson_UpdateSalespersonBysalespersonCd
+      parameters:
+      - name: salespersonCd
+        in: path
+        description: Identifies the Salesperson to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Salesperson to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+        required: true
+        x-bodyName: salesperson
+      responses:
+        '204':
+          description: NoContent
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/salesperson:
+    get:
+      tags:
+      - SalesPerson
+      summary: 'Get all or a range of Salespersons - screen ID: AR205000 Please use a page size…'
+      operationId: SalesPerson_GetSalespersons
+      parameters:
+      - name: salespersonCD
+        in: query
+        schema:
+          type: string
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: isActive
+        in: query
+        schema:
+          type: boolean
+      - name: commissionPct
+        in: query
+        schema:
+          type: number
+          format: double
+      - name: salesSub
+        in: query
+        schema:
+          type: string
+      - name: greaterThanValue
+        in: query
+        description: Greater than value. The item which is the object for this, varies from API to API.
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the creation date and time. Use it to retrieve all records that have been created since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: createdDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __CreatedDateTime__ and __CreatedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasePaginationDtoOfSalesPersonDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BasePaginationDtoOfSalesPersonDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - SalesPerson
+      summary: Create a Salesperson
+      description: Response Message has StatusCode Created if POST operation succeed
+      operationId: SalesPerson_CreateSalesperson
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Salesperson to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SalesPersonUpdateDto'
+        required: true
+        x-bodyName: salesperson
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    SubAccountDescriptionDto:
+      type: object
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    SalesPersonUpdateDto:
+      type: object
+      properties:
+        salespersonID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        isActive:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        commissionPct:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        salesSub:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustSalesPeopleUpdateDto'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    CustSalesPeopleUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        customerID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        commissionPct:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    BasePaginationDtoOfSalesPersonDto:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesPersonDto'
+    SalesPersonDto:
+      type: object
+      properties:
+        salespersonID:
+          type: string
+        name:
+          type: string
+        isActive:
+          type: boolean
+        commissionPct:
+          type: number
+          format: double
+        salesSub:
+          $ref: '#/components/schemas/SubAccountDescriptionDto'
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustSalesPeopleDto'
+        commissionHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/ARSPCommnHistoryDto'
+        createdDateTime:
+          type: string
+          format: date-time
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a salesperson in SalesPersonController. Used for getting data.
+    CustSalesPeopleDto:
+      type: object
+      properties:
+        bAccountID:
+          type: integer
+          format: int32
+        customerName:
+          type: string
+        locationID:
+          type: integer
+          format: int32
+        locationName:
+          type: string
+        isDefault:
+          type: boolean
+        commisionPct:
+          type: number
+          format: double
+        createdDateTime:
+          type: string
+          format: date-time
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    ARSPCommnHistoryDto:
+      type: object
+      properties:
+        commnPeriod:
+          type: string
+        commnAmt:
+          type: number
+          format: double
+        commnblAmt:
+          type: number
+          format: double
+        prProcessedDate:
+          type: string
+          format: date-time
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

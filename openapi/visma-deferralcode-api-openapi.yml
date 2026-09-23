@@ -1,0 +1,214 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Deferral Code API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: DeferralCode
+paths:
+  /v1/deferralCode/{deferralCodeId}:
+    get:
+      tags:
+      - DeferralCode
+      summary: Get a specific DeferralCode
+      operationId: DeferralCode_GetDeferralCodeBydeferralCodeId
+      parameters:
+      - name: deferralCodeId
+        in: path
+        description: Identifies the DeferralCode
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeferralCodeDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DeferralCodeDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/deferralCode:
+    get:
+      tags:
+      - DeferralCode
+      summary: Get a range of DeferralCodes - ScreenId=DR2020PL Request page size must be…
+      operationId: DeferralCode_GetDeferralCodes
+      parameters:
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeferralCodeDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeferralCodeDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    deferralSubInDeferralCodeDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Deferral sub &gt; The corresponding subaccount.
+    DeferralCodeDto:
+      type: object
+      properties:
+        deferralCode:
+          type: string
+          description: "Mandatory field: Deferral code* &gt; \tThe unique code for the deferral type."
+        description:
+          type: string
+          description: Description &gt; The description of the deferral code.
+        deferredRevenueFromItem:
+          type: boolean
+          description: Deferred revenue from item &gt; When this check box is selected, the deferred revenue of the code will be retrieved from the connected item.
+        recognitionMethod:
+          enum:
+          - EvenPeriods
+          - ProrateDays
+          - ExactDays
+          - FlexibileProrateDays
+          - FlexibileExactDays
+          - CashReceipt
+          type: string
+          description: Recognition method &gt; The method used to distribute the document amount over the periods.
+        codeType:
+          enum:
+          - Income
+          - Expense
+          type: string
+          description: Code type &gt; The type of the deferral code.
+        deferralAccount:
+          $ref: '#/components/schemas/deferralAccountInDeferralCodeDto'
+        deferralSub:
+          $ref: '#/components/schemas/deferralSubInDeferralCodeDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    deferralAccountInDeferralCodeDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Deferral account &gt; The account used to hold the deferred amount until it is fully recognised.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

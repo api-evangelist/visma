@@ -1,0 +1,1489 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Customer…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Customer Invoices
+  description: 'Invoices sent to customers for goods or services provided by your business.
+
+    Overview of Customer Invoice Functionality: Customer Invoices
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Solo'
+paths:
+  /customerinvoices:
+    get:
+      tags:
+      - Customer Invoices
+      summary: Get all customer invoices
+      description: 'Get all customer invoices, or add query parameters to filter the results. The response will include a list of customer invoices with their details, such as customer information, rows, totals, and payment status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: modifiedSinceUtc
+        in: query
+        description: Used to get the invoices which have been modified since a prompted date
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfCustomerInvoiceApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCustomerinvoices
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Customer Invoices
+      summary: Create a single customer invoice
+      description: 'Create a new customer invoice.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: rotReducedAutomaticDistribution
+        in: query
+        description: Used for the automatic distribution per person of the rot reduced invoicing amount
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInvoiceApi'
+      responses:
+        '201':
+          description: Invoice created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerInvoiceApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postCustomerinvoices
+      x-operation-id-source: derived
+  /customerinvoices/{invoiceId}:
+    get:
+      tags:
+      - Customer Invoices
+      summary: Gets a customer invoice with a specific id
+      description: 'Get a specific customer invoice by its unique identifier. The response will include the invoice details, such as customer information, rows, totals, and payment status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: invoiceId
+        in: path
+        description: Customer invoice id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerInvoiceApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCustomerinvoicesByInvoiceId
+      x-operation-id-source: derived
+  /customerinvoices/{invoiceId}/pdf:
+    get:
+      tags:
+      - Customer Invoices
+      summary: Gets a customer invoice in Portable Document Format (PDF)
+      description: 'Get a customer invoice in PDF format.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: invoiceId
+        in: path
+        description: Customer invoice id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceUrlApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCustomerinvoicesByInvoiceIdPdf
+      x-operation-id-source: derived
+  /customerinvoices/{invoiceId}/payments:
+    post:
+      tags:
+      - Customer Invoices
+      summary: Post a customer invoice payment
+      description: 'Create a payment for a customer invoice. The payment will be posted in the general ledger.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: invoiceId
+        in: path
+        description: Customer invoice id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoicePaymentApi'
+      responses:
+        '201':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicePaymentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postCustomerinvoicesByInvoiceIdPayments
+      x-operation-id-source: derived
+  /customerinvoices/{invoiceId}/email:
+    post:
+      tags:
+      - Customer Invoices
+      summary: Send an invoice via email
+      description: 'Send an invoice by email.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: invoiceId
+        in: path
+        description: Customer invoice id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailApi'
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postCustomerinvoicesByInvoiceIdEmail
+      x-operation-id-source: derived
+  /customerinvoices/{invoiceId}/einvoice:
+    post:
+      tags:
+      - Customer Invoices
+      summary: Send an invoice electronically
+      description: 'Send an invoice by e-invoice.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: invoiceId
+        in: path
+        description: Customer invoice id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ElectronicInvoiceRequestApi'
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postCustomerinvoicesByInvoiceIdEinvoice
+      x-operation-id-source: derived
+  /customerinvoices/{invoiceId}/paymentreminders:
+    post:
+      tags:
+      - Customer Invoices
+      summary: Send an a payment reminder for an invoice
+      description: 'Send a payment reminder email to an overdue invoice.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: invoiceId
+        in: path
+        description: Customer invoice id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentReminderEmailApi'
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postCustomerinvoicesByInvoiceIdPaymentreminders
+      x-operation-id-source: derived
+  /customerinvoices/{invoiceId}/print:
+    get:
+      tags:
+      - Customer Invoices
+      summary: Get a pdf file for an invoice
+      description: 'Get a PDF-file of a customer invoice. The response will be the actual PDF file content.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: invoiceId
+        in: path
+        description: Customer invoice id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCustomerinvoicesByInvoiceIdPrint
+      x-operation-id-source: derived
+  /customerinvoices/{invoiceId}/void:
+    post:
+      tags:
+      - Customer Invoices
+      summary: Void a customer invoice
+      description: 'Void a customer invoice.
+
+        In order to perform this operation the invoice can''t have any payments or prior credit relationships. Quick invoices or invoices that have been sold can''t be voided. Invoices that have been marked with doubtful or bad debt can''t be voided.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: invoiceId
+        in: path
+        description: Customer invoice id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: updateStock
+        in: query
+        description: True to update stock as well
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postCustomerinvoicesByInvoiceIdVoid
+      x-operation-id-source: derived
+components:
+  schemas:
+    SalesDocumentRotRutReductionPersonApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Ssn:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Social security number
+        Amount:
+          type: number
+          format: double
+      additionalProperties: false
+    EmailApi:
+      type: object
+      properties:
+        Email:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the customer's email address
+        CcRecipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Default value is the customer's cc email addresses (if omitted or empty list). Set to null to skip using any CC addresses.
+        Subject:
+          type:
+          - string
+          - 'null'
+          description: 'The default email subject found in the system followed by the company''s name.The special pattern #### in the subject text will be replaced by the sales document number (quote, order or invoice).This allows you to create a subject that contains the sales document number without querying for the document first'
+        Message:
+          type:
+          - string
+          - 'null'
+          description: Default value is the the domestic or foreign company text from /v2/companysettings
+      additionalProperties: false
+    ContributionMarginApi:
+      type: object
+      properties:
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: Amount of contribution margin
+          format: double
+        Percentage:
+          type:
+          - number
+          - 'null'
+          description: Percentage of contribution margin
+          format: double
+      additionalProperties: false
+    CreditedByApi:
+      type: object
+      properties:
+        CreditInvoiceId:
+          type: string
+          description: The Id of the customer invoice
+          format: uuid
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfCustomerInvoiceApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerInvoiceApi'
+      additionalProperties: false
+    CustomerInvoiceVatApi:
+      type: object
+      properties:
+        AmountInvoiceCurrency:
+          type: number
+          format: double
+          readOnly: true
+        VatAmountInvoiceCurrency:
+          type: number
+          format: double
+          readOnly: true
+        VatPercent:
+          type: number
+          format: double
+          readOnly: true
+      additionalProperties: false
+    InvoicePaymentApi:
+      required:
+      - CompanyBankAccountId
+      - PaymentAmount
+      - PaymentCurrency
+      - PaymentDate
+      - PaymentType
+      type: object
+      properties:
+        CompanyBankAccountId:
+          type: string
+          description: The bank account to which the payment is recorded
+          format: uuid
+        PaymentDate:
+          type: string
+          description: 'Future dates cannot be set. Date format: yyyy-mm-dd. Payment date must be sent in the timezone of the company instead of user''s location timezone.'
+          format: date-time
+        Reference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Payment's reference
+        PaymentAmount:
+          type: number
+          description: 'Amount in invoice currency. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
+          format: double
+        PaymentCurrency:
+          minLength: 1
+          type: string
+          description: Currency code of the payment amount.
+        DomesticPaymentAmount:
+          type: number
+          description: 'Only for non domestic invoices paid with cheque account. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
+          format: double
+        BankFeeAmount:
+          maximum: 1000000000
+          minimum: 0
+          type: number
+          description: Bank fee amount
+          format: double
+        PaymentType:
+          maximum: 4
+          minimum: 1
+          type: integer
+          description: <strong>Possible values:</strong><br/>PartialPayment = 1,<br/>CompletePayment = 2,<br/>Rounding = 3,<br/>BankCharge = 4
+          format: int32
+        FactoringFeeAmount:
+          type: number
+          description: Factoring fee amount for the current invoice, supported only for customer invoice payments
+          format: double
+        FactoringFeeAccountNumber:
+          type: integer
+          description: Factoring account number, supported only for customer invoice payments
+          format: int64
+        BankTransactionId:
+          type: string
+          description: The internal id in the system of the bank transaction corresponding to the payment
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+    CustomerInvoiceApi:
+      required:
+      - CustomerId
+      - EuThirdParty
+      - RotReducedInvoicingType
+      - Rows
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        EuThirdParty:
+          type: boolean
+          description: Default is false. True only if EU intermediary, VAT triangulation rules apply. Only if EU company is invoicing to a company from a different EU country, may set to True if desired.
+        IsCreditInvoice:
+          type: boolean
+        CurrencyCode:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        CurrencyRate:
+          type:
+          - number
+          - 'null'
+          description: 'Default: Automatic calculation of the currency rate. Enter this value to provide a custom rate'
+          format: double
+        CreatedByUserId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          readOnly: true
+        TotalAmount:
+          type: number
+          description: Total amount on this invoice expressed in base currency
+          format: double
+          readOnly: true
+        TotalVatAmount:
+          type: number
+          description: Total VAT amount on this invoice expressed in base currency
+          format: double
+          readOnly: true
+        TotalRoundings:
+          type: number
+          description: Total roundings amount on this invoice expressed in base currency
+          format: double
+          readOnly: true
+        TotalAmountInvoiceCurrency:
+          type: number
+          description: Total amount on this invoice expressed in the invoice currecy
+          format: double
+          readOnly: true
+        TotalVatAmountInvoiceCurrency:
+          type: number
+          description: Total VAT amount on this invoice expressed in the invoice currency
+          format: double
+          readOnly: true
+        SetOffAmountInvoiceCurrency:
+          type: number
+          description: Total credited amount on this invoice expressed in the invoice currency
+          format: double
+          readOnly: true
+        CustomerId:
+          type: string
+          format: uuid
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerInvoiceRowApi'
+        VatSpecification:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerInvoiceVatApi'
+          description: Contains a summary of amounts for each VAT rate
+          readOnly: true
+        InvoiceDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        DueDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        RotReducedInvoicingType:
+          maximum: 2
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = Rot,<br/>2 = Rut
+          format: int32
+        MaxAllowedTaxReductionAmount:
+          type: number
+          description: 'Default: maximum allowed tax reduction amount'
+          format: double
+          readOnly: true
+        RotReducedInvoicingAmount:
+          type:
+          - number
+          - 'null'
+          description: Default is automatic tax reduction calculation. Used for the manual input of the deducted tax reduction
+          format: double
+        RotReducedInvoicingPercent:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+          readOnly: true
+        RotReducedInvoicingPropertyName:
+          type:
+          - string
+          - 'null'
+          description: Used for providing a custom name. Is required when RotPropertyType or UsesGreenTechnology is set
+        RotReducedInvoicingOrgNumber:
+          maxLength: 11
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        Persons:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SalesDocumentRotRutReductionPersonApi'
+          description: 'Purpose: Required for ROT, RUT or Green Technology invoices only'
+        RotReducedInvoicingAutomaticDistribution:
+          type: boolean
+          readOnly: true
+        ElectronicReference:
+          type:
+          - string
+          - 'null'
+          description: Optional reference for sending invoices electronically
+        SubscriptionNumber:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ContractNumber:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ElectronicAddress:
+          type:
+          - string
+          - 'null'
+          description: Electronic address for sending invoices electronically
+          readOnly: true
+        EdiServiceDelivererId:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        OurReference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        YourReference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        BuyersOrderReference:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Used when sending electronic invoices. Can be null or empty
+        InvoiceCustomerName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        InvoiceAddress1:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: If the value is null it will be filled with the value from the customer
+        InvoiceAddress2:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: If the value is null it will be filled with the value from the customer
+        InvoicePostalCode:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+        InvoiceCity:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+        InvoiceCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the value from the selected customer
+        DeliveryCustomerName:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryAddress1:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryAddress2:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryPostalCode:
+          maxLength: 10
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryCity:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Takes the value from the selected customer
+        DeliveryCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        DeliveryMethodName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        DeliveryTermName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        DeliveryMethodCode:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        DeliveryTermCode:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        CustomerIsPrivatePerson:
+          type: boolean
+          description: True if the customer of this invoice is a private individual, false otherwise
+          readOnly: true
+        TermsOfPaymentId:
+          type: string
+          description: Specify a different terms of payment for the invoice. If not filled customer's terms of payment will be used
+          format: uuid
+        CustomerEmail:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        InvoiceNumber:
+          type: integer
+          format: int32
+          readOnly: true
+        CustomerNumber:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        CustomerName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        PaymentReferenceNumber:
+          type:
+          - string
+          - 'null'
+          description: Empty if UsesPaymentReferenceNumber not activated on the company. Use /v2/companysettings
+          readOnly: true
+        RotPropertyType:
+          maximum: 2
+          minimum: 1
+          type:
+          - integer
+          - 'null'
+          description: <strong>Possible values:</strong><br/>1 = Apartment,<br/>2 = Property<br/><br/>Leave blank or set to null if you do not intend to use ROT or Green Technology functionality.
+          format: int32
+        SalesDocumentAttachments:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Attachments for the customer invoice. Use POST /v2/salesdocumentattachments/customerinvoice to upload attachments.
+          readOnly: true
+        MessageThreads:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch messages via GET /v2/messagethreads/{messageThreadId}
+          readOnly: true
+        Notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch notes via GET /v2/notes/{noteId}
+          readOnly: true
+        HasAutoInvoiceError:
+          type: boolean
+          description: True if there was an error when trying to send the invoice via AutoInvoice, false otherwise
+          readOnly: true
+        IsNotDelivered:
+          type: boolean
+          description: True if sending by email has failed, false otherwise
+          readOnly: true
+        ReverseChargeOnConstructionServices:
+          type: boolean
+          description: True if this invoice contains reverse charge on construction services. False otherwise
+          readOnly: true
+        WorkHouseOtherCosts:
+          type:
+          - number
+          - 'null'
+          format: double
+        RemainingAmount:
+          type: number
+          description: Remaining amount to be paid on the invoice expressed in base currency
+          format: double
+          readOnly: true
+        RemainingAmountInvoiceCurrency:
+          type: number
+          description: Remaining amount to be paid on the invoice expressed in invoice currency
+          format: double
+          readOnly: true
+        ReferringInvoiceId:
+          type:
+          - string
+          - 'null'
+          description: Id of the invoice that serves as source for this invoice
+          format: uuid
+          readOnly: true
+        CreatedFromOrderId:
+          type:
+          - string
+          - 'null'
+          description: Id of the order this invoice was created from, if the invoice was created by converting an order
+          format: uuid
+          readOnly: true
+        CreatedFromQuoteId:
+          type:
+          - string
+          - 'null'
+          description: Id of the quote this invoice was created from, if the invoice was created by converting a quote
+          format: uuid
+          readOnly: true
+        CreatedFromDraftId:
+          type:
+          - string
+          - 'null'
+          description: If a valid customer invoice draft Id is provided, it will be bookkeeped using the option entered in the SendType property.
+          format: uuid
+        VoucherNumber:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        VoucherId:
+          type: string
+          format: uuid
+          readOnly: true
+        CreatedUtc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        ReversedConstructionVatInvoicing:
+          type: boolean
+          readOnly: true
+        IncludesVat:
+          type: boolean
+          description: True if company settings checkbox "ShowPricesExclVatPC" is checked and customer type is "Private", otherwise false
+          readOnly: true
+        SendType:
+          type:
+          - integer
+          - 'null'
+          description: '<strong>Possible values:</strong><br/>0 = None,<br/>1 = AutoInvoiceElectronic,<br/>2 = AutoInvoicePrint,<br/>3 = AutoInvoiceB2C (not available for Swedish customers),<br/>4 = Kivra<br/><br/>Used for sending the invoice via Autoinvoice. Default: None.'
+          format: int32
+        PaymentReminderIssued:
+          type: boolean
+          description: True if a payment reminder has been sent for the overdue invoice, otherwise false. To send a payment reminder please use the v2/customerinvoices/{invoiceId}/paymentreminders endpoint
+          readOnly: true
+        PaymentRemindersCount:
+          type: integer
+          description: Number of payment reminders sent for the overdue invoice.
+          format: int32
+          readOnly: true
+        LastPaymentReminderSentDate:
+          type:
+          - string
+          - 'null'
+          description: Last payment reminder date for the overdue invoice. Null if no payment reminder has been sent.
+          format: date-time
+          readOnly: true
+        UsesGreenTechnology:
+          type: boolean
+          description: <strong>Possible values:</strong><br/>True = This order uses green technology<br/>False = Otherwise
+        IsSold:
+          type: boolean
+          description: True if the customer invoice was sold using an integration with factoring partner, false otherwise.
+          readOnly: true
+        FactoringInvoiceStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Unknown,<br/>1 = Applied (applies for soft offers),<br/>2 = Withdrawn (applies for soft offers),<br/>3 = Rejected (applies for soft offers),<br/>4 = Sold,<br/>5 = Approved (applies for soft offers),<br/>6 = FirstReminderSent,<br/>7 = DebtCollection,<br/>8 = Reclaimed,<br/>9 = FullyPaid,<br/>10 = Closed,<br/>11 = SecondReminderSent
+          format: int32
+          readOnly: true
+        PaymentDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        PaymentStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Paid,<br/>1 = Unpaid,<br/>2 = Overdue
+          format: int32
+          readOnly: true
+        CreditedBy:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CreditedByApi'
+          description: Credit customer invoices created based on the customer invoice. Only applicable when IsCreditInvoice is false
+          readOnly: true
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        IsDirectDebit:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether direct debit should be applied, based on IsDirectDebitEnabled from customer settings
+        IsQuickInvoice:
+          type: boolean
+          description: Indicates if the invoice was created from journal entries posted manually or imported from another program.
+          readOnly: true
+        IsCollectiveInvoice:
+          type: boolean
+          description: Indicates if the invoice was created from more than one order document.
+          readOnly: true
+        CollectiveCustomerInvoiceRowsRelationToOrders:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CollectiveCustomerInvoiceRelationToOrderApi'
+          description: Describes the relation between the collective invoice rows and the orders that the invoice is generated from.
+          readOnly: true
+        ReplaceUnitPriceWhenZero:
+          type: boolean
+          description: <strong>Possible values:</strong><br/>True = replaces row unit prices that are equal to zero with article's unit price<br/>False = always uses the value on the row
+        TaxDeductionStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = ApplicableForDeductionExport,<br/>2 = ExportedToTaxAuthority,<br/>3 = RejectedByTaxAuthority
+          format: int32
+          readOnly: true
+        BackgroundId:
+          type:
+          - string
+          - 'null'
+          description: Identifier for the background image or template used on the PDF printout
+          format: uuid
+      additionalProperties: false
+    ElectronicInvoiceRequestApi:
+      type: object
+      properties:
+        SendType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = AutoInvoiceElectronic,<br/>2 = AutoInvoicePrint,<br/>3 = AutoInvoiceB2C,<br/>4 = Kivra<br/><br/>Used for sending the invoice via Autoinvoice. Possible values are.
+          format: int32
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CustomerInvoiceRowApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system for every row
+          format: uuid
+          readOnly: true
+        ArticleNumber:
+          type:
+          - string
+          - 'null'
+          description: Number of the article on the row
+          readOnly: true
+        ArticleId:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Null if text row'
+          format: uuid
+        IsServiceArticle:
+          type: boolean
+          description: True if the article is a service article. False otherwise
+          readOnly: true
+        AmountNoVat:
+          type: number
+          description: Amount on the row excluding VAT
+          format: double
+          readOnly: true
+        PercentVat:
+          type: number
+          format: double
+          readOnly: true
+          deprecated: true
+        VatRate:
+          type:
+          - number
+          - 'null'
+          description: When row is a text row the value is null. Default value is also null
+          format: double
+          readOnly: true
+        LineNumber:
+          type: integer
+          description: Number of the line in order on the row
+          format: int32
+          readOnly: true
+        IsTextRow:
+          type: boolean
+          description: True if this is a text row. False otherwise
+          readOnly: true
+        Text:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Default: For non text rows, default value will be the article''s name; for text rows, there should be at least one character in place'
+        UnitPrice:
+          type: number
+          description: 'Format: 2 decimals allowed if the customer and currency are domestic or 4 decimals if customer or currency is foreign'
+          format: double
+        UnitAbbreviation:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        UnitAbbreviationEnglish:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        IsDiscountInFixedAmount:
+          type: boolean
+          description: True if the discount on the row is a fixed amount, false otherwise
+          readOnly: true
+        DiscountFixedAmount:
+          type:
+          - number
+          - 'null'
+          description: 'Fixed amount discount on the row. Only applicable if IsDiscountInFixedAmount is true. Format: 2 decimals'
+          format: double
+          readOnly: true
+        DiscountPercentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: 'Percentage discount n the row. Format: 4 decimals'
+          format: double
+        Quantity:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+        IsWorkCost:
+          type: boolean
+          description: Only used for Rot/Rut
+          readOnly: true
+        IsVatFree:
+          type: boolean
+          description: True if this row is marked as VAT free. False otherwise
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        UnitId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/units/{id}'
+          format: uuid
+          readOnly: true
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Get from /v2/projects
+          format: uuid
+        WorkCostType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>RotConstructionWork = 1,<br/>RotElectricalWork = 2,<br/>RotGlassSheetMetalWork = 3,<br/>RotGroundWork = 4,<br/>RotBrickWork = 5,<br/>RotPaintDecorateWork = 6,<br/>RotPlumbWork = 7,<br/>RutCleanJobWork = 9,<br/>RutCareClothTextile = 10,<br/>RutSnowRemove = 12,<br/>RutGarden = 13,<br/>RutBabySitting = 14,<br/>RutOtherCare = 15,<br/>RutRemovalServices = 18,<br/>RutITServices = 19,<br/>RotHeatPump = 20,<br/>RotHeatPump2 = 21,<br/>RutHomeAppliances = 22,<br/>RotSolarHeatingSystem = 23,<br/>RotWoodBoiler = 24,<br/>RotFuelBoiler = 25,<br/>RutLaundry = 26,<br/>RutFurnishing = 27,<br/>RutGoodsTransport = 28,<br/>RutHomeSupervision = 29<br/><br/>Only used for Rot/Rut.
+          format: int32
+        WorkHours:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        MaterialCosts:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        GreenTechnologyType:
+          maximum: 3
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>SolarCellInstallation = 1,<br/>ElectricEnergyStorageInstallation = 2,<br/>ElectricVehicleChargingPointInstallation = 3<br/><br/>Type of green technology for the row.
+          format: int32
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        PurchasePrice:
+          type: number
+          description: Purchase price for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+        FreightCosts:
+          type: number
+          description: Freight costs for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+        Amount:
+          type: number
+          description: 'Returns a total amount of row. Format: 2 decimals'
+          format: double
+          readOnly: true
+      additionalProperties: false
+    CollectiveCustomerInvoiceRelationToOrderApi:
+      type: object
+      properties:
+        OrderId:
+          type: string
+          description: Unique Id provided by the system for order
+          format: uuid
+        OrderNumber:
+          type:
+          - integer
+          - 'null'
+          description: Order document number
+          format: int32
+        OrderReference:
+          type:
+          - string
+          - 'null'
+          description: Buyers order reference
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: Delivery date set in order document
+          format: date-time
+        RelatedInvoiceRows:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: List of invoice row numbers related to the order
+      additionalProperties: false
+    InvoiceUrlApi:
+      type: object
+      properties:
+        Url:
+          type:
+          - string
+          - 'null'
+          description: The URL to the invoice.
+      additionalProperties: false
+    PaymentReminderEmailApi:
+      type: object
+      properties:
+        LatePaymentFee:
+          maximum: 10000000
+          minimum: 0
+          type: number
+          description: Amount for late pament fee.
+          format: double
+        EmailDetails:
+          $ref: '#/components/schemas/EmailApi'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

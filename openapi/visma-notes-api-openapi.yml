@@ -1,0 +1,423 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Notes API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Notes
+  description: 'Comments or observations that can be attached to various documents and entities in the system.
+
+    Overview of Notes Functionality: Notes
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Bookkeeping
+
+    * Solo'
+paths:
+  /notes:
+    get:
+      tags:
+      - Notes
+      summary: Get all notes
+      description: 'Get all notes, or add query parameters to filter the results. The response will include a list of notes with their details, such as text content, attached documents, and creation timestamps.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfNoteApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getNotes
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Notes
+      summary: Create a new note
+      description: 'Create a new note. You can optionally attach the note to a specific document by providing the document Id and type.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteApi'
+      responses:
+        '200':
+          description: Note created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postNotes
+      x-operation-id-source: derived
+  /notes/{noteId}:
+    get:
+      tags:
+      - Notes
+      summary: Get a specific note
+      description: 'Get a specific note by its unique identifier. The response will include the note''s details, such as text content, attached document information, and timestamps.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: noteId
+        in: path
+        description: The Id of the note to retrieve
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getNotesByNoteId
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Notes
+      summary: Update a note
+      description: 'Replace an existing note''s data with the provided new data.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: noteId
+        in: path
+        description: The Id of the note to update
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteApi'
+      responses:
+        '200':
+          description: Note updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putNotesByNoteId
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    NoteApi:
+      required:
+      - Text
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the note
+          format: uuid
+          readOnly: true
+        UserId:
+          type: string
+          description: The unique identifier of the user who created the note
+          format: uuid
+          readOnly: true
+        AttachedTo:
+          type:
+          - string
+          - 'null'
+          description: The document Id to which the note can be attached
+          format: uuid
+        Text:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: The text content of the note
+        Subject:
+          maxLength: 40
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The subject of the note
+        DocumentType:
+          maximum: 21
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>CustomerInvoice = 1,<br/>CustomerInvoiceDraft = 2,<br/>SupplierInvoice = 3,<br/>Voucher = 4,<br/>Quotation = 5,<br/>Order = 6,<br/>SupplierInvoiceDraft = 7,<br/>WebshopOrder = 8,<br/>Customer = 9,<br/>Receipt = 10,<br/>Article = 11,<br/>VatReport = 12,<br/>Supplier = 13,<br/>Inventory = 14,<br/>Employee = 15,<br/>Payslip = 16,<br/>Image = 17,<br/>Reconciliation = 18,<br/>QuoteDraft = 19,<br/>VoucherDraft = 20,<br/>OrderDraft = 21<br/><br/>The document type to which the note is attached.
+          format: int32
+        CreatedUtc:
+          type: string
+          description: The time the note was created
+          format: date-time
+          readOnly: true
+        ModifiedUtc:
+          type: string
+          description: The time the note was last modified
+          format: date-time
+          readOnly: true
+        IsDone:
+          type: boolean
+          description: Indicates whether the note is marked as done
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfNoteApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NoteApi'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

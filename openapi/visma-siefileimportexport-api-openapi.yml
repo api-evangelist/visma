@@ -1,0 +1,357 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Sie File Import…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: SieFileImportExport
+  description: 'A Swedish standard file format used to import and export accounting data between different financial systems.
+
+    This implementation supports verifications and documents.
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping
+
+    * Invoicing
+
+    * Solo
+
+    * Payroll'
+paths:
+  /sie4export/{fromDate}/{toDate}:
+    get:
+      tags:
+      - SieFileImportExport
+      summary: Export SIE4 file
+      description: 'Exports a SIE4 file that is between FromDate and ToDate inside the same fiscal year.
+
+        Note: This export includes verifications and documents,
+
+        When choosing dates for a whole fiscal year the data file includes:
+
+        #RAR
+
+        #RAR previous fiscal year
+
+        #IB
+
+        #UB
+
+        #RES
+
+        #KONTO
+
+
+        Dates that are a part of a fiscal year does not include opening or closing balances (IB/UB), RAR or RES.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: fromDate
+        in: path
+        description: 'Start date for the export. Format: yyyy-MM-dd'
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: toDate
+        in: path
+        description: 'End date for the export. Format: yyyy-MM-dd'
+        required: true
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSie4exportByFromDateByToDate
+      x-operation-id-source: derived
+  /sie4import:
+    post:
+      tags:
+      - SieFileImportExport
+      summary: Import SIE4 file
+      description: 'Imports a SIE4 file into the system, parsing and validating the provided data based on the specified parameters. The data is processed to integrate with the accounting system, including mappings for ledger accounts, series, and other settings like opening balances or year-end adjustments. The response will include the number of vouchers successfully imported.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sie4Api'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonBatchResponseApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postSie4import
+      x-operation-id-source: derived
+components:
+  schemas:
+    Sie4Api:
+      required:
+      - Encoding
+      - EndYearAdjustment
+      - ImportAccountNames
+      - ImportOpeningBalance
+      - MapLedgerAccount
+      - SieData
+      type: object
+      properties:
+        SieData:
+          minLength: 1
+          type: string
+          description: Base64 string containing SIE data
+        Encoding:
+          type: integer
+          description: <strong>Possible values:</strong><br/>Default = 1 (Codepage 437),<br/>Administration = 2 (Codepage 850),<br/>Utf8 = 3,<br/>Ascii = 4<br/><br/>File encoding type.
+          format: int32
+        MapLedgerAccount:
+          type: boolean
+          description: Map ledger accounts to company default
+        ImportOpeningBalance:
+          type: boolean
+          description: Import opening balance for accounts
+        EndYearAdjustment:
+          type: boolean
+          description: Perform end-year adjustment
+        ImportAccountNames:
+          type: boolean
+          description: Import account names from SIE
+        SeriesMappings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SeriesMapping'
+          description: 'Array of series mappings: from original series in SIE file, to new series in company'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DocumentApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the document
+          format: uuid
+          readOnly: true
+        ContentType:
+          type:
+          - string
+          - 'null'
+          description: MIME content type of the document
+        CreatedUtc:
+          type: string
+          description: Date and time when the document was created (UTC)
+          format: date-time
+          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Full name of the document including extension
+        NameWithoutExtension:
+          type:
+          - string
+          - 'null'
+          description: Name of the document without the file extension
+        Size:
+          type: integer
+          description: Size of the document in bytes
+          format: int32
+        Type:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = SupplierInvoiceDraftAttachment,<br/>1 = SupplierInvoiceAttachment,<br/>2 = SupplierInvoiceXml,<br/>10 = CustomerInvoiceXml,<br/>11 = CustomerInvoicePdf,<br/>12 = CustomerInvoicePaymentReminderPdf,<br/>13 = CompanyLogo,<br/>14 = DocumentBackgroundPdf,<br/>15 = DocumentBackgroundImage,<br/>16 = DeletedDocumentBackground,<br/>20 = PhotoReceipt,<br/>21 = PhotoSupplierInvoice,<br/>30 = AutoInvoiceAssembly,<br/>40 = FinvoiceReceiverInfoXml,<br/>41 = VatReportPdf<br/><br/>Type of the document - see DocumentTypeApi enum for available values.
+          format: int32
+        TemporaryUrl:
+          type:
+          - string
+          - 'null'
+          description: Temporary URL for accessing the document. This URL will expire and should not be stored.
+        Title:
+          type:
+          - string
+          - 'null'
+          description: Title or descriptive name of the document
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CommonBatchResponseApi:
+      type: object
+      properties:
+        CreatedRows:
+          type: integer
+          description: The number of rows created in the batch operation.
+          format: int32
+      additionalProperties: false
+    SeriesMapping:
+      type: object
+      properties:
+        OriginalSeries:
+          type:
+          - string
+          - 'null'
+          description: Original series name from the SIE file
+        NewSeries:
+          type:
+          - string
+          - 'null'
+          description: New series name to map to in the company
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

@@ -1,0 +1,178 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Background API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: Background
+paths:
+  /v1/background/{requestId}:
+    get:
+      tags:
+      - Background
+      summary: Gets the state of a previously started background API operation
+      operationId: Background_GetBackgroundApiOperationByrequestId
+      parameters:
+      - name: requestId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundRequestStateDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundRequestStateDto'
+        '403':
+          description: State request was not done by same company/user as for the background operation request.
+          content:
+            application/json: {}
+            text/json: {}
+        '404':
+          description: No background operation state was found.
+          content:
+            application/json: {}
+            text/json: {}
+      security:
+      - interactiveapi: []
+  /v1/background/{requestId}/content:
+    get:
+      tags:
+      - Background
+      summary: Gets the response content, if any, of a previously started background API…
+      operationId: Background_GetBackgroundApiOperationContentByrequestId
+      parameters:
+      - name: requestId
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Gets response content for a finished background operation, if any.
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '403':
+          description: State request was not done by same company/user as for the background operation request.
+          content:
+            application/json: {}
+            text/json: {}
+        '404':
+          description: No background operation response content was found.
+          content:
+            application/json: {}
+            text/json: {}
+        '410':
+          description: State for background operation has been removed after 24 hours.
+          content:
+            application/json: {}
+            text/json: {}
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    BackgroundRequestStateDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: '
+
+            Identifies a started background API operation'
+        status:
+          type: string
+          description: '
+
+            Current status of a background API operation. Possible values are ''Started'', ''Finished'' and ''Failed''.'
+        statusCode:
+          type: integer
+          description: '
+
+            The Http Status Code of the finished background API operation. Value is 0 when operation is not done.'
+          format: int32
+        receivedUtc:
+          type: string
+          description: '
+
+            Time when background API operation was requested'
+          format: date-time
+        startedUtc:
+          type: string
+          description: '
+
+            Time when processing of background API operation was started'
+          format: date-time
+        finishedUtc:
+          type: string
+          description: '
+
+            Time when background API operation was finished processing'
+          format: date-time
+        webhookAddress:
+          type: string
+          description: '
+
+            The webhook uri used to notify when background API operation is finished, or ''none'' if no notification is configured'
+        errorMessage:
+          type: string
+          description: '
+
+            Any error message during processing of background API operation request. Note that any error response from the actual endpoint can be obtained by calling the ContentLocation address from the webhook notifaction response or the background state document.'
+        reference:
+          type: string
+        originalUri:
+          type: string
+          description: '
+
+            The endpoint that was requested to be processed as a background API operation.'
+        hasResponseContent:
+          type: boolean
+          description: '
+
+            Indicates whether or not the background API operation ended with a response content. Value is updated only when background API operation is finished.'
+        hasRequestContent:
+          type: boolean
+          description: '
+
+            Indicates whether or not the background API operation request has a request content.'
+        contentLocation:
+          type: string
+          description: '
+
+            The uri from where the client can get the response from the background API operation, if any is available.'
+          readOnly: true
+        responseHeaders:
+          type: object
+          additionalProperties:
+            type: string
+          description: '
+
+            Any response headers from the finished background API operation.'
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

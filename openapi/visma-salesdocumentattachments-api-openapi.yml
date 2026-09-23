@@ -1,0 +1,734 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Sales Document…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: SalesDocumentAttachments
+  description: 'Files or documents that can be linked to records such as customer invoices, quotes, and orders.
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Solo'
+paths:
+  /salesdocumentattachments/{attachmentId}.pdf:
+    get:
+      tags:
+      - SalesDocumentAttachments
+      summary: Download sales document attachment
+      description: 'Get a specific sales document attachment by its unique identifier and download it in its original file format.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: attachmentId
+        in: path
+        description: The attachment Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSalesdocumentattachments{attachmentId}Pdf
+      x-operation-id-source: derived
+  /salesdocumentattachments/{attachmentId}:
+    get:
+      tags:
+      - SalesDocumentAttachments
+      summary: Get sales document attachment information by Id
+      description: 'Get a specific sales document attachment by its unique identifier. The response will include information about the attachment, such as its Id, file name, size, and the date it was created.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: attachmentId
+        in: path
+        description: The attachment Id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesDocumentAttachmentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSalesdocumentattachmentsByAttachmentId
+      x-operation-id-source: derived
+  /salesdocumentattachments:
+    get:
+      tags:
+      - SalesDocumentAttachments
+      summary: Get all sales document attachments
+      description: 'Get all sales document attachments, or use query parameters to filter the results. The response will include details such as attachment Id, file name, upload date, and a link to download the attachment.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfSalesDocumentAttachmentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSalesdocumentattachments
+      x-operation-id-source: derived
+    post:
+      tags:
+      - SalesDocumentAttachments
+      summary: Create sales document attachment
+      description: 'Create a sales document attachment.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesDocumentAttachmentUploadApi'
+      responses:
+        '201':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesDocumentAttachmentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      deprecated: true
+      operationId: postSalesdocumentattachments
+      x-operation-id-source: derived
+  /salesdocumentattachments/customerinvoicedraft:
+    post:
+      tags:
+      - SalesDocumentAttachments
+      summary: Create sales document attachment for customer invoice draft
+      description: 'Create a sales document attachment for a customer invoice draft.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesDocumentAttachmentUploadApi'
+      responses:
+        '201':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesDocumentAttachmentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postSalesdocumentattachmentsCustomerinvoicedraft
+      x-operation-id-source: derived
+  /salesdocumentattachments/customerinvoice:
+    post:
+      tags:
+      - SalesDocumentAttachments
+      summary: Create sales document attachment for customer invoice
+      description: 'Create a sales document attachment for a customer invoice.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesDocumentAttachmentUploadApi'
+      responses:
+        '201':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesDocumentAttachmentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postSalesdocumentattachmentsCustomerinvoice
+      x-operation-id-source: derived
+  /salesdocumentattachments/order:
+    post:
+      tags:
+      - SalesDocumentAttachments
+      summary: Create sales document attachment for order
+      description: 'Create a sales document attachment for an order or an order draft.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesDocumentAttachmentUploadApi'
+      responses:
+        '201':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesDocumentAttachmentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postSalesdocumentattachmentsOrder
+      x-operation-id-source: derived
+  /salesdocumentattachments/quote:
+    post:
+      tags:
+      - SalesDocumentAttachments
+      summary: Create sales document attachment for quote
+      description: 'Create a sales document attachment for a quote or a quote draft.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesDocumentAttachmentUploadApi'
+      responses:
+        '201':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesDocumentAttachmentApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postSalesdocumentattachmentsQuote
+      x-operation-id-source: derived
+  /salesdocumentattachments/{customerInvoiceDraftId}/{attachmentId}:
+    delete:
+      tags:
+      - SalesDocumentAttachments
+      summary: Delete customer invoice draft attachment
+      description: 'Delete a specific attachment from a customer invoice draft by its unique identifier.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: customerInvoiceDraftId
+        in: path
+        description: Customer invoice draft ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: attachmentId
+        in: path
+        description: Attachment ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      deprecated: true
+      operationId: deleteSalesdocumentattachmentsByCustomerInvoiceDraftIdByAttachmentId
+      x-operation-id-source: derived
+  /salesdocumentattachments/customerinvoicedraft/{customerInvoiceDraftId}/{attachmentId}:
+    delete:
+      tags:
+      - SalesDocumentAttachments
+      summary: Delete customer invoice draft attachment
+      description: 'Delete a specific attachment from a customer invoice draft by its unique identifier.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: customerInvoiceDraftId
+        in: path
+        description: Customer invoice draft ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: attachmentId
+        in: path
+        description: Attachment ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteSalesdocumentattachmentsCustomerinvoicedraftByCustomerInvoiceDraftIdByAttachmentId
+      x-operation-id-source: derived
+  /salesdocumentattachments/customerinvoice/{customerInvoiceId}/{attachmentId}:
+    delete:
+      tags:
+      - SalesDocumentAttachments
+      summary: Delete customer invoice attachment
+      description: 'Delete an attachment from a customer invoice by its unique identifier.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: customerInvoiceId
+        in: path
+        description: Customer invoice ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: attachmentId
+        in: path
+        description: Attachment ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteSalesdocumentattachmentsCustomerinvoiceByCustomerInvoiceIdByAttachmentId
+      x-operation-id-source: derived
+  /salesdocumentattachments/order/{orderId}/{attachmentId}:
+    delete:
+      tags:
+      - SalesDocumentAttachments
+      summary: Delete order attachment
+      description: 'Delete an attachment from an order or order draft by its unique identifier.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: orderId
+        in: path
+        description: Order or order draft ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: attachmentId
+        in: path
+        description: Attachment ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '403':
+          description: Operation not allowed for demo company
+      operationId: deleteSalesdocumentattachmentsOrderByOrderIdByAttachmentId
+      x-operation-id-source: derived
+  /salesdocumentattachments/quote/{quoteId}/{attachmentId}:
+    delete:
+      tags:
+      - SalesDocumentAttachments
+      summary: Delete quote attachment
+      description: 'Delete an attachment from a quote or quote draft by its unique identifier.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: quoteId
+        in: path
+        description: Quote or quote draft ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: attachmentId
+        in: path
+        description: Attachment ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '403':
+          description: Operation not allowed for demo company
+      operationId: deleteSalesdocumentattachmentsQuoteByQuoteIdByAttachmentId
+      x-operation-id-source: derived
+components:
+  schemas:
+    PaginatedResponseOfSalesDocumentAttachmentApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesDocumentAttachmentApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    SalesDocumentAttachmentUploadApi:
+      required:
+      - ContentType
+      - DockumentId
+      - FileName
+      type: object
+      properties:
+        ContentType:
+          maxLength: 15
+          minLength: 0
+          type: string
+          description: 'Content type of the file. Allowed values: ''application/pdf'', ''image/jpeg'', ''image/tiff'', ''image/png''.'
+        FileName:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: The file name that will be shown in UI.
+        DockumentId:
+          type: string
+          description: Document's id to which a sales document is being attached.
+          format: uuid
+        Data:
+          type:
+          - string
+          - 'null'
+          description: Base64 encoded data of the file. Required if 'Url' is not provided.
+        Url:
+          type:
+          - string
+          - 'null'
+          description: Public URL of the file. Required if 'Data' is not provided.
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    SalesDocumentAttachmentApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Attachment ID.
+          format: uuid
+        DocumentId:
+          type:
+          - string
+          - 'null'
+          description: Sales document ID.
+          format: uuid
+        DocumentType:
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          type: integer
+          description: Sales document type.
+          format: int32
+        OriginalFilename:
+          type:
+          - string
+          - 'null'
+          description: Attached file name.
+        DocumentSize:
+          type: integer
+          description: Attached file size
+          format: int32
+        CreatedUtc:
+          type: string
+          description: Attachment date (UTC).
+          format: date-time
+          readOnly: true
+        CreatedBy:
+          type:
+          - string
+          - 'null'
+          description: Full name of user who attached the file.
+        Thumbnail:
+          type:
+          - string
+          - 'null'
+          description: Thumbnail of the attached file, null if the file is a pdf file
+          format: byte
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

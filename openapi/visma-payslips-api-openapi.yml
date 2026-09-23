@@ -1,0 +1,504 @@
+openapi: 3.2.0
+info:
+  title: Visma Payslips API
+  contact:
+    email: api@spiris.se
+  version: '1.0'
+  description: 'Operations tagged Payslips across 2 of this provider''s published API definitions: visma-payroll-api-v1-openapi-original.json, visma-payroll-api-v2-openapi-original.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: Payslips
+  description: Operations for managing employee payslips. Use this to retrieve a single payslip or list payslips for a specific employee or wage run in your company's payroll system.
+paths:
+  /v1/payslips/wagerun/{wagerunId}:
+    get:
+      tags:
+      - Payslips
+      summary: Gets payslips for specified wage run
+      description: Gets the payslips for a wagerun. Use query options ($filter, $select, $orderby, $top, $skip) to customize your request.
+      parameters:
+      - name: wagerunId
+        in: path
+        description: Id of wage run which payslips to return.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfPayslipApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1PayslipsWagerunByWagerunId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v1/payslips/{payslipId}:
+    get:
+      tags:
+      - Payslips
+      summary: Gets payslip by id
+      description: Gets a payslip by id. Use query parameters to select specific properties in the response.
+      parameters:
+      - name: payslipId
+        in: path
+        description: Id of wanted payslip.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayslipApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV1PayslipsByPayslipId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/payslips/wagerun/{wagerunId}:
+    get:
+      tags:
+      - Payslips
+      summary: Gets payslips for specified wage run
+      description: Gets the payslips for a wagerun. Use query options ($filter, $select, $orderby, $top, $skip) to customize your request.
+      parameters:
+      - name: wagerunId
+        in: path
+        description: Id of wage run which payslips to return.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfPayslipResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2PayslipsWagerunByWagerunId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/payslips/{payslipId}:
+    get:
+      tags:
+      - Payslips
+      summary: Gets payslip by id
+      description: Gets a payslip by id. Use query parameters to select specific properties in the response.
+      parameters:
+      - name: payslipId
+        in: path
+        description: Id of wanted payslip.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayslipResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2PayslipsByPayslipId
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+  /v2/payslips/{employeeId}/withdetails:
+    get:
+      tags:
+      - Payslips
+      summary: Gets all employees payslips with employee details
+      description: 'Get all payslips, both open and locked, with details on an employee. Use query options ($filter, $select, $orderby, $top, $skip) to customize your request.
+
+        Payslip includes net, gross salaries and preliminary tax.'
+      parameters:
+      - name: employeeId
+        in: path
+        description: Id of employee which payslips to return.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfPayslipDetailedResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getV2PayslipsByEmployeeIdWithdetails
+      x-operation-id-source: derived
+    servers:
+    - url: https://vlsapi.vismaonline.com/
+components:
+  schemas:
+    PayslipApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the payslip
+          format: uuid
+        EmployeeId:
+          type: string
+          description: Unique identifier of the employee the payslip belongs to
+          format: uuid
+        SalaryPeriod_ToDate:
+          type: string
+          description: End date of the salary period
+          format: date-time
+        SalaryPeriod_FromDate:
+          type: string
+          description: Start date of the salary period
+          format: date-time
+        DeviationPeriod_ToDate:
+          type: string
+          description: End date of the deviation reporting period
+          format: date-time
+        CreatedUtc:
+          type: string
+          description: UTC timestamp when the payslip was created
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the payslip was last modified
+          format: date-time
+        LockedDate:
+          type:
+          - string
+          - 'null'
+          description: Date when the payslip was locked, or null if it has not been locked
+          format: date-time
+        Locked:
+          type: boolean
+          description: Indicates whether the payslip is locked and cannot be modified
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfPayslipApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayslipApi'
+      additionalProperties: false
+    PaginatedResponseOfPayslipDetailedResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayslipDetailedResponse'
+      additionalProperties: false
+    PaginatedResponseOfPayslipResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayslipResponse'
+      additionalProperties: false
+    PayslipDetailedResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the payslip
+          format: uuid
+        EmployeeId:
+          type: string
+          description: Unique identifier of the employee the payslip belongs to
+          format: uuid
+        SalaryPeriod_ToDate:
+          type: string
+          description: End date of the salary period
+          format: date-time
+        SalaryPeriod_FromDate:
+          type: string
+          description: Start date of the salary period
+          format: date-time
+        DeviationPeriod_ToDate:
+          type: string
+          description: End date of the deviation reporting period
+          format: date-time
+        CreatedUtc:
+          type: string
+          description: UTC timestamp when the payslip was created
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the payslip was last modified
+          format: date-time
+        LockedDate:
+          type:
+          - string
+          - 'null'
+          description: Date when the payslip was locked, or null if it has not been locked
+          format: date-time
+        GrossSalary:
+          type: number
+          description: Total gross salary amount before deductions
+          format: double
+        NetSalary:
+          type: number
+          description: Net salary amount paid to the employee after deductions
+          format: double
+        PreliminaryTax:
+          type: number
+          description: Preliminary tax amount deducted from the gross salary
+          format: double
+        PaymentDateUtc:
+          type: string
+          description: UTC date when the salary payment is scheduled
+          format: date-time
+        WageRunType:
+          type: integer
+          description: 'Type of the wage run this payslip belongs to<br/>Possible values: Possible values: 1 - normal, 2 - extra, 3 - payment from employee'
+          format: int32
+      additionalProperties: false
+    PayslipResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the payslip
+          format: uuid
+        EmployeeId:
+          type: string
+          description: Unique identifier of the employee the payslip belongs to
+          format: uuid
+        SalaryPeriod_ToDate:
+          type: string
+          description: End date of the salary period
+          format: date-time
+        SalaryPeriod_FromDate:
+          type: string
+          description: Start date of the salary period
+          format: date-time
+        DeviationPeriod_ToDate:
+          type: string
+          description: End date of the deviation reporting period
+          format: date-time
+        CreatedUtc:
+          type: string
+          description: UTC timestamp when the payslip was created
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the payslip was last modified
+          format: date-time
+        LockedDate:
+          type:
+          - string
+          - 'null'
+          description: Date when the payslip was locked, or null if it has not been locked
+          format: date-time
+        Locked:
+          type: boolean
+          description: Indicates whether the payslip is locked and cannot be modified
+      additionalProperties: false
+x-refined-from:
+- visma-payroll-api-v1-openapi-original.json
+- visma-payroll-api-v2-openapi-original.json
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

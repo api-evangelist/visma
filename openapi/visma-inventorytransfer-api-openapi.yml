@@ -1,0 +1,845 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Inventory Transfer API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: InventoryTransfer
+paths:
+  /v1/inventoryTransfer/{inventoryTransferNumber}:
+    get:
+      tags:
+      - InventoryTransfer
+      summary: Get a specific Inventory Transfer document
+      operationId: InventoryTransfer_GetByinventoryTransferNumber
+      parameters:
+      - name: inventoryTransferNumber
+        in: path
+        description: Identifies the Inventory Transfer document
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryTransferDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/InventoryTransferDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    put:
+      tags:
+      - InventoryTransfer
+      summary: Update a specific inventory transfer
+      description: Response Message has StatusCode NoContent if PUT operation succeed
+      operationId: InventoryTransfer_PutByinventoryTransferNumber
+      parameters:
+      - name: inventoryTransferNumber
+        in: path
+        description: Identifies the inventory transfer to update
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: The data to update for inventory transfer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+        required: true
+        x-bodyName: transfer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/inventoryTransfer:
+    get:
+      tags:
+      - InventoryTransfer
+      summary: Get a range of Inventory Transfers - ScreenId=IN304000 Request page size must…
+      operationId: InventoryTransfer_GetAll
+      parameters:
+      - name: warehouse
+        in: query
+        description: Inventory transfer's source warehouse
+        schema:
+          type: string
+      - name: toWarehouse
+        in: query
+        description: Inventory transfer's target warehouse
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          type: string
+      - name: date
+        in: query
+        description: "The date when the inventory document was created\n            \nAccepted format:\n* ```yyyy-MM-dd```\n* ```yyyy-MM-dd HH:mm:ss```\n* ```yyyy-MM-dd HH:mm:ss.FFF```\n* ```yyyy-MM-ddTHH:mm:ss```\n* ```yyyy-MM-ddTHH:mm:ss.FFF```\n\n_Note:_ __Date__ and __DateCondition__ are __mutually inclusive__."
+        schema:
+          type: string
+      - name: dateCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records usind the __Date__ filter.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __Date__ and __DateCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: greaterThanValue
+        in: query
+        schema:
+          type: string
+      - name: numberToRead
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: skipRecords
+        in: query
+        description: This field has been deprecated and will be removed in future versions. Use pagenumber and pagesize for pagination purposes. Pagenumber and pagesize does not work with NumberToRead and SkipRecords.
+        schema:
+          type: integer
+          format: int32
+      - name: orderBy
+        in: query
+        description: This field has been deprecated and will be removed in future versions. The OrderBy parameter has no effect on the result.
+        schema:
+          type: string
+      - name: lastModifiedDateTime
+        in: query
+        description: 'This value, generated by the system, indicates the last time the record was modified. Use it to retrieve all records that have been modified since that time, up to the present.
+
+
+          Accepted format:
+
+          * ```yyyy-MM-dd```
+
+          * ```yyyy-MM-dd HH:mm:ss```
+
+          * ```yyyy-MM-dd HH:mm:ss.FFF```
+
+          * ```yyyy-MM-ddTHH:mm:ss```
+
+          * ```yyyy-MM-ddTHH:mm:ss.FFF```
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: lastModifiedDateTimeCondition
+        in: query
+        description: 'This value represents the condition to be applied when retrieving records.
+
+
+          Accepted values (without the single quotes):
+
+          * ''&gt;'' for greater than
+
+          * ''&lt;'' for less than
+
+          * ''&gt;='' for greater than or equal
+
+          * ''&lt;='' for less than or equal
+
+
+          _Note:_ __LastModifiedDateTime__ and __LastModifiedDateTimeCondition__ are __mutually inclusive__.'
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryTransferDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryTransferDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+    post:
+      tags:
+      - InventoryTransfer
+      summary: Create an inventory transfer
+      description: Response Message has StatusCode Created if POST operation succed
+      operationId: InventoryTransfer_Post
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Define the data for the inventory transfer to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InventoryTransferUpdateDto'
+        required: true
+        x-bodyName: inventoryTransfer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/inventoryTransfer/{transferNumber}/action/release:
+    post:
+      tags:
+      - InventoryTransfer
+      summary: Release inventory operation
+      description: The action result dto contains information about the result of running the action
+      operationId: InventoryTransfer_ReleaseDocumentBytransferNumber
+      parameters:
+      - name: transferNumber
+        in: path
+        description: Reference number of the released transfer to be released
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseInventoryDocumentActionResultDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReleaseInventoryDocumentActionResultDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ReleaseInventoryDocumentActionResultDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ReleaseInventoryDocumentActionResultDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+    InventoryTransferUpdateDto:
+      type: object
+      properties:
+        warehouseId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        toWarehouseId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        transferLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryTransferLineUpdateDto'
+          description: The inventory issue lines
+        referenceNumber:
+          $ref: '#/components/schemas/referenceNumberInInventoryTransferUpdateDto'
+        hold:
+          $ref: '#/components/schemas/holdInInventoryTransferUpdateDto'
+        date:
+          $ref: '#/components/schemas/dateInInventoryTransferUpdateDto'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInInventoryTransferUpdateDto'
+        externalReference:
+          $ref: '#/components/schemas/externalReferenceInInventoryTransferUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInInventoryTransferUpdateDto'
+        controlQuantity:
+          $ref: '#/components/schemas/controlQuantityInInventoryTransferUpdateDto'
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInInventoryTransferUpdateDto'
+      description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
+    descriptionInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A brief description of the inventory issue or its transactions.
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    locationInInventoryTransferLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Location &gt; The warehouse location from which the goods are transferred.
+    LocationDescriptionDto:
+      type: object
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+    holdInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: A check box that you select to give the receipt the On Hold status. Clear the check box to save the receipt with the Balanced status.
+    warehouseInInventoryTransferDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; From warehouse* &gt; The warehouse from which the goods are transferred.'
+    dateInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: The date when the receipt was created. All transactions included in this document will have this transaction date.
+    controlQuantityInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The manually entered quantity of inventory items. Control Qty. is available only if the Validate Document Totals on Entry option is selected on the Inventory Preferences form. If the Control Qty. and Total Qty.values do not match, the system generates a warning message and the issue cannot be saved.
+    InventoryTransferLineUpdateDto:
+      type: object
+      properties:
+        toLocationId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lotSerialNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expirationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationsUpdateBasicDto'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        reasonCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectTaskId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+    AllocationsUpdateBasicDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+          description: The operation &gt;  Insert=1, Update=2, Delete=3
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lotSerialNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+      description: This class represents an Allocation. Used to add/update data.
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    branchNumberInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Branch associated
+    postPeriodInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    toWarehouseInInventoryTransferDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; To warehouse &gt; The warehouse to which the goods are transferred.'
+    InventoryTransferDto:
+      type: object
+      properties:
+        warehouse:
+          $ref: '#/components/schemas/warehouseInInventoryTransferDto'
+        toWarehouse:
+          $ref: '#/components/schemas/toWarehouseInInventoryTransferDto'
+        transferLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryTransferLineDto'
+          description: The Transaction details tab &gt; The inventory transfer lines
+        referenceNumber:
+          type: string
+          description: The unique reference number of the receipt, which the system automatically assigns according to the numbering sequence selected for receipts on the Inventory Preferences IN.10.10.00) form.
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          type: string
+          description: " The current status of the receipt. The following options are available: \nOn Hold:The receipt/issue is a draft and can be edited. Receipts with this status cannot be released.\nBalanced: The receipt/issue data has been validated by the system and the receipt can be released. It also can be modified or deleted, but changes can be saved only if the receipt is balanced.\nReleased: The receipt/issue has been released and cannot be edited or deleted."
+        hold:
+          type: boolean
+          description: A check box that you select to give the receipt the On Hold status. Clear the check box to save the receipt with the Balanced status.
+        date:
+          type: string
+          description: The date when the inventory document was created. All transactions included in this document will have this transaction date.
+          format: date-time
+        postPeriod:
+          type: string
+          description: The financial period to which the transactions recorded in the document should be posted. Format MMYYYY.
+        externalReference:
+          type: string
+          description: The external reference number of the inventory issue document (for example, the vendor’s reference code).
+        description:
+          type: string
+          description: A brief description of the inventory issue or its transactions.
+        totalQuantity:
+          type: number
+          description: The total quantity of inventory items, which the system calculates automatically, for the document.
+          format: double
+        controlQuantity:
+          type: number
+          description: The manually entered quantity of inventory items. Control Qty. is available only if the Validate Document Totals on Entry option is selected on the Inventory Preferences form. If the Control Qty. and Total Qty.values do not match, the system generates a warning message and the issue cannot be saved.
+          format: double
+        batchNumber:
+          type: string
+          description: The reference number of the batch generated for the receipt. Click the number to open the Journal Transactions (GL.30.10.00) form and view the details of the transactions.
+        lastModifiedDateTime:
+          type: string
+          description: The date when the document was last modified.
+          format: date-time
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInInventoryTransferDto'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+          description: The data containing information about the document attachments
+        timestamp:
+          type: string
+          description: Timestamp of the inventory document
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
+    ReleaseInventoryDocumentActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    externalReferenceInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The external reference number of the inventory issue document (for example, the vendor’s reference code).
+    referenceNumberInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The unique reference number of the receipt, which the system automatically assigns according to the numbering sequence selected for receipts on the Inventory Preferences IN.10.10.00) form.
+    inventoryItemInInventoryTransferLineDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Item ID* &gt; The ID of the goods to be transferred.'
+    InventoryTransferLineDto:
+      type: object
+      properties:
+        toLocation:
+          $ref: '#/components/schemas/LocationDescriptionDto'
+        lotSerialNumber:
+          type: string
+        expirationDate:
+          type: string
+          format: date-time
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationsBasicDto'
+        lineNumber:
+          type: integer
+          format: int32
+        inventoryItem:
+          $ref: '#/components/schemas/inventoryItemInInventoryTransferLineDto'
+        location:
+          $ref: '#/components/schemas/locationInInventoryTransferLineDto'
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of the transferred goods (in the units indicated below).
+          format: double
+        uom:
+          type: string
+          description: 'Mandatory field: UoM* &gt; The unit of measure (UoM) used for the goods to be transferred.'
+        reasonCode:
+          $ref: '#/components/schemas/reasonCodeInInventoryTransferLineDto'
+        description:
+          type: string
+          description: Description &gt; A brief description of the goods transfer transaction.
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+        branchNumber:
+          $ref: '#/components/schemas/BranchNumberDto'
+    branchNumberInInventoryTransferDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Branch associated
+    reasonCodeInInventoryTransferLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Reason code &gt; The reason code associated with the transferred goods.
+    AllocationsBasicDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          format: int32
+        location:
+          $ref: '#/components/schemas/LocationDescriptionDto'
+        lotSerialNumber:
+          type: string
+        quantity:
+          type: number
+          format: double
+      description: This class represents a basic Allocation/Kit Allocation
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

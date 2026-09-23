@@ -1,0 +1,284 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Fixed Asset Class API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: FixedAssetClass
+paths:
+  /v1/fixedAssetClass/{ClassID}:
+    get:
+      tags:
+      - FixedAssetClass
+      summary: Get a specific Fixed Asset Class - Screen ID:FA201000
+      operationId: FixedAssetClass_GetByClassID
+      parameters:
+      - name: ClassID
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixedAssetClassDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/FixedAssetClassDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+  /v1/fixedAssetClass:
+    get:
+      tags:
+      - FixedAssetClass
+      summary: Get a range of Fixed Asset Classes - Screen ID:FA201000
+      operationId: FixedAssetClass_GetAll
+      parameters:
+      - name: classID
+        in: query
+        description: Fixed Asset Class ID that identifies the fixed asset class.
+        schema:
+          type: string
+      - name: pageNumber
+        in: query
+        description: Pagination parameter. Page number.
+        schema:
+          type: integer
+          format: int32
+      - name: pageSize
+        in: query
+        description: 'Pagination parameter. Number of items to be collected.
+
+          Please use a page size lower or equal to the allowed max page size which is returned as part of the metadata information.
+
+          If requested page size is greater than allowed max page size, request will be limited to max page size.'
+        schema:
+          type: integer
+          format: int32
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedAssetClassDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixedAssetClassDto'
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    accountsInFixedAssetClassDto:
+      properties:
+        accountID:
+          type: string
+          description: The fixed asset account for this fixed asset
+        subAccountID:
+          type: string
+          description: The sub account for this fixed asset
+        accrualAccountID:
+          type: string
+          description: The accrual account for this fixed asset
+        accrualSubAccountID:
+          type: string
+          description: The accrual sub account for this fixed asset
+        accumulatedDepreciationAccountID:
+          type: string
+          description: The accumulated depreciation account for this fixed asset
+        accumulatedDepreciationSubAccountID:
+          type: string
+          description: The accumulated depreciation sub for this fixed asset
+        depreciatedExpenseAccountID:
+          type: string
+          description: The depreciation expense account for this fixed asset
+        depreciatedExpenseSubAccountID:
+          type: string
+          description: The depreciation expense sub for this fixed asset
+        disposalAccountID:
+          type: string
+          description: The proceeds account for this fixed asset
+        disposalSubAccountID:
+          type: string
+          description: The proceeds sub for this fixed asset
+        gainAccountID:
+          type: string
+          description: The gain account for this fixed asset
+        gainSubAccountID:
+          type: string
+          description: The gain sub for this fixed asset
+        lossAccountID:
+          type: string
+          description: The loss account for this fixed asset
+        lossSubAccountID:
+          type: string
+          description: The loss sub for this fixed asset
+        debitAccountID:
+          type: string
+          description: The debit account
+        debitSubAccountID:
+          type: string
+          description: The debit sub account
+        creditAccountID:
+          type: string
+          description: The credit account
+        creditSubAccountID:
+          type: string
+          description: The credit sub account
+      description: Default accounts for the fixed asset using this fixed asset class
+    bookSettingsInFixedAssetClassDto:
+      properties:
+        bookID:
+          type: string
+          description: The book id
+        depreciationMethodID:
+          type: string
+          description: The depreciation method id
+      description: Default book settings for the fixed asset using this fixed asset class
+    FixedAssetClassDto:
+      type: object
+      properties:
+        classID:
+          type: string
+          description: The id that identifies this fixed asset class
+        recordType:
+          type: string
+          description: The type of the record. This value is 'C' for fixed asset classes
+        description:
+          type: string
+          description: The description of this fixed asset class
+        active:
+          type: boolean
+          description: Indicates whether this fixed asset class is active or not
+        assetTypeID:
+          type: string
+          description: The type id of this fixed asset class
+        isTangible:
+          type: boolean
+          description: Indicates whether the fixed asset using this fixed asset class is tangible or not by default
+        depreciable:
+          type: boolean
+          description: Indicates whether the fixed asset using this fixed asset class can be depreciated or not by default
+        usefulLife:
+          type: number
+          description: Default useful life in years of the fixed asset using this fixed asset class
+          format: double
+        acceleratedDepreciation:
+          type: boolean
+          description: Indicates whether the fixed asset using this fixed asset class will use accelerated depreciation depending on selected depreciation method
+        bookSettings:
+          $ref: '#/components/schemas/bookSettingsInFixedAssetClassDto'
+        accounts:
+          $ref: '#/components/schemas/accountsInFixedAssetClassDto'
+        subAccountMask:
+          type: string
+          description: The sub account mask for this fixed asset class
+        accumulatedDepreciationSubAccountMask:
+          type: string
+          description: The accumulated depreciation sub account mask for this fixed asset class
+        depreciatedExpenseSubAccountMask:
+          type: string
+          description: The depreciated expense sub account mask for this fixed asset class
+        proceedSubAccountMask:
+          type: string
+          description: The proceed sub account mask for this fixed asset class
+        gainLossSubAccountMask:
+          type: string
+          description: The gain/loss sub account mask for this fixed asset class
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents an attribute in FixedAssetClass. Used for getting data.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

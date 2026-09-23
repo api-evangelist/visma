@@ -1,0 +1,425 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Vat Code API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: VatCode
+  description: 'VAT codes define the tax rates and types applicable to different transactions.
+
+    Overview of VAT Codes Functionality: Vat Codes
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping
+
+    * Invoicing
+
+    * Solo'
+paths:
+  /vatcodes:
+    get:
+      tags:
+      - VatCode
+      summary: Get vat codes
+      description: 'Get all VAT codes, or add query parameters to filter the results. The response will include a list of VAT codes with their description and related accounts.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: vatRateDate
+        in: query
+        description: 'Default value: Today'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfVatCodeApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '401':
+          description: Unauthorized. Access denied.
+        '403':
+          description: Forbidden. The company is not active, or the startup guide is not completed.
+      operationId: getVatcodes
+      x-operation-id-source: derived
+  /vatcodes/{id}:
+    get:
+      tags:
+      - VatCode
+      summary: Get a vat code by Id
+      description: 'Get a specific VAT code by its unique identifier. The response includes the VAT rate, OSS code type if applicable, and related account numbers.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the Vat Code.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: vatRateDate
+        in: query
+        description: 'Default value: Today'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VatCodeApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Not Found
+        '401':
+          description: Unauthorized. Access denied.
+        '403':
+          description: Forbidden. The company is not active, or the startup guide is not completed.
+      operationId: getVatcodesById
+      x-operation-id-source: derived
+  /vatcodesrates:
+    get:
+      tags:
+      - VatCode
+      summary: Get vat codes with rates
+      description: 'Get all VAT codes with their historical and future VAT rates. Each VAT code includes a collection of rate changes over time, showing when each rate became effective and related account mappings.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfVatCodeRateApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '401':
+          description: Unauthorized. Access denied.
+        '403':
+          description: Forbidden. The company is not active, or the startup guide is not completed.
+      operationId: getVatcodesrates
+      x-operation-id-source: derived
+components:
+  schemas:
+    VatCodeRateApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the vat code rate.
+          format: uuid
+          readOnly: true
+        Code:
+          type:
+          - string
+          - 'null'
+          description: The code representing the VAT category.
+        Description:
+          type:
+          - string
+          - 'null'
+          description: The description of the VAT code.
+        VatRates:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/VatRateApi'
+          description: The VAT rates applicable to this VAT code.
+        OssCodeType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Sales,<br/>2 = Vat
+          format: int32
+        RelatedAccounts:
+          $ref: '#/components/schemas/RelatedAccounts'
+      additionalProperties: false
+    PaginatedResponseOfVatCodeApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VatCodeApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfVatCodeRateApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VatCodeRateApi'
+      additionalProperties: false
+    VatRateApi:
+      type: object
+      properties:
+        VatRateDate:
+          type: string
+          description: Vat rate start date
+          format: date-time
+        VatRate:
+          type: number
+          description: The VAT rate as a percentage.
+          format: double
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    RelatedAccounts:
+      type: object
+      properties:
+        AccountNumber1:
+          type:
+          - integer
+          - 'null'
+          description: The first account number for VAT.
+          format: int64
+        AccountNumber2:
+          type:
+          - integer
+          - 'null'
+          description: The second account number for VAT.
+          format: int64
+        AccountNumber3:
+          type:
+          - integer
+          - 'null'
+          description: The third account number for VAT.
+          format: int64
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    VatCodeApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the vat code.
+          format: uuid
+          readOnly: true
+        Code:
+          type:
+          - string
+          - 'null'
+          description: The code representing the VAT category.
+        Description:
+          type:
+          - string
+          - 'null'
+          description: The description of the VAT code.
+        VatRate:
+          type: number
+          description: The VAT rate as a percentage.
+          format: double
+        OssCodeType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Sales,<br/>2 = Vat
+          format: int32
+        RelatedAccounts:
+          $ref: '#/components/schemas/RelatedAccounts'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

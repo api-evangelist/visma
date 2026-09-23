@@ -1,0 +1,647 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Articles API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Articles
+  description: 'A product or service that the company offers to customers, used on quotes and invoices.
+
+    Overview of Articles Functionality: Articles
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Solo'
+paths:
+  /articles:
+    get:
+      tags:
+      - Articles
+      summary: Gets articles
+      description: 'Get all articles, or add query parameters to filter the results. The response will include a list of articles with their details, such as name, description, price information and stock data.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: showPricesWithTwoDecimals
+        in: query
+        description: Show prices with two decimals
+        schema:
+          type: boolean
+          default: false
+      - name: customerId
+        in: query
+        description: "Customer ID for price calculations.If customerId is provided in querystring,\n                                       then article prices and discounts will be returned based on which pricelist \n                                       and discount agreement is assigned to customer."
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfArticleApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getArticles
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Articles
+      summary: Create a single article
+      description: 'Create a new article.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleApi'
+      responses:
+        '201':
+          description: The created article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleApi'
+        '400':
+          description: The article can't be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postArticles
+      x-operation-id-source: derived
+  /articles/{articleId}:
+    get:
+      tags:
+      - Articles
+      summary: Gets an article by id
+      description: 'Get a specific article by its unique identifier. The response will contain the article''s details, including name, description, pricing, stock information and associated labels.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      parameters:
+      - name: articleId
+        in: path
+        description: This represents the Id of the article
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: showPricesWithTwoDecimals
+        in: query
+        description: Show prices with two decimals
+        schema:
+          type: boolean
+          default: false
+      - name: customerId
+        in: query
+        description: "Customer ID for price calculations.If customerId is provided in querystring,\n                                       then article prices and discounts will be returned based on which pricelist\n                                       and discount agreement is assigned to customer."
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getArticlesByArticleId
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Articles
+      summary: Replace an article
+      description: 'Replace an existing article''s data with the provided new data. The article must already exist in the system.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      parameters:
+      - name: articleId
+        in: path
+        description: This represents the Id of the article
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleApi'
+      responses:
+        '200':
+          description: The updated article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleApi'
+        '400':
+          description: The article can't be updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putArticlesByArticleId
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfArticleApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleApi'
+      additionalProperties: false
+    ArticleLabelApi:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Name of the article label
+        Description:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Description of the article label
+      additionalProperties: false
+    ArticleBarcodeApi:
+      type: object
+      properties:
+        Barcode:
+          type:
+          - string
+          - 'null'
+          description: Article barcode
+        BarcodeType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>Default = 0<br/><br/>Article barcode type.
+          format: int32
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    ArticleApi:
+      required:
+      - CodingId
+      - IsActive
+      - Name
+      - Number
+      - UnitId
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by eAccounting
+          format: uuid
+          readOnly: true
+        IsActive:
+          type: boolean
+          description: Indicates whether the article is active
+        Number:
+          maxLength: 40
+          minLength: 0
+          type: string
+          description: Article number
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Article name (Swedish)
+        NameEnglish:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Article name (English)
+        NetPrice:
+          maximum: 99000000
+          minimum: 0
+          type: number
+          format: double
+        NetPriceWithDiscount:
+          maximum: 99000000
+          minimum: 0
+          type: number
+          format: double
+        GrossPrice:
+          maximum: 99000000
+          minimum: 0
+          type: number
+          format: double
+        CodingId:
+          type: string
+          description: Get from /v2/articleaccountcodings
+          format: uuid
+        CodingName:
+          type:
+          - string
+          - 'null'
+          description: Name of CodingId
+          readOnly: true
+        UnitId:
+          type: string
+          description: 'Source: Get from /v2/units'
+          format: uuid
+        UnitName:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Returns the unit name entered from UnitId'
+          readOnly: true
+        UnitAbbreviation:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Returns the unit abbreviation entered from UnitId'
+          readOnly: true
+        StockBalance:
+          maximum: 1000000000000000
+          minimum: -1000000000000000
+          type: number
+          description: 'Purpose: Sets the stock balance for this article Default: 0 When stock module is active, this is read only'
+          format: double
+        StockBalanceManuallyChangedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Set when the stock balance is changed manually'
+          format: date-time
+          readOnly: true
+        StockBalanceReserved:
+          type: number
+          description: 'Purpose: Returns the reserved stock balance for this article'
+          format: double
+          readOnly: true
+        StockBalanceAvailable:
+          type: number
+          description: 'Purpose: Returns the available stock balance for this article'
+          format: double
+          readOnly: true
+        CreatedUtc:
+          type: string
+          description: 'Purpose: Returns the date and time when the article was created'
+          format: date-time
+          readOnly: true
+        ChangedUtc:
+          type: string
+          description: 'Purpose: Returns the last date and time from when a change was made on the article'
+          format: date-time
+          readOnly: true
+        HouseWorkType:
+          type:
+          - integer
+          - 'null'
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = RotConstructionWork,<br/>2 = RotElectricalWork,<br/>3 = RotGlassSheetMetalWork,<br/>4 = RotGroundWork,<br/>5 = RotBrickWork,<br/>6 = RotPaintDecorateWork,<br/>7 = RotPlumbWork,<br/>9 = RutCleanJobWork,<br/>10 = RutCareClothTextile,<br/>12 = RutSnowRemove,<br/>13 = RutGarden,<br/>14 = RutBabySitting,<br/>15 = RutOtherCare,<br/>18 = RutRemovalServices,<br/>19 = RutITServices,<br/>20 = RotHeatPump,<br/>21 = RotHeatPump2,<br/>22 = RutHomeAppliances,<br/>23 = RotSolarHeatingSystem,<br/>24 = RotWoodBoiler,<br/>25 = RotFuelBoiler,<br/>26 = RutLaundry,<br/>27 = RutFurnishing,<br/>28 = RutGoodsTransport,<br/>29 = RutHomeSupervision
+          format: int32
+        PurchasePrice:
+          maximum: 99000000
+          minimum: 0
+          type: number
+          description: Purchase price of the article in domestic currency. When saved on the article this is rounded to 2 decimals.
+          format: double
+        PurchasePriceManuallyChangedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Set when the purchase price is changed manually'
+          format: date-time
+          readOnly: true
+        SendToWebshop:
+          type: boolean
+          description: 'Purpose: If true, will send article to VismaWebShop (If company has the integration). Default: True'
+        UsesMoss:
+          type: boolean
+          description: This property can be set if the OSS setting is checked in company settings. Only applicable if using Accrual accounting
+        ArticleLabels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ArticleLabelApi'
+          description: Article Labels
+        MessageThreads:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch messages via GET /v2/messagethreads/{messageThreadId}
+          readOnly: true
+        Notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch notes via GET /v2/notes/{noteId}
+          readOnly: true
+        Note:
+          maxLength: 4000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Article Note
+        IsStock:
+          type: boolean
+          description: Article can be stock article if stock module is activated and sales category for the article Goods type
+        ShowStockInformation:
+          type: boolean
+          description: ShowStockInformation = TRUE IF company has active stock module, article is stock article and article is not a service article OR company hasn't active stock module and article is not a service article
+          readOnly: true
+        IsServiceArticle:
+          type: boolean
+          description: <strong>Possible values:</strong><br/>True = the sales category for the article is of the type Service<br/>False = the sales category for the article is of the type Goods TRUE = the sales category for the article is of the type Service
+          readOnly: true
+        StockLocationReference:
+          type:
+          - string
+          - 'null'
+          description: Article stock location reference
+        FreightCosts:
+          maximum: 99000000
+          minimum: 0
+          type: number
+          description: Freight costs per article unit
+          format: double
+        FreightCostsManuallyChangedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Set when the freight costs is changed manually'
+          format: date-time
+          readOnly: true
+        UpdateStockPrices:
+          type: boolean
+          description: 'Purpose: Update article purchase price and freight costs when creating manual stock adjustment'
+        Barcodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ArticleBarcodeApi'
+          description: Article barcode (currently only one BarcodeType=Default)
+        StockValue:
+          type: number
+          description: Total value of articles currently in stock
+          format: double
+          readOnly: true
+        GreenTechnologyType:
+          type:
+          - integer
+          - 'null'
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = SolarCellInstallation,<br/>2 = ElectricEnergyStorageInstallation,<br/>3 = ElectricVehicleChargingPointInstallation<br/><br/>The type of green technology on articles can be.
+          format: int32
+        DiscountPercentage:
+          type: number
+          description: Discount from discount agreement
+          format: double
+        CurrencyCode:
+          maxLength: 3
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The currency code for the purchase price
+        PurchasePriceWithCurrency:
+          type: number
+          description: The purchase price expressed in the article's currency code
+          format: double
+        FreightCostWithCurrency:
+          type: number
+          description: The article's freight cost expressed in the article's currency code
+          format: double
+        OrderingPoint:
+          type:
+          - number
+          - 'null'
+          description: 'The article''s ordering point. Used when: Stock module = activated. Article sales category type = Goods'
+          format: double
+        SupplierId:
+          type:
+          - string
+          - 'null'
+          description: 'Id of the main supplier for the article. Clear by setting to empty GUID. Used when: Stock module = activated'
+          format: uuid
+        SupplierArticleNumber:
+          maxLength: 16
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Supplier's article number.
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

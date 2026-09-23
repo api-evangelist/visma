@@ -1,0 +1,519 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Attachments API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Attachments
+  description: 'Files or documents that can be linked to records such as supplier invoices and vouchers.
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Bookkeeping
+
+    * Solo'
+paths:
+  /attachments:
+    get:
+      tags:
+      - Attachments
+      summary: Get attachments
+      description: 'Get all attachments, or add query parameters to filter the result. The response will include a list of attachments, with details such as attachment id, file name, and upload date.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: includeMatched
+        in: query
+        description: 'Default value: true. When set to false the endpoint returns just the unmatched attachments.'
+        schema:
+          type: boolean
+          default: true
+      - name: includeTemporaryUrl
+        in: query
+        description: 'Default value: true. When set to false the endpoint returns attachments but does not provide the TemporaryUrl.'
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfAttachment'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getAttachments
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Attachments
+      summary: Create an attachment
+      description: 'Create a new attachment.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:accounting'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttachmentUploadApi'
+      responses:
+        '201':
+          description: Attachment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postAttachments
+      x-operation-id-source: derived
+  /attachments/{attachmentId}:
+    get:
+      tags:
+      - Attachments
+      summary: Get a specific attachment based on id
+      description: 'Get a specific attachment by its unique identifier. The response will include details such as attachment id, file name, upload date, and a link to download the attachment.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: attachmentId
+        in: path
+        description: This represents the Id of the attachment you want to get
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getAttachmentsByAttachmentId
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Attachments
+      summary: Delete an attachment
+      description: 'Delete an attachment. Only attachments without any linked transactions can be deleted.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:accounting'
+      parameters:
+      - name: attachmentId
+        in: path
+        description: This represents the Id of the attachment you want to delete
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Attachment deleted successfully
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteAttachmentsByAttachmentId
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    AttachmentUploadApi:
+      required:
+      - ContentType
+      - FileName
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the attachment
+          format: uuid
+        ContentType:
+          maxLength: 15
+          minLength: 0
+          type: string
+          description: 'Content type of the attachment. Allowed values: ''image/jpeg'', ''image/png'', ''image/tiff'', ''application/pdf'''
+        FileName:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: File name of the attachment. Allowed characters are alphabetic letters, numbers and characters - _ ()
+        Data:
+          type:
+          - string
+          - 'null'
+          description: 'Base64 encoded byte array of the file content. Individual file size limits: Sweden 20 MB, other countries 10 MB. Total size of all attachments on a document cannot exceed 20 MB'
+        Url:
+          type:
+          - string
+          - 'null'
+          description: 'Public URL for the attachment file. Individual file size limits: Sweden 20 MB, other countries 10 MB. Total size of all attachments on a document cannot exceed 20 MB'
+        Comment:
+          type:
+          - string
+          - 'null'
+          description: Optional comment for the attachment
+      additionalProperties: false
+    PaginatedResponseOfAttachment:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Attachment:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the attachment
+          format: uuid
+          readOnly: true
+        ContentType:
+          type:
+          - string
+          - 'null'
+          description: MIME type of the attachment file
+        DocumentId:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the linked document (if any)
+          format: uuid
+        AttachedDocumentType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = SupplierInvoice,<br/>2 = Receipt,<br/>3 = Voucher,<br/>4 = SupplierInvoiceDraft,<br/>5 = AllocationPeriod,<br/>6 = Transfer,<br/>8 = BankTransaction<br/><br/>Type of the attached document.
+          format: int32
+        MessageThreads:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Collection of message thread IDs. Fetch messages via GET /v2/messagethreads/{messageThreadId}
+          readOnly: true
+        Notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Collection of note IDs. Fetch notes via GET /v2/notes/{notesId}
+          readOnly: true
+        PhotoSource:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Unknown,<br/>1 = VismaScannerApp,<br/>2 = CompanyEmail,<br/>3 = EmployeeEmail,<br/>4 = eAccountingApp,<br/>100 = DragAndDrop,<br/>101 = eInvoice,<br/>102 = ScanPDF,<br/>103 = ScanLetter,<br/>105 = Integration,<br/>106 = KivraCompanyMailbox<br/><br/>Source from which the photo was uploaded.
+          format: int32
+          readOnly: true
+        FileName:
+          type:
+          - string
+          - 'null'
+          description: Original file name of the attachment
+        TemporaryUrl:
+          type:
+          - string
+          - 'null'
+          description: Temporary URL for downloading the attachment file
+        Comment:
+          type:
+          - string
+          - 'null'
+          description: User comment on the attachment
+        SupplierName:
+          type:
+          - string
+          - 'null'
+          description: Name of the supplier extracted from the attachment
+        CurrencyCode:
+          type:
+          - string
+          - 'null'
+          description: Currency code used in the invoice amount
+        AmountInvoiceCurrency:
+          type: number
+          description: Invoice amount in the invoice currency
+          format: double
+        Type:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Invoice,<br/>1 = Receipt,<br/>2 = Document<br/><br/>Type of photo document.
+          format: int32
+        AttachmentStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Matched,<br/>1 = Unmatched<br/><br/>Status of the attachment.
+          format: int32
+        UploadedBy:
+          type:
+          - string
+          - 'null'
+          description: Name of the user who uploaded the attachment
+          readOnly: true
+        ImageDate:
+          type: string
+          description: Date and time when the source image was uploaded
+          format: date-time
+          readOnly: true
+        TransactionDate:
+          type:
+          - string
+          - 'null'
+          description: The interpreted transaction date of the source image (e.g., invoice date for an invoice, payment date for a receipt). Can be null if not interpreted.
+          format: date-time
+          readOnly: true
+        Ocr:
+          type:
+          - string
+          - 'null'
+          description: OCR
+        InvoiceNumber:
+          type:
+          - string
+          - 'null'
+          description: Invoice Number
+        Vat:
+          type:
+          - number
+          - 'null'
+          description: Total VAT amount
+          format: double
+        DueDate:
+          type:
+          - string
+          - 'null'
+          description: Payment due date
+          format: date-time
+        SupplierCorporateIdentityNumber:
+          type:
+          - string
+          - 'null'
+          description: Supplier corporate identity number
+        PaymentDate:
+          type:
+          - string
+          - 'null'
+          description: Invoice payment date
+          format: date-time
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

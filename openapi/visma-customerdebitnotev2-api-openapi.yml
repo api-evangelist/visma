@@ -1,0 +1,437 @@
+openapi: 3.2.0
+info:
+  title: Visma.net ERP Customer Debit Note V2 API
+  version: v1
+servers:
+- url: https://api.finance.visma.net
+tags:
+- name: CustomerDebitNoteV2
+paths:
+  /v2/customerDebitNote:
+    post:
+      tags:
+      - CustomerDebitNoteV2
+      summary: Create a Customer Debit Note. ScreenID=AR301000
+      description: 'Response Message has StatusCode Created if POST operation succeed
+
+
+        Response Message has StatusCode BadRequest or InternalServerError if POST operation failed
+
+
+        The response headers include an ETag after a successful POST operation.'
+      operationId: CustomerDebitNoteV2_Create
+      parameters:
+      - name: erp-api-background
+        in: header
+        description: 'Accepts the request and queues it to be executed in the background by our least busy worker. Responds with 202 Accepted and a document containing a JobId reference and details state location.
+
+          Supported values:
+
+          * a URL: when the background operation is finished, a notification will be posted to the URL with a document containing a reference id, status code and a details state location.
+
+          * "none" (without quotes): Fire and forget; no notification will be sent when background operation is finished.
+
+          * "subscription[:<name_1>=<value_1>,..,<name_n>=<value_n>]" (without quotes): when the background operation is finsihed, a notification is posted to the Webhook subscription set up in Developer Portal for your integration client.
+
+          Optionally a set of name-value pairs can be added. These will be sent as headers in the POST request to the Webhook subscription''s url.
+
+
+          To find status and details of a background-api operation, GET .. v1/background/{id}. To get the response payload of a background-api operation, if any, GET .. v1/background/{id}/content'
+        schema:
+          type: string
+      requestBody:
+        description: Defines the data for the Debit Note to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDebitNoteUpdateDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDebitNoteUpdateDto'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CustomerDebitNoteUpdateDto'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/CustomerDebitNoteUpdateDto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerDebitNoteUpdateDto'
+        required: true
+        x-bodyName: debitNote
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+        '202':
+          description: Server accepted and queued the request for background execution.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BackgroundApiAcceptedDto'
+      security:
+      - interactiveapi: []
+components:
+  schemas:
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    DtoValueOfNullableOfRutRotTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Rut
+          - Rot
+          type: string
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    TaxDetailUpdateDto:
+      type: object
+      properties:
+        taxId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taxableAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        expenseAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+      description: This class represents a Tax Detail Line. Used to pass data to server for updating a tax line
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    SalesInvoiceAddressUpdateDto:
+      type: object
+      properties:
+        overrideAddress:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        addressLine1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postalCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        city:
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        county:
+          $ref: '#/components/schemas/DtoValueOfString'
+    SalesInvoiceContactUpdateDto:
+      type: object
+      properties:
+        overrideContact:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        attention:
+          $ref: '#/components/schemas/DtoValueOfString'
+        email:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone1:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfSalesInvoiceAddressUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/SalesInvoiceAddressUpdateDto'
+    CustomerDebitNoteLinesUpdateDto:
+      type: object
+      properties:
+        discountCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        domesticServicesDeductible:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        itemType:
+          $ref: '#/components/schemas/DtoValueOfNullableOfRutRotItemTypes'
+        typeOfWork:
+          $ref: '#/components/schemas/DtoValueOfString'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        unitPriceInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        accountNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        vatCodeId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        discountPercent:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        discountAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualDiscount:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        subaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        salesperson:
+          $ref: '#/components/schemas/DtoValueOfString'
+        deferralSchedule:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        deferralCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        termStartDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        termEndDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfSalesInvoiceContactUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/SalesInvoiceContactUpdateDto'
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    RotRutUpdateDto:
+      type: object
+      properties:
+        distributedAutomaticaly:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        type:
+          $ref: '#/components/schemas/DtoValueOfNullableOfRutRotTypes'
+        appartment:
+          $ref: '#/components/schemas/DtoValueOfString'
+        estate:
+          $ref: '#/components/schemas/DtoValueOfString'
+        organizationNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        distribution:
+          type: array
+          items:
+            $ref: '#/components/schemas/RotRutDistributionUpdateDto'
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    salesPersonIDInCustomerDebitNoteUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The field is deprecated for customer document endpoints, please use Salesperson instead
+    salespersonInCustomerDebitNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The identifier of the salesperson involved.
+    financialPeriodInCustomerDebitNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
+    DtoValueOfNullableOfRutRotItemTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Service
+          - MaterialCost
+          - OtherCost
+          type: string
+    CustomerDebitNoteUpdateDto:
+      type: object
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        creditTermsId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        currencyId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerRefNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        cashDiscountDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        documentDueDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        externalReference:
+          $ref: '#/components/schemas/DtoValueOfString'
+        exchangeRate:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        domesticServicesDeductibleDocument:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        paymentReference:
+          $ref: '#/components/schemas/DtoValueOfString'
+        contact:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        rotRutDetails:
+          $ref: '#/components/schemas/RotRutUpdateDto'
+        taxDetailLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxDetailUpdateDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerDebitNoteLinesUpdateDto'
+        customerVatZoneId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        invoiceAddress:
+          $ref: '#/components/schemas/DtoValueOfSalesInvoiceAddressUpdateDto'
+        invoiceContact:
+          $ref: '#/components/schemas/DtoValueOfSalesInvoiceContactUpdateDto'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        startDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        endDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        accountingCostRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        originatorDocRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        contractDocRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        referenceNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        childCustomerNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        consolidateInvoices:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        documentDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        origInvoiceDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInCustomerDebitNoteUpdateDto'
+        financialPeriod:
+          $ref: '#/components/schemas/financialPeriodInCustomerDebitNoteUpdateDto'
+        invoiceText:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        salesPersonID:
+          $ref: '#/components/schemas/salesPersonIDInCustomerDebitNoteUpdateDto'
+        salesperson:
+          $ref: '#/components/schemas/salespersonInCustomerDebitNoteUpdateDto'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        cashAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        dontPrint:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        dontEmail:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+    RotRutDistributionUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        personalId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        extra:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+    postPeriodInCustomerDebitNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+  securitySchemes:
+    interactiveapi:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://connect.visma.com/connect/authorize
+          tokenUrl: https://connect.visma.com/connect/token
+          scopes:
+            vismanet_erp_interactive_api:read: vismanet_erp_interactive_api:read
+            vismanet_erp_interactive_api:update: vismanet_erp_interactive_api:update
+            vismanet_erp_interactive_api:create: vismanet_erp_interactive_api:create
+            vismanet_erp_interactive_api:delete: vismanet_erp_interactive_api:delete
+            vismanet_erp_interactive_api:ui-extension: vismanet_erp_interactive_api:ui-extension

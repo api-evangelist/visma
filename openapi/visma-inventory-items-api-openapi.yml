@@ -1,0 +1,577 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Inventory Items…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Inventory Items
+  description: 'Fixed assets used to track long-term company resources such as equipment, vehicles, or machines. *(Note: Despite the endpoint name, this resource represents fixed assets rather than inventory items.)*
+
+    Overview of Fixed Assets Functionality: Fixed Assets
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping'
+paths:
+  /inventoryitems:
+    get:
+      tags:
+      - Inventory Items
+      summary: Get inventory items
+      description: '*(Note: Despite the endpoint name, this resource represents fixed assets rather than inventory items.)*
+
+        Get all fixed assets, or add query parameters to filter the results. The response will include a list of fixed assets with their details, such as name, purchase price, depreciation settings, current value, and accounting template information.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfInventoryItemApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getInventoryitems
+      x-operation-id-source: derived
+  /inventoryitems/{id}:
+    get:
+      tags:
+      - Inventory Items
+      summary: Get an inventory item
+      description: '*(Note: Despite the endpoint name, this resource represents fixed assets rather than inventory items.)*
+
+        Get a specific fixed asset by its unique identifier. The response will include details, such as name, purchase price, depreciation settings, current value, and accounting template information.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the Inventory Item.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItemApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Inventory item not found
+      operationId: getInventoryitemsById
+      x-operation-id-source: derived
+components:
+  schemas:
+    InventoryAccountingTemplateApi:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id
+          format: uuid
+          readOnly: true
+        Active:
+          type: boolean
+          description: Whether the template is active
+        NoDepreciations:
+          type: boolean
+          description: Whether the template has no depreciations
+        IsCustom:
+          type: boolean
+          description: Whether the template is custom
+        Name:
+          minLength: 1
+          type: string
+          description: The name of the template
+        NameEnglish:
+          type:
+          - string
+          - 'null'
+          description: The English name of the template
+        InventoryAccountNumber:
+          type: integer
+          description: The inventory account number
+          format: int64
+        InventoryAccountUseCostCenter:
+          type: boolean
+          description: Whether the inventory account uses cost center
+        DepreciationAssetAccountNumber:
+          type:
+          - integer
+          - 'null'
+          description: The depreciation asset account number
+          format: int64
+        DepreciationAssetAccountUseCostCenter:
+          type: boolean
+          description: Whether the depreciation asset account uses cost center
+        DepreciationResultAccountNumber:
+          type:
+          - integer
+          - 'null'
+          description: The depreciation result account number
+          format: int64
+        DepreciationResultAccountUseCostCenter:
+          type: boolean
+          description: Whether the depreciation result account uses cost center
+        CapitalGainAccountNumber:
+          type: integer
+          description: The capital gain account number
+          format: int64
+        CapitalGainAccountUseCostCenter:
+          type: boolean
+          description: Whether the capital gain account uses cost center
+        CapitalLossAccountNumber:
+          type: integer
+          description: The capital loss account number
+          format: int64
+        CapitalLossAccountUseCostCenter:
+          type: boolean
+          description: Whether the capital loss account uses cost center
+        TaxationDepreciation:
+          type:
+          - string
+          - 'null'
+          description: The taxation depreciation
+        AppreciationsAccountNumber:
+          type:
+          - integer
+          - 'null'
+          description: The appreciations account number
+          format: int64
+        AppreciationAccountUseCostCenter:
+          type: boolean
+          description: Whether the appreciation account uses cost center
+        AccumulatedImpairmentLossAccountNumber:
+          type:
+          - integer
+          - 'null'
+          description: The accumulated impairment loss account number
+          format: int64
+        AccumulatedImpairmentLossAccountUseCostCenter:
+          type: boolean
+          description: Whether the accumulated impairment loss account uses cost center
+        ImpairmentLossAccountNumber:
+          type:
+          - integer
+          - 'null'
+          description: The impairment loss account number
+          format: int64
+        ImpairmentLossAccountUseCostCenter:
+          type: boolean
+          description: Whether the impairment loss account uses cost center
+        ReversalOfImpairmentAccountNumber:
+          type:
+          - integer
+          - 'null'
+          description: The reversal of impairment account number
+          format: int64
+        ReversalOfImpairmentAccountUseCostCenter:
+          type: boolean
+          description: Whether the reversal of impairment account uses cost center
+      additionalProperties: false
+    InventoryEventApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id
+          format: uuid
+          readOnly: true
+        VoucherId:
+          type:
+          - string
+          - 'null'
+          description: The voucher ID
+          format: uuid
+        BookkeepingDate:
+          type:
+          - string
+          - 'null'
+          description: The bookkeeping date
+          format: date-time
+        UndoVoucherId:
+          type:
+          - string
+          - 'null'
+          description: The undo voucher ID
+          format: uuid
+        UndoBookkeepingDate:
+          type:
+          - string
+          - 'null'
+          description: The undo bookkeeping date
+          format: date-time
+        Type:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Depreciation,<br/>1 = Sale,<br/>4 = Disposal,<br/>5 = ValueChange,<br/>6 = Appreciation,<br/>7 = ImpairmentLoss,<br/>8 = ReversalOfImpairment,<br/>9 = AdditionalDepreciation,<br/>10 = CostOfAquisitionAdjustement,<br/>11 = DepreciationBasisAdjustement<br/><br/>The type of the event.
+          format: int32
+        Amount:
+          type: number
+          description: The amount
+          format: double
+        CurrentValueBeforeEvent:
+          type: number
+          description: The current value before the event
+          format: double
+        CreatedUtc:
+          type: string
+          description: The creation date and time in UTC
+          format: date-time
+          readOnly: true
+        Undone:
+          type: boolean
+          description: Whether the event is undone
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    InventoryAccumulatedDepreciationApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id
+          format: uuid
+          readOnly: true
+        FiscalYearId:
+          type:
+          - string
+          - 'null'
+          description: The fiscal year ID
+          format: uuid
+        OpeningAccumulatedDepreciation:
+          type: number
+          description: The opening accumulated depreciation
+          format: double
+        DepreciationForTheYear:
+          type: number
+          description: The depreciation for the year
+          format: double
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfInventoryItemApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryItemApi'
+      additionalProperties: false
+    InventoryItemApi:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by eAccounting
+          format: uuid
+          readOnly: true
+        Number:
+          type: integer
+          description: The inventory item number
+          format: int32
+          readOnly: true
+        Name:
+          minLength: 1
+          type: string
+          description: The name of the inventory item
+        PurchasePrice:
+          type: number
+          description: The purchase price of the inventory item
+          format: double
+        PurchaseDate:
+          type: string
+          description: The purchase date of the inventory item
+          format: date-time
+        InventoryItemStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = Inactive,<br/>2 = Active,<br/>3 = Sold,<br/>4 = Dispose<br/><br/>The status of the inventory item.
+          format: int32
+        Depreciate:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the inventory item should be depreciated
+        LifeSpanInMonths:
+          type:
+          - integer
+          - 'null'
+          description: The lifespan of the inventory item in months
+          format: int32
+        DepreciationStartType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = PurchaseMonth,<br/>2 = MonthAfterPurchaseMonth,<br/>3 = FirstMonthOfPurchaseYear<br/><br/>The depreciation start type.
+          format: int32
+        FirstDepreciationDate:
+          type:
+          - string
+          - 'null'
+          description: The first depreciation date
+          format: date-time
+        LatestDepreciationDate:
+          type:
+          - string
+          - 'null'
+          description: The latest depreciation date
+          format: date-time
+        ResidualValue:
+          type:
+          - number
+          - 'null'
+          description: The residual value of the inventory item
+          format: double
+        CurrentValue:
+          type: number
+          description: The current value of the inventory item
+          format: double
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: Cost center item ID 1
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: Cost center item ID 2
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: Cost center item ID 3
+          format: uuid
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Project ID
+          format: uuid
+        InventoryAccountingTemplate:
+          $ref: '#/components/schemas/InventoryAccountingTemplateApi'
+        Events:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InventoryEventApi'
+          description: The events associated with the inventory item
+        OpeningDepreciations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InventoryAccumulatedDepreciationApi'
+          description: The opening depreciations
+        HasUpcomingDepreciations:
+          type: boolean
+          description: Whether the inventory item has upcoming depreciations
+          readOnly: true
+        CreatedUtc:
+          type: string
+          description: The creation date and time in UTC
+          format: date-time
+          readOnly: true
+        ModifiedUtc:
+          type: string
+          description: The last modification date and time in UTC
+          format: date-time
+          readOnly: true
+        DepreciationBasis:
+          type: number
+          description: The depreciation basis
+          format: double
+          readOnly: true
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

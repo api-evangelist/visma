@@ -1,0 +1,707 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Message Threads…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Message Threads
+  description: 'Message threads allow users to communicate about specific documents or general topics within the system. Each thread can contain multiple messages and can be attached to various document types.
+
+    Overview of Message Thread Functionality: Messages
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Invoicing
+
+    * Bookkeeping
+
+    * Solo'
+paths:
+  /messagethreads/{messageThreadId}:
+    get:
+      tags:
+      - Message Threads
+      summary: Get message thread
+      description: 'Get a specific message thread by its unique identifier. The response will include the thread details, including subject, document attachment, and receivers.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: messageThreadId
+        in: path
+        description: Id of the message thread
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageThreadApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getMessagethreadsByMessageThreadId
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Message Threads
+      summary: Reply to message thread
+      description: 'Reply to an existing message thread by adding a new message. The reply will be sent to all current participants of the thread.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: messageThreadId
+        in: path
+        description: Id of the thread to post the reply to
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageApi'
+      responses:
+        '201':
+          description: Message reply created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postMessagethreadsByMessageThreadId
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Message Threads
+      summary: Mark message thread
+      description: 'Mark a message thread as read or closed. This action updates the status of the thread for the current user or all participants.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: messageThreadId
+        in: path
+        description: Id of the message thread
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageStatusApi'
+      responses:
+        '201':
+          description: Message thread updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageThreadApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putMessagethreadsByMessageThreadId
+      x-operation-id-source: derived
+  /messagethreads/{messageThreadId}/messages:
+    get:
+      tags:
+      - Message Threads
+      summary: Get message thread messages
+      description: 'Get all messages within a specific message thread. The response will include a list of messages with their text, sender, and timestamps.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: messageThreadId
+        in: path
+        description: Id of the message thread
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getMessagethreadsByMessageThreadIdMessages
+      x-operation-id-source: derived
+  /messagethreads:
+    post:
+      tags:
+      - Message Threads
+      summary: Create message thread
+      description: 'Create a new message thread. You can optionally attach the thread to a specific document by providing DocumentType and DocumentId.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageToPostApi'
+      responses:
+        '201':
+          description: Message thread created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageThreadApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postMessagethreads
+      x-operation-id-source: derived
+    get:
+      tags:
+      - Message Threads
+      summary: Get all message threads
+      description: 'Get all message threads for the current user, or add query parameters to filter the results. Use the excludeClosed parameter to filter out closed threads.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      parameters:
+      - name: excludeClosed
+        in: query
+        description: True excludes closed messages
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfMessageThreadApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getMessagethreads
+      x-operation-id-source: derived
+  /messagethreads/messages:
+    get:
+      tags:
+      - Message Threads
+      summary: Get all messages
+      description: 'Get all messages from all message threads for the current user. The response will include messages from all threads with their details.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * ea:purchase
+
+        * ea:purchase_readonly
+
+        * ea:accounting
+
+        * ea:accounting_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfMessageApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getMessagethreadsMessages
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    MessageToPostApi:
+      required:
+      - DocumentType
+      - Message
+      type: object
+      properties:
+        Message:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: The content of the message. Maximum length is 256 characters.
+        Subject:
+          maxLength: 40
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The subject of the message. Maximum length is 40 characters.
+        DocumentType:
+          maximum: 21
+          minimum: 0
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 8
+          - 9
+          - 10
+          - 11
+          - 12
+          - 13
+          - 14
+          - 17
+          - 18
+          - 19
+          - 20
+          - 21
+          type: integer
+          description: The document type to which the message thread is attached.
+          format: int32
+        DocumentId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the document to which the message thread is attached.
+          format: uuid
+        MessageReceivers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MessageReceiverApi'
+          description: The list of message receivers. At least one receiver is required.
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfMessageApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageApi'
+      additionalProperties: false
+    MessageReceiverApi:
+      required:
+      - UserId
+      type: object
+      properties:
+        UserId:
+          type: string
+          description: The unique identifier of the user receiver.
+          format: uuid
+        Status:
+          type:
+          - integer
+          - 'null'
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>New = 1,<br/>Read = 2,<br/>Open = 3,<br/>Close = 4<br/><br/>The status type of the message.
+          format: int32
+          readOnly: true
+        IsCurrentUser:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the receiver is the current user.
+          readOnly: true
+      additionalProperties: false
+    MessageStatusApi:
+      required:
+      - Status
+      type: object
+      properties:
+        Status:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = New ,<br/>2 = Read,<br/>3 = Open,<br/>4 = Close<br/><br/>The status type of the message.
+          format: int32
+      additionalProperties: false
+    MessageThreadApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the message thread.
+          format: uuid
+          readOnly: true
+        DocumentType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>CustomerInvoice = 1,<br/>CustomerInvoiceDraft = 2,<br/>SupplierInvoice = 3,<br/>Voucher = 4,<br/>Quotation = 5,<br/>Order = 6,<br/>SupplierInvoiceDraft = 7,<br/>WebshopOrder = 8,<br/>Customer = 9,<br/>Receipt = 10,<br/>Article = 11,<br/>VatReport = 12,<br/>Supplier = 13,<br/>Inventory = 14,<br/>Employee = 15,<br/>Payslip = 16,<br/>Image = 17,<br/>Reconciliation = 18,<br/>QuoteDraft = 19,<br/>VoucherDraft = 20,<br/>OrderDraft = 21<br/><br/>The document type to which the message thread is attached. Values are.
+          format: int32
+        DocumentId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the document to which the message thread is attached.
+          format: uuid
+        DocumentNumber:
+          type:
+          - string
+          - 'null'
+          description: Number of the document to which the message thread is attached.
+          readOnly: true
+        Subject:
+          maxLength: 40
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The subject of the message thread.
+        ModifiedUtc:
+          type: string
+          description: The date and time (in UTC) when the message thread was last modified.
+          format: date-time
+          readOnly: true
+        IsClosed:
+          type: boolean
+          description: Indicates whether the message thread is closed.
+          readOnly: true
+        MessageReceivers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MessageReceiverApi'
+          description: The list of message receivers associated with the message thread.
+        LastMessage:
+          $ref: '#/components/schemas/MessageApi'
+      additionalProperties: false
+    PaginatedResponseOfMessageThreadApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageThreadApi'
+      additionalProperties: false
+    MessageApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the message.
+          format: uuid
+          readOnly: true
+        Text:
+          maxLength: 256
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The content of the message. Maximum length is 256 characters.
+        ModifiedUtc:
+          type: string
+          description: The date and time (in UTC) when the message was last modified.
+          format: date-time
+          readOnly: true
+        CreatedUtc:
+          type: string
+          description: The date and time (in UTC) when the message was created.
+          format: date-time
+          readOnly: true
+        CreatedByUserId:
+          type: string
+          description: The unique identifier of the user who created the message.
+          format: uuid
+          readOnly: true
+        ModifiedByUserId:
+          type: string
+          description: The unique identifier of the user who last modified the message.
+          format: uuid
+          readOnly: true
+        MessageThreadId:
+          type: string
+          description: The unique identifier of the message thread to which this message belongs.
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

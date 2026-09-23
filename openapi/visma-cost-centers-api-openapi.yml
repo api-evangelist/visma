@@ -1,0 +1,355 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Cost Centers API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Cost Centers
+  description: 'Cost centers provide a way to organize and track expenses across different departments, projects, or business units within the company.
+
+    Overview of Cost Center Functionality: Cost Centers
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping
+
+    * Invoicing
+
+    * Payroll'
+paths:
+  /costcenters:
+    get:
+      tags:
+      - Cost Centers
+      summary: Get cost centers
+      description: 'Get all cost centers, or add query parameters to filter the results. The response will include a list of cost centers with their details, such as name, number, active status, and associated cost center items.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:accounting_readonly
+
+        * ea:sales
+
+        * ea:sales_readonly
+
+        * vls:api'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfCostCenterApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '401':
+          description: Unauthorized. Access denied.
+        '403':
+          description: Forbidden. The company is not active, or the startup guide is not completed.
+      operationId: getCostcenters
+      x-operation-id-source: derived
+  /costcenters/{id}:
+    put:
+      tags:
+      - Cost Centers
+      summary: Update a cost center
+      description: 'Replace an existing cost center''s data with the provided new data. The cost center must already exist in the system.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:accounting
+
+        * ea:sales
+
+        * vls:api'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the cost center.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostCenterApi'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostCenterApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+        '404':
+          description: Not Found
+        '401':
+          description: Unauthorized. Access denied.
+        '403':
+          description: Forbidden. The company is not active, or the startup guide is not completed.
+      operationId: putCostcentersById
+      x-operation-id-source: derived
+components:
+  schemas:
+    CostCenterItemApi:
+      required:
+      - CostCenterId
+      - IsActive
+      - Name
+      - ShortName
+      type: object
+      properties:
+        CostCenterId:
+          type: string
+          description: The unique identifier of the cost center this item belongs to. Get from /v2/costcenters endpoint.
+          format: uuid
+        Id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier assigned by eAccounting (read-only).
+          format: uuid
+          readOnly: true
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: The name of the cost center item. Maximum 50 characters.
+        ShortName:
+          maxLength: 9
+          minLength: 0
+          type: string
+          description: The short name or code for the cost center item. Maximum 9 characters.
+        IsActive:
+          type: boolean
+          description: Indicates whether the cost center item is active or inactive.
+        CreatedUtc:
+          type: string
+          description: The UTC timestamp when this cost center item was created (read-only).
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CostCenterApi:
+      required:
+      - Name
+      type: object
+      properties:
+        Name:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: The name of the cost center. Maximum 20 characters.
+        Number:
+          type: integer
+          description: The unique number assigned to the cost center by eAccounting (read-only).
+          format: int32
+          readOnly: true
+        IsActive:
+          type: boolean
+          description: Indicates whether the cost center is active or inactive.
+        Items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CostCenterItemApi'
+          description: Collection of cost center items associated with this cost center.
+          readOnly: true
+        Id:
+          type: string
+          description: The unique identifier assigned by eAccounting (read-only).
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfCostCenterApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostCenterApi'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

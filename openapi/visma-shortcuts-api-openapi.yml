@@ -1,0 +1,80 @@
+openapi: 3.2.0
+info:
+  title: Spiris Lön API V1 Shortcuts API
+  description: Visit our complete Spiris Lön/Cloud Payroll API docs for how to get started, more information about authentication, error handling, query customization and more.
+  contact:
+    email: api@spiris.se
+  version: v1
+servers:
+- url: https://vlsapi.vismaonline.com/
+tags:
+- name: Shortcuts
+  description: Operations for managing shortcut operations. Allows deleting shortcuts created by third-party integrations.
+paths:
+  /v1/shortcutsoperations/{shortcutId}:
+    delete:
+      tags:
+      - Shortcuts
+      summary: Delete a shortcut
+      description: Delete a shortcut.
+      parameters:
+      - name: shortcutId
+        in: path
+        description: The shortcut id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: deleteV1ShortcutsoperationsByShortcutId
+      x-operation-id-source: derived
+components:
+  schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false

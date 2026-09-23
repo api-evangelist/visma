@@ -1,0 +1,750 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Suppliers API
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Suppliers
+  description: 'Organizations or individuals that provide goods or services to your business.
+
+    Overview of Supplier Functionality: Suppliers
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Solo
+
+    * Bookkeeping
+
+    * InvoicingCollaboration'
+paths:
+  /suppliers:
+    get:
+      tags:
+      - Suppliers
+      summary: Get suppliers
+      description: 'Get all suppliers, or add query parameters to filter the results. The response will include a list of suppliers with their details, such as name, address, and contact information.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfSupplierApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSuppliers
+      x-operation-id-source: derived
+    post:
+      tags:
+      - Suppliers
+      summary: Create a supplier
+      description: 'Create a new supplier.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierApi'
+      responses:
+        '201':
+          description: Supplier created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierApi'
+        '400':
+          description: Supplier can't be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postSuppliers
+      x-operation-id-source: derived
+  /suppliers/{id}:
+    get:
+      tags:
+      - Suppliers
+      summary: Get a supplier
+      description: 'Get a specific supplier by its unique identifier. The response will contain the supplier''s details, including the supplier''s name, address, and contact information.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the Supplier.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getSuppliersById
+      x-operation-id-source: derived
+    delete:
+      tags:
+      - Suppliers
+      summary: Delete a supplier
+      description: 'Delete a specified supplier. Only suppliers without any linked transactions can be deleted.
+
+        To hide a supplier that has transactions, set the `IsActive` property to `false` in a PUT request.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the Supplier.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+        '404':
+          description: Supplier not found
+        '400':
+          description: Supplier can't be deleted
+      operationId: deleteSuppliersById
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Suppliers
+      summary: Replace a supplier
+      description: 'Replace an existing supplier''s data with the provided new data. The supplier must already exist in the system.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase'
+      parameters:
+      - name: id
+        in: path
+        description: This represents the Id of the Supplier.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierApi'
+      responses:
+        '200':
+          description: Supplier replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplierApi'
+        '400':
+          description: Supplier can't be replaced
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putSuppliersById
+      x-operation-id-source: derived
+components:
+  schemas:
+    SupplierApproverApi:
+      type: object
+      properties:
+        ApproverId:
+          type: string
+          description: 'Source: Get from /v2/users'
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Full name of the approver
+          readOnly: true
+        Priority:
+          type: integer
+          description: <strong>Possible values:</strong><br/>priority = 0, then supplier invoice can be approved in any order<br/><br/>Priority of the approver. If there are multiple approvers, the one with the lowest priority will be the first to approve. Priority starts from 1. If.
+          format: int32
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ForeignPaymentCode:
+      type: object
+      properties:
+        Code:
+          type: integer
+          format: int32
+        Description:
+          type:
+          - string
+          - 'null'
+        Id:
+          type: string
+          format: uuid
+        CountryCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    SupplierApi:
+      required:
+      - Name
+      - TermsOfPaymentId
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the supplier
+          format: uuid
+          readOnly: true
+        SupplierNumber:
+          maxLength: 16
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Unique identifier. If not provided, Bookkeeping & Invoicing/eAccounting will provide one'
+        Address1:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Street address of the supplier'
+        Address2:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Additional address information'
+        AutomaticPaymentService:
+          type: boolean
+          description: 'Indicates if the supplier is paid by an automatic payment service. Supplier invoices to such suppliers will not be sent to the bank via the bank integration. Default value: false'
+        UnpaidInvoicesAmount:
+          type: number
+          description: 'Purpose: The amount of unpaid invoices for the supplier'
+          format: double
+          readOnly: true
+        BankAccountNumber:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Only used for domestic suppliers'
+        Clearing:
+          maxLength: 5
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Only used in Swedish Bookkeeping & Invoicing/eAccounting, for Swedish suppliers'
+        BankBban:
+          maxLength: 50
+          minLength: 0
+          pattern: ^[a-zA-Z0-9]{1,35}$
+          type:
+          - string
+          - 'null'
+          description: '<strong>Possible values:</strong><br/>11-14 characters<br/><br/>Purpose: Used on foreign payments to identify a bank account together with Bank Code (SupplierBankCode). Format NO: 11 characters, Format DK.'
+        BankBic:
+          maxLength: 50
+          minLength: 0
+          pattern: ^[a-zA-Z]{6}([a-zA-z0-9]{2}|[a-zA-z0-9]{5})$
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Used on foreign payments to identify a bank account together with IBAN (SupplierBankIban). Format: 6 letters followed by 2 or 5 characters (total length 8 or 11)'
+        BankCode:
+          maxLength: 50
+          minLength: 0
+          pattern: ^([a-zA-Z]{2})[a-zA-Z0-9]{3,}$
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Used on foreign payments to identify a bank account together with BBAN (SupplierBankBban). Format: 2 letters followed by at least 3 characters'
+        BankCountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Default value: Country of the supplier'
+        BankgiroNumber:
+          maxLength: 10
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Only used in Swedish Bookkeeping & Invoicing/eAccounting, for Swedish suppliers'
+        BankIban:
+          maxLength: 50
+          minLength: 0
+          pattern: ^[a-zA-Z]{2}[0-9]{2}[a-zA-z0-9]{1,}$
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Used on foreign payments to identify a bank account together with BIC (SupplierBankBic). Format: 2 letters for country code, 2 control digits, 3 characters for bank identification'
+        BankName:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Name of the supplier Bank'
+        City:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        ContactPersonEmail:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Email address of the contact person'
+        ContactPersonMobile:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Mobile phone number of the contact person'
+        ContactPersonName:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Name of the contact person'
+        ContactPersonPhone:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Phone number of the contact person'
+        CorporateIdentityNumber:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Corporate identity number of the supplier'
+        CountryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Default value: Country of the user company'
+        CreatedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Timestamp of when the supplier was created'
+          format: date-time
+          readOnly: true
+        CurrencyCode:
+          maxLength: 3
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Default value: Currency of the user company'
+        EmailAddress:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Email address of the supplier'
+        MessageThreads:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch messages via GET /v2/messagethreads/{messageThreadId}
+          readOnly: true
+        MobilePhone:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Mobile phone number of the supplier'
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Timestamp of when the supplier was last modified'
+          format: date-time
+          readOnly: true
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+        Note:
+          maxLength: 4000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Custom note for the supplier'
+        Notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: Fetch notes via GET /v2/notes/{noteId}
+          readOnly: true
+        PlusgiroNumber:
+          maxLength: 10
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Only used in Swedish Bookkeeping & Invoicing/eAccounting, for Swedish suppliers'
+        PostalCode:
+          maxLength: 10
+          minLength: 0
+          type:
+          - string
+          - 'null'
+        Telephone:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Phone number of the supplier'
+        TermsOfPaymentId:
+          type: string
+          description: 'Source: Get from /v2/termsofpayment'
+          format: uuid
+        VatNumber:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Used to check VAT number before deducting VAT or for 3rd party validations'
+        WwwAddress:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Website address of the supplier'
+        BankFeeCode:
+          type: integer
+          description: '<strong>Possible values:</strong><br/>0 = None,<br/>1 = SenderPaysAllBankCharges,<br/>2 = ReceiverPaysAllBankCharges,<br/>3 = ReceiverPaysForeignCosts<br/><br/>Purpose: Determines who pays additional bank fees.'
+          format: int32
+        PayFromBankAccountId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/bankaccounts. Purpose: Determines the bank account for foreign payments'
+          format: uuid
+        ForeignPaymentCodeId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/foreignpaymentcodes. Purpose: Categorization of foreign purchases (NO and SE only)'
+          format: uuid
+          readOnly: true
+        ForeignPaymentCode:
+          $ref: '#/components/schemas/ForeignPaymentCode'
+        UsesPaymentReferenceNumbers:
+          type: boolean
+          description: 'Purpose: Indicates if the supplier uses payment reference numbers, such as OCR, KID, etc.'
+        IsActive:
+          type: boolean
+          description: Indicates if the supplier is active
+        IsDraft:
+          type: boolean
+          description: Indicates if the supplier is a draft
+          readOnly: true
+        ProportionalVat:
+          type: boolean
+          description: 'Purpose: Indicates if the supplier has Proportional VAT activated'
+        SelfEmployedWithoutFixedAddress:
+          type: boolean
+          description: Norwegian companies only.
+        UseGroupCompany:
+          type:
+          - boolean
+          - 'null'
+          description: 'Purpose: Indicates if invoices from this supplier are booked against the group company payable account instead of the standard payable account. Only settable for Swedish companies with the Group Company feature enabled in company settings; ignored otherwise. On PUT, omit this property (leave it null) to leave the existing value unchanged'
+        GroupAccountNumber:
+          type:
+          - integer
+          - 'null'
+          description: 'Purpose: The account number invoices from this supplier are booked against when UseGroupCompany is true. Only settable for Swedish companies with the Group Company feature enabled in company settings; ignored otherwise. On PUT, omit this property (leave it null) to leave the existing value unchanged'
+          format: int64
+        ApprovalOrderType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Default,<br/>1 = Specific order,<br/>2 = Any order<br/><br/>Approval order type.
+          format: int32
+          readOnly: true
+        OurCustomerNumber:
+          maxLength: 40
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Requires active stock module'
+        PurchaseDocumentLanguage:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Language of the purchase document
+        Approvers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SupplierApproverApi'
+          description: List of approvers. Empty if ApprovalOrderType is 0 (default)
+        UsesAutomaticSupplierInvoiceApproval:
+          type: boolean
+          description: 'Option to send invoices automatically to approval. Default: false'
+        UsesAutomaticInvoicePostToLedger:
+          type: boolean
+          description: 'Option to automatically post invoices to ledger. Default: false'
+        LastInvoiceDate:
+          type:
+          - string
+          - 'null'
+          description: The last invoice date of the supplier
+          format: date-time
+          readOnly: true
+        AccountingTemplateId:
+          type:
+          - string
+          - 'null'
+          description: The last accounting template used for this supplier
+          format: uuid
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfSupplierApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierApi'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

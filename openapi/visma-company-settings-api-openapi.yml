@@ -1,0 +1,903 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Company Settings…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: Company Settings
+  description: 'Configuration options of your company.
+
+    Overview of Company Settings Functionality: Company settings
+
+
+    ___'
+paths:
+  /companysettings:
+    get:
+      tags:
+      - Company Settings
+      summary: Get company settings
+      description: 'Get the current company settings for the authenticated user''s company.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales
+
+        * ea:sales_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanySettingsApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getCompanysettings
+      x-operation-id-source: derived
+    put:
+      tags:
+      - Company Settings
+      summary: Replace company settings
+      description: 'Update the company settings'' data with the provided new data.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanySettingsApi'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanySettingsApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putCompanysettings
+      x-operation-id-source: derived
+  /companysettings/accountinglocksettings:
+    put:
+      tags:
+      - Company Settings
+      summary: Update accounting lock settings
+      description: 'Updates the accounting lock interval and related settings for the company.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountingLockSettingsApi'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanySettingsApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putCompanysettingsAccountinglocksettings
+      x-operation-id-source: derived
+  /companysettings/rotrut:
+    put:
+      tags:
+      - Company Settings
+      summary: Update ROT/RUT settings
+      description: 'Update ROT/RUT settings for Swedish companies using reduced invoicing.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:sales'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyRotRutSettingsApi'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanySettingsApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putCompanysettingsRotrut
+      x-operation-id-source: derived
+components:
+  schemas:
+    CompanySettingsApi:
+      required:
+      - Address1
+      - City
+      - CountryCode
+      - Name
+      - PostalCode
+      type: object
+      properties:
+        CompanyScanningAddress:
+          $ref: '#/components/schemas/CompanyScanningAddressApi'
+        Name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Company name.
+        Email:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Company email address.
+        Phone:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Company phone number. Required for all countries except Sweden
+        MobilePhone:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Company mobile phone number.
+        Address1:
+          maxLength: 40
+          minLength: 0
+          type: string
+          description: Primary address line.
+        Address2:
+          maxLength: 40
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Secondary address line.
+        CountryCode:
+          maxLength: 2
+          minLength: 0
+          type: string
+          description: <strong>Possible values:</strong><br/>3166-1 alpha-2)<br/><br/>Country code (ISO.
+        PostalCode:
+          maxLength: 10
+          minLength: 0
+          type: string
+          description: Postal code.
+        City:
+          maxLength: 40
+          minLength: 0
+          type: string
+          description: City name.
+        Website:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Company website URL.
+        OurReference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default company reference.
+        CurrencyCode:
+          type:
+          - string
+          - 'null'
+          description: Currency code used by the company
+          readOnly: true
+        TermsOfPaymentId:
+          type: string
+          description: 'Terms of payment identifier. Source: Get from /v2/termsofpayments'
+          format: uuid
+          readOnly: true
+        CorporateIdentityNumber:
+          type:
+          - string
+          - 'null'
+          description: Corporate identity number
+          readOnly: true
+        PeppolId:
+          type:
+          - string
+          - 'null'
+          description: PEPPOL participant identifiers separated by semicolons. If identifier is empty in DB, then we try to fetch it from InExchange.
+          readOnly: true
+        VatCode:
+          type:
+          - string
+          - 'null'
+          description: VAT identification number
+          readOnly: true
+        BankGiro:
+          type:
+          - string
+          - 'null'
+          description: Bank giro number. Only used in Sweden
+        PlusGiro:
+          type:
+          - string
+          - 'null'
+          description: Plus giro number. Only used in Sweden
+        BankAccount:
+          type:
+          - string
+          - 'null'
+          description: Company bank account number
+          readOnly: true
+        Iban:
+          type:
+          - string
+          - 'null'
+          description: International Bank Account Number (IBAN)
+          readOnly: true
+        AccountNumberDigits:
+          type: integer
+          description: Accountnumber
+          format: int32
+          readOnly: true
+        AccountingLockedTo:
+          type: string
+          description: Date until which accounting is locked
+          format: date-time
+          readOnly: true
+        AccountingLockInterval:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Month,<br/>2 = Quarter,<br/>3 = Year,<br/>4 = TaxDeclaration<br/><br/>Accounting lock interval.
+          format: int32
+          readOnly: true
+        TaxDeclarationDate:
+          $ref: '#/components/schemas/TaxDeclarationDateApi'
+        Gln:
+          type:
+          - string
+          - 'null'
+          description: Global Location Number (GLN)
+          readOnly: true
+        ProductVariant:
+          type:
+          - integer
+          - 'null'
+          description: <strong>Possible values:</strong><br/>1 = Standard,<br/>2 = Invoicing,<br/>3 = Bookkeeping,<br/>4 = Solo,<br/>5 = Pro,<br/>6 = InvoicingCollaboration<br/><br/>Product variant.
+          format: int32
+          readOnly: true
+        TypeOfBusiness:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = Corporation,<br/>2 = SoleProprietorship,<br/>3 = EconomicAssociation,<br/>4 = NonProfitOrganization,<br/>5 = GeneralPartnership,<br/>6 = LimitedPartnership,<br/>7 = Cooperatives,<br/>9 = PublicLimited<br/><br/>Type of business.
+          format: int32
+          readOnly: true
+        VatPeriod:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = OnceAMonth12th,<br/>2 = OnceAMonth26th,<br/>3 = OnceAQuarter,<br/>4 = OnceAYear,<br/>5 = Never,<br/>6 = Bimonthly,<br/>7 = OnceAMonth,<br/>8 = TwiceAYear,<br/>9 = OnceAQuarterFloating<br/><br/>VAT reporting period.
+          format: int32
+          readOnly: true
+        ActivatedModules:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: List of activated modules for the company
+          readOnly: true
+        CompanyText:
+          $ref: '#/components/schemas/CompanyTextsApi'
+        NextCustomerNumber:
+          type: integer
+          description: Next available customer number
+          format: int32
+          readOnly: true
+        NextSupplierNumber:
+          type: integer
+          description: Next available supplier number
+          format: int32
+          readOnly: true
+        NextCustomerInvoiceNumber:
+          type: integer
+          description: Next available customer invoice number
+          format: int32
+          readOnly: true
+        NextQuoteNumber:
+          type: integer
+          description: Next available quote number
+          format: int32
+          readOnly: true
+        NextOrderNumber:
+          type: integer
+          description: Next available order number
+          format: int32
+          readOnly: true
+        NextArticleNumber:
+          type:
+          - integer
+          - 'null'
+          description: Next available article number
+          format: int32
+          readOnly: true
+        ShowPricesExclVatPC:
+          type: boolean
+          description: Show prices excluding VAT for private individuals
+          readOnly: true
+        ShowContributionMargin:
+          type: boolean
+          description: Show contribution margin
+          readOnly: true
+        HasProportionalVatEnabled:
+          type: boolean
+          description: Whether proportional VAT is enabled
+          readOnly: true
+        ProportionalVatValue:
+          type:
+          - integer
+          - 'null'
+          description: Proportional VAT percentage value
+          format: int32
+          readOnly: true
+        IsPayslipActivated:
+          type:
+          - boolean
+          - 'null'
+          description: Whether payslip functionality is activated
+          readOnly: true
+        UsesCostCenter:
+          type: boolean
+          description: Whether cost centers are used
+          readOnly: true
+        UsesProject:
+          type: boolean
+          description: Whether projects are used
+          readOnly: true
+        UsesMoss:
+          type: boolean
+          description: Whether MOSS (Mini One Stop Shop) is used
+        UsesPaymentReferenceNumber:
+          type: boolean
+          description: Show OCR/KID reference number on invoice
+        UsesSupplierInvoiceEdit:
+          type:
+          - boolean
+          - 'null'
+          description: Allow editing of purchase invoices
+        UseAdvancedMode:
+          type:
+          - boolean
+          - 'null'
+          description: Show debit and credit on purchase invoices
+        DomesticCurrencyRounding:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = HalfAwayFromZero<br/><br/>Domestic currency rounding type.
+          format: int32
+          readOnly: true
+        AutoInvoice:
+          $ref: '#/components/schemas/AutoInvoiceApi'
+        ApprovalSettings:
+          $ref: '#/components/schemas/ApprovalSettingsApi'
+        UsesReverseConstructionVat:
+          type: boolean
+          description: Whether VAT reverse charge rules apply for construction sector
+        UsesRotReducedInvoicing:
+          type: boolean
+          description: Whether ROT/RUT reduced invoicing is used. Only for Swedish companies
+        CompanyRotRutSettings:
+          $ref: '#/components/schemas/CompanyRotRutSettingsApi'
+        CompanyStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Inactive,<br/>1 = Active,<br/>2 = ReadOnly<br/><br/>Company status.
+          format: int32
+          readOnly: true
+        CompanyIdentifier:
+          type:
+          - string
+          - 'null'
+          description: Unique company identifier
+          readOnly: true
+        BankgiroNumberPrint:
+          type:
+          - string
+          - 'null'
+          description: Alternative bank giro number for sales invoice printouts
+        KeepOriginalDraftDate:
+          type:
+          - boolean
+          - 'null'
+          description: 'Keep original draft date as invoice date. Default: false'
+        UsePaymentFilesForOutgoingPayments:
+          type: boolean
+          description: Use payment files for outgoing payments
+        UseAutomaticVatCalculation:
+          type:
+          - boolean
+          - 'null'
+          description: Use automatic VAT calculation. Used for SE, NO, FI. When set to true, vat rows are added (when creating a voucher for example), if the account used relates to.
+        ShowCostCenterReminder:
+          type: boolean
+          description: Show cost center reminder when creating invoices
+          readOnly: true
+        ShowProjectReminder:
+          type: boolean
+          description: Show project reminder when creating invoices
+          readOnly: true
+        UsesGreenTechnology:
+          type: boolean
+          description: <strong>Possible values:</strong><br/>True = company uses Green Technology functionality<br/>False = company does not use Green Technology functionality
+          readOnly: true
+        CompanyGreenTechnologySettings:
+          $ref: '#/components/schemas/CompanyGreenTechnologySettingsApi'
+        UsesVatTriangulationRules:
+          type: boolean
+          description: Use VAT triangulation rules for EU transactions
+        Swish:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Swish payment number.
+        CompanyEmailForUpload:
+          type:
+          - string
+          - 'null'
+          description: Company email for source document upload. Only valid if email upload is activated
+          readOnly: true
+        VismaWebshopStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Enabled,<br/>2 = Disabled,<br/>3 = Requested<br/><br/>Visma Webshop synchronization status.
+          format: int32
+          readOnly: true
+        UsesTransactionText:
+          type: boolean
+          description: Use transaction text for narration
+          readOnly: true
+        FirstPaymentReminderWithoutFee:
+          type:
+          - boolean
+          - 'null'
+          description: First payment reminder without fee. Set to null to skip updating
+        LatePaymentFee:
+          maximum: 99999
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: <strong>Possible values:</strong><br/>0-99999)<br/><br/>Late payment fee (. Set to null to skip updating.
+          format: double
+        DefaultBackgroundId:
+          type:
+          - string
+          - 'null'
+          description: 'Default background ID for sales documents. Source: Get from /v2/backgrounds'
+          format: uuid
+        InvoicePrintSettingsType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = CompanyNameAndFooter,<br/>2 = LogotypeAndFooter,<br/>3 = InvoiceBackground<br/><br/>Type of background that is used for PDF sales documents.
+          format: int32
+          readOnly: true
+      additionalProperties: false
+    AutoInvoiceApi:
+      type: object
+      properties:
+        AutoInvoiceActivationStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Unregistered,<br/>1 = Registered,<br/>2 = Activated<br/><br/>Auto invoice activation status.
+          format: int32
+          readOnly: true
+        AutoInvoiceB2CStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = NotActivated,<br/>1 = Pending,<br/>2 = Activated<br/><br/>Auto invoice B2C status, only for Norway and Finland.
+          format: int32
+          readOnly: true
+        AutoInvoiceInboundStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Deactivated,<br/>1 = Activated<br/><br/>Auto invoice inbound status.
+          format: int32
+          readOnly: true
+      additionalProperties: false
+      description: Auto invoice settings
+    CompanyScanningAddressApi:
+      type: object
+      properties:
+        Name:
+          type:
+          - string
+          - 'null'
+          description: The name of the person to receive the invoice scanning
+        Address1:
+          type:
+          - string
+          - 'null'
+          description: The first line of the address
+        Address2:
+          type:
+          - string
+          - 'null'
+          description: The second line of the address
+        PostCode:
+          type:
+          - string
+          - 'null'
+          description: The postal code of the address
+        PostOffice:
+          type:
+          - string
+          - 'null'
+          description: The postal office of the address
+        Email:
+          type:
+          - string
+          - 'null'
+          description: The email of the person to receive the invoice scanning
+      additionalProperties: false
+      description: Electronic invoice scanning address. Only valid if autoinvoice scanning is activated otherwise null
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ApprovalSettingsApi:
+      type: object
+      properties:
+        UsesSupplierInvoiceApproval:
+          type: boolean
+          description: 'Whether supplier invoice approval is used. Used with: /v2/approval/supplierinvoice/{id}'
+          readOnly: true
+        UsesVatReportApproval:
+          type: boolean
+          description: 'Whether VAT report approval is used. Used with: /v2/approval/vatreport/{id}'
+          readOnly: true
+      additionalProperties: false
+      description: Approval company settings
+    CompanyGreenTechnologySettingsApi:
+      type: object
+      properties:
+        GreenTechnologyDeductionMaxAmount:
+          type: number
+          description: Green technology deduction maximum amount
+          format: double
+          readOnly: true
+        SollarCellDiscountPercentage:
+          type: number
+          description: Solar cell discount percentage
+          format: double
+          readOnly: true
+      additionalProperties: false
+      description: Green Technology settings
+    CompanyTextsApi:
+      type: object
+      properties:
+        CustomerInvoiceTextDomestic:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Customer invoice text for domestic customers.
+        CustomerInvoiceTextForeign:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Customer invoice text for foreign customers.
+        OrderTextDomestic:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Order text for domestic customers.
+        OrderTextForeign:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Order text for foreign customers.
+        OverDueTextDomestic:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Overdue text for domestic customers.
+        OverDueTextForeign:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Overdue text for foreign customers.
+        QuoteEmailDomestic:
+          maxLength: 2048
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Quote email text for domestic customers.
+        QuoteEmailForeign:
+          maxLength: 2048
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Quote email text for foreign customers.
+        InvoiceEmailDomestic:
+          maxLength: 2048
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Invoice email text for domestic customers.
+        InvoiceEmailForeign:
+          maxLength: 2048
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Invoice email text for foreign customers.
+        OrderEmailDomestic:
+          maxLength: 2048
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Order email text for domestic customers.
+        OrderEmailForeign:
+          maxLength: 2048
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Order email text for foreign customers.
+        PurchaseOrderEmailDomestic:
+          maxLength: 2048
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Purchase order email text for domestic suppliers.
+        PurchaseOrderEmailForeign:
+          maxLength: 2048
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Purchase order email text for foreign suppliers.
+      additionalProperties: false
+      description: Company additional text information
+    CompanyRotRutSettingsApi:
+      type: object
+      properties:
+        RutMaxAmountForPersBelow65Year:
+          maximum: 999999
+          minimum: 0
+          type: number
+          description: RUT maximum amount for persons below 65 years
+          format: double
+        RutMaxAmountForPersOver65Year:
+          maximum: 999999
+          minimum: 0
+          type: number
+          description: RUT maximum amount for persons over 65 years
+          format: double
+        RutReducedInvoicingPercent:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: RUT reduced invoicing percentage
+          format: double
+        RotReducedInvoicingMaxAmount:
+          maximum: 999999
+          minimum: 0
+          type: number
+          description: ROT reduced invoicing maximum amount
+          format: double
+        RotReducedInvoicingPercent:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: ROT reduced invoicing percentage
+          format: double
+      additionalProperties: false
+      description: ROT/RUT settings for Swedish companies. Use PUT v2/companysettings/rotrutsettings to update in combination with UsesRotReducedInvoicing set to true
+    AccountingLockSettingsApi:
+      type: object
+      properties:
+        AccountingLockedAsOf:
+          $ref: '#/components/schemas/AccountingLockDateApi'
+        AccountingLockInterval:
+          maximum: 4
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Month,<br/>2 = Quarter,<br/>3 = Year,<br/>4 = TaxDeclaration<br/><br/>Accounting lock interval.
+          format: int32
+        TaxDeclarationDate:
+          $ref: '#/components/schemas/TaxDeclarationDateApi'
+      additionalProperties: false
+    AccountingLockDateApi:
+      type: object
+      properties:
+        Year:
+          type: integer
+          description: Year
+          format: int32
+        Month:
+          maximum: 12
+          minimum: 1
+          type: integer
+          description: Month
+          format: int32
+      additionalProperties: false
+      description: 'Accounting locked as of year and month. Default: No lock'
+    TaxDeclarationDateApi:
+      type: object
+      properties:
+        Month:
+          maximum: 31
+          minimum: 1
+          type: integer
+          description: Month
+          format: int32
+        Day:
+          maximum: 12
+          minimum: 1
+          type: integer
+          description: Day of the month
+          format: int32
+      additionalProperties: false
+      description: Tax declaration day and month. Only for Sweden and Finland
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment

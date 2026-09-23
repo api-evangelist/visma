@@ -1,0 +1,640 @@
+openapi: 3.2.0
+info:
+  title: Bookkeeping & Invoicing/eAccounting API V2 Allocation…
+  description: 'Visit our complete Bookkeeping & Invoicing/eAccounting API docs for how to get started, information about authentication, error handling, query customization and more.
+
+
+    ✉ API Support'
+  version: v2
+servers:
+- url: https://eaccountingapi.vismaonline.com/v2/
+tags:
+- name: AllocationPeriods
+  description: 'The periods used to distribute or allocate revenues and expenses across specific dates or accounting periods. Allocation periods help ensure accurate financial reporting and matching of income and costs.
+
+
+    ___
+
+
+    Available in any of the following variants:
+
+    * Pro
+
+    * Standard
+
+    * Bookkeeping'
+paths:
+  /allocationperiods:
+    get:
+      tags:
+      - AllocationPeriods
+      summary: Get allocation periods
+      description: 'Get all allocation periods, or add query parameters to filter the results. The response includes details such as the period''s name, start and end dates, and its active status.
+
+
+        **Note**: This endpoint returns only active (non-deleted) allocation periods. If you need to retrieve deleted allocation periods for synchronization purposes, use the separate `/v2/allocationperiods/deleted` endpoint.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponseOfAllocationPeriodApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getAllocationperiods
+      x-operation-id-source: derived
+    post:
+      tags:
+      - AllocationPeriods
+      summary: Add allocation periods for voucher or supplier invoice
+      description: 'Creates new allocation periods from allocation plans for vouchers or supplier invoices.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AllocationPlan'
+      responses:
+        '201':
+          description: Allocation periods created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocationPeriodApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: postAllocationperiods
+      x-operation-id-source: derived
+    put:
+      tags:
+      - AllocationPeriods
+      summary: Update allocation periods for voucher or supplier invoice
+      description: 'Updates existing allocation periods from modified allocation plans for vouchers or supplier invoices.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AllocationPlan'
+      responses:
+        '200':
+          description: Allocation periods updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocationPeriodApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: putAllocationperiods
+      x-operation-id-source: derived
+  /allocationperiods/{allocationPeriodId}:
+    get:
+      tags:
+      - AllocationPeriods
+      summary: Get single allocation period
+      description: 'Get a specific allocation period by its unique identifier. The response includes details such as the period''s name, start and end dates, and its active status.
+
+
+        ___
+
+        Requires any of the following scopes:
+
+        * ea:purchase
+
+        * ea:purchase_readonly'
+      parameters:
+      - name: allocationPeriodId
+        in: path
+        description: The Id of the allocation period to retrieve
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocationPeriodApi'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonExtendedBadRequest'
+      operationId: getAllocationperiodsByAllocationPeriodId
+      x-operation-id-source: derived
+components:
+  schemas:
+    PaginatedResponseOfAllocationPeriodApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationPeriodApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    AllocationPlan:
+      required:
+      - AllocationAccountNumber
+      - AmountToAllocate
+      - BookkeepingStartDate
+      - NumberOfAllocationPeriods
+      type: object
+      properties:
+        SupplierInvoiceDraftId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a supplier invoice draft. If assigned, SupplierInvoiceDraftRow must be set
+          format: uuid
+        SupplierInvoiceDraftRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a supplier invoice draft row. Required if SupplierInvoiceDraftId is assigned
+          format: int32
+        SupplierInvoiceId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a supplier invoice. If assigned, SupplierInvoiceRow must be set
+          format: uuid
+        SupplierInvoiceRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a supplier invoice row. Required if SupplierInvoiceId is assigned
+          format: int32
+        VoucherId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a voucher. If assigned, VoucherRow must be set
+          format: uuid
+        VoucherRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a voucher row. Required if VoucherId is assigned
+          format: int32
+        BookkeepingStartDate:
+          type: string
+          description: The start date for bookkeeping allocation
+          format: date-time
+        AmountToAllocate:
+          maximum: 1000000000
+          minimum: 1
+          type: number
+          description: The amount to allocate across periods
+          format: double
+        QuantityToAllocate:
+          type:
+          - number
+          - 'null'
+          description: Used for Dutch companies that use agricultural settings
+          format: double
+        WeightToAllocate:
+          type:
+          - number
+          - 'null'
+          description: Used for Dutch companies that use agricultural settings
+          format: double
+        AllocationAccountNumber:
+          type: integer
+          description: The account number for allocation
+          format: int64
+        NumberOfAllocationPeriods:
+          maximum: 9999
+          minimum: 1
+          type: integer
+          description: Number of allocation periods to create
+          format: int32
+      additionalProperties: false
+      description: Plan for creating allocation periods to distribute costs over time
+    AllocationPeriodApi:
+      required:
+      - Rows
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the allocation period
+          format: uuid
+          readOnly: true
+        SupplierInvoiceDraftId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a supplier invoice draft that may be associated with this allocation period
+          format: uuid
+          readOnly: true
+        SupplierInvoiceDraftRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a supplier invoice draft row that may be associated with this allocation period
+          format: int32
+          readOnly: true
+        SupplierInvoiceId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a supplier invoice that may be associated with this allocation period
+          format: uuid
+          readOnly: true
+        SupplierInvoiceRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a supplier invoice row that may be associated with this allocation period
+          format: int32
+          readOnly: true
+        ManualVoucherId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a possible manual voucher that this allocation period belongs to
+          format: uuid
+          readOnly: true
+        ManualVoucherRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a possible manual voucher row that this allocation period belongs to
+          format: int32
+          readOnly: true
+        CustomerInvoiceId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a possible customer invoice that this allocation period belongs to
+          format: uuid
+          readOnly: true
+        CustomerInvoiceRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a possible customer invoice row that this allocation period belongs to
+          format: int32
+          readOnly: true
+        CustomerInvoiceDraftId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a possible customer invoice draft that this allocation period belongs to
+          format: uuid
+          readOnly: true
+        CustomerInvoiceDraftRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a possible customer invoice draft row that this allocation period belongs to
+          format: int32
+          readOnly: true
+        VoucherFiscalYearId:
+          type:
+          - string
+          - 'null'
+          description: Reference to fiscal year id of the voucher coresponding to the source type, if applicable
+          format: uuid
+          readOnly: true
+        VoucherId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a possible voucher that this allocation period belongs to
+          format: uuid
+          readOnly: true
+        AllocationPeriodSourceType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = SupplierInvoice,<br/>1 = ManualVoucher,<br/>2 = CustomerInvoice,<br/>3 = CustomerInvoiceDraft
+          format: int32
+        Status:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Pending,<br/>1 = Revoked,<br/>2 = Booked,<br/>3 = CancelledNotBooked
+          format: int32
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: Identifier of a cost center item associated with this allocation, if applicable
+          format: uuid
+          readOnly: true
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: Identifier of a cost center item associated with this allocation, if applicable
+          format: uuid
+          readOnly: true
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: Identifier of a cost center item associated with this allocation, if applicable
+          format: uuid
+          readOnly: true
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a project, if applicable
+          format: uuid
+          readOnly: true
+        BookkeepingDate:
+          type: string
+          description: Bookeeping date for this allocation period
+          format: date-time
+        CreatedUtc:
+          type: string
+          description: When the allocation was created
+          format: date-time
+          readOnly: true
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationPeriodRowApi'
+          description: The accounting rows/lines of this alocation
+        DebitAccountNumber:
+          type: integer
+          description: The first debit account number for non VAT accounting rows/lines of this alocation
+          format: int64
+          readOnly: true
+        CreditAccountNumber:
+          type: integer
+          description: The first credit account number for non VAT accounting rows/lines of this alocation
+          format: int64
+          readOnly: true
+        Amount:
+          type: number
+          description: The amount of the first non VAT accounting row/line of this alocation
+          format: double
+          readOnly: true
+        IsCredit:
+          type: boolean
+          description: Indicates whether the associated source invoice is of credit type
+        SourceDate:
+          type:
+          - string
+          - 'null'
+          description: Voucher date or Invoice date if no source voucher
+          format: date-time
+          readOnly: true
+        Description:
+          type:
+          - string
+          - 'null'
+          description: Voucher description or Invoice description if no source voucher
+          readOnly: true
+        NumberAndNumberSeries:
+          type:
+          - string
+          - 'null'
+          description: From source voucher or null if no source voucher
+          readOnly: true
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Last UTC time the period was changed. If the allocation wasn't changed it takes the value of created UTC
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+      description: Allocation period for distributing costs over time
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    AllocationPeriodRowApi:
+      required:
+      - DebitCredit
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the allocation period row
+          format: uuid
+          readOnly: true
+        AllocationPeriodId:
+          type: string
+          description: Reference to the allocation period this row belongs to
+          format: uuid
+          readOnly: true
+        AccountNumber:
+          type: integer
+          description: Account number
+          format: int64
+        Amount:
+          type: number
+          description: Amount to allocate
+          format: double
+        Quantity:
+          type:
+          - number
+          - 'null'
+          description: Used for dutch companies that use agricultural settings
+          format: double
+        Weight:
+          type:
+          - number
+          - 'null'
+          description: Used for dutch companies that use agricultural settings
+          format: double
+        DebitCredit:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = Debit,<br/>2 = Credit
+          format: int32
+        AllocationPeriodRowType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>InputVat = 1
+          format: int32
+      additionalProperties: false
+      description: Row in an allocation period
+x-tagGroups:
+- name: Sales
+  tags:
+  - ArticleLabels
+  - Articles
+  - CustomerInvoiceDrafts
+  - CustomerInvoiceOffsets
+  - CustomerInvoices
+  - CustomerInvoiceValuationHistories
+  - CustomerLabels
+  - CustomerLedgerItems
+  - Customers
+  - DeliveryMethods
+  - DeliveryTerms
+  - DiscountAgreements
+  - Orders
+  - QuoteDrafts
+  - Quotes
+  - SalesPriceLists
+  - TermsOfPayment
+  - WebshopOrders
+- name: Purchase
+  tags:
+  - BankAccounts
+  - ForeignPaymentCodes
+  - PurchaseReceiptDrafts
+  - SupplierInvoiceDrafts
+  - SupplierInvoices
+  - SupplierInvoiceValuationHistories
+  - SupplierLedgerItems
+  - Suppliers
+- name: Common
+  tags:
+  - Approval
+  - AppStoreActivationStatus
+  - AttachmentLinks
+  - Attachments
+  - AutoInvoice
+  - Bank
+  - Charts
+  - CompanySettings
+  - Company
+  - Countries
+  - Currencies
+  - Documents
+  - IdentityLookup
+  - MessageThreads
+  - Mobile
+  - Notes
+  - PartnerResourceLinks
+  - SalesDocumentAttachments
+  - Trials
+  - Units
+  - Users
+  - VoTokenValidation
+  - WebHooks
+  - Zapier
+- name: Accounting
+  tags:
+  - AccountBalance
+  - Accounts
+  - AccountTypes
+  - AllocationPeriods
+  - ArticleAccountCodings
+  - BankTransactions
+  - CostCenterItems
+  - CostCenters
+  - FiscalYears
+  - InventoryItems
+  - PaymentVoucher
+  - Projects
+  - SieFileImportExport
+  - VatCode
+  - VatReport
+  - VoucherDrafts
+  - Vouchers
+  - VoucherWithOverunderPayment
