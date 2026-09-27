@@ -359,31 +359,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    branchInCustomerDocumentDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Branch is deprecated, please use BranchNumber instead.
     locationInCustomerDocumentDto:
       properties:
         countryId:
@@ -400,6 +375,102 @@ components:
         location of the selected customer or, if the invoice is created from an opportunity,
 
         it is the customer location specified for the opportunity.'
+    branchInCustomerDocumentDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Branch is deprecated, please use BranchNumber instead.
+    subaccountInCustomerDocumentDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    branchNumberInCustomerDocumentDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
+    projectInCustomerDocumentDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     accountInCustomerDocumentDto:
       properties:
         type:
@@ -585,77 +656,6 @@ components:
           type: string
           description: Click the magnifier. &gt; The name.
       description: The top part &gt; Customer &gt; The customer associated with the document.
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
-    subaccountInCustomerDocumentDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
-    projectInCustomerDocumentDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
-    branchNumberInCustomerDocumentDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
   securitySchemes:
     interactiveapi:
       type: oauth2

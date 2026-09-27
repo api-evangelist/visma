@@ -231,6 +231,12 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
     ContractUsageLineUpdateDto:
       type: object
       properties:
@@ -255,12 +261,53 @@ components:
         date:
           $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
       description: This class represent a Contract Usage Line in Contract Usage Controller. Used to pass data to server for creating or updating an Contract Usage Line
-    DtoValueOfNullableOfInt32:
+    ContractUsageDto:
+      type: object
+      properties:
+        contract:
+          type: string
+        transaction:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContractUsageLineDto'
+          description: Transactions not yet invoiced tab or Transaction history tab
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+    DtoValueOfNullableOfDateTime:
       type: object
       properties:
         value:
-          type: integer
-          format: int32
+          type: string
+          format: date-time
+    ContractUsageUpdateDto:
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContractUsageLineUpdateDto'
+      description: This class represent a Contract Usage in Contract Usage Controller. Used to pass data to server for creating or updating an Contract Usage
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    branchInContractUsageLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Both tabs &gt; Branch &gt;
     BackgroundApiAcceptedDto:
       type: object
       properties:
@@ -268,6 +315,12 @@ components:
           type: string
         stateLocation:
           type: string
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
     itemInContractUsageLineDto:
       properties:
         number:
@@ -277,31 +330,6 @@ components:
           type: string
           description: Name of item/description
       description: Both tabs
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    ContractUsageUpdateDto:
-      type: object
-      properties:
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContractUsageLineUpdateDto'
-      description: This class represent a Contract Usage in Contract Usage Controller. Used to pass data to server for creating or updating an Contract Usage
     ContractUsageLineDto:
       type: object
       properties:
@@ -343,34 +371,6 @@ components:
           type: string
           description: A system generated date/time that indicates the last change for the document.
           format: date-time
-    branchInContractUsageLineDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Both tabs &gt; Branch &gt;
-    ContractUsageDto:
-      type: object
-      properties:
-        contract:
-          type: string
-        transaction:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContractUsageLineDto'
-          description: Transactions not yet invoiced tab or Transaction history tab
-        lastModifiedDateTime:
-          type: string
-          format: date-time
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
   securitySchemes:
     interactiveapi:
       type: oauth2

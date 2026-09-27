@@ -240,24 +240,38 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    SalesDocumentRotRutReductionPersonApi:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system
-          format: uuid
-          readOnly: true
-        Ssn:
-          maxLength: 50
-          minLength: 0
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-          description: Social security number
-        Amount:
-          type: number
-          format: double
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfQuoteApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteApi'
       additionalProperties: false
     QuoteRowApi:
       type: object
@@ -438,95 +452,40 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    CommonError:
+    ContributionMarginApi:
       type: object
       properties:
-        Field:
+        Amount:
           type:
-          - string
+          - number
           - 'null'
-        ErrorCode:
+          description: Amount of contribution margin
+          format: double
+        Percentage:
           type:
-          - string
+          - number
           - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+          description: Percentage of contribution margin
+          format: double
       additionalProperties: false
-    PaginatedResponseOfQuoteApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuoteApi'
-      additionalProperties: false
-    TermsOfPaymentApi:
+    SalesDocumentRotRutReductionPersonApi:
       type: object
       properties:
         Id:
           type: string
-          description: Unique Id provided by the system. For v2/quotes and v2/quotedrafts endpoints Id is editable
+          description: Unique Id provided by the system
           format: uuid
           readOnly: true
-        Name:
+        Ssn:
+          maxLength: 50
+          minLength: 0
           type:
           - string
           - 'null'
-          description: Name of the terms of payment
-        NameEnglish:
-          type:
-          - string
-          - 'null'
-          description: English name of the terms of payment
-        NumberOfDays:
-          type: integer
-          description: Number of days to pay
-          format: int32
-        TermsOfPaymentTypeId:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = CurrentMonth,<br/>2 = Cash,<br/>3 = CardPayment,<br/>4 = DigitalWallet,<br/>5 = PaymentServiceProvider<br/><br/>Type of terms of payment, possible values are.
-          format: int32
-        TermsOfPaymentTypeText:
-          type:
-          - string
-          - 'null'
-        AvailableForSales:
-          type: boolean
-          description: True if this terms of payment can be used on sales documents, false otherwise
-        AvailableForPurchase:
-          type: boolean
-          description: True if this terms of payment can be used on purchase documents, false otherwise
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+          description: Social security number
+        Amount:
+          type: number
+          format: double
       additionalProperties: false
     QuoteApi:
       required:
@@ -839,21 +798,62 @@ components:
           format: double
           readOnly: true
       additionalProperties: false
-    ContributionMarginApi:
+    TermsOfPaymentApi:
       type: object
       properties:
-        Amount:
+        Id:
+          type: string
+          description: Unique Id provided by the system. For v2/quotes and v2/quotedrafts endpoints Id is editable
+          format: uuid
+          readOnly: true
+        Name:
           type:
-          - number
+          - string
           - 'null'
-          description: Amount of contribution margin
-          format: double
-        Percentage:
+          description: Name of the terms of payment
+        NameEnglish:
           type:
-          - number
+          - string
           - 'null'
-          description: Percentage of contribution margin
-          format: double
+          description: English name of the terms of payment
+        NumberOfDays:
+          type: integer
+          description: Number of days to pay
+          format: int32
+        TermsOfPaymentTypeId:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = CurrentMonth,<br/>2 = Cash,<br/>3 = CardPayment,<br/>4 = DigitalWallet,<br/>5 = PaymentServiceProvider<br/><br/>Type of terms of payment, possible values are.
+          format: int32
+        TermsOfPaymentTypeText:
+          type:
+          - string
+          - 'null'
+        AvailableForSales:
+          type: boolean
+          description: True if this terms of payment can be used on sales documents, false otherwise
+        AvailableForPurchase:
+          type: boolean
+          description: True if this terms of payment can be used on purchase documents, false otherwise
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

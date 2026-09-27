@@ -70,6 +70,72 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    UserApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the user
+          format: uuid
+          readOnly: true
+        Email:
+          type:
+          - string
+          - 'null'
+          description: Email address of the user
+        FirstName:
+          type:
+          - string
+          - 'null'
+          description: The first name of the user
+        LastName:
+          type:
+          - string
+          - 'null'
+          description: The last name of the user
+        IsActive:
+          type: boolean
+          description: Status of the user
+        IsCurrentUser:
+          type: boolean
+          description: True if this is the user that is currently logged in
+        IsConsultant:
+          type: boolean
+          description: True if this user is a consultant
+        HasPurchaseInvoicesApprovalPermission:
+          type: boolean
+          description: True if the user can approve/reject purchase invoices
+        HasVATReportsApprovalPermission:
+          type: boolean
+          description: True if the user can approve/reject VAT reports
+        DaysSinceSignup:
+          type:
+          - integer
+          - 'null'
+          description: Whole days between the date the user was created and today, in UTC. Null when the creation date is unknown
+          format: int32
+          readOnly: true
+      additionalProperties: false
     PaginatedResponseOfUserApi:
       required:
       - Data
@@ -132,72 +198,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    UserApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: The unique identifier of the user
-          format: uuid
-          readOnly: true
-        Email:
-          type:
-          - string
-          - 'null'
-          description: Email address of the user
-        FirstName:
-          type:
-          - string
-          - 'null'
-          description: The first name of the user
-        LastName:
-          type:
-          - string
-          - 'null'
-          description: The last name of the user
-        IsActive:
-          type: boolean
-          description: Status of the user
-        IsCurrentUser:
-          type: boolean
-          description: True if this is the user that is currently logged in
-        IsConsultant:
-          type: boolean
-          description: True if this user is a consultant
-        HasPurchaseInvoicesApprovalPermission:
-          type: boolean
-          description: True if the user can approve/reject purchase invoices
-        HasVATReportsApprovalPermission:
-          type: boolean
-          description: True if the user can approve/reject VAT reports
-        DaysSinceSignup:
-          type:
-          - integer
-          - 'null'
-          description: Whole days between the date the user was created and today, in UTC. Null when the creation date is unknown
-          format: int32
-          readOnly: true
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

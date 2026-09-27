@@ -945,6 +945,32 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    AttributeIdValueDto:
+      type: object
+      properties:
+        id:
+          type: string
+        value:
+          type: string
+          description: Value &gt; The value of the attribute.
+        description:
+          type: string
+          description: Attribute &gt; The description of the attribute.
+    DtoValueOfNullableOfInvoiceToType:
+      type: object
+      properties:
+        value:
+          enum:
+          - ParentAccount
+          - CustomerAccount
+          - SpecificAccount
+          type: string
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
     BackgroundApiAcceptedDto:
       type: object
       properties:
@@ -952,6 +978,265 @@ components:
           type: string
         stateLocation:
           type: string
+    AttributeLineUpdateDto:
+      type: object
+      properties:
+        attributeId:
+          $ref: '#/components/schemas/attributeIdInAttributeLineUpdateDto'
+        attributeValue:
+          $ref: '#/components/schemas/DtoValueOfString'
+    customerInCustomerContractUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory for POST, not applicable for PUT.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    CustomerContractRecurringSummaryLineDto:
+      type: object
+      properties:
+        itemCode:
+          type: string
+        description:
+          type: string
+        itemId:
+          type: string
+        uom:
+          type: string
+        invoiceType:
+          enum:
+          - None
+          - Prepay
+          - Usage
+          - Deposits
+          type: string
+        included:
+          type: number
+          format: double
+        recurringPrice:
+          type: number
+          format: double
+        recurringDiscount:
+          type: number
+          format: double
+        extraUsagePrice:
+          type: number
+          format: double
+        unInvoiced:
+          type: number
+          format: double
+        usedTotal:
+          type: number
+          format: double
+      description: This class represents a CustomerContractRecurringSummaryLine in CustomerContractController. Used for getting data.
+    CustomerContractRecurringSummaryDto:
+      type: object
+      properties:
+        recurringTotal:
+          type: number
+          format: double
+        extraUsageTotal:
+          type: number
+          format: double
+        totalDue:
+          type: number
+          format: double
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerContractRecurringSummaryLineDto'
+      description: This class represents the CustomerContractRecurringSummary in CustomerContractController. Used for getting data.
+    contractIdInCustomerContractUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory for POST, not applicable for PUT.
+    locationInCustomerContractDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Location &gt; The customer location associated with the contract.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    salesPersonInCustomerContractSummaryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Contract management &gt; Salesperson &gt; The salesperson associated with the contract.
+    CustomerContractDetailsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        contractDetailId:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        itemCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        included:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        setupPrice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        recurringPrice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        extraUsagePrice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        renewalPrice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+    PromoCodeIdDescriptionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    CustomerContractDetailsLineDto:
+      type: object
+      properties:
+        contractDetailId:
+          type: integer
+          format: int32
+        itemCode:
+          type: string
+        description:
+          type: string
+        included:
+          type: number
+          format: double
+        difference:
+          type: number
+          format: double
+        setupPrice:
+          type: number
+          format: double
+        setupDiscount:
+          type: number
+          format: double
+        recurringPrice:
+          type: number
+          format: double
+        extraUsagePrice:
+          type: number
+          format: double
+        recurringDiscount:
+          type: number
+          format: double
+        renewalPrice:
+          type: number
+          format: double
+        renewalDiscount:
+          type: number
+          format: double
+        invoiceType:
+          enum:
+          - None
+          - Prepaid
+          - Postpaid
+          type: string
+      description: This class represents a CustomerContractDetailLine in CustomerContractController. Used for getting data.
+    CustomerContractDetailsDto:
+      type: object
+      properties:
+        effectiveFrom:
+          type: string
+          format: date-time
+        promoCode:
+          $ref: '#/components/schemas/PromoCodeIdDescriptionDto'
+        pendingSetup:
+          type: number
+          format: double
+        pendingRecurring:
+          type: number
+          format: double
+        pendingRenewal:
+          type: number
+          format: double
+        totalPending:
+          type: number
+          format: double
+        currentSetup:
+          type: number
+          format: double
+        currentRecurring:
+          type: number
+          format: double
+        currentRenewal:
+          type: number
+          format: double
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerContractDetailsLineDto'
+      description: This class represents the CustomerContractDetails in CustomerContractController. Used for getting data.
+    contractTemplateInCustomerContractUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory for POST, not applicable for PUT.
+    CustomerContractUpdateDto:
+      type: object
+      properties:
+        contractId:
+          $ref: '#/components/schemas/contractIdInCustomerContractUpdateDto'
+        contractTemplate:
+          $ref: '#/components/schemas/contractTemplateInCustomerContractUpdateDto'
+        customer:
+          $ref: '#/components/schemas/customerInCustomerContractUpdateDto'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        setupDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        activationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        expirationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        massRenewal:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        renewalPoint:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        gracePeriod:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        currency:
+          $ref: '#/components/schemas/DtoValueOfString'
+        invoiceTo:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInvoiceToType'
+        invoiceAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        invoiceLocation:
+          $ref: '#/components/schemas/DtoValueOfString'
+        owner:
+          $ref: '#/components/schemas/DtoValueOfString'
+        salesPerson:
+          $ref: '#/components/schemas/DtoValueOfString'
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerContractDetailsUpdateDto'
+        attributeLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeLineUpdateDto'
     CustomerContractSummaryDto:
       type: object
       properties:
@@ -1026,207 +1311,35 @@ components:
         caseCountItem:
           $ref: '#/components/schemas/caseCountItemInCustomerContractSummaryDto'
       description: This class represents the CustomerContractSummary in CustomerContractController. Used for getting data.
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    salesPersonInCustomerContractSummaryDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Contract management &gt; Salesperson &gt; The salesperson associated with the contract.
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    CustomerContractRecurringSummaryDto:
-      type: object
-      properties:
-        recurringTotal:
-          type: number
-          format: double
-        extraUsageTotal:
-          type: number
-          format: double
-        totalDue:
-          type: number
-          format: double
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerContractRecurringSummaryLineDto'
-      description: This class represents the CustomerContractRecurringSummary in CustomerContractController. Used for getting data.
-    PromoCodeIdDescriptionDto:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-    detailsInCustomerContractDto:
-      properties:
-        effectiveFrom:
-          type: string
-          format: date-time
-        promoCode:
-          $ref: '#/components/schemas/PromoCodeIdDescriptionDto'
-        pendingSetup:
-          type: number
-          format: double
-        pendingRecurring:
-          type: number
-          format: double
-        pendingRenewal:
-          type: number
-          format: double
-        totalPending:
-          type: number
-          format: double
-        currentSetup:
-          type: number
-          format: double
-        currentRecurring:
-          type: number
-          format: double
-        currentRenewal:
-          type: number
-          format: double
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerContractDetailsLineDto'
-      description: Details tab &gt;
     attributeIdInAttributeLineUpdateDto:
       properties:
         value:
           type: string
       description: The ID of the attribute on the line.
-    CustomerContractRecurringSummaryLineDto:
-      type: object
-      properties:
-        itemCode:
-          type: string
-        description:
-          type: string
-        itemId:
-          type: string
-        uom:
-          type: string
-        invoiceType:
-          enum:
-          - None
-          - Prepay
-          - Usage
-          - Deposits
-          type: string
-        included:
-          type: number
-          format: double
-        recurringPrice:
-          type: number
-          format: double
-        recurringDiscount:
-          type: number
-          format: double
-        extraUsagePrice:
-          type: number
-          format: double
-        unInvoiced:
-          type: number
-          format: double
-        usedTotal:
-          type: number
-          format: double
-      description: This class represents a CustomerContractRecurringSummaryLine in CustomerContractController. Used for getting data.
-    AttributeLineUpdateDto:
-      type: object
-      properties:
-        attributeId:
-          $ref: '#/components/schemas/attributeIdInAttributeLineUpdateDto'
-        attributeValue:
-          $ref: '#/components/schemas/DtoValueOfString'
-    customerInCustomerContractDto:
-      properties:
-        number:
-          type: string
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: The top part &gt; Customer* &gt; The customer associated with the contract.'
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    locationInCustomerContractDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; Location &gt; The customer location associated with the contract.
-    CustomerContractDetailsLineDto:
-      type: object
-      properties:
-        contractDetailId:
-          type: integer
-          format: int32
-        itemCode:
-          type: string
-        description:
-          type: string
-        included:
-          type: number
-          format: double
-        difference:
-          type: number
-          format: double
-        setupPrice:
-          type: number
-          format: double
-        setupDiscount:
-          type: number
-          format: double
-        recurringPrice:
-          type: number
-          format: double
-        extraUsagePrice:
-          type: number
-          format: double
-        recurringDiscount:
-          type: number
-          format: double
-        renewalPrice:
-          type: number
-          format: double
-        renewalDiscount:
-          type: number
-          format: double
-        invoiceType:
-          enum:
-          - None
-          - Prepaid
-          - Postpaid
-          type: string
-      description: This class represents a CustomerContractDetailLine in CustomerContractController. Used for getting data.
     DtoValueOfNullableOfInt32:
       type: object
       properties:
         value:
           type: integer
           format: int32
+    contractTemplateInCustomerContractDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Contract template* &gt; The contract template that is used as a base for the contract.'
+    caseCountItemInCustomerContractSummaryDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Contract management section &gt; Case count item &gt; A non-stock item used for counting cases associated with the contract.
     LocationNameDescriptionDto:
       type: object
       properties:
@@ -1236,168 +1349,14 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-    DtoValueOfString:
-      type: object
+    customerInCustomerContractDto:
       properties:
-        value:
-          type: string
-    ownerInCustomerContractSummaryDto:
-      properties:
-        internalId:
-          type: string
         number:
           type: string
-          description: The identifier of the particular destination of the selected type.
         name:
           type: string
-          description: The name of the particular destination of the selected type.
-      description: Contract management section &gt; Owner &gt; The owner of the contract.
-    contractIdInCustomerContractUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory for POST, not applicable for PUT.
-    AttributeIdValueDto:
-      type: object
-      properties:
-        id:
-          type: string
-        value:
-          type: string
-          description: Value &gt; The value of the attribute.
-        description:
-          type: string
-          description: Attribute &gt; The description of the attribute.
-    CustomerContractUpdateDto:
-      type: object
-      properties:
-        contractId:
-          $ref: '#/components/schemas/contractIdInCustomerContractUpdateDto'
-        contractTemplate:
-          $ref: '#/components/schemas/contractTemplateInCustomerContractUpdateDto'
-        customer:
-          $ref: '#/components/schemas/customerInCustomerContractUpdateDto'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        setupDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        activationDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        expirationDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        massRenewal:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        renewalPoint:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        gracePeriod:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        currency:
-          $ref: '#/components/schemas/DtoValueOfString'
-        invoiceTo:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInvoiceToType'
-        invoiceAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        invoiceLocation:
-          $ref: '#/components/schemas/DtoValueOfString'
-        owner:
-          $ref: '#/components/schemas/DtoValueOfString'
-        salesPerson:
-          $ref: '#/components/schemas/DtoValueOfString'
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerContractDetailsUpdateDto'
-        attributeLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributeLineUpdateDto'
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    contractTemplateInCustomerContractUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory for POST, not applicable for PUT.
-    CustomerContractDto:
-      type: object
-      properties:
-        contractId:
-          type: string
-          description: 'Mandatory field: The top part &gt; Contract ID* &gt; The unique identifier of a contract.'
-        contractTemplate:
-          $ref: '#/components/schemas/contractTemplateInCustomerContractDto'
-        status:
-          enum:
-          - Draft
-          - InApproval
-          - Active
-          - Expired
-          - Canceled
-          - Completed
-          - InUpgrade
-          - PendingActivation
-          type: string
-          description: 'The top part &gt; Status &gt; The status of the contract, which is one of the following: Draft, Pending activation, Active, Expired, Cancelled, Pending update.'
-        customer:
-          $ref: '#/components/schemas/customerInCustomerContractDto'
-        location:
-          $ref: '#/components/schemas/locationInCustomerContractDto'
-        description:
-          type: string
-          description: 'Mandatory field: The top part &gt; Description* &gt; The description of the contract, which includes any related comments.'
-        balance:
-          type: number
-          description: The top part &gt; Balance &gt; A read-only field that displays the sum of the balances of open invoices associated with the contract.
-          format: double
-        lastModifiedDateTime:
-          type: string
-          description: System generated information
-          format: date-time
-        summary:
-          $ref: '#/components/schemas/summaryInCustomerContractDto'
-        details:
-          $ref: '#/components/schemas/detailsInCustomerContractDto'
-        attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributeIdValueDto'
-          description: Project attributes tab
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-      description: This class represents a CustomerContract in CustomerContractController. Used for getting data.
-    CustomerContractDetailsUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        contractDetailId:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        itemCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        included:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        setupPrice:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        recurringPrice:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        extraUsagePrice:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        renewalPrice:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: The top part &gt; Customer* &gt; The customer associated with the contract.'
     summaryInCustomerContractDto:
       properties:
         setupDate:
@@ -1471,15 +1430,12 @@ components:
         caseCountItem:
           $ref: '#/components/schemas/caseCountItemInCustomerContractSummaryDto'
       description: Summary tab &gt;
-    contractTemplateInCustomerContractDto:
+    DtoValueOfNullableOfDecimal:
+      type: object
       properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part &gt; Contract template* &gt; The contract template that is used as a base for the contract.'
+        value:
+          type: number
+          format: double
     invoiceAccountInCustomerContractSummaryDto:
       properties:
         number:
@@ -1488,8 +1444,7 @@ components:
           type: string
           description: Click the magnifier. &gt; The name.
       description: "Invoice information section &gt; Account &gt; \tThe specific account that is to be invoiced for contract services."
-    CustomerContractDetailsDto:
-      type: object
+    detailsInCustomerContractDto:
       properties:
         effectiveFrom:
           type: string
@@ -1521,30 +1476,75 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomerContractDetailsLineDto'
-      description: This class represents the CustomerContractDetails in CustomerContractController. Used for getting data.
-    DtoValueOfNullableOfInvoiceToType:
+      description: Details tab &gt;
+    CustomerContractDto:
+      type: object
+      properties:
+        contractId:
+          type: string
+          description: 'Mandatory field: The top part &gt; Contract ID* &gt; The unique identifier of a contract.'
+        contractTemplate:
+          $ref: '#/components/schemas/contractTemplateInCustomerContractDto'
+        status:
+          enum:
+          - Draft
+          - InApproval
+          - Active
+          - Expired
+          - Canceled
+          - Completed
+          - InUpgrade
+          - PendingActivation
+          type: string
+          description: 'The top part &gt; Status &gt; The status of the contract, which is one of the following: Draft, Pending activation, Active, Expired, Cancelled, Pending update.'
+        customer:
+          $ref: '#/components/schemas/customerInCustomerContractDto'
+        location:
+          $ref: '#/components/schemas/locationInCustomerContractDto'
+        description:
+          type: string
+          description: 'Mandatory field: The top part &gt; Description* &gt; The description of the contract, which includes any related comments.'
+        balance:
+          type: number
+          description: The top part &gt; Balance &gt; A read-only field that displays the sum of the balances of open invoices associated with the contract.
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: System generated information
+          format: date-time
+        summary:
+          $ref: '#/components/schemas/summaryInCustomerContractDto'
+        details:
+          $ref: '#/components/schemas/detailsInCustomerContractDto'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeIdValueDto'
+          description: Project attributes tab
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+      description: This class represents a CustomerContract in CustomerContractController. Used for getting data.
+    DtoValueOfInt32:
       type: object
       properties:
         value:
-          enum:
-          - ParentAccount
-          - CustomerAccount
-          - SpecificAccount
-          type: string
-    customerInCustomerContractUpdateDto:
+          type: integer
+          format: int32
+    ownerInCustomerContractSummaryDto:
       properties:
-        value:
+        internalId:
           type: string
-      description: Mandatory for POST, not applicable for PUT.
-    caseCountItemInCustomerContractSummaryDto:
-      properties:
         number:
           type: string
-          description: Number of item
-        description:
+          description: The identifier of the particular destination of the selected type.
+        name:
           type: string
-          description: Name of item/description
-      description: Contract management section &gt; Case count item &gt; A non-stock item used for counting cases associated with the contract.
+          description: The name of the particular destination of the selected type.
+      description: Contract management section &gt; Owner &gt; The owner of the contract.
   securitySchemes:
     interactiveapi:
       type: oauth2

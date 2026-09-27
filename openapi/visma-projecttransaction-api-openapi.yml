@@ -465,130 +465,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    projectTaskInProjectTransactionLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The project task associated with the transaction.
-    locationInProjectTransactionLineDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Location &gt; The location of the customer or supplier.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    debitAccountInProjectTransactionLineDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Debit account &gt; For released transactions, the account the transaction debited when it was released; for unreleased transactions, the account the transaction debits if it is released (mainly for the transactions that originate in the Projects module).
-    contactInEmployeeDto:
-      properties:
-        employeeContact:
-          type: string
-          description: Employee contact &gt; The link to the contact record associated with the employee.
-        title:
-          enum:
-          - Doctor
-          - Miss
-          - Mr
-          - Mrs
-          - Ms
-          - Prof
-          type: string
-          description: Title &gt; The courtesy title to be used for the employee.
-        firstName:
-          type: string
-          description: First name &gt; The first name of the employee.
-        midName:
-          type: string
-          description: Middle name &gt; The middle name of the employee.
-        lastName:
-          type: string
-          description: 'Mandatory field: Last name* &gt; The last name of the employee.'
-        phone3:
-          type: string
-          description: Phone 3 &gt; An additional phone number of the employee.
-        contactId:
-          type: integer
-          format: int32
-        name:
-          type: string
-          description: Name &gt; The legal name of to appear on the documents.
-        attention:
-          type: string
-          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
-        email:
-          type: string
-          description: Email &gt; The email address of the customer/supplier/company as a business entity.
-        web:
-          type: string
-          description: Web &gt; The website of the company, if one exists.
-        phone1:
-          type: string
-          description: Phone 1 &gt; The default phone number.
-        phone2:
-          type: string
-          description: Phone 2 &gt; An additional phone number.
-        fax:
-          type: string
-          description: Fax &gt; The fax number.
-      description: General information tab &gt; Contact section &gt;
-    DtoValueOfNullableOfProjectTransactionStatus:
-      type: object
-      properties:
-        value:
-          enum:
-          - Hold
-          - Balanced
-          - Released
-          type: string
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
     employeeInProjectTransactionLineDto:
       properties:
         employeeUserId:
@@ -648,59 +524,46 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: Employee &gt; The employee associated with the transaction, such as the employee who worked on the project for the customer.
-    DtoValueOfNullableOfBoolean:
+    accountGroupInProjectTransactionLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Account group &gt; The account group of the debit side account of the transaction.
+    countyInAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    DtoValueOfNullableOfDateTime:
       type: object
       properties:
         value:
-          type: boolean
+          type: string
+          format: date-time
     DtoValueOfInt64:
       type: object
       properties:
         value:
           type: integer
           format: int64
-    ProjectTransactionDocumentUpdateDto:
-      type: object
-      properties:
-        refNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        status:
-          $ref: '#/components/schemas/DtoValueOfNullableOfProjectTransactionStatus'
-        module:
-          $ref: '#/components/schemas/DtoValueOfNullableOfJournalTransactionModule'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectTransactionLineUpdateDto'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-    countryInAddressDto:
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
-          type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    debitSubaccountInProjectTransactionLineDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Debit subaccount &gt; For released transactions, the subaccount the transaction debited when it was released; for unreleased transactions, the subaccount the transaction debits if it is released.
-    projectInProjectTransactionLineDto:
+    projectTaskInProjectTransactionLineDto:
       properties:
         internalId:
           type: integer
@@ -712,32 +575,198 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Project &gt; The project associated with the transaction.
-    addressInEmployeeDto:
+      description: Project task &gt; The project task associated with the transaction.
+    BackgroundApiAcceptedDto:
+      type: object
       properties:
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
+        id:
           type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
+        stateLocation:
           type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfNullableOfJournalTransactionModule:
+      type: object
+      properties:
+        value:
+          enum:
+          - ModuleGL
+          - ModuleAP
+          - ModuleAR
+          - ModuleCA
+          - ModuleCM
+          - ModuleIN
+          - ModuleSO
+          - ModulePO
+          - ModuleDR
+          - ModuleFA
+          - ModuleEP
+          - ModulePM
+          - ModuleTX
+          - ModuleCR
           type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
+    debitSubaccountInProjectTransactionLineDto:
+      properties:
+        active:
+          type: boolean
+        id:
           type: string
-          description: Postcode &gt; The postcode.
-        city:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInAddressDto'
-      description: General information tab &gt; Address info section &gt;
+          description: Click on the magnifier. &gt; The description.
+      description: Debit subaccount &gt; For released transactions, the subaccount the transaction debited when it was released; for unreleased transactions, the subaccount the transaction debits if it is released.
+    ProjectTransactionDocumentDto:
+      type: object
+      properties:
+        refNbr:
+          type: string
+          description: The top part &gt; Ref. no. &gt; The reference number of the transaction.
+        description:
+          type: string
+          description: The top part &gt; Description &gt; The description provided for the transaction.
+        origDocNbr:
+          type: string
+          description: The top part &gt; Orig. doc. no. &gt; The reference number of the underlying document for the transaction.
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          type: string
+          description: 'The top part &gt; Status &gt; The status of the transaction. The following statuses are possible: Balanced, Released.'
+        module:
+          enum:
+          - ModuleGL
+          - ModuleAP
+          - ModuleAR
+          - ModuleCA
+          - ModuleCM
+          - ModuleIN
+          - ModuleSO
+          - ModulePO
+          - ModuleDR
+          - ModuleFA
+          - ModuleEP
+          - ModulePM
+          - ModuleTX
+          - ModuleCR
+          type: string
+          description: The top part &gt; Module &gt; The module you create the transactions in.
+        origDocType:
+          enum:
+          - Allocation
+          - Timecard
+          - Case
+          - ExpenseClaim
+          - EquipmentTimecard
+          - AllocationReversal
+          - Reversal
+          - CreditMemo
+          - UnbilledRemainder
+          - ProformaBilling
+          type: string
+          description: 'The top part &gt; Orig. doc. no. &gt; The type of the document the transaction is based on. It has one of the following values: Allocation, Time card, Case, Expense claim, Allocation reversal, Reversal, Credit note.'
+        note:
+          type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectTransactionLineDto'
+          description: The table &gt;
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    DtoValueOfNullableOfProjectTransactionStatus:
+      type: object
+      properties:
+        value:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          type: string
+    creditAccountInProjectTransactionLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Credit account &gt; For released transactions, the account the transaction credited when it was released; for unreleased transactions, the account the transaction credits if it is released.
+    locationInProjectTransactionLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Location &gt; The location of the customer or supplier.
+    debitAccountInProjectTransactionLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Debit account &gt; For released transactions, the account the transaction debited when it was released; for unreleased transactions, the account the transaction debits if it is released (mainly for the transactions that originate in the Projects module).
+    inventoryIdInProjectTransactionLineDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Item ID &gt; The identifier of the stock or non-stock item associated with the transaction.
     ProjectTransactionLineDto:
       type: object
       properties:
@@ -840,48 +869,10 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    BranchNumberDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
     DtoValueOfString:
       type: object
       properties:
         value:
-          type: string
-    DtoValueOfNullableOfJournalTransactionModule:
-      type: object
-      properties:
-        value:
-          enum:
-          - ModuleGL
-          - ModuleAP
-          - ModuleAR
-          - ModuleCA
-          - ModuleCM
-          - ModuleIN
-          - ModuleSO
-          - ModulePO
-          - ModuleDR
-          - ModuleFA
-          - ModuleEP
-          - ModulePM
-          - ModuleTX
-          - ModuleCR
           type: string
     debitAccountGroupInProjectTransactionLineDto:
       properties:
@@ -892,15 +883,6 @@ components:
           type: string
           description: Click the magnifier. &gt; The name.
       description: Debit Account group &gt; The account group of the debit side account of the transaction. This field has been deprecated and will be removed in future versions. Use DebitAccountGroup.
-    creditAccountGroupInProjectTransactionLineDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Debit Account group &gt; The account group of the credit side account of the transaction.
     branchInProjectTransactionLineDto:
       properties:
         number:
@@ -910,38 +892,39 @@ components:
           type: string
           description: Click the magnifier. &gt; The name.
       description: Branch &gt; The branch in which the transaction was created.
-    earningTypeInProjectTransactionLineDto:
+    employeeClassInEmployeeDto:
       properties:
-        code:
+        id:
           type: string
-          description: 'Mandatory field: Code* &gt; The unique ID of the type of hour.'
+          description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
-          description: 'Mandatory field: Description &gt; The brief description of the type of hour.'
-        isOvertime:
-          type: boolean
-          description: Overtime &gt; A check box that indicates (if selected) that the type of hour is treated as overtime.
-        isBillable:
-          type: boolean
-          description: Invoicable &gt; A check box that indicates (if selected) that the type is treated as invoiceable by default.
-        isActive:
-          type: boolean
-          description: Active &gt; A check box that indicates (if selected) that the type of hour is active and can be used.
-        overtimeMultiplier:
-          type: number
-          description: Multiplier &gt; The value by which the employee cost for this type of hour is multiplied when the time activity is released.
-          format: double
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-      description: Earning type &gt; The earning type specified for the transaction to calculate the labour cost.
-    DtoValueOfNullableOfDecimal:
-      type: object
+          description: Click on the magnifier. &gt; The description.
+      description: 'Additional information about Employee User
+
+        ///'
+    creditAccountGroupInProjectTransactionLineDto:
       properties:
-        value:
-          type: number
-          format: double
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Debit Account group &gt; The account group of the credit side account of the transaction.
+    projectInProjectTransactionLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project &gt; The project associated with the transaction.
     customerVendorInProjectTransactionLineDto:
       properties:
         internalId:
@@ -954,40 +937,19 @@ components:
           type: string
           description: The name of the particular destination of the selected type.
       description: Customer/supplier &gt; The name of the supplier (if the transaction originated in the Supplier ledger workspace) or customer (if the transaction originated in another workspace).
-    creditAccountInProjectTransactionLineDto:
+    countryInAddressDto:
       properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
+        id:
           type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Credit account &gt; For released transactions, the account the transaction credited when it was released; for unreleased transactions, the account the transaction credits if it is released.
-    accountGroupInProjectTransactionLineDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
         name:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: Account group &gt; The account group of the debit side account of the transaction.
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
     ProjectTransactionLineUpdateDto:
       type: object
       properties:
@@ -1047,6 +1009,89 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         note:
           $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    addressInEmployeeDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: General information tab &gt; Address info section &gt;
+    contactInEmployeeDto:
+      properties:
+        employeeContact:
+          type: string
+          description: Employee contact &gt; The link to the contact record associated with the employee.
+        title:
+          enum:
+          - Doctor
+          - Miss
+          - Mr
+          - Mrs
+          - Ms
+          - Prof
+          type: string
+          description: Title &gt; The courtesy title to be used for the employee.
+        firstName:
+          type: string
+          description: First name &gt; The first name of the employee.
+        midName:
+          type: string
+          description: Middle name &gt; The middle name of the employee.
+        lastName:
+          type: string
+          description: 'Mandatory field: Last name* &gt; The last name of the employee.'
+        phone3:
+          type: string
+          description: Phone 3 &gt; An additional phone number of the employee.
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: General information tab &gt; Contact section &gt;
     creditSubaccountInProjectTransactionLineDto:
       properties:
         active:
@@ -1058,103 +1103,58 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: "Credit subaccount &gt; \tFor released transactions, the subaccount the transaction credited when it was released; for unreleased transactions, the subaccount the transaction credits if it is released."
-    ProjectTransactionDocumentDto:
+    ProjectTransactionDocumentUpdateDto:
       type: object
       properties:
         refNbr:
-          type: string
-          description: The top part &gt; Ref. no. &gt; The reference number of the transaction.
+          $ref: '#/components/schemas/DtoValueOfString'
         description:
-          type: string
-          description: The top part &gt; Description &gt; The description provided for the transaction.
-        origDocNbr:
-          type: string
-          description: The top part &gt; Orig. doc. no. &gt; The reference number of the underlying document for the transaction.
+          $ref: '#/components/schemas/DtoValueOfString'
         status:
-          enum:
-          - Hold
-          - Balanced
-          - Released
-          type: string
-          description: 'The top part &gt; Status &gt; The status of the transaction. The following statuses are possible: Balanced, Released.'
+          $ref: '#/components/schemas/DtoValueOfNullableOfProjectTransactionStatus'
         module:
-          enum:
-          - ModuleGL
-          - ModuleAP
-          - ModuleAR
-          - ModuleCA
-          - ModuleCM
-          - ModuleIN
-          - ModuleSO
-          - ModulePO
-          - ModuleDR
-          - ModuleFA
-          - ModuleEP
-          - ModulePM
-          - ModuleTX
-          - ModuleCR
-          type: string
-          description: The top part &gt; Module &gt; The module you create the transactions in.
-        origDocType:
-          enum:
-          - Allocation
-          - Timecard
-          - Case
-          - ExpenseClaim
-          - EquipmentTimecard
-          - AllocationReversal
-          - Reversal
-          - CreditMemo
-          - UnbilledRemainder
-          - ProformaBilling
-          type: string
-          description: 'The top part &gt; Orig. doc. no. &gt; The type of the document the transaction is based on. It has one of the following values: Allocation, Time card, Case, Expense claim, Allocation reversal, Reversal, Credit note.'
-        note:
-          type: string
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
+          $ref: '#/components/schemas/DtoValueOfNullableOfJournalTransactionModule'
         lines:
           type: array
           items:
-            $ref: '#/components/schemas/ProjectTransactionLineDto'
-          description: The table &gt;
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-    inventoryIdInProjectTransactionLineDto:
+            $ref: '#/components/schemas/ProjectTransactionLineUpdateDto'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+    MetadataDto:
+      type: object
       properties:
-        number:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    earningTypeInProjectTransactionLineDto:
+      properties:
+        code:
           type: string
-          description: Number of item
+          description: 'Mandatory field: Code* &gt; The unique ID of the type of hour.'
         description:
           type: string
-          description: Name of item/description
-      description: Item ID &gt; The identifier of the stock or non-stock item associated with the transaction.
-    employeeClassInEmployeeDto:
-      properties:
-        id:
+          description: 'Mandatory field: Description &gt; The brief description of the type of hour.'
+        isOvertime:
+          type: boolean
+          description: Overtime &gt; A check box that indicates (if selected) that the type of hour is treated as overtime.
+        isBillable:
+          type: boolean
+          description: Invoicable &gt; A check box that indicates (if selected) that the type is treated as invoiceable by default.
+        isActive:
+          type: boolean
+          description: Active &gt; A check box that indicates (if selected) that the type of hour is active and can be used.
+        overtimeMultiplier:
+          type: number
+          description: Multiplier &gt; The value by which the employee cost for this type of hour is multiplied when the time activity is released.
+          format: double
+        lastModifiedDateTime:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Additional information about Employee User
-
-        ///'
-    countyInAddressDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
+          description: System generated information.
+          format: date-time
+      description: Earning type &gt; The earning type specified for the transaction to calculate the labour cost.
   securitySchemes:
     interactiveapi:
       type: oauth2

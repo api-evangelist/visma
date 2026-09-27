@@ -246,13 +246,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
     VatCategoryLineDto:
       type: object
       properties:
@@ -300,6 +293,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VatRateLineDto'
+    VatRateLineDto:
+      type: object
+      properties:
+        revisionID:
+          type: string
+          description: The revision ID of the VAT rate.
+        vatRate:
+          type: number
+          description: The VAT rate of the line.
+          format: double
+        groupType:
+          enum:
+          - Output
+          - Input
+          type: string
+          description: The type of the reporting group.
+        startDate:
+          type: string
+          description: The date and time from which the VAT rate is effective.
+          format: date-time
     VatCategoryDto:
       type: object
       properties:
@@ -324,26 +337,13 @@ components:
           items:
             $ref: '#/components/schemas/VatCategoryLineDto'
           description: The table &gt;
-    VatRateLineDto:
+    BackgroundApiAcceptedDto:
       type: object
       properties:
-        revisionID:
+        id:
           type: string
-          description: The revision ID of the VAT rate.
-        vatRate:
-          type: number
-          description: The VAT rate of the line.
-          format: double
-        groupType:
-          enum:
-          - Output
-          - Input
+        stateLocation:
           type: string
-          description: The type of the reporting group.
-        startDate:
-          type: string
-          description: The date and time from which the VAT rate is effective.
-          format: date-time
   securitySchemes:
     interactiveapi:
       type: oauth2

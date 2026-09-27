@@ -203,23 +203,56 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    SupplierApproverApi:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        ApproverId:
-          type: string
-          description: 'Source: Get from /v2/users'
-          format: uuid
-        Name:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-          description: Full name of the approver
-          readOnly: true
-        Priority:
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    ForeignPaymentCode:
+      type: object
+      properties:
+        Code:
           type: integer
-          description: <strong>Possible values:</strong><br/>priority = 0, then supplier invoice can be approved in any order<br/><br/>Priority of the approver. If there are multiple approvers, the one with the lowest priority will be the first to approve. Priority starts from 1. If.
           format: int32
+        Description:
+          type:
+          - string
+          - 'null'
+        Id:
+          type: string
+          format: uuid
+        CountryCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfSupplierApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierApi'
       additionalProperties: false
     CommonPaginationMetadata:
       required:
@@ -250,44 +283,6 @@ components:
           type: string
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ForeignPaymentCode:
-      type: object
-      properties:
-        Code:
-          type: integer
-          format: int32
-        Description:
-          type:
-          - string
-          - 'null'
-        Id:
-          type: string
-          format: uuid
-        CountryCode:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
     SupplierApi:
       required:
@@ -638,38 +633,43 @@ components:
           description: The last accounting template used for this supplier
           format: uuid
       additionalProperties: false
-    CommonExtendedBadRequest:
+    SupplierApproverApi:
       type: object
       properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        ApproverId:
+          type: string
+          description: 'Source: Get from /v2/users'
+          format: uuid
+        Name:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+          description: Full name of the approver
+          readOnly: true
+        Priority:
+          type: integer
+          description: <strong>Possible values:</strong><br/>priority = 0, then supplier invoice can be approved in any order<br/><br/>Priority of the approver. If there are multiple approvers, the one with the lowest priority will be the first to approve. Priority starts from 1. If.
+          format: int32
       additionalProperties: false
-    PaginatedResponseOfSupplierApi:
-      required:
-      - Data
-      - Meta
+    CommonError:
       type: object
       properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SupplierApi'
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

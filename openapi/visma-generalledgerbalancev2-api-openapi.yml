@@ -140,15 +140,44 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    MetadataDto:
+    subaccountInGeneralLedgerBalanceDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: The subaccount number / code. Format 9-XX.
+        subaccountId:
+          type: integer
+          description: The internal SubID identifier of the subaccount.
+          format: int32
+      description: The subaccount of the balance row.
+    AccountNumberDescriptionDto:
       type: object
       properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+        externalCode1:
+          type: string
+          description: ExternalCode1 is deprecated, please use ExternalCode1Info instead.
+        externalCode2:
+          type: string
+          description: ExternalCode2 is deprecated, please use ExternalCode2Info instead.
+        externalCode1Info:
+          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
+        externalCode2Info:
+          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
+        glConsolAccountCD:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
     BranchNumberDto:
       type: object
       properties:
@@ -158,13 +187,24 @@ components:
         name:
           type: string
           description: Click the magnifier. &gt; The name.
-    BackgroundApiAcceptedDto:
+    LedgerDescriptionDto:
       type: object
       properties:
         id:
           type: string
-        stateLocation:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
+          description: Click on the magnifier. &gt; The description.
+    ExternalCodeNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
     GeneralLedgerBalanceDto:
       type: object
       properties:
@@ -241,62 +281,22 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a General Ledger Balance in GeneralLedgerBalanceController. Used by getting data.
-    AccountNumberDescriptionDto:
+    MetadataDto:
       type: object
       properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-        externalCode1:
-          type: string
-          description: ExternalCode1 is deprecated, please use ExternalCode1Info instead.
-        externalCode2:
-          type: string
-          description: ExternalCode2 is deprecated, please use ExternalCode2Info instead.
-        externalCode1Info:
-          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
-        externalCode2Info:
-          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
-        glConsolAccountCD:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-    subaccountInGeneralLedgerBalanceDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: The subaccount number / code. Format 9-XX.
-        subaccountId:
+        totalCount:
           type: integer
-          description: The internal SubID identifier of the subaccount.
-          format: int32
-      description: The subaccount of the balance row.
-    ExternalCodeNumberDescriptionDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-    LedgerDescriptionDto:
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    BackgroundApiAcceptedDto:
       type: object
       properties:
         id:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
+        stateLocation:
           type: string
-          description: Click on the magnifier. &gt; The description.
   securitySchemes:
     interactiveapi:
       type: oauth2

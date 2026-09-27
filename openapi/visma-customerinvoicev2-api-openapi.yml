@@ -82,118 +82,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    financialPeriodInCustomerInvoiceUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
-    typeOfWorkInCustomerInvoiceLinesUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The property is now considered obsolete. Please define typeOfWork on the item level instead.
-    DtoValueOfNullableOfRutRotTypes:
-      type: object
-      properties:
-        value:
-          enum:
-          - Rut
-          - Rot
-          type: string
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    salesPersonIDInCustomerInvoiceUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: The field is deprecated for customer document endpoints, please use Salesperson instead
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    TaxDetailUpdateDto:
-      type: object
-      properties:
-        taxId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        taxableAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        vatAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        expenseAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-      description: This class represents a Tax Detail Line. Used to pass data to server for updating a tax line
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    postPeriodInCustomerInvoiceUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    DtoValueOfNullableOfGuid:
-      type: object
-      properties:
-        value:
-          type: string
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-    SalesInvoiceAddressUpdateDto:
-      type: object
-      properties:
-        overrideAddress:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        addressLine1:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine2:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine3:
-          $ref: '#/components/schemas/DtoValueOfString'
-        postalCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        city:
-          $ref: '#/components/schemas/DtoValueOfString'
-        countryId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        county:
-          $ref: '#/components/schemas/DtoValueOfString'
-    SalesInvoiceContactUpdateDto:
-      type: object
-      properties:
-        overrideContact:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        name:
-          $ref: '#/components/schemas/DtoValueOfString'
-        attention:
-          $ref: '#/components/schemas/DtoValueOfString'
-        email:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone1:
-          $ref: '#/components/schemas/DtoValueOfString'
     CustomerInvoiceLinesUpdateDto:
       type: object
       properties:
@@ -259,66 +147,26 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         branchNumber:
           $ref: '#/components/schemas/DtoValueOfString'
-    DtoValueOfSalesInvoiceAddressUpdateDto:
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/SalesInvoiceAddressUpdateDto'
-    DtoValueOfSalesInvoiceContactUpdateDto:
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/SalesInvoiceContactUpdateDto'
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    RotRutUpdateDto:
-      type: object
-      properties:
-        distributedAutomaticaly:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        type:
-          $ref: '#/components/schemas/DtoValueOfNullableOfRutRotTypes'
-        appartment:
-          $ref: '#/components/schemas/DtoValueOfString'
-        estate:
-          $ref: '#/components/schemas/DtoValueOfString'
-        organizationNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        distribution:
-          type: array
-          items:
-            $ref: '#/components/schemas/RotRutDistributionUpdateDto'
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
     salespersonInCustomerInvoiceUpdateDto:
       properties:
         value:
           type: string
       description: The identifier of the salesperson involved.
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    DtoValueOfDateTime:
+    DtoValueOfNullableOfDateTime:
       type: object
       properties:
         value:
           type: string
           format: date-time
+    itemTypeInCustomerInvoiceLinesUpdateDto:
+      properties:
+        value:
+          enum:
+          - Service
+          - MaterialCost
+          - OtherCost
+          type: string
+      description: The property is now considered obsolete. Please define ItemType on the item level instead.
     CustomerInvoiceUpdateDto:
       type: object
       properties:
@@ -428,26 +276,23 @@ components:
           $ref: '#/components/schemas/DtoValueOfBoolean'
         dontEmail:
           $ref: '#/components/schemas/DtoValueOfBoolean'
-    DtoValueOfNullableOfDecimal:
+    DtoValueOfSalesInvoiceContactUpdateDto:
       type: object
       properties:
         value:
-          type: number
-          format: double
-    itemTypeInCustomerInvoiceLinesUpdateDto:
+          $ref: '#/components/schemas/SalesInvoiceContactUpdateDto'
+    BackgroundApiAcceptedDto:
+      type: object
       properties:
-        value:
-          enum:
-          - Service
-          - MaterialCost
-          - OtherCost
+        id:
           type: string
-      description: The property is now considered obsolete. Please define ItemType on the item level instead.
-    overrideNumberSeriesInCustomerInvoiceUpdateDto:
+        stateLocation:
+          type: string
+    DtoValueOfNullableOfBoolean:
+      type: object
       properties:
         value:
           type: boolean
-      description: Set this value to true if you need to create a new invoice and use supplied referenceNumber (Invoicenumber)
     RotRutDistributionUpdateDto:
       type: object
       properties:
@@ -465,6 +310,161 @@ components:
           $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
         extra:
           $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+    salesPersonIDInCustomerInvoiceUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The field is deprecated for customer document endpoints, please use Salesperson instead
+    overrideNumberSeriesInCustomerInvoiceUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Set this value to true if you need to create a new invoice and use supplied referenceNumber (Invoicenumber)
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    TaxDetailUpdateDto:
+      type: object
+      properties:
+        taxId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taxableAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        expenseAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+      description: This class represents a Tax Detail Line. Used to pass data to server for updating a tax line
+    DtoValueOfSalesInvoiceAddressUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/SalesInvoiceAddressUpdateDto'
+    DtoValueOfNullableOfGuid:
+      type: object
+      properties:
+        value:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    SalesInvoiceContactUpdateDto:
+      type: object
+      properties:
+        overrideContact:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        attention:
+          $ref: '#/components/schemas/DtoValueOfString'
+        email:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone1:
+          $ref: '#/components/schemas/DtoValueOfString'
+    postPeriodInCustomerInvoiceUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    RotRutUpdateDto:
+      type: object
+      properties:
+        distributedAutomaticaly:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        type:
+          $ref: '#/components/schemas/DtoValueOfNullableOfRutRotTypes'
+        appartment:
+          $ref: '#/components/schemas/DtoValueOfString'
+        estate:
+          $ref: '#/components/schemas/DtoValueOfString'
+        organizationNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        distribution:
+          type: array
+          items:
+            $ref: '#/components/schemas/RotRutDistributionUpdateDto'
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    SalesInvoiceAddressUpdateDto:
+      type: object
+      properties:
+        overrideAddress:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        addressLine1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postalCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        city:
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        county:
+          $ref: '#/components/schemas/DtoValueOfString'
+    financialPeriodInCustomerInvoiceUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    DtoValueOfNullableOfRutRotTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Rut
+          - Rot
+          type: string
+    typeOfWorkInCustomerInvoiceLinesUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The property is now considered obsolete. Please define typeOfWork on the item level instead.
   securitySchemes:
     interactiveapi:
       type: oauth2

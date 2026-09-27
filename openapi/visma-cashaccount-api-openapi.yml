@@ -168,33 +168,15 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    MetadataDto:
-      type: object
+    defaultOffsetAccountBranchInEntryTypeDto:
       properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    defaultOffsetSubaccountInEntryTypeDto:
-      properties:
-        active:
-          type: boolean
-        id:
+        number:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
+          description: Click the magnifier. &gt; The identifier.
+        name:
           type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Default offset subaccount &gt; The corresponding subaccount.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The branch to which the default offset account belongs.
     offsetAccountOverrideInEntryTypeDto:
       properties:
         type:
@@ -220,6 +202,42 @@ components:
           type: string
           description: Name of item/description
       description: "Reclassification account override &gt; The account that should be used as the offset account for this entry type with this cash account instead of the default offset account specified on the Entry types tab. \nWe recommend that for the disbursement type of transaction, you specify an expense account. For the receipt type of transaction, specify an asset account."
+    TaxCategoryNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    businessAccountInEntryTypeDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Business account &gt; The supplier account, if the entry type is used to record transactions that involve a particular supplier, or the customer account,
+
+        if the entry type is used to record transactions that involve a particular customer.'
     defaultOffsetAccountInEntryTypeDto:
       properties:
         type:
@@ -270,120 +288,17 @@ components:
           type: string
           description: Name of item/description
       description: The account that should be used instead of the reclassification account specified as the default one on the Entry types tab.
-    subaccountInCashAccountDto:
+    defaultOffsetSubaccountInEntryTypeDto:
       properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
         active:
           type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: The subaccount to be used for the cash account.
-    TaxCategoryNumberDescriptionDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-    reclasificationAccountInEntryTypeDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Reclassification account &gt;  &gt; The cash account that is used to temporary hold payments that came to the bank account but cannot be entered as valid payments because the customer or supplier is unknown.
-
-        The parameter is used together with the Use for payments reclassification check box.'
-    vatZoneInEntryTypeDto:
-      properties:
         id:
           type: string
-          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
+          description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
-          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultVatCategory:
-          type: string
-          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultTaxCategory:
-          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: VAT zone &gt; The VAT zone to be used by default with this entry type.
-    businessAccountInEntryTypeDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Business account &gt; The supplier account, if the entry type is used to record transactions that involve a particular supplier, or the customer account,
-
-        if the entry type is used to record transactions that involve a particular customer.'
+          description: Click on the magnifier. &gt; The description.
+      description: Default offset subaccount &gt; The corresponding subaccount.
     SegmentDto:
       type: object
       properties:
@@ -424,6 +339,86 @@ components:
         description:
           type: string
           description: Name of item/description
+    accountInCashAccountDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The account added to the cash account.
+    offsetAccountBranchInEntryTypeDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Default offset account branch &gt; The branch to which the overriding offset account belongs.
+    reclasificationAccountInEntryTypeDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Reclassification account &gt;  &gt; The cash account that is used to temporary hold payments that came to the bank account but cannot be entered as valid payments because the customer or supplier is unknown.
+
+        The parameter is used together with the Use for payments reclassification check box.'
+    subaccountInCashAccountDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: The subaccount to be used for the cash account.
     EntryTypeDto:
       type: object
       properties:
@@ -475,17 +470,40 @@ components:
         lastModifiedDateTime:
           type: string
           format: date-time
-    accountInCashAccountDto:
+    BackgroundApiAcceptedDto:
+      type: object
       properties:
-        type:
+        id:
           type: string
-        number:
+        stateLocation:
           type: string
-          description: Number of item
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    vatZoneInEntryTypeDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
         description:
           type: string
-          description: Name of item/description
-      description: The account added to the cash account.
+          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultVatCategory:
+          type: string
+          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultTaxCategory:
+          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: VAT zone &gt; The VAT zone to be used by default with this entry type.
     offsetSubaccountOverrideInEntryTypeDto:
       properties:
         active:
@@ -497,24 +515,6 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Offset account override &gt; The subaccount for this entry type to be used with this cash account instead of the default offset subaccount specified in the Entry types window.
-    offsetAccountBranchInEntryTypeDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Default offset account branch &gt; The branch to which the overriding offset account belongs.
-    defaultOffsetAccountBranchInEntryTypeDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The branch to which the default offset account belongs.
   securitySchemes:
     interactiveapi:
       type: oauth2

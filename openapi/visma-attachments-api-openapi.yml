@@ -186,6 +186,26 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -264,26 +284,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Attachment'
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
     Attachment:
       type: object
@@ -420,25 +420,25 @@ components:
           description: Invoice payment date
           format: date-time
       additionalProperties: false
-    CommonExtendedBadRequest:
+    CommonError:
       type: object
       properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        Field:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+        ErrorCode:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

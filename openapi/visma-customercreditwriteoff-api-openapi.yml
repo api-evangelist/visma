@@ -415,79 +415,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    subaccountInCustomerCreditWriteOffDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
-    customerInCustomerCreditWriteOffDto:
-      properties:
-        number:
-          type: string
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The top part &gt; Customer &gt; The customer associated with the document.
-    locationInCustomerCreditWriteOffDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
-
-        location of the selected customer or, if the invoice is created from an opportunity,
-
-        it is the customer location specified for the opportunity.'
     customerVatZoneInCustomerCreditWriteOffDto:
       properties:
         id:
@@ -497,6 +424,22 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: The Financial details tab &gt; The VAT info section &gt; Customer VAT zone &gt; If the invoice was created from an opportunity that has a VAT zone specified, the VAT zone specified for the opportunity.
+    branchNumberInCustomerCreditWriteOffDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
     SegmentDto:
       type: object
       properties:
@@ -522,31 +465,6 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
-    accountInCustomerCreditWriteOffDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
     projectInCustomerCreditWriteOffDto:
       properties:
         internalId:
@@ -713,15 +631,97 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    branchNumberInCustomerCreditWriteOffDto:
+    subaccountInCustomerCreditWriteOffDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
+    accountInCustomerCreditWriteOffDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
+    locationInCustomerCreditWriteOffDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
+
+        location of the selected customer or, if the invoice is created from an opportunity,
+
+        it is the customer location specified for the opportunity.'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    customerInCustomerCreditWriteOffDto:
       properties:
         number:
           type: string
-          description: Click the magnifier. &gt; The identifier.
         name:
           type: string
           description: Click the magnifier. &gt; The name.
-      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
+      description: The top part &gt; Customer &gt; The customer associated with the document.
   securitySchemes:
     interactiveapi:
       type: oauth2

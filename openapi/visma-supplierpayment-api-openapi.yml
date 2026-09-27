@@ -752,52 +752,20 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    BackgroundApiAcceptedDto:
+    WriteoffPaymentActionResultDto:
       type: object
       properties:
-        id:
+        actionId:
           type: string
-        stateLocation:
-          type: string
-    currencyInSupplierPaymentDto:
-      properties:
-        id:
-          type: string
-          description: Currency Id.
-        description:
-          type: string
-          description: Currency description.
-        symbol:
-          type: string
-          description: Currency symbol.
-        isBaseCurrency:
-          type: boolean
-          description: Identify if the currency is the base currency.
-        decimalPrecision:
-          type: integer
-          description: Decimal precision.
-          format: int32
-        isUsedForAccounting:
-          type: boolean
-          description: Identify if is used for accounting.
-      description: The top part &gt; Currency &gt; The currency of the payment; by default, it is the currency associated with the cash account.
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    DtoValueOfNullableOfSupplierInvoiceTypes:
-      type: object
-      properties:
-        value:
+          format: uuid
+        actionResult:
           enum:
-          - Invoice
-          - CreditAdj
-          - DebitAdj
-          - Prepayment
-          - Refund
-          - Payment
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
           type: string
     supplierInSupplierPaymentDto:
       properties:
@@ -811,6 +779,13 @@ components:
           type: string
           description: The name of the particular destination of the selected type.
       description: 'Mandatory field: The top part &gt; Supplier* &gt; The supplier.'
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
     SupplierPaymentUpdateDto:
       type: object
       properties:
@@ -848,106 +823,6 @@ components:
             $ref: '#/components/schemas/SupplierPaymentAdjustmentUpdateDto'
         overrideNumberSeries:
           $ref: '#/components/schemas/DtoValueOfBoolean'
-    SupplierPaymentAdjustmentDto:
-      type: object
-      properties:
-        branch:
-          type: string
-        batchNumber:
-          type: string
-        docType:
-          enum:
-          - Invoice
-          - CreditAdj
-          - DebitAdj
-          - Prepayment
-          - Refund
-          - Payment
-          type: string
-        invoiceRefNbr:
-          type: string
-        amountPaid:
-          type: number
-          format: double
-        cashDiscountTaken:
-          type: number
-          format: double
-        withholdingTax:
-          type: number
-          format: double
-        applicationPeriod:
-          type: string
-        date:
-          type: string
-          format: date-time
-        dueDate:
-          type: string
-          format: date-time
-        cashDiscountDate:
-          type: string
-          format: date-time
-        balance:
-          type: number
-          format: double
-        cashDiscountBalance:
-          type: number
-          format: double
-        description:
-          type: string
-        currency:
-          type: string
-        postPeriod:
-          type: string
-        supplierRef:
-          type: string
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    ReleaseSupplierPaymentActionDto:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/DtoValueOfNullableOfSupplierPaymentTypes'
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    locationInSupplierPaymentDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: The top part &gt; Location* &gt; The supplier''s location. Main location by default.'
-    DtoValueOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
     DtoValueOfNullableOfSupplierPaymentTypes:
       type: object
       properties:
@@ -960,40 +835,11 @@ components:
           - VoidPayment
           - VoidRefund
           type: string
-    WriteoffPaymentActionResultDto:
+    ReleaseSupplierPaymentActionDto:
       type: object
       properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    SupplierPaymentAdjustmentUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        documentType:
-          $ref: '#/components/schemas/DtoValueOfNullableOfSupplierInvoiceTypes'
-        refNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        amountPaid:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        cashDiscountTaken:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        crossRate:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
+        type:
+          $ref: '#/components/schemas/DtoValueOfNullableOfSupplierPaymentTypes'
     SupplierPaymentDto:
       type: object
       properties:
@@ -1100,6 +946,52 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    locationInSupplierPaymentDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; The supplier''s location. Main location by default.'
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfNullableOfSupplierInvoiceTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Invoice
+          - CreditAdj
+          - DebitAdj
+          - Prepayment
+          - Refund
+          - Payment
+          type: string
     typeInSupplierPaymentUpdateDto:
       properties:
         value:
@@ -1112,6 +1004,114 @@ components:
           - VoidRefund
           type: string
       description: Reference number for the document. Can be used when manual numbering is enabled.
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    SupplierPaymentAdjustmentDto:
+      type: object
+      properties:
+        branch:
+          type: string
+        batchNumber:
+          type: string
+        docType:
+          enum:
+          - Invoice
+          - CreditAdj
+          - DebitAdj
+          - Prepayment
+          - Refund
+          - Payment
+          type: string
+        invoiceRefNbr:
+          type: string
+        amountPaid:
+          type: number
+          format: double
+        cashDiscountTaken:
+          type: number
+          format: double
+        withholdingTax:
+          type: number
+          format: double
+        applicationPeriod:
+          type: string
+        date:
+          type: string
+          format: date-time
+        dueDate:
+          type: string
+          format: date-time
+        cashDiscountDate:
+          type: string
+          format: date-time
+        balance:
+          type: number
+          format: double
+        cashDiscountBalance:
+          type: number
+          format: double
+        description:
+          type: string
+        currency:
+          type: string
+        postPeriod:
+          type: string
+        supplierRef:
+          type: string
+    currencyInSupplierPaymentDto:
+      properties:
+        id:
+          type: string
+          description: Currency Id.
+        description:
+          type: string
+          description: Currency description.
+        symbol:
+          type: string
+          description: Currency symbol.
+        isBaseCurrency:
+          type: boolean
+          description: Identify if the currency is the base currency.
+        decimalPrecision:
+          type: integer
+          description: Decimal precision.
+          format: int32
+        isUsedForAccounting:
+          type: boolean
+          description: Identify if is used for accounting.
+      description: The top part &gt; Currency &gt; The currency of the payment; by default, it is the currency associated with the cash account.
+    SupplierPaymentAdjustmentUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        documentType:
+          $ref: '#/components/schemas/DtoValueOfNullableOfSupplierInvoiceTypes'
+        refNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amountPaid:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        cashDiscountTaken:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        crossRate:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
   securitySchemes:
     interactiveapi:
       type: oauth2

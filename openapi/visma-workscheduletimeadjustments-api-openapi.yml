@@ -89,6 +89,110 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    WorkScheduleTimeAdjustmentWorkDayResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Time adjustment work day unique identifier
+          format: uuid
+        CodedDay:
+          type:
+          - integer
+          - 'null'
+          description: 'Code corresponding to a specific holiday/event day of the year<br/>Possible values: 1 - NewYearsDay, 2 - TwelfthDay, 3 - GoodFriDay, 4 - EasterEve, 5 - EasterDay, 6 - DayAfterEasterDay, 7 - FirstOfMay, 8 - AscensionDay, 9 - WhitsunEve, 10 - WhitsunDay, 11 - DayAfterWhitsunDay, 12 - MidsummerEve, 13 - MidsummerDay, 14 - AllSaintsDay, 15 - ChristmasEve, 16 - ChristmasDay, 17 - DayAfterChristmasDay, 18 - NewYearsEve, 19 - MaundyThursday, 20 - TwelfthDayDayBefore, 21 - FirstOfMayDayBefore, 22 - AscensionDayDayBefore, 23 - MidsummerEveDayBefore, 24 - ChristmasEveDayBefore, 25 - NewYearsEveDayBefore, 26 - AscensionDayDayAfter, 27 - AllSaintsDayDayBefore, 30 - NationalDay, 31 - NationalDayDayBefore, 110 - NewYearsDayDayAfter, 120 - NationalDayDayAfter, 130 - MidsummerDayDayAfter'
+          format: int32
+        AnnualDate:
+          type:
+          - string
+          - 'null'
+          description: 'Date of a recurring day of the year (format: MM-dd)'
+        MinutesToWork:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes to work on the specified day. Null indicates day is full time.
+          format: int32
+        Note:
+          type:
+          - string
+          - 'null'
+          description: Optional note/comment
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the time adjustment work day was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the time adjustment work day was last modified (UTC)
+          format: date-time
+      additionalProperties: false
+    WorkScheduleTimeAdjustmentWorkDayRequest:
+      type: object
+      properties:
+        CodedDay:
+          type:
+          - integer
+          - 'null'
+          description: 'Code corresponding to a specific holiday/event day of the year. Either CodedDay or AnnualDate must be provided.<br/>Possible values: 1 - NewYearsDay, 2 - TwelfthDay, 3 - GoodFriDay, 4 - EasterEve, 5 - EasterDay, 6 - DayAfterEasterDay, 7 - FirstOfMay, 8 - AscensionDay, 9 - WhitsunEve, 10 - WhitsunDay, 11 - DayAfterWhitsunDay, 12 - MidsummerEve, 13 - MidsummerDay, 14 - AllSaintsDay, 15 - ChristmasEve, 16 - ChristmasDay, 17 - DayAfterChristmasDay, 18 - NewYearsEve, 19 - MaundyThursday, 20 - TwelfthDayDayBefore, 21 - FirstOfMayDayBefore, 22 - AscensionDayDayBefore, 23 - MidsummerEveDayBefore, 24 - ChristmasEveDayBefore, 25 - NewYearsEveDayBefore, 26 - AscensionDayDayAfter, 27 - AllSaintsDayDayBefore, 30 - NationalDay, 31 - NationalDayDayBefore, 110 - NewYearsDayDayAfter, 120 - NationalDayDayAfter, 130 - MidsummerDayDayAfter'
+          format: int32
+        AnnualDate:
+          type:
+          - string
+          - 'null'
+          description: 'Date of a recurring day of the year (format: MM-dd). Either CodedDay or AnnualDate must be provided.'
+        MinutesToWork:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes to work on the specified day. Null indicates day is full time.
+          format: int32
+        Note:
+          type:
+          - string
+          - 'null'
+          description: Optional note/comment (max 50 characters)
+      additionalProperties: false
     PaginatedResponseOfWorkScheduleTimeAdjustmentResponse:
       required:
       - Data
@@ -166,110 +270,6 @@ components:
           items:
             $ref: '#/components/schemas/WorkScheduleTimeAdjustmentWorkDayResponse'
           description: Time adjustment work days
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    WorkScheduleTimeAdjustmentWorkDayRequest:
-      type: object
-      properties:
-        CodedDay:
-          type:
-          - integer
-          - 'null'
-          description: 'Code corresponding to a specific holiday/event day of the year. Either CodedDay or AnnualDate must be provided.<br/>Possible values: 1 - NewYearsDay, 2 - TwelfthDay, 3 - GoodFriDay, 4 - EasterEve, 5 - EasterDay, 6 - DayAfterEasterDay, 7 - FirstOfMay, 8 - AscensionDay, 9 - WhitsunEve, 10 - WhitsunDay, 11 - DayAfterWhitsunDay, 12 - MidsummerEve, 13 - MidsummerDay, 14 - AllSaintsDay, 15 - ChristmasEve, 16 - ChristmasDay, 17 - DayAfterChristmasDay, 18 - NewYearsEve, 19 - MaundyThursday, 20 - TwelfthDayDayBefore, 21 - FirstOfMayDayBefore, 22 - AscensionDayDayBefore, 23 - MidsummerEveDayBefore, 24 - ChristmasEveDayBefore, 25 - NewYearsEveDayBefore, 26 - AscensionDayDayAfter, 27 - AllSaintsDayDayBefore, 30 - NationalDay, 31 - NationalDayDayBefore, 110 - NewYearsDayDayAfter, 120 - NationalDayDayAfter, 130 - MidsummerDayDayAfter'
-          format: int32
-        AnnualDate:
-          type:
-          - string
-          - 'null'
-          description: 'Date of a recurring day of the year (format: MM-dd). Either CodedDay or AnnualDate must be provided.'
-        MinutesToWork:
-          type:
-          - integer
-          - 'null'
-          description: Number of minutes to work on the specified day. Null indicates day is full time.
-          format: int32
-        Note:
-          type:
-          - string
-          - 'null'
-          description: Optional note/comment (max 50 characters)
-      additionalProperties: false
-    WorkScheduleTimeAdjustmentWorkDayResponse:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Time adjustment work day unique identifier
-          format: uuid
-        CodedDay:
-          type:
-          - integer
-          - 'null'
-          description: 'Code corresponding to a specific holiday/event day of the year<br/>Possible values: 1 - NewYearsDay, 2 - TwelfthDay, 3 - GoodFriDay, 4 - EasterEve, 5 - EasterDay, 6 - DayAfterEasterDay, 7 - FirstOfMay, 8 - AscensionDay, 9 - WhitsunEve, 10 - WhitsunDay, 11 - DayAfterWhitsunDay, 12 - MidsummerEve, 13 - MidsummerDay, 14 - AllSaintsDay, 15 - ChristmasEve, 16 - ChristmasDay, 17 - DayAfterChristmasDay, 18 - NewYearsEve, 19 - MaundyThursday, 20 - TwelfthDayDayBefore, 21 - FirstOfMayDayBefore, 22 - AscensionDayDayBefore, 23 - MidsummerEveDayBefore, 24 - ChristmasEveDayBefore, 25 - NewYearsEveDayBefore, 26 - AscensionDayDayAfter, 27 - AllSaintsDayDayBefore, 30 - NationalDay, 31 - NationalDayDayBefore, 110 - NewYearsDayDayAfter, 120 - NationalDayDayAfter, 130 - MidsummerDayDayAfter'
-          format: int32
-        AnnualDate:
-          type:
-          - string
-          - 'null'
-          description: 'Date of a recurring day of the year (format: MM-dd)'
-        MinutesToWork:
-          type:
-          - integer
-          - 'null'
-          description: Number of minutes to work on the specified day. Null indicates day is full time.
-          format: int32
-        Note:
-          type:
-          - string
-          - 'null'
-          description: Optional note/comment
-        CreatedUtc:
-          type: string
-          description: Timestamp indicating when the time adjustment work day was created (UTC)
-          format: date-time
-        ModifiedUtc:
-          type: string
-          description: Timestamp indicating when the time adjustment work day was last modified (UTC)
-          format: date-time
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     WorkScheduleTimeAdjustmentRequest:
       required:

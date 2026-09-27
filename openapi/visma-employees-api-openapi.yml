@@ -233,6 +233,53 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    EmployeeAgreementApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the employee agreement assignment
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the agreement
+        AgreementId:
+          type: string
+          description: Reference to the agreement definition
+          format: uuid
+        ActiveSince:
+          type: string
+          description: Date when this agreement became active for the employee
+          format: date-time
+        HasConfidenceTime:
+          type: boolean
+          description: Indicates whether the agreement includes confidence time provisions
+        IsDeleted:
+          type: boolean
+          description: Indicates whether the employee agreement is marked as deleted
+      additionalProperties: false
     PaginatedResponseOfEmployeeApi:
       required:
       - Data
@@ -246,36 +293,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EmployeeApi'
-      additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
-          format: date-time
       additionalProperties: false
     EmployeeWorkingScheduleApi:
       type: object
@@ -307,52 +324,35 @@ components:
           description: Date when this work schedule became active for the employee
           format: date-time
       additionalProperties: false
-    CommonError:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
       type: object
       properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    EmployeeAgreementApi:
-      type: object
-      properties:
-        Id:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
           type: string
-          description: Unique identifier for the employee agreement assignment
-          format: uuid
-        Name:
-          type:
-          - string
-          - 'null'
-          description: Name of the agreement
-        AgreementId:
-          type: string
-          description: Reference to the agreement definition
-          format: uuid
-        ActiveSince:
-          type: string
-          description: Date when this agreement became active for the employee
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
           format: date-time
-        HasConfidenceTime:
-          type: boolean
-          description: Indicates whether the agreement includes confidence time provisions
-        IsDeleted:
-          type: boolean
-          description: Indicates whether the employee agreement is marked as deleted
       additionalProperties: false
     EmployeeApi:
       type: object
@@ -541,25 +541,294 @@ components:
           type: boolean
           description: Indicates whether the employee is marked as deleted
       additionalProperties: false
-    CommonExtendedBadRequest:
+    CommonError:
       type: object
       properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        Field:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+        ErrorCode:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CreateEmployeeContractResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the employee contract
+          format: uuid
+        EmployeeCategory:
+          type:
+          - integer
+          - 'null'
+          description: 'Employee category classification (0 = WhiteCollar, 1 = BlueCollar)<br/>Possible values: 0 - WhiteCollar, 1 - BlueCollar'
+          format: int32
+        SalaryType:
+          type: integer
+          description: 'Salary type for the employee<br/>Possible values: 1 - Monthly, 2 - Hourly'
+          format: int32
+        ContractStartDate:
+          type:
+          - string
+          - 'null'
+          description: 'Start date of the employee''s contract. Format: YYYY-MM-DD'
+          format: date-time
+        ContractEndDate:
+          type:
+          - string
+          - 'null'
+          description: 'End date of the employee''s contract, if applicable. Format: YYYY-MM-DD'
+          format: date-time
+        UsesVLAFromDate:
+          type:
+          - string
+          - 'null'
+          description: 'Date from which the employee uses VLA (Visma Leave Application). Format: YYYY-MM-DD'
+          format: date-time
+        UsesVLA:
+          type: boolean
+          description: Indicates whether the employee uses VLA (Visma Leave Application). If true, UsesVLAFromDate is required
+        ModifiedUtc:
+          type: string
+          description: Timestamp when the contract was last modified (UTC)
+          format: date-time
+        CreatedUtc:
+          type: string
+          description: Timestamp when the contract was created (UTC)
+          format: date-time
+      additionalProperties: false
+    CreateEmployeeContractRequest:
+      required:
+      - SalaryType
+      type: object
+      properties:
+        EmployeeCategory:
+          type:
+          - integer
+          - 'null'
+          description: 'Employee category classification<br/>Possible values: 0 - WhiteCollar, 1 - BlueCollar'
+          format: int32
+        SalaryType:
+          type: integer
+          description: 'Salary type for the employee<br/>Possible values: 1 - Monthly, 2 - Hourly'
+          format: int32
+        ContractStartDate:
+          type:
+          - string
+          - 'null'
+          description: 'Start date of the employee''s contract. Format: YYYY-MM-DD'
+          format: date-time
+        ContractEndDate:
+          type:
+          - string
+          - 'null'
+          description: 'End date of the employee''s contract, if applicable. Format: YYYY-MM-DD'
+          format: date-time
+        UsesVLAFromDate:
+          type:
+          - string
+          - 'null'
+          description: 'Date from which the employee uses VLA (Visma Leave Application). Format: YYYY-MM-DD'
+          format: date-time
+        UsesVLA:
+          type: boolean
+          description: Indicates whether the employee uses VLA (Visma Leave Application). If true, UsesVLAFromDate is required
+        TimeReserveType:
+          type:
+          - integer
+          - 'null'
+          description: 'Type of time bank reserve<br/>Possible values: 1 - WorkingTimeReserve, 2 - WorkingTimeAcount'
+          format: int32
+      additionalProperties: false
+    CreateEmployeeResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the employee
+          format: uuid
+        FirstName:
+          type:
+          - string
+          - 'null'
+          description: Employee's first name
+        LastName:
+          type:
+          - string
+          - 'null'
+          description: Employee's last name
+        IdentificationNumber:
+          type:
+          - string
+          - 'null'
+          description: Personal identification number (personnummer) of the employee
+        EmployeeNumber:
+          type:
+          - string
+          - 'null'
+          description: Employee number assigned by the company
+        PhoneMobile:
+          type:
+          - string
+          - 'null'
+          description: Employee's mobile phone number
+        PhoneWork:
+          type:
+          - string
+          - 'null'
+          description: Employee's work phone number
+        EmailWork:
+          type:
+          - string
+          - 'null'
+          description: Employee's work email address. Can be null
+        PrimaryAddress:
+          type:
+          - string
+          - 'null'
+          description: Primary street address line of the employee's residence
+        SecondaryAddress:
+          type:
+          - string
+          - 'null'
+          description: Secondary address line (apartment number, floor, etc.)
+        City:
+          type:
+          - string
+          - 'null'
+          description: City of the employee's residence
+        Zip:
+          type:
+          - string
+          - 'null'
+          description: Postal code of the employee's residence
+        Country:
+          type:
+          - string
+          - 'null'
+          description: Country of the employee's residence
+        HolidayAgreementNumber:
+          type:
+          - integer
+          - 'null'
+          description: The chosen holiday agreement number. Valid numbers are 0, 10, 20 or 30. If null, the employee is a draft employee
+          format: int32
+        UsesPayslip:
+          type: boolean
+          description: Indicates whether the employee receives digital payslips
+        UsesWorkingTimeAccountOrReserve:
+          type: boolean
+          description: Indicates whether the employee uses working time account or reserve functionality
+        EmployeeCategory:
+          type:
+          - integer
+          - 'null'
+          description: 'Employee category classification<br/>Possible values: 0 - WhiteCollar, 1 - BlueCollar'
+          format: int32
+        SalaryType:
+          type: integer
+          description: 'Salary type for the employee<br/>Possible values: 1 - Monthly, 2 - Hourly'
+          format: int32
+        Type:
+          type: integer
+          description: 'Employee type. Only regular employees can use shortcuts<br/>Possible values: 0 - Regular, 1 - Limited'
+          format: int32
+        State:
+          type: integer
+          description: 'State of the employee. Draft employees are missing information and cannot be used in payroll runs or have shortcuts connected to them<br/>Possible values: 0 - Draft, 1 - Full'
+          format: int32
+        ContractEndDate:
+          type:
+          - string
+          - 'null'
+          description: The end date of the employee's contract, if applicable
+          format: date-time
+        LastLockedDeviationDate:
+          type:
+          - string
+          - 'null'
+          description: Last date when deviations were locked for this employee
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp when the employee record was last modified (UTC)
+          format: date-time
+        CreatedUtc:
+          type: string
+          description: Timestamp when the employee record was created (UTC)
+          format: date-time
+        HolidayRemainingUnpayed:
+          type:
+          - number
+          - 'null'
+          description: Remaining unpaid holiday days in decimal format
+          format: double
+        HolidayRemainingSaved:
+          type:
+          - number
+          - 'null'
+          description: Remaining saved holiday days in decimal format
+          format: double
+        HolidayRemainingPayed:
+          type:
+          - number
+          - 'null'
+          description: Remaining paid holiday days in decimal format
+          format: double
+        HolidayRemainingAdvance:
+          type:
+          - number
+          - 'null'
+          description: Remaining advance holiday days in decimal format
+          format: double
+        CompensationTimeBalanceInMinutes:
+          type:
+          - number
+          - 'null'
+          description: Compensation time balance in minutes
+          format: double
+        TimeResereveType:
+          type:
+          - integer
+          - 'null'
+          description: 'Type of time bank reserve<br/>Possible values: 1 - WorkingTimeReserve, 2 - WorkingTimeAcount'
+          format: int32
+        TimeResereveInMinutes:
+          type:
+          - number
+          - 'null'
+          description: Amount of minutes accumulated in the time bank reserve
+          format: double
+        UsesVLAFromDate:
+          type:
+          - string
+          - 'null'
+          description: Date from which the employee uses VLA (Visma Leave Application)
+          format: date-time
+        UsesVLA:
+          type: boolean
+          description: Indicates whether the employee uses VLA (Visma Leave Application)
+        UsesCompanyExpenseFromDate:
+          type:
+          - string
+          - 'null'
+          description: Date from which the employee uses company expense management
+          format: date-time
+        Contract:
+          allOf:
+          - $ref: '#/components/schemas/CreateEmployeeContractResponse'
+          description: Contract details for the created employee
       additionalProperties: false
     AddWorkScheduleToEmployeeRequest:
       required:
@@ -581,20 +850,38 @@ components:
           description: Date from which the work schedule becomes active for the employee
           format: date-time
       additionalProperties: false
-    AddAgreementToEmployeeResponse:
+    PaginatedResponseOfEmployeeResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeeResponse'
+      additionalProperties: false
+    AddAgreementToEmployeeRequest:
+      required:
+      - ActiveFromUtc
+      - AgreementId
+      - HasConfidenceTime
       type: object
       properties:
         AgreementId:
           type: string
-          description: Unique identifier of the agreement that was assigned
+          description: Unique identifier of the agreement to assign to the employee
           format: uuid
-        Success:
+        ActiveFromUtc:
+          type: string
+          description: Date from which the agreement becomes active for the employee (UTC)
+          format: date-time
+        HasConfidenceTime:
           type: boolean
-          description: Indicates whether the agreement was successfully added to the employee
-        ValidationError:
-          allOf:
-          - $ref: '#/components/schemas/CommonValidationError'
-          description: Validation error details if the operation was not successful
+          description: Indicates whether the agreement includes confidence time provisions
       additionalProperties: false
     EmployeeResponse:
       type: object
@@ -781,184 +1068,98 @@ components:
             $ref: '#/components/schemas/EmployeeWorkingScheduleResponse'
           description: List of working schedules associated with the employee
       additionalProperties: false
-    CreateEmployeeResponse:
+    EmployeeWorkingScheduleResponse:
       type: object
       properties:
         Id:
           type: string
-          description: Unique identifier for the employee
+          description: Unique identifier for the employee working schedule assignment
           format: uuid
-        FirstName:
-          type:
-          - string
-          - 'null'
-          description: Employee's first name
-        LastName:
-          type:
-          - string
-          - 'null'
-          description: Employee's last name
-        IdentificationNumber:
-          type:
-          - string
-          - 'null'
-          description: Personal identification number (personnummer) of the employee
-        EmployeeNumber:
-          type:
-          - string
-          - 'null'
-          description: Employee number assigned by the company
-        PhoneMobile:
-          type:
-          - string
-          - 'null'
-          description: Employee's mobile phone number
-        PhoneWork:
-          type:
-          - string
-          - 'null'
-          description: Employee's work phone number
-        EmailWork:
-          type:
-          - string
-          - 'null'
-          description: Employee's work email address. Can be null
-        PrimaryAddress:
-          type:
-          - string
-          - 'null'
-          description: Primary street address line of the employee's residence
-        SecondaryAddress:
-          type:
-          - string
-          - 'null'
-          description: Secondary address line (apartment number, floor, etc.)
-        City:
-          type:
-          - string
-          - 'null'
-          description: City of the employee's residence
-        Zip:
-          type:
-          - string
-          - 'null'
-          description: Postal code of the employee's residence
-        Country:
-          type:
-          - string
-          - 'null'
-          description: Country of the employee's residence
-        HolidayAgreementNumber:
-          type:
-          - integer
-          - 'null'
-          description: The chosen holiday agreement number. Valid numbers are 0, 10, 20 or 30. If null, the employee is a draft employee
-          format: int32
-        UsesPayslip:
-          type: boolean
-          description: Indicates whether the employee receives digital payslips
-        UsesWorkingTimeAccountOrReserve:
-          type: boolean
-          description: Indicates whether the employee uses working time account or reserve functionality
-        EmployeeCategory:
-          type:
-          - integer
-          - 'null'
-          description: 'Employee category classification<br/>Possible values: 0 - WhiteCollar, 1 - BlueCollar'
-          format: int32
-        SalaryType:
-          type: integer
-          description: 'Salary type for the employee<br/>Possible values: 1 - Monthly, 2 - Hourly'
-          format: int32
-        Type:
-          type: integer
-          description: 'Employee type. Only regular employees can use shortcuts<br/>Possible values: 0 - Regular, 1 - Limited'
-          format: int32
-        State:
-          type: integer
-          description: 'State of the employee. Draft employees are missing information and cannot be used in payroll runs or have shortcuts connected to them<br/>Possible values: 0 - Draft, 1 - Full'
-          format: int32
-        ContractEndDate:
-          type:
-          - string
-          - 'null'
-          description: The end date of the employee's contract, if applicable
-          format: date-time
-        LastLockedDeviationDate:
-          type:
-          - string
-          - 'null'
-          description: Last date when deviations were locked for this employee
-          format: date-time
-        ModifiedUtc:
+        WorkScheduleId:
           type: string
-          description: Timestamp when the employee record was last modified (UTC)
-          format: date-time
-        CreatedUtc:
+          description: Reference to the work schedule definition
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the work schedule
+        ActiveSince:
           type: string
-          description: Timestamp when the employee record was created (UTC)
+          description: Date when this work schedule became active for the employee
           format: date-time
-        HolidayRemainingUnpayed:
-          type:
-          - number
-          - 'null'
-          description: Remaining unpaid holiday days in decimal format
-          format: double
-        HolidayRemainingSaved:
-          type:
-          - number
-          - 'null'
-          description: Remaining saved holiday days in decimal format
-          format: double
-        HolidayRemainingPayed:
-          type:
-          - number
-          - 'null'
-          description: Remaining paid holiday days in decimal format
-          format: double
-        HolidayRemainingAdvance:
-          type:
-          - number
-          - 'null'
-          description: Remaining advance holiday days in decimal format
-          format: double
-        CompensationTimeBalanceInMinutes:
-          type:
-          - number
-          - 'null'
-          description: Compensation time balance in minutes
-          format: double
-        TimeResereveType:
+        WorkWeekCycleStart:
           type:
           - integer
           - 'null'
-          description: 'Type of time bank reserve<br/>Possible values: 1 - WorkingTimeReserve, 2 - WorkingTimeAcount'
+          description: Starting week number in the work week cycle, if the schedule uses a rotating pattern
           format: int32
-        TimeResereveInMinutes:
-          type:
-          - number
-          - 'null'
-          description: Amount of minutes accumulated in the time bank reserve
-          format: double
-        UsesVLAFromDate:
-          type:
-          - string
-          - 'null'
-          description: Date from which the employee uses VLA (Visma Leave Application)
-          format: date-time
-        UsesVLA:
+      additionalProperties: false
+    AddWorkScheduleToEmployeeResponse:
+      type: object
+      properties:
+        WorkScheduleId:
+          type: string
+          description: Unique identifier of the work schedule that was assigned
+          format: uuid
+        Success:
           type: boolean
-          description: Indicates whether the employee uses VLA (Visma Leave Application)
-        UsesCompanyExpenseFromDate:
-          type:
-          - string
-          - 'null'
-          description: Date from which the employee uses company expense management
-          format: date-time
-        Contract:
+          description: Indicates whether the work schedule was successfully added to the employee
+        ValidationError:
           allOf:
-          - $ref: '#/components/schemas/CreateEmployeeContractResponse'
-          description: Contract details for the created employee
+          - $ref: '#/components/schemas/CommonValidationError'
+          description: Validation error details if the operation was not successful
+      additionalProperties: false
+    CommonValidationError:
+      type: object
+      properties:
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        ErrorMessage:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    EmployeeAgreementResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the employee agreement assignment
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the agreement
+        AgreementId:
+          type: string
+          description: Reference to the agreement definition
+          format: uuid
+        ActiveSince:
+          type: string
+          description: Date when this agreement became active for the employee
+          format: date-time
+        HasConfidenceTime:
+          type: boolean
+          description: Indicates whether the agreement includes confidence time provisions
+      additionalProperties: false
+    AddAgreementToEmployeeResponse:
+      type: object
+      properties:
+        AgreementId:
+          type: string
+          description: Unique identifier of the agreement that was assigned
+          format: uuid
+        Success:
+          type: boolean
+          description: Indicates whether the agreement was successfully added to the employee
+        ValidationError:
+          allOf:
+          - $ref: '#/components/schemas/CommonValidationError'
+          description: Validation error details if the operation was not successful
       additionalProperties: false
     CreateEmployeeRequest:
       required:
@@ -1010,207 +1211,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/CreateEmployeeContractRequest'
           description: Contract details for the employee
-      additionalProperties: false
-    AddAgreementToEmployeeRequest:
-      required:
-      - ActiveFromUtc
-      - AgreementId
-      - HasConfidenceTime
-      type: object
-      properties:
-        AgreementId:
-          type: string
-          description: Unique identifier of the agreement to assign to the employee
-          format: uuid
-        ActiveFromUtc:
-          type: string
-          description: Date from which the agreement becomes active for the employee (UTC)
-          format: date-time
-        HasConfidenceTime:
-          type: boolean
-          description: Indicates whether the agreement includes confidence time provisions
-      additionalProperties: false
-    PaginatedResponseOfEmployeeResponse:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmployeeResponse'
-      additionalProperties: false
-    CreateEmployeeContractResponse:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier for the employee contract
-          format: uuid
-        EmployeeCategory:
-          type:
-          - integer
-          - 'null'
-          description: 'Employee category classification (0 = WhiteCollar, 1 = BlueCollar)<br/>Possible values: 0 - WhiteCollar, 1 - BlueCollar'
-          format: int32
-        SalaryType:
-          type: integer
-          description: 'Salary type for the employee<br/>Possible values: 1 - Monthly, 2 - Hourly'
-          format: int32
-        ContractStartDate:
-          type:
-          - string
-          - 'null'
-          description: 'Start date of the employee''s contract. Format: YYYY-MM-DD'
-          format: date-time
-        ContractEndDate:
-          type:
-          - string
-          - 'null'
-          description: 'End date of the employee''s contract, if applicable. Format: YYYY-MM-DD'
-          format: date-time
-        UsesVLAFromDate:
-          type:
-          - string
-          - 'null'
-          description: 'Date from which the employee uses VLA (Visma Leave Application). Format: YYYY-MM-DD'
-          format: date-time
-        UsesVLA:
-          type: boolean
-          description: Indicates whether the employee uses VLA (Visma Leave Application). If true, UsesVLAFromDate is required
-        ModifiedUtc:
-          type: string
-          description: Timestamp when the contract was last modified (UTC)
-          format: date-time
-        CreatedUtc:
-          type: string
-          description: Timestamp when the contract was created (UTC)
-          format: date-time
-      additionalProperties: false
-    EmployeeWorkingScheduleResponse:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier for the employee working schedule assignment
-          format: uuid
-        WorkScheduleId:
-          type: string
-          description: Reference to the work schedule definition
-          format: uuid
-        Name:
-          type:
-          - string
-          - 'null'
-          description: Name of the work schedule
-        ActiveSince:
-          type: string
-          description: Date when this work schedule became active for the employee
-          format: date-time
-        WorkWeekCycleStart:
-          type:
-          - integer
-          - 'null'
-          description: Starting week number in the work week cycle, if the schedule uses a rotating pattern
-          format: int32
-      additionalProperties: false
-    CreateEmployeeContractRequest:
-      required:
-      - SalaryType
-      type: object
-      properties:
-        EmployeeCategory:
-          type:
-          - integer
-          - 'null'
-          description: 'Employee category classification<br/>Possible values: 0 - WhiteCollar, 1 - BlueCollar'
-          format: int32
-        SalaryType:
-          type: integer
-          description: 'Salary type for the employee<br/>Possible values: 1 - Monthly, 2 - Hourly'
-          format: int32
-        ContractStartDate:
-          type:
-          - string
-          - 'null'
-          description: 'Start date of the employee''s contract. Format: YYYY-MM-DD'
-          format: date-time
-        ContractEndDate:
-          type:
-          - string
-          - 'null'
-          description: 'End date of the employee''s contract, if applicable. Format: YYYY-MM-DD'
-          format: date-time
-        UsesVLAFromDate:
-          type:
-          - string
-          - 'null'
-          description: 'Date from which the employee uses VLA (Visma Leave Application). Format: YYYY-MM-DD'
-          format: date-time
-        UsesVLA:
-          type: boolean
-          description: Indicates whether the employee uses VLA (Visma Leave Application). If true, UsesVLAFromDate is required
-        TimeReserveType:
-          type:
-          - integer
-          - 'null'
-          description: 'Type of time bank reserve<br/>Possible values: 1 - WorkingTimeReserve, 2 - WorkingTimeAcount'
-          format: int32
-      additionalProperties: false
-    AddWorkScheduleToEmployeeResponse:
-      type: object
-      properties:
-        WorkScheduleId:
-          type: string
-          description: Unique identifier of the work schedule that was assigned
-          format: uuid
-        Success:
-          type: boolean
-          description: Indicates whether the work schedule was successfully added to the employee
-        ValidationError:
-          allOf:
-          - $ref: '#/components/schemas/CommonValidationError'
-          description: Validation error details if the operation was not successful
-      additionalProperties: false
-    EmployeeAgreementResponse:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier for the employee agreement assignment
-          format: uuid
-        Name:
-          type:
-          - string
-          - 'null'
-          description: Name of the agreement
-        AgreementId:
-          type: string
-          description: Reference to the agreement definition
-          format: uuid
-        ActiveSince:
-          type: string
-          description: Date when this agreement became active for the employee
-          format: date-time
-        HasConfidenceTime:
-          type: boolean
-          description: Indicates whether the agreement includes confidence time provisions
-      additionalProperties: false
-    CommonValidationError:
-      type: object
-      properties:
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        ErrorMessage:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
 x-refined-from:
 - visma-payroll-api-v1-openapi-original.json

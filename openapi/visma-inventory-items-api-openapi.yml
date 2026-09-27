@@ -102,6 +102,102 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    InventoryEventApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id
+          format: uuid
+          readOnly: true
+        VoucherId:
+          type:
+          - string
+          - 'null'
+          description: The voucher ID
+          format: uuid
+        BookkeepingDate:
+          type:
+          - string
+          - 'null'
+          description: The bookkeeping date
+          format: date-time
+        UndoVoucherId:
+          type:
+          - string
+          - 'null'
+          description: The undo voucher ID
+          format: uuid
+        UndoBookkeepingDate:
+          type:
+          - string
+          - 'null'
+          description: The undo bookkeeping date
+          format: date-time
+        Type:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Depreciation,<br/>1 = Sale,<br/>4 = Disposal,<br/>5 = ValueChange,<br/>6 = Appreciation,<br/>7 = ImpairmentLoss,<br/>8 = ReversalOfImpairment,<br/>9 = AdditionalDepreciation,<br/>10 = CostOfAquisitionAdjustement,<br/>11 = DepreciationBasisAdjustement<br/><br/>The type of the event.
+          format: int32
+        Amount:
+          type: number
+          description: The amount
+          format: double
+        CurrentValueBeforeEvent:
+          type: number
+          description: The current value before the event
+          format: double
+        CreatedUtc:
+          type: string
+          description: The creation date and time in UTC
+          format: date-time
+          readOnly: true
+        Undone:
+          type: boolean
+          description: Whether the event is undone
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    InventoryAccumulatedDepreciationApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id
+          format: uuid
+          readOnly: true
+        FiscalYearId:
+          type:
+          - string
+          - 'null'
+          description: The fiscal year ID
+          format: uuid
+        OpeningAccumulatedDepreciation:
+          type: number
+          description: The opening accumulated depreciation
+          format: double
+        DepreciationForTheYear:
+          type: number
+          description: The depreciation for the year
+          format: double
+      additionalProperties: false
     InventoryAccountingTemplateApi:
       required:
       - Name
@@ -211,58 +307,18 @@ components:
           type: boolean
           description: Whether the reversal of impairment account uses cost center
       additionalProperties: false
-    InventoryEventApi:
+    PaginatedResponseOfInventoryItemApi:
+      required:
+      - Data
+      - Meta
       type: object
       properties:
-        Id:
-          type: string
-          description: Unique Id
-          format: uuid
-          readOnly: true
-        VoucherId:
-          type:
-          - string
-          - 'null'
-          description: The voucher ID
-          format: uuid
-        BookkeepingDate:
-          type:
-          - string
-          - 'null'
-          description: The bookkeeping date
-          format: date-time
-        UndoVoucherId:
-          type:
-          - string
-          - 'null'
-          description: The undo voucher ID
-          format: uuid
-        UndoBookkeepingDate:
-          type:
-          - string
-          - 'null'
-          description: The undo bookkeeping date
-          format: date-time
-        Type:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Depreciation,<br/>1 = Sale,<br/>4 = Disposal,<br/>5 = ValueChange,<br/>6 = Appreciation,<br/>7 = ImpairmentLoss,<br/>8 = ReversalOfImpairment,<br/>9 = AdditionalDepreciation,<br/>10 = CostOfAquisitionAdjustement,<br/>11 = DepreciationBasisAdjustement<br/><br/>The type of the event.
-          format: int32
-        Amount:
-          type: number
-          description: The amount
-          format: double
-        CurrentValueBeforeEvent:
-          type: number
-          description: The current value before the event
-          format: double
-        CreatedUtc:
-          type: string
-          description: The creation date and time in UTC
-          format: date-time
-          readOnly: true
-        Undone:
-          type: boolean
-          description: Whether the event is undone
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryItemApi'
       additionalProperties: false
     CommonPaginationMetadata:
       required:
@@ -293,62 +349,6 @@ components:
           type: string
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
-      additionalProperties: false
-    InventoryAccumulatedDepreciationApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id
-          format: uuid
-          readOnly: true
-        FiscalYearId:
-          type:
-          - string
-          - 'null'
-          description: The fiscal year ID
-          format: uuid
-        OpeningAccumulatedDepreciation:
-          type: number
-          description: The opening accumulated depreciation
-          format: double
-        DepreciationForTheYear:
-          type: number
-          description: The depreciation for the year
-          format: double
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    PaginatedResponseOfInventoryItemApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/InventoryItemApi'
       additionalProperties: false
     InventoryItemApi:
       required:
@@ -478,25 +478,25 @@ components:
           format: double
           readOnly: true
       additionalProperties: false
-    CommonExtendedBadRequest:
+    CommonError:
       type: object
       properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        Field:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+        ErrorCode:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

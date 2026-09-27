@@ -365,69 +365,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    addressInContactDto:
-      properties:
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInAddressDto'
-      description: The Details tab &gt; Address section &gt;
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    DtoValueOfAddressUpdateDto:
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/AddressUpdateDto'
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    DtoValueOfEmployeeTitles:
-      type: object
-      properties:
-        value:
-          enum:
-          - Doctor
-          - Miss
-          - Mr
-          - Mrs
-          - Ms
-          - Prof
-          type: string
     ContactDto:
       type: object
       properties:
@@ -530,39 +467,40 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a contact in ContactController. Used by getting data.
-    DtoValueOfBoolean:
-      type: object
+    addressInContactDto:
       properties:
-        value:
-          type: boolean
-    DtoValueOfContactMethods:
-      type: object
-      properties:
-        value:
-          enum:
-          - Any
-          - Email
-          - Mail
-          - Fax
-          - Phone
-          type: string
-    AddressUpdateDto:
-      type: object
-      properties:
+        addressId:
+          type: integer
+          format: int32
         addressLine1:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
         addressLine2:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
+          description: Address 2 &gt; The second line of the address.
         addressLine3:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
+          description: Address 3 &gt; The third line of the address.
         postalCode:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
+          description: Postcode &gt; The postcode.
         city:
-          $ref: '#/components/schemas/DtoValueOfString'
-        countryId:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
         county:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: The Details tab &gt; Address section &gt;
+    countyInAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
     ContactUpdateDto:
       type: object
       properties:
@@ -608,6 +546,65 @@ components:
           $ref: '#/components/schemas/DtoValueOfBoolean'
         noMarketing:
           $ref: '#/components/schemas/DtoValueOfBoolean'
+    DtoValueOfAddressUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/AddressUpdateDto'
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    DtoValueOfContactMethods:
+      type: object
+      properties:
+        value:
+          enum:
+          - Any
+          - Email
+          - Mail
+          - Fax
+          - Phone
+          type: string
+    AddressUpdateDto:
+      type: object
+      properties:
+        addressLine1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postalCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        city:
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        county:
+          $ref: '#/components/schemas/DtoValueOfString'
     countryInAddressDto:
       properties:
         id:
@@ -621,15 +618,18 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: Country &gt; The country.
-    countyInAddressDto:
+    DtoValueOfEmployeeTitles:
+      type: object
       properties:
-        id:
+        value:
+          enum:
+          - Doctor
+          - Miss
+          - Mr
+          - Mrs
+          - Ms
+          - Prof
           type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
   securitySchemes:
     interactiveapi:
       type: oauth2

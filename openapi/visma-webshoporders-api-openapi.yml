@@ -135,6 +135,109 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfWebshopOrderApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebshopOrderApi'
+      additionalProperties: false
+    WebshopOrderRowApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the order row
+          format: uuid
+          readOnly: true
+        ArticleName:
+          type:
+          - string
+          - 'null'
+          description: Name of the article
+        ArticleNumber:
+          type:
+          - string
+          - 'null'
+          description: Article number/SKU
+        PricePerUnitInvoiceCurrency:
+          type: number
+          description: Price per unit in invoice currency
+          format: double
+        Quantity:
+          type: number
+          description: Quantity of the item
+          format: double
+        UnitAbbreviation:
+          type:
+          - string
+          - 'null'
+          description: Unit abbreviation (e.g., pcs, kg)
+        Sum:
+          type: number
+          description: Total sum for this row
+          format: double
+        PercentVat:
+          type: number
+          description: VAT percentage
+          format: double
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
     WebshopOrderApi:
       type: object
       properties:
@@ -273,76 +376,6 @@ components:
           description: Note IDs associated with this order. Fetch notes via GET /v2/notes/{noteId}
           readOnly: true
       additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    WebshopOrderRowApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier for the order row
-          format: uuid
-          readOnly: true
-        ArticleName:
-          type:
-          - string
-          - 'null'
-          description: Name of the article
-        ArticleNumber:
-          type:
-          - string
-          - 'null'
-          description: Article number/SKU
-        PricePerUnitInvoiceCurrency:
-          type: number
-          description: Price per unit in invoice currency
-          format: double
-        Quantity:
-          type: number
-          description: Quantity of the item
-          format: double
-        UnitAbbreviation:
-          type:
-          - string
-          - 'null'
-          description: Unit abbreviation (e.g., pcs, kg)
-        Sum:
-          type: number
-          description: Total sum for this row
-          format: double
-        PercentVat:
-          type: number
-          description: VAT percentage
-          format: double
-      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -362,39 +395,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    PaginatedResponseOfWebshopOrderApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WebshopOrderApi'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

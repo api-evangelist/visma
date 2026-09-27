@@ -207,67 +207,25 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
+    CommonExtendedBadRequest:
       type: object
       properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    BalanceAndDateApi:
-      type: object
-      properties:
-        Balance:
-          type: number
-          description: The balance amount
-          format: double
-        Date:
-          type: string
-          description: The date when this balance was recorded
-          format: date-time
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
         ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-        Message:
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
           type:
-          - string
+          - array
           - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     BankAccountApi:
       required:
@@ -379,26 +337,6 @@ components:
           description: Indicates if automatic direct debit service is used. Applicable for NL only. This property is ignored in PUT and POST operations.
           readOnly: true
       additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
     PaginatedResponseOfBankAccountApi:
       required:
       - Data
@@ -411,6 +349,68 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BankAccountApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    BalanceAndDateApi:
+      type: object
+      properties:
+        Balance:
+          type: number
+          description: The balance amount
+          format: double
+        Date:
+          type: string
+          description: The date when this balance was recorded
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

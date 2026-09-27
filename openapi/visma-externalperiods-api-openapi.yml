@@ -166,7 +166,27 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ProjectCostCenterAllocationResponse:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    ProjectCostCenterAllocationRequest:
       type: object
       properties:
         Id:
@@ -175,22 +195,27 @@ components:
           format: uuid
         Percentage:
           type: number
-          description: Allocation percentage for this entry.
+          description: Allocation percentage for this entry. Allocations with a percentage of 0 are ignored.
           format: double
       additionalProperties: false
-    PaginatedResponseOfExternalPeriodResponse:
+    ExternalPeriodRequest:
       required:
-      - Data
-      - Meta
+      - DeviationPeriodToDate
+      - EmployeeId
       type: object
       properties:
-        Meta:
+        EmployeeId:
+          type: string
+          description: 'The unique identifier of the employee. Source: Get from /v2/employees'
+          format: uuid
+        DeviationPeriodToDate:
+          type: string
+          description: End date of the deviation period
+          format: date-time
+        ProjectCostCenterDistribution:
           allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalPeriodResponse'
+          - $ref: '#/components/schemas/ProjectCostCenterDistributionRequest'
+          description: Project/cost-center distribution for worked-time salary rows. The percentages within each of Project, CostCenter1, CostCenter2 and CostCenter3 must total at most 100%.
       additionalProperties: false
     ProjectCostCenterDistributionRequest:
       type: object
@@ -224,6 +249,18 @@ components:
             $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
           description: 'Allocations on cost center 3. The percentages within CostCenter3 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
       additionalProperties: false
+    ProjectCostCenterAllocationResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Project id or cost center item id for this allocation.
+          format: uuid
+        Percentage:
+          type: number
+          description: Allocation percentage for this entry.
+          format: double
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -254,56 +291,51 @@ components:
           description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
           format: date-time
       additionalProperties: false
-    ProjectCostCenterAllocationRequest:
+    ProjectCostCenterDistributionResponse:
       type: object
       properties:
-        Id:
-          type: string
-          description: Project id or cost center item id for this allocation.
-          format: uuid
-        Percentage:
-          type: number
-          description: Allocation percentage for this entry. Allocations with a percentage of 0 are ignored.
-          format: double
+        Project:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
+          description: 'Allocations on Project. Each allocation Id is a project id. Source: Get from eAccounting API, /v2/projects'
+        CostCenter1:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
+          description: 'Allocations on cost center 1. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+        CostCenter2:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
+          description: 'Allocations on cost center 2. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+        CostCenter3:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
+          description: 'Allocations on cost center 3. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
       additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ExternalPeriodRequest:
+    PaginatedResponseOfExternalPeriodResponse:
       required:
-      - DeviationPeriodToDate
-      - EmployeeId
+      - Data
+      - Meta
       type: object
       properties:
-        EmployeeId:
-          type: string
-          description: 'The unique identifier of the employee. Source: Get from /v2/employees'
-          format: uuid
-        DeviationPeriodToDate:
-          type: string
-          description: End date of the deviation period
-          format: date-time
-        ProjectCostCenterDistribution:
+        Meta:
           allOf:
-          - $ref: '#/components/schemas/ProjectCostCenterDistributionRequest'
-          description: Project/cost-center distribution for worked-time salary rows. The percentages within each of Project, CostCenter1, CostCenter2 and CostCenter3 must total at most 100%.
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalPeriodResponse'
       additionalProperties: false
     ExternalPeriodResponse:
       type: object
@@ -339,55 +371,23 @@ components:
           description: Timestamp when the external period was last modified (UTC)
           format: date-time
       additionalProperties: false
-    CommonExtendedBadRequest:
+    CommonError:
       type: object
       properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        Field:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+        ErrorCode:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    ProjectCostCenterDistributionResponse:
-      type: object
-      properties:
-        Project:
+        Message:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
-          description: 'Allocations on Project. Each allocation Id is a project id. Source: Get from eAccounting API, /v2/projects'
-        CostCenter1:
+        Key:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
-          description: 'Allocations on cost center 1. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
-        CostCenter2:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
-          description: 'Allocations on cost center 2. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
-        CostCenter3:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
-          description: 'Allocations on cost center 3. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
       additionalProperties: false

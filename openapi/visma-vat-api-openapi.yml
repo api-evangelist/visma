@@ -351,215 +351,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    vatPayableSubaccountInVatGlAccountsDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: VAT payable subaccount* &gt; The corresponding VAT payable subaccount.'
-    vatClaimableSubccountInVatGlAccountsDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: VAT claimable subaccount &gt; The corresponding tax claimable subaccount.
-    VatCategoryDto:
-      type: object
-      properties:
-        vatCategoryId:
-          type: string
-          description: 'Mandatory field: The top part &gt; VAT category ID* &gt; The unique ID of the VAT category. An alphanumeric string of up to six characters can be used.'
-        description:
-          type: string
-          description: The top part &gt; Description &gt; A detailed description of the category.
-        active:
-          type: boolean
-          description: The top part &gt; Active &gt; A check box that means (if selected) that this VAT category is active.
-        excludeListedTaxes:
-          type: boolean
-          description: The top part &gt; Exclude listed taxes &gt; A check box that indicates (if selected) this VAT category should exclude the listed taxes from VAT zones.
-        lastModifiedDateTime:
-          type: string
-          description: Systemgenerated information.
-          format: date-time
-        vatCategoryLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/VatCategoryLineDto'
-          description: The table &gt;
-    defaultNonStockItemInVatInformationDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: VAT settings tab &gt; Default non-stock item &gt; The default non-stock item for the VAT ID.
-    UpdateNoteDto:
-      type: object
-      properties:
-        note:
-          $ref: '#/components/schemas/noteInUpdateNoteDto'
-    noteInUpdateNoteDto:
-      properties:
-        value:
-          type: string
-      description: Note for Vat report header.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    glAccountsInVatInformationDto:
-      properties:
-        vatPayableAccount:
-          $ref: '#/components/schemas/vatPayableAccountInVatGlAccountsDto'
-        vatPayableSubaccount:
-          $ref: '#/components/schemas/vatPayableSubaccountInVatGlAccountsDto'
-        vatClaimableAccount:
-          $ref: '#/components/schemas/vatClaimableAccountInVatGlAccountsDto'
-        vatClaimableSubccount:
-          $ref: '#/components/schemas/vatClaimableSubccountInVatGlAccountsDto'
-      description: General ledger accounts &gt;
-    TaxCategoryNumberDescriptionDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-    VatInformationScheduleDto:
-      type: object
-      properties:
-        startDate:
-          type: string
-          description: 'Mandatory field: Start date &gt; The date when the VAT at the rate in the current row becomes effective.'
-          format: date-time
-        vatRate:
-          type: number
-          description: VAT rate &gt; The VAT rate (%) that is used to calculate the VAT amount.
-          format: double
-        minTaxableAmt:
-          type: number
-          description: Min. taxable amount &gt; The minimum taxable amount for which this rate is applicable.
-          format: double
-        maxTaxableAmt:
-          type: number
-          description: Max. taxable amount &gt; The maximum taxable amount for which this rate applies.
-          format: double
-        reportingGroup:
-          type: string
-          description: Reporting group &gt; The reporting group for the VAT.
-        deductibleVatRate:
-          type: number
-          description: Deductible VAT rate &gt; The VAT rate (%) that is used to calculate the amount deductible from the output VAT.
-          format: double
-        groupType:
-          enum:
-          - Output
-          - Input
-          type: string
-          description: Group type &gt; The type of the reporting group.
-    VatRateLineDto:
-      type: object
-      properties:
-        revisionID:
-          type: string
-          description: The revision ID of the VAT rate.
-        vatRate:
-          type: number
-          description: The VAT rate of the line.
-          format: double
-        groupType:
-          enum:
-          - Output
-          - Input
-          type: string
-          description: The type of the reporting group.
-        startDate:
-          type: string
-          description: The date and time from which the VAT rate is effective.
-          format: date-time
-    vatAgencyIdInVatInformationDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal id of the supplier
-          format: int64
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: VAT settings tab &gt; Tax agency &gt; The name of the tax agency to receive the VAT.
-    VatZoneDto:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        description:
-          type: string
-          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultVatCategory:
-          type: string
-          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultTaxCategory:
-          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-    vatPayableAccountInVatGlAccountsDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: VAT payable account* &gt; The liability account that accumulates the VAT amounts to be paid to a tax agency for the VAT reporting period.'
     VatCategoryLineDto:
       type: object
       properties:
@@ -607,7 +398,71 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VatRateLineDto'
-    vatClaimableAccountInVatGlAccountsDto:
+    TaxCategoryNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    vatPayableSubaccountInVatGlAccountsDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: VAT payable subaccount* &gt; The corresponding VAT payable subaccount.'
+    VatCategoryDto:
+      type: object
+      properties:
+        vatCategoryId:
+          type: string
+          description: 'Mandatory field: The top part &gt; VAT category ID* &gt; The unique ID of the VAT category. An alphanumeric string of up to six characters can be used.'
+        description:
+          type: string
+          description: The top part &gt; Description &gt; A detailed description of the category.
+        active:
+          type: boolean
+          description: The top part &gt; Active &gt; A check box that means (if selected) that this VAT category is active.
+        excludeListedTaxes:
+          type: boolean
+          description: The top part &gt; Exclude listed taxes &gt; A check box that indicates (if selected) this VAT category should exclude the listed taxes from VAT zones.
+        lastModifiedDateTime:
+          type: string
+          description: Systemgenerated information.
+          format: date-time
+        vatCategoryLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/VatCategoryLineDto'
+          description: The table &gt;
+    VatRateLineDto:
+      type: object
+      properties:
+        revisionID:
+          type: string
+          description: The revision ID of the VAT rate.
+        vatRate:
+          type: number
+          description: The VAT rate of the line.
+          format: double
+        groupType:
+          enum:
+          - Output
+          - Input
+          type: string
+          description: The type of the reporting group.
+        startDate:
+          type: string
+          description: The date and time from which the VAT rate is effective.
+          format: date-time
+    vatPayableAccountInVatGlAccountsDto:
       properties:
         type:
           enum:
@@ -631,7 +486,25 @@ components:
         description:
           type: string
           description: Name of item/description
-      description: VAT Claimable account &gt; The account that accumulates the VAT amounts to be claimed from the tax agency for the VAT reporting period.
+      description: 'Mandatory field: VAT payable account* &gt; The liability account that accumulates the VAT amounts to be paid to a tax agency for the VAT reporting period.'
+    VatZoneDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        description:
+          type: string
+          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultVatCategory:
+          type: string
+          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultTaxCategory:
+          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
     VatInformationDto:
       type: object
       properties:
@@ -744,6 +617,133 @@ components:
           items:
             $ref: '#/components/schemas/VatZoneDto'
           description: Both tabs &gt; Zones tab &gt;
+    vatAgencyIdInVatInformationDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal id of the supplier
+          format: int64
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: VAT settings tab &gt; Tax agency &gt; The name of the tax agency to receive the VAT.
+    defaultNonStockItemInVatInformationDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT settings tab &gt; Default non-stock item &gt; The default non-stock item for the VAT ID.
+    noteInUpdateNoteDto:
+      properties:
+        value:
+          type: string
+      description: Note for Vat report header.
+    glAccountsInVatInformationDto:
+      properties:
+        vatPayableAccount:
+          $ref: '#/components/schemas/vatPayableAccountInVatGlAccountsDto'
+        vatPayableSubaccount:
+          $ref: '#/components/schemas/vatPayableSubaccountInVatGlAccountsDto'
+        vatClaimableAccount:
+          $ref: '#/components/schemas/vatClaimableAccountInVatGlAccountsDto'
+        vatClaimableSubccount:
+          $ref: '#/components/schemas/vatClaimableSubccountInVatGlAccountsDto'
+      description: General ledger accounts &gt;
+    UpdateNoteDto:
+      type: object
+      properties:
+        note:
+          $ref: '#/components/schemas/noteInUpdateNoteDto'
+    vatClaimableAccountInVatGlAccountsDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT Claimable account &gt; The account that accumulates the VAT amounts to be claimed from the tax agency for the VAT reporting period.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    VatInformationScheduleDto:
+      type: object
+      properties:
+        startDate:
+          type: string
+          description: 'Mandatory field: Start date &gt; The date when the VAT at the rate in the current row becomes effective.'
+          format: date-time
+        vatRate:
+          type: number
+          description: VAT rate &gt; The VAT rate (%) that is used to calculate the VAT amount.
+          format: double
+        minTaxableAmt:
+          type: number
+          description: Min. taxable amount &gt; The minimum taxable amount for which this rate is applicable.
+          format: double
+        maxTaxableAmt:
+          type: number
+          description: Max. taxable amount &gt; The maximum taxable amount for which this rate applies.
+          format: double
+        reportingGroup:
+          type: string
+          description: Reporting group &gt; The reporting group for the VAT.
+        deductibleVatRate:
+          type: number
+          description: Deductible VAT rate &gt; The VAT rate (%) that is used to calculate the amount deductible from the output VAT.
+          format: double
+        groupType:
+          enum:
+          - Output
+          - Input
+          type: string
+          description: Group type &gt; The type of the reporting group.
+    vatClaimableSubccountInVatGlAccountsDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: VAT claimable subaccount &gt; The corresponding tax claimable subaccount.
   securitySchemes:
     interactiveapi:
       type: oauth2

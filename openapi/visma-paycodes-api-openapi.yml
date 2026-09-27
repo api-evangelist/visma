@@ -229,6 +229,40 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfPaycodeApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+      additionalProperties: false
     PaycodeApi:
       type: object
       properties:
@@ -313,26 +347,6 @@ components:
           description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
           format: date-time
       additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     TravelAndExpensePaycodesApi:
       type: object
       properties:
@@ -365,40 +379,6 @@ components:
             $ref: '#/components/schemas/PaycodeApi'
           description: Paycodes used for travel and expense benefits
       additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    PaginatedResponseOfPaycodeApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaycodeApi'
-      additionalProperties: false
     OtherAdditionDeductionPaycodesApi:
       type: object
       properties:
@@ -430,6 +410,58 @@ components:
           items:
             $ref: '#/components/schemas/PaycodeApi'
           description: Paycodes used for tax adjustments
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    TravelAndExpensePaycodesResponse:
+      type: object
+      properties:
+        ReimbursmentPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for reimbursement of travel and expense costs
+        CompensationPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for travel and expense compensation
+        AllowancePaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for travel and expense allowances
+        BenefitPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for travel and expense benefits
       additionalProperties: false
     OtherAdditionDeductionPaycodesResponse:
       type: object
@@ -476,38 +508,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PayCodeResponse'
-      additionalProperties: false
-    TravelAndExpensePaycodesResponse:
-      type: object
-      properties:
-        ReimbursmentPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PayCodeResponse'
-          description: Paycodes used for reimbursement of travel and expense costs
-        CompensationPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PayCodeResponse'
-          description: Paycodes used for travel and expense compensation
-        AllowancePaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PayCodeResponse'
-          description: Paycodes used for travel and expense allowances
-        BenefitPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PayCodeResponse'
-          description: Paycodes used for travel and expense benefits
       additionalProperties: false
     PayCodeResponse:
       type: object

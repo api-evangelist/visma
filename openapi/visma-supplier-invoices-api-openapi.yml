@@ -346,549 +346,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    SupplierInvoiceRowApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier provided by the system
-          format: uuid
-          readOnly: true
-        AccountNumber:
-          maximum: 9999999999
-          minimum: 1
-          type: integer
-          description: The account number for this row
-          format: int64
-        AccountName:
-          type:
-          - string
-          - 'null'
-          description: The name of the account
-          readOnly: true
-        VatCodeId:
-          type:
-          - string
-          - 'null'
-          description: VAT code identifier (Denmark and Netherlands only)
-          format: uuid
-        VatAmount:
-          type:
-          - number
-          - 'null'
-          description: VAT amount for this row (Denmark and Netherlands only)
-          format: double
-        ProportionalVatRateValue:
-          type:
-          - integer
-          - 'null'
-          description: Proportional VAT rate value (Norway only)
-          format: int32
-        CostCenterItemId1:
-          type:
-          - string
-          - 'null'
-          description: First cost center item. Get from /v2/costcenters
-          format: uuid
-        CostCenterItemId2:
-          type:
-          - string
-          - 'null'
-          description: Second cost center item. Get from /v2/costcenters
-          format: uuid
-        CostCenterItemId3:
-          type:
-          - string
-          - 'null'
-          description: Third cost center item. Get from /v2/costcenters
-          format: uuid
-        Quantity:
-          type:
-          - number
-          - 'null'
-          description: Quantity with max 2 decimals (Dutch companies with agriculture support only)
-          format: double
-        Weight:
-          type:
-          - number
-          - 'null'
-          description: Weight with max 2 decimals (Dutch companies with agriculture support only)
-          format: double
-        DeliveryDate:
-          type:
-          - string
-          - 'null'
-          description: Delivery date (Dutch companies with agriculture support only)
-          format: date-time
-        HarvestYear:
-          type:
-          - integer
-          - 'null'
-          description: Harvest year (Dutch companies with agriculture support only)
-          format: int32
-        DebetAmount:
-          type: number
-          description: Debit amount with max 2 decimals
-          format: double
-        CreditAmount:
-          type: number
-          description: Credit amount with max 2 decimals
-          format: double
-        LineNumber:
-          type: integer
-          description: The line number of this row
-          format: int32
-          readOnly: true
-        ProjectId:
-          type:
-          - string
-          - 'null'
-          description: Project identifier. Get from /v2/projects
-          format: uuid
-        TransactionText:
-          maxLength: 100
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Transaction text used in searchable column in Account Analysis
-      additionalProperties: false
-      description: Represents an accounting row/line in a supplier invoice
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    SupplierInvoiceOffsetUndoResponseApi:
-      required:
-      - ReversedVoucherIds
-      type: object
-      properties:
-        ReversedVoucherIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            format: uuid
-          description: The IDs of the reversed vouchers
-      additionalProperties: false
-      description: Response model for undo offset
-    PaginatedResponseOfSupplierInvoiceApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SupplierInvoiceApi'
-      additionalProperties: false
-    TransactionalCostsRequest:
-      required:
-      - InterpretedAttachments
-      - SupplierInvoice
-      type: object
-      properties:
-        SupplierInvoice:
-          $ref: '#/components/schemas/SupplierInvoiceApi'
-        InterpretedAttachments:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttachmentInterpretationApi'
-          description: The attachment interpretations that are going to be posted with the invoice
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ValidateDocumentResponse:
-      type: object
-      properties:
-        TransactionCostWillBeCharged:
-          type: boolean
-          description: True if the attachment will be charged with transaction costs due to interpretation
-        DisplayFirstTimeCostsInformation:
-          type: boolean
-          description: True the first time the user uses the interpretation service with transaction costs
-        DisplayConsultantBillingInformation:
-          type: boolean
-          description: True if the user is a consultant and the company has not activated AutoInvoice collaboration
-        PricePerDocument:
-          type:
-          - number
-          - 'null'
-          description: Price per document for the interpretation service
-          format: double
-        PriceCurrency:
-          type:
-          - string
-          - 'null'
-          description: Price currency for the interpretation service
-      additionalProperties: false
-    AllocationPeriodApi:
-      required:
-      - Rows
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier of the allocation period
-          format: uuid
-          readOnly: true
-        SupplierInvoiceDraftId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a supplier invoice draft that may be associated with this allocation period
-          format: uuid
-          readOnly: true
-        SupplierInvoiceDraftRow:
-          type:
-          - integer
-          - 'null'
-          description: Reference to a supplier invoice draft row that may be associated with this allocation period
-          format: int32
-          readOnly: true
-        SupplierInvoiceId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a supplier invoice that may be associated with this allocation period
-          format: uuid
-          readOnly: true
-        SupplierInvoiceRow:
-          type:
-          - integer
-          - 'null'
-          description: Reference to a supplier invoice row that may be associated with this allocation period
-          format: int32
-          readOnly: true
-        ManualVoucherId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a possible manual voucher that this allocation period belongs to
-          format: uuid
-          readOnly: true
-        ManualVoucherRow:
-          type:
-          - integer
-          - 'null'
-          description: Reference to a possible manual voucher row that this allocation period belongs to
-          format: int32
-          readOnly: true
-        CustomerInvoiceId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a possible customer invoice that this allocation period belongs to
-          format: uuid
-          readOnly: true
-        CustomerInvoiceRow:
-          type:
-          - integer
-          - 'null'
-          description: Reference to a possible customer invoice row that this allocation period belongs to
-          format: int32
-          readOnly: true
-        CustomerInvoiceDraftId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a possible customer invoice draft that this allocation period belongs to
-          format: uuid
-          readOnly: true
-        CustomerInvoiceDraftRow:
-          type:
-          - integer
-          - 'null'
-          description: Reference to a possible customer invoice draft row that this allocation period belongs to
-          format: int32
-          readOnly: true
-        VoucherFiscalYearId:
-          type:
-          - string
-          - 'null'
-          description: Reference to fiscal year id of the voucher coresponding to the source type, if applicable
-          format: uuid
-          readOnly: true
-        VoucherId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a possible voucher that this allocation period belongs to
-          format: uuid
-          readOnly: true
-        AllocationPeriodSourceType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = SupplierInvoice,<br/>1 = ManualVoucher,<br/>2 = CustomerInvoice,<br/>3 = CustomerInvoiceDraft
-          format: int32
-        Status:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Pending,<br/>1 = Revoked,<br/>2 = Booked,<br/>3 = CancelledNotBooked
-          format: int32
-        CostCenterItemId1:
-          type:
-          - string
-          - 'null'
-          description: Identifier of a cost center item associated with this allocation, if applicable
-          format: uuid
-          readOnly: true
-        CostCenterItemId2:
-          type:
-          - string
-          - 'null'
-          description: Identifier of a cost center item associated with this allocation, if applicable
-          format: uuid
-          readOnly: true
-        CostCenterItemId3:
-          type:
-          - string
-          - 'null'
-          description: Identifier of a cost center item associated with this allocation, if applicable
-          format: uuid
-          readOnly: true
-        ProjectId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a project, if applicable
-          format: uuid
-          readOnly: true
-        BookkeepingDate:
-          type: string
-          description: Bookeeping date for this allocation period
-          format: date-time
-        CreatedUtc:
-          type: string
-          description: When the allocation was created
-          format: date-time
-          readOnly: true
-        Rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllocationPeriodRowApi'
-          description: The accounting rows/lines of this alocation
-        DebitAccountNumber:
-          type: integer
-          description: The first debit account number for non VAT accounting rows/lines of this alocation
-          format: int64
-          readOnly: true
-        CreditAccountNumber:
-          type: integer
-          description: The first credit account number for non VAT accounting rows/lines of this alocation
-          format: int64
-          readOnly: true
-        Amount:
-          type: number
-          description: The amount of the first non VAT accounting row/line of this alocation
-          format: double
-          readOnly: true
-        IsCredit:
-          type: boolean
-          description: Indicates whether the associated source invoice is of credit type
-        SourceDate:
-          type:
-          - string
-          - 'null'
-          description: Voucher date or Invoice date if no source voucher
-          format: date-time
-          readOnly: true
-        Description:
-          type:
-          - string
-          - 'null'
-          description: Voucher description or Invoice description if no source voucher
-          readOnly: true
-        NumberAndNumberSeries:
-          type:
-          - string
-          - 'null'
-          description: From source voucher or null if no source voucher
-          readOnly: true
-        ModifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: Last UTC time the period was changed. If the allocation wasn't changed it takes the value of created UTC
-          format: date-time
-          readOnly: true
-      additionalProperties: false
-      description: Allocation period for distributing costs over time
-    InvoicePaymentApi:
-      required:
-      - CompanyBankAccountId
-      - PaymentAmount
-      - PaymentCurrency
-      - PaymentDate
-      - PaymentType
-      type: object
-      properties:
-        CompanyBankAccountId:
-          type: string
-          description: The bank account to which the payment is recorded
-          format: uuid
-        PaymentDate:
-          type: string
-          description: 'Future dates cannot be set. Date format: yyyy-mm-dd. Payment date must be sent in the timezone of the company instead of user''s location timezone.'
-          format: date-time
-        Reference:
-          maxLength: 100
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Payment's reference
-        PaymentAmount:
-          type: number
-          description: 'Amount in invoice currency. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
-          format: double
-        PaymentCurrency:
-          minLength: 1
-          type: string
-          description: Currency code of the payment amount.
-        DomesticPaymentAmount:
-          type: number
-          description: 'Only for non domestic invoices paid with cheque account. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
-          format: double
-        BankFeeAmount:
-          maximum: 1000000000
-          minimum: 0
-          type: number
-          description: Bank fee amount
-          format: double
-        PaymentType:
-          maximum: 4
-          minimum: 1
-          type: integer
-          description: <strong>Possible values:</strong><br/>PartialPayment = 1,<br/>CompletePayment = 2,<br/>Rounding = 3,<br/>BankCharge = 4
-          format: int32
-        FactoringFeeAmount:
-          type: number
-          description: Factoring fee amount for the current invoice, supported only for customer invoice payments
-          format: double
-        FactoringFeeAccountNumber:
-          type: integer
-          description: Factoring account number, supported only for customer invoice payments
-          format: int64
-        BankTransactionId:
-          type: string
-          description: The internal id in the system of the bank transaction corresponding to the payment
-          format: uuid
-          readOnly: true
-      additionalProperties: false
-    SupplierInvoiceOffsetResponseApi:
-      type: object
-      properties:
-        CreditInvoiceId:
-          type: string
-          description: The ID of the credit invoice
-          format: uuid
-        DebitInvoiceId:
-          type: string
-          description: The ID of the debit invoice that was offset
-          format: uuid
-      additionalProperties: false
-      description: Response model for a created offset
-    SupplierInvoiceOffsetCandidateApi:
-      type: object
-      properties:
-        InvoiceId:
-          type: string
-          description: The invoice ID
-          format: uuid
-        InvoiceNumber:
-          type:
-          - string
-          - 'null'
-          description: The invoice number
-        InvoiceDate:
-          type:
-          - string
-          - 'null'
-          description: The invoice date
-          format: date-time
-        SupplierName:
-          type:
-          - string
-          - 'null'
-          description: The supplier name
-        RemainingAmount:
-          type: number
-          description: The remaining amount on the invoice
-          format: double
-        CurrencyCode:
-          type:
-          - string
-          - 'null'
-          description: The currency code
-      additionalProperties: false
-      description: Candidate invoice that can be offset
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
     SupplierInvoiceApi:
       required:
       - InvoiceNumber
@@ -1179,6 +636,108 @@ components:
           readOnly: true
       additionalProperties: false
       description: Represents a supplier invoice in the system
+    InvoicePaymentApi:
+      required:
+      - CompanyBankAccountId
+      - PaymentAmount
+      - PaymentCurrency
+      - PaymentDate
+      - PaymentType
+      type: object
+      properties:
+        CompanyBankAccountId:
+          type: string
+          description: The bank account to which the payment is recorded
+          format: uuid
+        PaymentDate:
+          type: string
+          description: 'Future dates cannot be set. Date format: yyyy-mm-dd. Payment date must be sent in the timezone of the company instead of user''s location timezone.'
+          format: date-time
+        Reference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Payment's reference
+        PaymentAmount:
+          type: number
+          description: 'Amount in invoice currency. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
+          format: double
+        PaymentCurrency:
+          minLength: 1
+          type: string
+          description: Currency code of the payment amount.
+        DomesticPaymentAmount:
+          type: number
+          description: 'Only for non domestic invoices paid with cheque account. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
+          format: double
+        BankFeeAmount:
+          maximum: 1000000000
+          minimum: 0
+          type: number
+          description: Bank fee amount
+          format: double
+        PaymentType:
+          maximum: 4
+          minimum: 1
+          type: integer
+          description: <strong>Possible values:</strong><br/>PartialPayment = 1,<br/>CompletePayment = 2,<br/>Rounding = 3,<br/>BankCharge = 4
+          format: int32
+        FactoringFeeAmount:
+          type: number
+          description: Factoring fee amount for the current invoice, supported only for customer invoice payments
+          format: double
+        FactoringFeeAccountNumber:
+          type: integer
+          description: Factoring account number, supported only for customer invoice payments
+          format: int64
+        BankTransactionId:
+          type: string
+          description: The internal id in the system of the bank transaction corresponding to the payment
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     AttachmentInterpretationApi:
       type: object
       properties:
@@ -1461,6 +1020,172 @@ components:
           format: date-time
       additionalProperties: false
       description: Request model for creating an offset between a credit invoice and debit invoices
+    SupplierInvoiceOffsetCandidateApi:
+      type: object
+      properties:
+        InvoiceId:
+          type: string
+          description: The invoice ID
+          format: uuid
+        InvoiceNumber:
+          type:
+          - string
+          - 'null'
+          description: The invoice number
+        InvoiceDate:
+          type:
+          - string
+          - 'null'
+          description: The invoice date
+          format: date-time
+        SupplierName:
+          type:
+          - string
+          - 'null'
+          description: The supplier name
+        RemainingAmount:
+          type: number
+          description: The remaining amount on the invoice
+          format: double
+        CurrencyCode:
+          type:
+          - string
+          - 'null'
+          description: The currency code
+      additionalProperties: false
+      description: Candidate invoice that can be offset
+    ValidateDocumentResponse:
+      type: object
+      properties:
+        TransactionCostWillBeCharged:
+          type: boolean
+          description: True if the attachment will be charged with transaction costs due to interpretation
+        DisplayFirstTimeCostsInformation:
+          type: boolean
+          description: True the first time the user uses the interpretation service with transaction costs
+        DisplayConsultantBillingInformation:
+          type: boolean
+          description: True if the user is a consultant and the company has not activated AutoInvoice collaboration
+        PricePerDocument:
+          type:
+          - number
+          - 'null'
+          description: Price per document for the interpretation service
+          format: double
+        PriceCurrency:
+          type:
+          - string
+          - 'null'
+          description: Price currency for the interpretation service
+      additionalProperties: false
+    SupplierInvoiceRowApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by the system
+          format: uuid
+          readOnly: true
+        AccountNumber:
+          maximum: 9999999999
+          minimum: 1
+          type: integer
+          description: The account number for this row
+          format: int64
+        AccountName:
+          type:
+          - string
+          - 'null'
+          description: The name of the account
+          readOnly: true
+        VatCodeId:
+          type:
+          - string
+          - 'null'
+          description: VAT code identifier (Denmark and Netherlands only)
+          format: uuid
+        VatAmount:
+          type:
+          - number
+          - 'null'
+          description: VAT amount for this row (Denmark and Netherlands only)
+          format: double
+        ProportionalVatRateValue:
+          type:
+          - integer
+          - 'null'
+          description: Proportional VAT rate value (Norway only)
+          format: int32
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: First cost center item. Get from /v2/costcenters
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: Second cost center item. Get from /v2/costcenters
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: Third cost center item. Get from /v2/costcenters
+          format: uuid
+        Quantity:
+          type:
+          - number
+          - 'null'
+          description: Quantity with max 2 decimals (Dutch companies with agriculture support only)
+          format: double
+        Weight:
+          type:
+          - number
+          - 'null'
+          description: Weight with max 2 decimals (Dutch companies with agriculture support only)
+          format: double
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: Delivery date (Dutch companies with agriculture support only)
+          format: date-time
+        HarvestYear:
+          type:
+          - integer
+          - 'null'
+          description: Harvest year (Dutch companies with agriculture support only)
+          format: int32
+        DebetAmount:
+          type: number
+          description: Debit amount with max 2 decimals
+          format: double
+        CreditAmount:
+          type: number
+          description: Credit amount with max 2 decimals
+          format: double
+        LineNumber:
+          type: integer
+          description: The line number of this row
+          format: int32
+          readOnly: true
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Project identifier. Get from /v2/projects
+          format: uuid
+        TransactionText:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Transaction text used in searchable column in Account Analysis
+      additionalProperties: false
+      description: Represents an accounting row/line in a supplier invoice
     AllocationPeriodRowApi:
       required:
       - DebitCredit
@@ -1506,6 +1231,281 @@ components:
           format: int32
       additionalProperties: false
       description: Row in an allocation period
+    SupplierInvoiceOffsetUndoResponseApi:
+      required:
+      - ReversedVoucherIds
+      type: object
+      properties:
+        ReversedVoucherIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: The IDs of the reversed vouchers
+      additionalProperties: false
+      description: Response model for undo offset
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfSupplierInvoiceApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierInvoiceApi'
+      additionalProperties: false
+    AllocationPeriodApi:
+      required:
+      - Rows
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the allocation period
+          format: uuid
+          readOnly: true
+        SupplierInvoiceDraftId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a supplier invoice draft that may be associated with this allocation period
+          format: uuid
+          readOnly: true
+        SupplierInvoiceDraftRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a supplier invoice draft row that may be associated with this allocation period
+          format: int32
+          readOnly: true
+        SupplierInvoiceId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a supplier invoice that may be associated with this allocation period
+          format: uuid
+          readOnly: true
+        SupplierInvoiceRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a supplier invoice row that may be associated with this allocation period
+          format: int32
+          readOnly: true
+        ManualVoucherId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a possible manual voucher that this allocation period belongs to
+          format: uuid
+          readOnly: true
+        ManualVoucherRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a possible manual voucher row that this allocation period belongs to
+          format: int32
+          readOnly: true
+        CustomerInvoiceId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a possible customer invoice that this allocation period belongs to
+          format: uuid
+          readOnly: true
+        CustomerInvoiceRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a possible customer invoice row that this allocation period belongs to
+          format: int32
+          readOnly: true
+        CustomerInvoiceDraftId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a possible customer invoice draft that this allocation period belongs to
+          format: uuid
+          readOnly: true
+        CustomerInvoiceDraftRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a possible customer invoice draft row that this allocation period belongs to
+          format: int32
+          readOnly: true
+        VoucherFiscalYearId:
+          type:
+          - string
+          - 'null'
+          description: Reference to fiscal year id of the voucher coresponding to the source type, if applicable
+          format: uuid
+          readOnly: true
+        VoucherId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a possible voucher that this allocation period belongs to
+          format: uuid
+          readOnly: true
+        AllocationPeriodSourceType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = SupplierInvoice,<br/>1 = ManualVoucher,<br/>2 = CustomerInvoice,<br/>3 = CustomerInvoiceDraft
+          format: int32
+        Status:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Pending,<br/>1 = Revoked,<br/>2 = Booked,<br/>3 = CancelledNotBooked
+          format: int32
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: Identifier of a cost center item associated with this allocation, if applicable
+          format: uuid
+          readOnly: true
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: Identifier of a cost center item associated with this allocation, if applicable
+          format: uuid
+          readOnly: true
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: Identifier of a cost center item associated with this allocation, if applicable
+          format: uuid
+          readOnly: true
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a project, if applicable
+          format: uuid
+          readOnly: true
+        BookkeepingDate:
+          type: string
+          description: Bookeeping date for this allocation period
+          format: date-time
+        CreatedUtc:
+          type: string
+          description: When the allocation was created
+          format: date-time
+          readOnly: true
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationPeriodRowApi'
+          description: The accounting rows/lines of this alocation
+        DebitAccountNumber:
+          type: integer
+          description: The first debit account number for non VAT accounting rows/lines of this alocation
+          format: int64
+          readOnly: true
+        CreditAccountNumber:
+          type: integer
+          description: The first credit account number for non VAT accounting rows/lines of this alocation
+          format: int64
+          readOnly: true
+        Amount:
+          type: number
+          description: The amount of the first non VAT accounting row/line of this alocation
+          format: double
+          readOnly: true
+        IsCredit:
+          type: boolean
+          description: Indicates whether the associated source invoice is of credit type
+        SourceDate:
+          type:
+          - string
+          - 'null'
+          description: Voucher date or Invoice date if no source voucher
+          format: date-time
+          readOnly: true
+        Description:
+          type:
+          - string
+          - 'null'
+          description: Voucher description or Invoice description if no source voucher
+          readOnly: true
+        NumberAndNumberSeries:
+          type:
+          - string
+          - 'null'
+          description: From source voucher or null if no source voucher
+          readOnly: true
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: Last UTC time the period was changed. If the allocation wasn't changed it takes the value of created UTC
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+      description: Allocation period for distributing costs over time
+    SupplierInvoiceOffsetResponseApi:
+      type: object
+      properties:
+        CreditInvoiceId:
+          type: string
+          description: The ID of the credit invoice
+          format: uuid
+        DebitInvoiceId:
+          type: string
+          description: The ID of the debit invoice that was offset
+          format: uuid
+      additionalProperties: false
+      description: Response model for a created offset
+    TransactionalCostsRequest:
+      required:
+      - InterpretedAttachments
+      - SupplierInvoice
+      type: object
+      properties:
+        SupplierInvoice:
+          $ref: '#/components/schemas/SupplierInvoiceApi'
+        InterpretedAttachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentInterpretationApi'
+          description: The attachment interpretations that are going to be posted with the invoice
+      additionalProperties: false
 x-tagGroups:
 - name: Sales
   tags:

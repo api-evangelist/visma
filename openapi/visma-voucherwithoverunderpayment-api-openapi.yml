@@ -110,58 +110,46 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonPaginationMetadata:
+    AttachmentLinkApi:
       required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
+      - AttachmentIds
+      - DocumentType
       type: object
       properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
+        DocumentId:
           type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
+          description: 'The id from the system of the corresponding linked document. Source: Get from endpoints corresponding to your document type'
+          format: uuid
+        DocumentType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = SupplierInvoice,<br/>2 = Receipt,<br/>3 = Voucher,<br/>4 = SupplierInvoiceDraft,<br/>5 = AllocationPeriod,<br/>6 = Transfer,<br/>8 = BankTransaction,<br/>9 = VoucherDraft
+          format: int32
+        AttachmentIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of guids representing the attachment ids fetched from the system
       additionalProperties: false
-    LedgerVoucherRelationApi:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Amount:
-          type: number
-          description: The remaining amount for this relation
-          format: double
-          readOnly: true
-        CustomerId:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-          description: Customer Id fetch from the system, if this relation is for a customer
+        ErrorId:
+          type: string
           format: uuid
-          readOnly: true
-        SupplierId:
+        Errors:
           type:
-          - string
+          - array
           - 'null'
-          description: Supplier Id fetch from the system, if this relation is for a supplier
-          format: uuid
-          readOnly: true
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     VoucherWithOverunderPaymentRowApi:
       required:
@@ -253,59 +241,6 @@ components:
           description: Supplier Id for this row
           format: uuid
       additionalProperties: false
-    PaginatedResponseOfLedgerVoucherRelationApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/LedgerVoucherRelationApi'
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
     VoucherWithOverunderPaymentApi:
       required:
       - Rows
@@ -331,26 +266,91 @@ components:
         Attachments:
           $ref: '#/components/schemas/AttachmentLinkApi'
       additionalProperties: false
-    AttachmentLinkApi:
+    PaginatedResponseOfLedgerVoucherRelationApi:
       required:
-      - AttachmentIds
-      - DocumentType
+      - Data
+      - Meta
       type: object
       properties:
-        DocumentId:
-          type: string
-          description: 'The id from the system of the corresponding linked document. Source: Get from endpoints corresponding to your document type'
-          format: uuid
-        DocumentType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = SupplierInvoice,<br/>2 = Receipt,<br/>3 = Voucher,<br/>4 = SupplierInvoiceDraft,<br/>5 = AllocationPeriod,<br/>6 = Transfer,<br/>8 = BankTransaction,<br/>9 = VoucherDraft
-          format: int32
-        AttachmentIds:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
           type: array
           items:
-            type: string
-            format: uuid
-          description: List of guids representing the attachment ids fetched from the system
+            $ref: '#/components/schemas/LedgerVoucherRelationApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    LedgerVoucherRelationApi:
+      type: object
+      properties:
+        Amount:
+          type: number
+          description: The remaining amount for this relation
+          format: double
+          readOnly: true
+        CustomerId:
+          type:
+          - string
+          - 'null'
+          description: Customer Id fetch from the system, if this relation is for a customer
+          format: uuid
+          readOnly: true
+        SupplierId:
+          type:
+          - string
+          - 'null'
+          description: Supplier Id fetch from the system, if this relation is for a supplier
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

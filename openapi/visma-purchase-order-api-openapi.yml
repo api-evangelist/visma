@@ -551,48 +551,38 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DtoValueOfNullableOfDateTime:
-      type: object
+    customInt2InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    accountInPurchaseOrderLineDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Account &gt; The expense account used to record the purchased non-stock item that does not require receipt (by default, the account specified for the item in the Combine COGS/expense sub. from field in the Posting classes (IN206000) window).
+    customStr3InPurchaseOrderLineUpdateDto:
       properties:
         value:
           type: string
-          format: date-time
-    DtoValueOfNullableOfGuid:
-      type: object
+      description: A free custom colum of type string with max length 100.
+    customStr5InPurchaseOrderLineUpdateDto:
       properties:
         value:
           type: string
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-    PurchaseOrderAddressUpdateDto:
-      type: object
-      properties:
-        overrideAddress:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        addressLine1:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine2:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine3:
-          $ref: '#/components/schemas/DtoValueOfString'
-        postalCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        city:
-          $ref: '#/components/schemas/DtoValueOfString'
-        countryId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        county:
-          $ref: '#/components/schemas/DtoValueOfString'
-    DtoValueOfNullableOfPOShippingDestinationType:
+      description: A free custom colum of type string with max length 100.
+    DtoValueOfNullableOfBoolean:
       type: object
       properties:
         value:
-          enum:
-          - CompanyLocation
-          - Customer
-          - Vendor
-          - Site
-          type: string
+          type: boolean
     taxCategoryInPurchaseOrderLineDto:
       properties:
         number:
@@ -602,40 +592,225 @@ components:
           type: string
           description: Name of item/description
       description: VAT category &gt; The VAT category assigned to the ordered stock item.
+    ownerInPurchaseOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: The top part &gt; Owner &gt; The employee who is responsible for the purchase order.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    PurchaseOrderLineDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          description: The line number
+          format: int32
+        branch:
+          $ref: '#/components/schemas/branchInPurchaseOrderLineDto'
+        inventory:
+          $ref: '#/components/schemas/inventoryInPurchaseOrderLineDto'
+        lineType:
+          enum:
+          - GoodsForInventory
+          - GoodsForSalesOrder
+          - GoodsForReplenishment
+          - GoodsForDropShip
+          - NonStockForDropShip
+          - NonStockForSalesOrder
+          - NonStock
+          - Service
+          - Freight
+          - Description
+          type: string
+          description: "Line type &gt; \tThe type of the order line, which can be one of the following options: Goods for inventory, Non-stock, Service, Freight, Good for sales order, Non-stock for drop-ship, Drop-ship, Goods for RP, Description."
+        warehouse:
+          $ref: '#/components/schemas/warehouseInPurchaseOrderLineDto'
+        lineDescription:
+          type: string
+          description: A description of the order line, which is copied from the item's description.
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure (UoM) in which the quantity of the item is specified.
+        orderQty:
+          type: number
+          description: Order qty. &gt; The quantity of the item that has been ordered.
+          format: double
+        baseOrderQty:
+          type: number
+          description: Base Order qty. &gt; The base quantity of the item that has been ordered.
+          format: double
+        qtyOnReceipts:
+          type: number
+          description: Qty. on receipts &gt; The quantity of the item that has been received according to all receipts, including the unreleased ones.
+          format: double
+        unitCost:
+          type: number
+          description: Unit cost &gt; The cost per UoM of the stock item.
+          format: double
+        unitCostInBaseCurrency:
+          type: number
+          description: Background calculation connected with the View base/View currency function in the top part. Changes the values in Unit cost, Amount, Disc. unit cost and Cost fields.
+          format: double
+        discountUnitCost:
+          type: number
+          description: Disc. unit cost &gt; The unit cost of the item after the line discount has been applied.
+          format: double
+        extCost:
+          type: number
+          description: Ext. cost &gt; The extended cost of the item, which is the unit cost multiplied by the quantity.
+          format: double
+        discountPercent:
+          type: number
+          description: Discount percent &gt; If the Supplier customer discounts functionality is enabled in the Enable/disable functionalities (CS100000) window, the percent of the discount that has been entered manually or calculated based on the discount amount entered manually for this line item.
+          format: double
+        discountAmount:
+          type: number
+          description: Discount amount &gt; If the Supplier customer discounts functionality is enabled in the Enable/disable functionalities (CS100000) window, the amount of the discount that has been specified manually or calculated based on the discount percent entered manually.
+          format: double
+        manualDiscount:
+          type: boolean
+          description: Manual discount &gt; A check box that indicates (if selected) that the discount has been applied manually.
+        discountCode:
+          $ref: '#/components/schemas/discountCodeInPurchaseOrderLineDto'
+        amount:
+          type: number
+          description: Amount &gt; The amount calculated (after the discount has been taken) for the item.
+          format: double
+        receivedAmt:
+          type: number
+          description: Received amt. &gt; The amount received on this purchase order for this item.
+          format: double
+        alternateId:
+          type: string
+          description: Alternate ID &gt; The alternate ID used for this stock item-subitem pair by the supplier.
+        minReceipt:
+          type: number
+          description: Min. receipt (%) &gt; The minimum quantity of the item, expressed as a percentage of the ordered quantity, that is required for the item to be accepted at the warehouse if the Receipt action is Rejected.
+          format: double
+        maxReceipt:
+          type: number
+          description: Max. receipt (%) &gt; The maximum quantity of the item, expressed as a percentage of the ordered quantity, that is required for the item to be accepted at the warehouse if the Receipt action is Rejected.
+          format: double
+        completeOn:
+          type: number
+          description: Complete on (%) &gt; The minimum percentage of the ordered quantity for the stock item that must be received to complete the purchase order line (gets the default value from the Threshold receipt (%) setting of the supplier in the (AP303000) window).
+          format: double
+        receiptAction:
+          enum:
+          - Reject
+          - AcceptButWarn
+          - Accept
+          type: string
+          description: 'Receipt action &gt; The action that should be perform when the ordered item is received if its quantity is greater than the Max. receipt value or less than the Min. receipt value calculated based on the line''s ordered quantity. Values: Reject, Accept but warn, Accept.'
+        taxCategory:
+          $ref: '#/components/schemas/taxCategoryInPurchaseOrderLineDto'
+        account:
+          $ref: '#/components/schemas/accountInPurchaseOrderLineDto'
+        sub:
+          $ref: '#/components/schemas/subInPurchaseOrderLineDto'
+        project:
+          $ref: '#/components/schemas/projectInPurchaseOrderLineDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInPurchaseOrderLineDto'
+        requested:
+          type: string
+          description: Requested &gt; The date when the item was requested.
+          format: date-time
+        promised:
+          type: string
+          description: Promised &gt; The date when the item's deliver was promised.
+          format: date-time
+        completed:
+          type: boolean
+          description: Completed &gt; A check box that indicates (if selected) that the purchasing of the item requested by this line of the purchase order has been completed.
+        canceled:
+          type: boolean
+          description: Cancelled &gt; A check box that indicates (if selected) that this line of the purchase order has been cancelled.
+        orderType:
+          enum:
+          - RegularOrder
+          - DropShip
+          - Blanket
+          - StandardBlanket
+          type: string
+          description: Order type &gt; The order type this order is related to (for normal orders based on blanket or standard orders).
+        orderNumber:
+          type: string
+          description: "Order no. &gt; \tThe reference number of the blanket or standard order (for normal orders based on blanket or standard orders)."
+        note:
+          type: string
+          description: Table &gt; Icon Notes &gt; Pop-up window for providing any user-defined text connected to the order.
+        customStr1:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr2:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr3:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr4:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr5:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customDec1:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customDec2:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customInt1:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customInt2:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customDateTimeUTC1:
+          type: string
+          description: A free custom colum of type DateTime - in UTC timezone
+          format: date-time
+      description: This class represents a Purchase Order Line in PurchaseOrderController. Used for getting data.
     customDec2InPurchaseOrderLineUpdateDto:
       properties:
         value:
           type: number
           format: double
       description: A free custom colum of type decimal with max 4 decimals.
-    glnInPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field if Supplier or VatRegistrationId is not specified.
-    CreatePurchaseReceiptActionDto:
-      required:
-      - orderType
-      type: object
-      properties:
-        orderType:
-          type: string
-          description: Mandatory field
-    inventoryInPurchaseOrderLineDto:
+    branchInPurchaseOrderLineDto:
       properties:
         number:
           type: string
-          description: Number of item
-        description:
+          description: Click the magnifier. &gt; The identifier.
+        name:
           type: string
-          description: Name of item/description
-      description: Item ID &gt; The ID of the item.
-    customDec1InPurchaseOrderUpdateDto:
+          description: Click the magnifier. &gt; The name.
+      description: Branch &gt; The branch associated with the purchase order.
+    supplierInPurchaseOrderUpdateDto:
       properties:
         value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
+          type: string
+      description: Mandatory field if GLN or VatRegistrationId is not specified.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
     SegmentDto:
       type: object
       properties:
@@ -652,44 +827,67 @@ components:
         segmentValueDescription:
           type: string
           description: The Segment values window &gt; The table &gt; The description of the segment value.
-    customStr1InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    DtoValueOfNullableOfPoLineType:
+    DtoValueOfNullableOfInt32:
       type: object
-      properties:
-        value:
-          enum:
-          - GoodsForInventory
-          - GoodsForSalesOrder
-          - GoodsForReplenishment
-          - GoodsForDropShip
-          - NonStockForDropShip
-          - NonStockForSalesOrder
-          - NonStock
-          - Service
-          - Freight
-          - Description
-          type: string
-    customStr3InPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customStr5InPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customInt2InPurchaseOrderUpdateDto:
       properties:
         value:
           type: integer
           format: int32
-      description: A free custom colum of type int
-    projectTaskInPurchaseOrderLineDto:
+    supplierInPurchaseOrderDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: The top part &gt; Supplier* &gt; The supplier from which the items will be purchased.'
+    warehouseInPurchaseOrderLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Warehouse &gt; The warehouse to receive the item listed on the order.
+    remitAddressInPurchaseOrderDto:
+      properties:
+        overrideAddress:
+          type: boolean
+          description: The Supplier info tab &gt; The Supplier address section &gt; Override &gt; A check box that you select to override (that is, to edit ) the default shipping address for the supplier.
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInPurchaseOrderAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInPurchaseOrderAddressDto'
+      description: Supplier info tab &gt; The Supplier address section &gt; The default contact setting for the supplier.
+    customStr4InPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    projectInPurchaseOrderLineDto:
       properties:
         internalId:
           type: integer
@@ -701,13 +899,8 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The project task with which this purchase order is associated.
-    vatRegistrationIdInPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field if Supplier or GLN is not specified.
-    discountCodeInPurchaseOrderLineDto:
+      description: Project &gt; The project with which this purchase order line is associated.
+    vatIdInTaxDetailDto:
       properties:
         number:
           type: string
@@ -715,33 +908,47 @@ components:
         description:
           type: string
           description: Name of item/description
-      description: Discount code &gt; The code of the line discount that has been applied to this line automatically.
-    customDec2InPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    accountInPurchaseOrderLineDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Account &gt; The expense account used to record the purchased non-stock item that does not require receipt (by default, the account specified for the item in the Combine COGS/expense sub. from field in the Posting classes (IN206000) window).
-    TaxCategoryNumberDescriptionDto:
+      description: VAT ID &gt; The ID of the specific VAT applied.
+    BackgroundApiAcceptedDto:
       type: object
       properties:
-        number:
+        id:
           type: string
-          description: Number of item
+        stateLocation:
+          type: string
+    subInPurchaseOrderLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
         description:
           type: string
-          description: Name of item/description
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Sub. ID &gt; The subaccount used to record the purchased non-stock item that does not require receipt (by default, the subaccount generated in accordance with the rule defined in the Combine COGS/expense sub. from field in the Posting classes (IN206000) window).
     TaxDetailDto:
       type: object
       properties:
@@ -771,25 +978,409 @@ components:
           description: Expense Amount for the VAT type that has been added.
           format: double
       description: This class represents a VAT Detail Line. Used for getting data.
-    DtoValueOfNullableOfBoolean:
+    PurchaseReceiptsDto:
+      type: object
+      properties:
+        type:
+          enum:
+          - PoReceipt
+          - PoReturn
+          - TransferReceipt
+          type: string
+          description: The top part &gt; Type &gt; The type of the document, which can be Receipt, Return, or Transfer receipt.
+        receiptNumber:
+          type: string
+          description: The top part &gt; Receipt no. &gt; The unique reference number of the purchase receipt, transfer receipt, or return, which the system automatically assigns according to its number series.
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          - Cancelled
+          type: string
+          description: The top part &gt; Status &gt; The current status of the purchase or transfer receipt, or return, which the system assigns automatically.
+        supplierName:
+          type: string
+          description: The top part &gt; Supplier &gt; The supplier from which the items have been received or to which they will be returned.
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency the supplier uses for invoicing.
+        totalQty:
+          type: number
+          description: The top part &gt; Total qty. &gt; The total quantity of items received from or returned to the supplier; the sum of all quantities of all stock items listed on the Document details tab.
+          format: double
+        totalAmt:
+          type: number
+          description: The top part &gt; Total amt. &gt; The total amount calculated for items received from or returned to the supplier; the sum of all amounts of all stock items listed on the Document details tab.
+          format: double
+    customDec1InPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    PurchaseOrderLineUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        branch:
+          $ref: '#/components/schemas/DtoValueOfString'
+        inventory:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lineType:
+          $ref: '#/components/schemas/DtoValueOfNullableOfPoLineType'
+        warehouse:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lineDescription:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        orderQty:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        unitCost:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        extCost:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountPercent:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        manualDiscount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        discountCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        alternateId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        minReceipt:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        maxReceipt:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        completeOn:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        receiptAction:
+          $ref: '#/components/schemas/DtoValueOfNullableOfPurchaseOrderReceiptAction'
+        taxCategory:
+          $ref: '#/components/schemas/DtoValueOfString'
+        account:
+          $ref: '#/components/schemas/DtoValueOfString'
+        sub:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        project:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectTask:
+          $ref: '#/components/schemas/DtoValueOfString'
+        requested:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        promised:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customStr1:
+          $ref: '#/components/schemas/customStr1InPurchaseOrderLineUpdateDto'
+        customStr2:
+          $ref: '#/components/schemas/customStr2InPurchaseOrderLineUpdateDto'
+        customStr3:
+          $ref: '#/components/schemas/customStr3InPurchaseOrderLineUpdateDto'
+        customStr4:
+          $ref: '#/components/schemas/customStr4InPurchaseOrderLineUpdateDto'
+        customStr5:
+          $ref: '#/components/schemas/customStr5InPurchaseOrderLineUpdateDto'
+        customDec1:
+          $ref: '#/components/schemas/customDec1InPurchaseOrderLineUpdateDto'
+        customDec2:
+          $ref: '#/components/schemas/customDec2InPurchaseOrderLineUpdateDto'
+        customInt1:
+          $ref: '#/components/schemas/customInt1InPurchaseOrderLineUpdateDto'
+        customInt2:
+          $ref: '#/components/schemas/customInt2InPurchaseOrderLineUpdateDto'
+        customDateTimeUTC1:
+          $ref: '#/components/schemas/customDateTimeUTC1InPurchaseOrderLineUpdateDto'
+        completed:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+      description: This class represent a Purchase Order Line in Purchase Order Controller. Used to pass data to server for creating or updating an order line
+    shippingAddressInPurchaseOrderDto:
+      properties:
+        overrideAddress:
+          type: boolean
+          description: The Supplier info tab &gt; The Supplier address section &gt; Override &gt; A check box that you select to override (that is, to edit ) the default shipping address for the supplier.
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInPurchaseOrderAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInPurchaseOrderAddressDto'
+      description: Supplier info tab &gt; The Supplier address section &gt; The default shipping address for the supplier.
+    DtoValueOfNullableOfPOShippingDestinationType:
       type: object
       properties:
         value:
-          type: boolean
+          enum:
+          - CompanyLocation
+          - Customer
+          - Vendor
+          - Site
+          type: string
+    DtoValueOfNullableOfPoLineType:
+      type: object
+      properties:
+        value:
+          enum:
+          - GoodsForInventory
+          - GoodsForSalesOrder
+          - GoodsForReplenishment
+          - GoodsForDropShip
+          - NonStockForDropShip
+          - NonStockForSalesOrder
+          - NonStock
+          - Service
+          - Freight
+          - Description
+          type: string
+    customDec1InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    DtoValueOfNullableOfGuid:
+      type: object
+      properties:
+        value:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
     DtoValueOfPurchaseOrderAddressUpdateDto:
       type: object
       properties:
         value:
           $ref: '#/components/schemas/PurchaseOrderAddressUpdateDto'
-    warehouseInPurchaseOrderDto:
+    customInt2InPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    branchInPurchaseOrderDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Document details tab &gt; Branch &gt; The branch to receive the item.
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    customStr1InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    customStr3InPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    countryInPurchaseOrderAddressDto:
       properties:
         id:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    PurchaseOrderContactUpdateDto:
+      type: object
+      properties:
+        overrideContact:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        attention:
+          $ref: '#/components/schemas/DtoValueOfString'
+        email:
+          $ref: '#/components/schemas/DtoValueOfString'
+        web:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        fax:
+          $ref: '#/components/schemas/DtoValueOfString'
+    vatRegistrationIdInPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field if Supplier or GLN is not specified.
+    remitContactInPurchaseOrderDto:
+      properties:
+        overrideContact:
+          type: boolean
+          description: The Supplier information tab &gt; The Supplier contact section &gt; Override &gt; A check box that you select to override (edit) the default contact settings for the supplier.
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: Supplier info tab &gt; The Supplier contact section &gt; The default contact settings for the supplier.
+    customDec2InPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    customInt1InPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    customInt1InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    customStr2InPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    locationInPurchaseOrderDto:
+      properties:
+        id:
+          type: integer
+          description: Click the magnifier &gt; The identifier
+          format: int32
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; Click the magnifier. The supplier location from which the items will be received.'
+    supplierVatZoneInPurchaseOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
         description:
           type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Document details tab &gt; Warehouse &gt; The warehouse to receive the item listed on the order.
+          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultVatCategory:
+          type: string
+          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultTaxCategory:
+          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Supplier info tab &gt; The Info section &gt; Supplier VAT zone &gt; The VAT zone of the supplier's location.
+    shipToInPurchaseOrderDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: Shipping instructions tab &gt; The Delivery address section &gt; Ship to &gt; The particular destination of the selected type.
+    customStr4InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    DtoValueOfPurchaseOrderContactUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/PurchaseOrderContactUpdateDto'
+    shippingLocationInPurchaseOrderDto:
+      properties:
+        id:
+          type: integer
+          description: Click the magnifier &gt; The identifier
+          format: int32
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The Shipping instructions tab &gt; The Delivery address section &gt; Shipping location* &gt; The location from which the order is to be shipped.'
+    PurchaseOrderAddressUpdateDto:
+      type: object
+      properties:
+        overrideAddress:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        addressLine1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postalCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        city:
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        county:
+          $ref: '#/components/schemas/DtoValueOfString'
     PurchaseOrderDto:
       type: object
       properties:
@@ -1029,348 +1620,141 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a Purchase Order in PurchaseOrderController. Used for getting data.
-    DtoValueOfNullableOfPurchaseOrderType:
-      type: object
+    customDateTimeUTC1InPurchaseOrderLineUpdateDto:
       properties:
         value:
-          enum:
-          - RegularOrder
-          - DropShip
-          - Blanket
-          - StandardBlanket
           type: string
-    shippingLocationInPurchaseOrderDto:
-      properties:
-        id:
-          type: integer
-          description: Click the magnifier &gt; The identifier
-          format: int32
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: The Shipping instructions tab &gt; The Delivery address section &gt; Shipping location* &gt; The location from which the order is to be shipped.'
-    PurchaseOrderLineDto:
-      type: object
-      properties:
-        lineNbr:
-          type: integer
-          description: The line number
-          format: int32
-        branch:
-          $ref: '#/components/schemas/branchInPurchaseOrderLineDto'
-        inventory:
-          $ref: '#/components/schemas/inventoryInPurchaseOrderLineDto'
-        lineType:
-          enum:
-          - GoodsForInventory
-          - GoodsForSalesOrder
-          - GoodsForReplenishment
-          - GoodsForDropShip
-          - NonStockForDropShip
-          - NonStockForSalesOrder
-          - NonStock
-          - Service
-          - Freight
-          - Description
-          type: string
-          description: "Line type &gt; \tThe type of the order line, which can be one of the following options: Goods for inventory, Non-stock, Service, Freight, Good for sales order, Non-stock for drop-ship, Drop-ship, Goods for RP, Description."
-        warehouse:
-          $ref: '#/components/schemas/warehouseInPurchaseOrderLineDto'
-        lineDescription:
-          type: string
-          description: A description of the order line, which is copied from the item's description.
-        uom:
-          type: string
-          description: UoM &gt; The unit of measure (UoM) in which the quantity of the item is specified.
-        orderQty:
-          type: number
-          description: Order qty. &gt; The quantity of the item that has been ordered.
-          format: double
-        baseOrderQty:
-          type: number
-          description: Base Order qty. &gt; The base quantity of the item that has been ordered.
-          format: double
-        qtyOnReceipts:
-          type: number
-          description: Qty. on receipts &gt; The quantity of the item that has been received according to all receipts, including the unreleased ones.
-          format: double
-        unitCost:
-          type: number
-          description: Unit cost &gt; The cost per UoM of the stock item.
-          format: double
-        unitCostInBaseCurrency:
-          type: number
-          description: Background calculation connected with the View base/View currency function in the top part. Changes the values in Unit cost, Amount, Disc. unit cost and Cost fields.
-          format: double
-        discountUnitCost:
-          type: number
-          description: Disc. unit cost &gt; The unit cost of the item after the line discount has been applied.
-          format: double
-        extCost:
-          type: number
-          description: Ext. cost &gt; The extended cost of the item, which is the unit cost multiplied by the quantity.
-          format: double
-        discountPercent:
-          type: number
-          description: Discount percent &gt; If the Supplier customer discounts functionality is enabled in the Enable/disable functionalities (CS100000) window, the percent of the discount that has been entered manually or calculated based on the discount amount entered manually for this line item.
-          format: double
-        discountAmount:
-          type: number
-          description: Discount amount &gt; If the Supplier customer discounts functionality is enabled in the Enable/disable functionalities (CS100000) window, the amount of the discount that has been specified manually or calculated based on the discount percent entered manually.
-          format: double
-        manualDiscount:
-          type: boolean
-          description: Manual discount &gt; A check box that indicates (if selected) that the discount has been applied manually.
-        discountCode:
-          $ref: '#/components/schemas/discountCodeInPurchaseOrderLineDto'
-        amount:
-          type: number
-          description: Amount &gt; The amount calculated (after the discount has been taken) for the item.
-          format: double
-        receivedAmt:
-          type: number
-          description: Received amt. &gt; The amount received on this purchase order for this item.
-          format: double
-        alternateId:
-          type: string
-          description: Alternate ID &gt; The alternate ID used for this stock item-subitem pair by the supplier.
-        minReceipt:
-          type: number
-          description: Min. receipt (%) &gt; The minimum quantity of the item, expressed as a percentage of the ordered quantity, that is required for the item to be accepted at the warehouse if the Receipt action is Rejected.
-          format: double
-        maxReceipt:
-          type: number
-          description: Max. receipt (%) &gt; The maximum quantity of the item, expressed as a percentage of the ordered quantity, that is required for the item to be accepted at the warehouse if the Receipt action is Rejected.
-          format: double
-        completeOn:
-          type: number
-          description: Complete on (%) &gt; The minimum percentage of the ordered quantity for the stock item that must be received to complete the purchase order line (gets the default value from the Threshold receipt (%) setting of the supplier in the (AP303000) window).
-          format: double
-        receiptAction:
-          enum:
-          - Reject
-          - AcceptButWarn
-          - Accept
-          type: string
-          description: 'Receipt action &gt; The action that should be perform when the ordered item is received if its quantity is greater than the Max. receipt value or less than the Min. receipt value calculated based on the line''s ordered quantity. Values: Reject, Accept but warn, Accept.'
-        taxCategory:
-          $ref: '#/components/schemas/taxCategoryInPurchaseOrderLineDto'
-        account:
-          $ref: '#/components/schemas/accountInPurchaseOrderLineDto'
-        sub:
-          $ref: '#/components/schemas/subInPurchaseOrderLineDto'
-        project:
-          $ref: '#/components/schemas/projectInPurchaseOrderLineDto'
-        projectTask:
-          $ref: '#/components/schemas/projectTaskInPurchaseOrderLineDto'
-        requested:
-          type: string
-          description: Requested &gt; The date when the item was requested.
           format: date-time
-        promised:
-          type: string
-          description: Promised &gt; The date when the item's deliver was promised.
-          format: date-time
-        completed:
-          type: boolean
-          description: Completed &gt; A check box that indicates (if selected) that the purchasing of the item requested by this line of the purchase order has been completed.
-        canceled:
-          type: boolean
-          description: Cancelled &gt; A check box that indicates (if selected) that this line of the purchase order has been cancelled.
-        orderType:
-          enum:
-          - RegularOrder
-          - DropShip
-          - Blanket
-          - StandardBlanket
-          type: string
-          description: Order type &gt; The order type this order is related to (for normal orders based on blanket or standard orders).
-        orderNumber:
-          type: string
-          description: "Order no. &gt; \tThe reference number of the blanket or standard order (for normal orders based on blanket or standard orders)."
-        note:
-          type: string
-          description: Table &gt; Icon Notes &gt; Pop-up window for providing any user-defined text connected to the order.
-        customStr1:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr2:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr3:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr4:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr5:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customDec1:
-          type: number
-          description: A free custom colum of type decimal with max 4 decimals.
-          format: double
-        customDec2:
-          type: number
-          description: A free custom colum of type decimal with max 4 decimals.
-          format: double
-        customInt1:
-          type: integer
-          description: A free custom colum of type int
-          format: int32
-        customInt2:
-          type: integer
-          description: A free custom colum of type int
-          format: int32
-        customDateTimeUTC1:
-          type: string
-          description: A free custom colum of type DateTime - in UTC timezone
-          format: date-time
-      description: This class represents a Purchase Order Line in PurchaseOrderController. Used for getting data.
-    warehouseInPurchaseOrderLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Warehouse &gt; The warehouse to receive the item listed on the order.
-    PurchaseOrderContactUpdateDto:
-      type: object
-      properties:
-        overrideContact:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        name:
-          $ref: '#/components/schemas/DtoValueOfString'
-        attention:
-          $ref: '#/components/schemas/DtoValueOfString'
-        email:
-          $ref: '#/components/schemas/DtoValueOfString'
-        web:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone1:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone2:
-          $ref: '#/components/schemas/DtoValueOfString'
-        fax:
-          $ref: '#/components/schemas/DtoValueOfString'
-    PurchaseOrderLineUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        branch:
-          $ref: '#/components/schemas/DtoValueOfString'
-        inventory:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lineType:
-          $ref: '#/components/schemas/DtoValueOfNullableOfPoLineType'
-        warehouse:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lineDescription:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        orderQty:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        unitCost:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        extCost:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        discountAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        discountPercent:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        manualDiscount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        discountCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        amount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        alternateId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        minReceipt:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        maxReceipt:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        completeOn:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        receiptAction:
-          $ref: '#/components/schemas/DtoValueOfNullableOfPurchaseOrderReceiptAction'
-        taxCategory:
-          $ref: '#/components/schemas/DtoValueOfString'
-        account:
-          $ref: '#/components/schemas/DtoValueOfString'
-        sub:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-        project:
-          $ref: '#/components/schemas/DtoValueOfString'
-        projectTask:
-          $ref: '#/components/schemas/DtoValueOfString'
-        requested:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        promised:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        customStr1:
-          $ref: '#/components/schemas/customStr1InPurchaseOrderLineUpdateDto'
-        customStr2:
-          $ref: '#/components/schemas/customStr2InPurchaseOrderLineUpdateDto'
-        customStr3:
-          $ref: '#/components/schemas/customStr3InPurchaseOrderLineUpdateDto'
-        customStr4:
-          $ref: '#/components/schemas/customStr4InPurchaseOrderLineUpdateDto'
-        customStr5:
-          $ref: '#/components/schemas/customStr5InPurchaseOrderLineUpdateDto'
-        customDec1:
-          $ref: '#/components/schemas/customDec1InPurchaseOrderLineUpdateDto'
-        customDec2:
-          $ref: '#/components/schemas/customDec2InPurchaseOrderLineUpdateDto'
-        customInt1:
-          $ref: '#/components/schemas/customInt1InPurchaseOrderLineUpdateDto'
-        customInt2:
-          $ref: '#/components/schemas/customInt2InPurchaseOrderLineUpdateDto'
-        customDateTimeUTC1:
-          $ref: '#/components/schemas/customDateTimeUTC1InPurchaseOrderLineUpdateDto'
-        completed:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-      description: This class represent a Purchase Order Line in Purchase Order Controller. Used to pass data to server for creating or updating an order line
-    supplierInPurchaseOrderDto:
-      properties:
-        internalId:
-          type: integer
-          format: int32
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: 'Mandatory field: The top part &gt; Supplier* &gt; The supplier from which the items will be purchased.'
-    termsInPurchaseOrderDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The Supplier info tab &gt; The Info section &gt; Terms* &gt; The specific credit terms to be used for the purchase order.'
-    customStr2InPurchaseOrderUpdateDto:
+      description: A free custom colum of type DateTime - in UTC timezone
+    customStr2InPurchaseOrderLineUpdateDto:
       properties:
         value:
           type: string
       description: A free custom colum of type string with max length 100.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    TaxCategoryNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    warehouseInPurchaseOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Document details tab &gt; Warehouse &gt; The warehouse to receive the item listed on the order.
+    DiscountDetailDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          description: The table &gt; Line number.
+          format: int32
+        skipDiscount:
+          type: boolean
+          description: The table &gt; Skip discount &gt; A check box that you select to cancel a Group or Document level discount for the document.
+        discountCode:
+          type: string
+          description: 'Mandatory field: The table &gt; Discount code* &gt; The discount code of the supplier discount applied to the document automatically or manually.'
+        sequanceID:
+          type: string
+          description: 'Mandatory field: The table &gt; Series ID* &gt; The ID of the discount sequence applied to the document.'
+        type:
+          enum:
+          - Line
+          - Group
+          - Document
+          - Flat
+          type: string
+          description: The table &gt; Type &gt; The type of discount applied to the document (Group or Document).
+        manualDiscount:
+          type: boolean
+          description: The table &gt; Manual discount &gt; A check box that indicates (if selected) that the supplier discount shown in this row has been applied manually .
+        discountableAmt:
+          type: number
+          description: The table &gt; Discountable amt. &gt; The amount used as a base for discount calculation if the discount is defined as based on the amount.
+          format: double
+        discountableQty:
+          type: number
+          description: The table &gt; Discountable qty. &gt; The quantity used as a base for discount calculation if the discount is defined as based on the item quantity.
+          format: double
+        discountAmt:
+          type: number
+          description: The table &gt; Discount amt. &gt; The amount of the discount.
+          format: double
+        discount:
+          type: number
+          description: The table &gt; Discount percent &gt; The discount percent if by definition the discount is calculated as a percentage.
+          format: double
+        freeItem:
+          type: integer
+          description: The table &gt; Free item &gt; The item ID of the free item, if one is specified by the discount applied to the document.
+          format: int32
+        freeItemQty:
+          type: number
+          description: The table &gt; Free item qty.&gt; The quantity of the free item to be added as the discount.
+          format: double
+    customStr1InPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    customStr5InPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    CreatePurchaseReceiptActionDto:
+      required:
+      - orderType
+      type: object
+      properties:
+        orderType:
+          type: string
+          description: Mandatory field
+    countyInPurchaseOrderAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    glnInPurchaseOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field if Supplier or VatRegistrationId is not specified.
     PurchaseOrderUpdateDto:
       type: object
       properties:
@@ -1472,351 +1856,6 @@ components:
           type: string
           format: byte
       description: This class represent a Purchase Order in Purchase Order Controller. Used to pass data to server for creating or updating an order
-    locationInPurchaseOrderDto:
-      properties:
-        id:
-          type: integer
-          description: Click the magnifier &gt; The identifier
-          format: int32
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: The top part &gt; Location* &gt; Click the magnifier. The supplier location from which the items will be received.'
-    customStr5InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customInt2InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    DtoValueOfNullableOfPurchaseOrderReceiptAction:
-      type: object
-      properties:
-        value:
-          enum:
-          - Reject
-          - AcceptButWarn
-          - Accept
-          type: string
-    branchInPurchaseOrderLineDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Branch &gt; The branch associated with the purchase order.
-    customStr2InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    DtoValueOfPurchaseOrderContactUpdateDto:
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/PurchaseOrderContactUpdateDto'
-    ownerInPurchaseOrderDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: The top part &gt; Owner &gt; The employee who is responsible for the purchase order.
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    DiscountDetailDto:
-      type: object
-      properties:
-        lineNbr:
-          type: integer
-          description: The table &gt; Line number.
-          format: int32
-        skipDiscount:
-          type: boolean
-          description: The table &gt; Skip discount &gt; A check box that you select to cancel a Group or Document level discount for the document.
-        discountCode:
-          type: string
-          description: 'Mandatory field: The table &gt; Discount code* &gt; The discount code of the supplier discount applied to the document automatically or manually.'
-        sequanceID:
-          type: string
-          description: 'Mandatory field: The table &gt; Series ID* &gt; The ID of the discount sequence applied to the document.'
-        type:
-          enum:
-          - Line
-          - Group
-          - Document
-          - Flat
-          type: string
-          description: The table &gt; Type &gt; The type of discount applied to the document (Group or Document).
-        manualDiscount:
-          type: boolean
-          description: The table &gt; Manual discount &gt; A check box that indicates (if selected) that the supplier discount shown in this row has been applied manually .
-        discountableAmt:
-          type: number
-          description: The table &gt; Discountable amt. &gt; The amount used as a base for discount calculation if the discount is defined as based on the amount.
-          format: double
-        discountableQty:
-          type: number
-          description: The table &gt; Discountable qty. &gt; The quantity used as a base for discount calculation if the discount is defined as based on the item quantity.
-          format: double
-        discountAmt:
-          type: number
-          description: The table &gt; Discount amt. &gt; The amount of the discount.
-          format: double
-        discount:
-          type: number
-          description: The table &gt; Discount percent &gt; The discount percent if by definition the discount is calculated as a percentage.
-          format: double
-        freeItem:
-          type: integer
-          description: The table &gt; Free item &gt; The item ID of the free item, if one is specified by the discount applied to the document.
-          format: int32
-        freeItemQty:
-          type: number
-          description: The table &gt; Free item qty.&gt; The quantity of the free item to be added as the discount.
-          format: double
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    projectInPurchaseOrderLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project &gt; The project with which this purchase order line is associated.
-    customDateTimeUTC1InPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: A free custom colum of type DateTime - in UTC timezone
-    customInt1InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    supplierInPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field if GLN or VatRegistrationId is not specified.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    customStr1InPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    remitAddressInPurchaseOrderDto:
-      properties:
-        overrideAddress:
-          type: boolean
-          description: The Supplier info tab &gt; The Supplier address section &gt; Override &gt; A check box that you select to override (that is, to edit ) the default shipping address for the supplier.
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInPurchaseOrderAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInPurchaseOrderAddressDto'
-      description: Supplier info tab &gt; The Supplier address section &gt; The default contact setting for the supplier.
-    vatIdInTaxDetailDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: VAT ID &gt; The ID of the specific VAT applied.
-    shipToInPurchaseOrderDto:
-      properties:
-        internalId:
-          type: integer
-          format: int32
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: Shipping instructions tab &gt; The Delivery address section &gt; Ship to &gt; The particular destination of the selected type.
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    branchInPurchaseOrderDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Document details tab &gt; Branch &gt; The branch to receive the item.
-    DiscountDetailUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        skipDiscount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        discountCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        sequanceID:
-          $ref: '#/components/schemas/DtoValueOfString'
-      description: This class represent a Discount Detail for Purchase Order in Purchase Order Controller. Used to pass data to server for creating or updating an order
-    subInPurchaseOrderLineDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Sub. ID &gt; The subaccount used to record the purchased non-stock item that does not require receipt (by default, the subaccount generated in accordance with the rule defined in the Combine COGS/expense sub. from field in the Posting classes (IN206000) window).
-    customInt1InPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    supplierVatZoneInPurchaseOrderDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        description:
-          type: string
-          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultVatCategory:
-          type: string
-          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultTaxCategory:
-          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Supplier info tab &gt; The Info section &gt; Supplier VAT zone &gt; The VAT zone of the supplier's location.
-    PurchaseReceiptsDto:
-      type: object
-      properties:
-        type:
-          enum:
-          - PoReceipt
-          - PoReturn
-          - TransferReceipt
-          type: string
-          description: The top part &gt; Type &gt; The type of the document, which can be Receipt, Return, or Transfer receipt.
-        receiptNumber:
-          type: string
-          description: The top part &gt; Receipt no. &gt; The unique reference number of the purchase receipt, transfer receipt, or return, which the system automatically assigns according to its number series.
-        status:
-          enum:
-          - Hold
-          - Balanced
-          - Released
-          - Cancelled
-          type: string
-          description: The top part &gt; Status &gt; The current status of the purchase or transfer receipt, or return, which the system assigns automatically.
-        supplierName:
-          type: string
-          description: The top part &gt; Supplier &gt; The supplier from which the items have been received or to which they will be returned.
-        currency:
-          type: string
-          description: The top part &gt; Currency &gt; The currency the supplier uses for invoicing.
-        totalQty:
-          type: number
-          description: The top part &gt; Total qty. &gt; The total quantity of items received from or returned to the supplier; the sum of all quantities of all stock items listed on the Document details tab.
-          format: double
-        totalAmt:
-          type: number
-          description: The top part &gt; Total amt. &gt; The total amount calculated for items received from or returned to the supplier; the sum of all amounts of all stock items listed on the Document details tab.
-          format: double
-    customStr4InPurchaseOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
     shippingContactInPurchaseOrderDto:
       properties:
         overrideContact:
@@ -1847,128 +1886,89 @@ components:
           type: string
           description: Fax &gt; The fax number.
       description: Supplier information tab &gt; The Supplier contact section &gt; The supplier contact for matters related to this purchase order.
-    MetadataDto:
+    termsInPurchaseOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The Supplier info tab &gt; The Info section &gt; Terms* &gt; The specific credit terms to be used for the purchase order.'
+    discountCodeInPurchaseOrderLineDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Discount code &gt; The code of the line discount that has been applied to this line automatically.
+    projectTaskInPurchaseOrderLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The project task with which this purchase order is associated.
+    DtoValueOfNullableOfPurchaseOrderReceiptAction:
       type: object
       properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    customDateTimeUTC1InPurchaseOrderLineUpdateDto:
+        value:
+          enum:
+          - Reject
+          - AcceptButWarn
+          - Accept
+          type: string
+    customDateTimeUTC1InPurchaseOrderUpdateDto:
       properties:
         value:
           type: string
           format: date-time
       description: A free custom colum of type DateTime - in UTC timezone
-    remitContactInPurchaseOrderDto:
+    DiscountDetailUpdateDto:
+      type: object
       properties:
-        overrideContact:
-          type: boolean
-          description: The Supplier information tab &gt; The Supplier contact section &gt; Override &gt; A check box that you select to override (edit) the default contact settings for the supplier.
-        contactId:
-          type: integer
-          format: int32
-        name:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
-          description: Name &gt; The legal name of to appear on the documents.
-        attention:
-          type: string
-          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
-        email:
-          type: string
-          description: Email &gt; The email address of the customer/supplier/company as a business entity.
-        web:
-          type: string
-          description: Web &gt; The website of the company, if one exists.
-        phone1:
-          type: string
-          description: Phone 1 &gt; The default phone number.
-        phone2:
-          type: string
-          description: Phone 2 &gt; An additional phone number.
-        fax:
-          type: string
-          description: Fax &gt; The fax number.
-      description: Supplier info tab &gt; The Supplier contact section &gt; The default contact settings for the supplier.
-    shippingAddressInPurchaseOrderDto:
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        skipDiscount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        discountCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        sequanceID:
+          $ref: '#/components/schemas/DtoValueOfString'
+      description: This class represent a Discount Detail for Purchase Order in Purchase Order Controller. Used to pass data to server for creating or updating an order
+    inventoryInPurchaseOrderLineDto:
       properties:
-        overrideAddress:
-          type: boolean
-          description: The Supplier info tab &gt; The Supplier address section &gt; Override &gt; A check box that you select to override (that is, to edit ) the default shipping address for the supplier.
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
+        number:
           type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
+          description: Number of item
+        description:
           type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInPurchaseOrderAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInPurchaseOrderAddressDto'
-      description: Supplier info tab &gt; The Supplier address section &gt; The default shipping address for the supplier.
-    DtoValueOfString:
+          description: Name of item/description
+      description: Item ID &gt; The ID of the item.
+    DtoValueOfNullableOfPurchaseOrderType:
       type: object
       properties:
         value:
+          enum:
+          - RegularOrder
+          - DropShip
+          - Blanket
+          - StandardBlanket
           type: string
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    countryInPurchaseOrderAddressDto:
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
-          type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    countyInPurchaseOrderAddressDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
-    customDec1InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    customStr4InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customStr3InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
   securitySchemes:
     interactiveapi:
       type: oauth2

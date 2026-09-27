@@ -123,6 +123,71 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CostCenterApi:
+      required:
+      - Name
+      type: object
+      properties:
+        Name:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: The name of the cost center. Maximum 20 characters.
+        Number:
+          type: integer
+          description: The unique number assigned to the cost center by eAccounting (read-only).
+          format: int32
+          readOnly: true
+        IsActive:
+          type: boolean
+          description: Indicates whether the cost center is active or inactive.
+        Items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CostCenterItemApi'
+          description: Collection of cost center items associated with this cost center.
+          readOnly: true
+        Id:
+          type: string
+          description: The unique identifier assigned by eAccounting (read-only).
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+    PaginatedResponseOfCostCenterApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CostCenterApi'
+      additionalProperties: false
     CostCenterItemApi:
       required:
       - CostCenterId
@@ -210,71 +275,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    CostCenterApi:
-      required:
-      - Name
-      type: object
-      properties:
-        Name:
-          maxLength: 20
-          minLength: 0
-          type: string
-          description: The name of the cost center. Maximum 20 characters.
-        Number:
-          type: integer
-          description: The unique number assigned to the cost center by eAccounting (read-only).
-          format: int32
-          readOnly: true
-        IsActive:
-          type: boolean
-          description: Indicates whether the cost center is active or inactive.
-        Items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CostCenterItemApi'
-          description: Collection of cost center items associated with this cost center.
-          readOnly: true
-        Id:
-          type: string
-          description: The unique identifier assigned by eAccounting (read-only).
-          format: uuid
-          readOnly: true
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    PaginatedResponseOfCostCenterApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CostCenterApi'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

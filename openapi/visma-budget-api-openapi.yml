@@ -309,85 +309,12 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    subaccountInBudgetDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The budget area &gt; The budget articles pane &gt; Subaccount* &gt; The subaccount of the budget article if the article is a leaf on the budget tree.'
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    branchNumberInBudgetDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The Top part &gt; Branch &gt; Click the magnifier
-    FinancialPeriodAmountDto:
-      type: object
-      properties:
-        periodId:
-          type: string
-        amount:
-          type: number
-          format: double
-    accountInBudgetDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: The budget area &gt; The budget articles pane &gt; Account* &gt; The account of the budget article if the article is a leaf on the budget tree.'
     DtoValueOfDecimal:
       type: object
       properties:
         value:
           type: number
           format: double
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
     BudgetUpdateDto:
       type: object
       properties:
@@ -411,19 +338,54 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FinancialPeriodAmountUpdateDto'
-    FinancialPeriodAmountUpdateDto:
+    BackgroundApiAcceptedDto:
       type: object
       properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
+        id:
           type: string
+        stateLocation:
+          type: string
+    branchNumberInBudgetDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Top part &gt; Branch &gt; Click the magnifier
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    FinancialPeriodAmountDto:
+      type: object
+      properties:
         periodId:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
         amount:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
+          type: number
+          format: double
+    subaccountInBudgetDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The budget area &gt; The budget articles pane &gt; Subaccount* &gt; The subaccount of the budget article if the article is a leaf on the budget tree.'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
     BudgetDto:
       type: object
       properties:
@@ -467,6 +429,44 @@ components:
           type: string
           description: The timestamp of the budget article, used for concurrency control.
           format: byte
+    accountInBudgetDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: The budget area &gt; The budget articles pane &gt; Account* &gt; The account of the budget article if the article is a leaf on the budget tree.'
+    FinancialPeriodAmountUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        periodId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
   securitySchemes:
     interactiveapi:
       type: oauth2

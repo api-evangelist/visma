@@ -110,6 +110,26 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
     PaginatedResponseOfAppStoreActivationStatusApi:
       required:
       - Data
@@ -122,26 +142,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AppStoreActivationStatusApi'
-      additionalProperties: false
-    AppStoreActivationStatusApi:
-      required:
-      - ActivationStatus
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier for the app store activation status
-          format: uuid
-          readOnly: true
-        ActivationStatus:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Active,<br/>1 = Inactive
-          format: int32
-        ModifiedUtc:
-          type: string
-          description: Date and time when the activation status was last modified (UTC)
-          format: date-time
-          readOnly: true
       additionalProperties: false
     CommonPaginationMetadata:
       required:
@@ -173,6 +173,26 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
+    AppStoreActivationStatusApi:
+      required:
+      - ActivationStatus
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the app store activation status
+          format: uuid
+          readOnly: true
+        ActivationStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Active,<br/>1 = Inactive
+          format: int32
+        ModifiedUtc:
+          type: string
+          description: Date and time when the activation status was last modified (UTC)
+          format: date-time
+          readOnly: true
+      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -192,26 +212,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

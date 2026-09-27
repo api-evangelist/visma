@@ -106,6 +106,65 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    ForeignPaymentCodesApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the foreign payment code
+          format: uuid
+          readOnly: true
+        Code:
+          type: integer
+          description: The foreign payment code value
+          format: int32
+          readOnly: true
+        Description:
+          type:
+          - string
+          - 'null'
+          description: Description of the foreign payment code
+          readOnly: true
+        CountryCode:
+          type:
+          - string
+          - 'null'
+          description: Country code for which this foreign payment code applies
+          readOnly: true
+      additionalProperties: false
+    PaginatedResponseOfForeignPaymentCodesApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForeignPaymentCodesApi'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -155,65 +214,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    PaginatedResponseOfForeignPaymentCodesApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ForeignPaymentCodesApi'
-      additionalProperties: false
-    ForeignPaymentCodesApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: The unique identifier of the foreign payment code
-          format: uuid
-          readOnly: true
-        Code:
-          type: integer
-          description: The foreign payment code value
-          format: int32
-          readOnly: true
-        Description:
-          type:
-          - string
-          - 'null'
-          description: Description of the foreign payment code
-          readOnly: true
-        CountryCode:
-          type:
-          - string
-          - 'null'
-          description: Country code for which this foreign payment code applies
-          readOnly: true
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

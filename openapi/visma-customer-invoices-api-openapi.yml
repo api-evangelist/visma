@@ -418,127 +418,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    SalesDocumentRotRutReductionPersonApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system
-          format: uuid
-          readOnly: true
-        Ssn:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Social security number
-        Amount:
-          type: number
-          format: double
-      additionalProperties: false
-    EmailApi:
-      type: object
-      properties:
-        Email:
-          maxLength: 255
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Default value is the customer's email address
-        CcRecipients:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Default value is the customer's cc email addresses (if omitted or empty list). Set to null to skip using any CC addresses.
-        Subject:
-          type:
-          - string
-          - 'null'
-          description: 'The default email subject found in the system followed by the company''s name.The special pattern #### in the subject text will be replaced by the sales document number (quote, order or invoice).This allows you to create a subject that contains the sales document number without querying for the document first'
-        Message:
-          type:
-          - string
-          - 'null'
-          description: Default value is the the domestic or foreign company text from /v2/companysettings
-      additionalProperties: false
-    ContributionMarginApi:
-      type: object
-      properties:
-        Amount:
-          type:
-          - number
-          - 'null'
-          description: Amount of contribution margin
-          format: double
-        Percentage:
-          type:
-          - number
-          - 'null'
-          description: Percentage of contribution margin
-          format: double
-      additionalProperties: false
-    CreditedByApi:
-      type: object
-      properties:
-        CreditInvoiceId:
-          type: string
-          description: The Id of the customer invoice
-          format: uuid
-      additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     PaginatedResponseOfCustomerInvoiceApi:
       required:
       - Data
@@ -552,19 +431,193 @@ components:
           items:
             $ref: '#/components/schemas/CustomerInvoiceApi'
       additionalProperties: false
-    CustomerInvoiceVatApi:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        AmountInvoiceCurrency:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CustomerInvoiceRowApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system for every row
+          format: uuid
+          readOnly: true
+        ArticleNumber:
+          type:
+          - string
+          - 'null'
+          description: Number of the article on the row
+          readOnly: true
+        ArticleId:
+          type:
+          - string
+          - 'null'
+          description: 'Purpose: Null if text row'
+          format: uuid
+        IsServiceArticle:
+          type: boolean
+          description: True if the article is a service article. False otherwise
+          readOnly: true
+        AmountNoVat:
+          type: number
+          description: Amount on the row excluding VAT
+          format: double
+          readOnly: true
+        PercentVat:
           type: number
           format: double
           readOnly: true
-        VatAmountInvoiceCurrency:
-          type: number
+          deprecated: true
+        VatRate:
+          type:
+          - number
+          - 'null'
+          description: When row is a text row the value is null. Default value is also null
           format: double
           readOnly: true
-        VatPercent:
+        LineNumber:
+          type: integer
+          description: Number of the line in order on the row
+          format: int32
+          readOnly: true
+        IsTextRow:
+          type: boolean
+          description: True if this is a text row. False otherwise
+          readOnly: true
+        Text:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Default: For non text rows, default value will be the article''s name; for text rows, there should be at least one character in place'
+        UnitPrice:
           type: number
+          description: 'Format: 2 decimals allowed if the customer and currency are domestic or 4 decimals if customer or currency is foreign'
+          format: double
+        UnitAbbreviation:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        UnitAbbreviationEnglish:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        IsDiscountInFixedAmount:
+          type: boolean
+          description: True if the discount on the row is a fixed amount, false otherwise
+          readOnly: true
+        DiscountFixedAmount:
+          type:
+          - number
+          - 'null'
+          description: 'Fixed amount discount on the row. Only applicable if IsDiscountInFixedAmount is true. Format: 2 decimals'
+          format: double
+          readOnly: true
+        DiscountPercentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: 'Percentage discount n the row. Format: 4 decimals'
+          format: double
+        Quantity:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+        IsWorkCost:
+          type: boolean
+          description: Only used for Rot/Rut
+          readOnly: true
+        IsVatFree:
+          type: boolean
+          description: True if this row is marked as VAT free. False otherwise
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        UnitId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/units/{id}'
+          format: uuid
+          readOnly: true
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Get from /v2/projects
+          format: uuid
+        WorkCostType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>RotConstructionWork = 1,<br/>RotElectricalWork = 2,<br/>RotGlassSheetMetalWork = 3,<br/>RotGroundWork = 4,<br/>RotBrickWork = 5,<br/>RotPaintDecorateWork = 6,<br/>RotPlumbWork = 7,<br/>RutCleanJobWork = 9,<br/>RutCareClothTextile = 10,<br/>RutSnowRemove = 12,<br/>RutGarden = 13,<br/>RutBabySitting = 14,<br/>RutOtherCare = 15,<br/>RutRemovalServices = 18,<br/>RutITServices = 19,<br/>RotHeatPump = 20,<br/>RotHeatPump2 = 21,<br/>RutHomeAppliances = 22,<br/>RotSolarHeatingSystem = 23,<br/>RotWoodBoiler = 24,<br/>RotFuelBoiler = 25,<br/>RutLaundry = 26,<br/>RutFurnishing = 27,<br/>RutGoodsTransport = 28,<br/>RutHomeSupervision = 29<br/><br/>Only used for Rot/Rut.
+          format: int32
+        WorkHours:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        MaterialCosts:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        GreenTechnologyType:
+          maximum: 3
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>SolarCellInstallation = 1,<br/>ElectricEnergyStorageInstallation = 2,<br/>ElectricVehicleChargingPointInstallation = 3<br/><br/>Type of green technology for the row.
+          format: int32
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        PurchasePrice:
+          type: number
+          description: Purchase price for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+        FreightCosts:
+          type: number
+          description: Freight costs for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+        Amount:
+          type: number
+          description: 'Returns a total amount of row. Format: 2 decimals'
           format: double
           readOnly: true
       additionalProperties: false
@@ -629,6 +682,128 @@ components:
           description: The internal id in the system of the bank transaction corresponding to the payment
           format: uuid
           readOnly: true
+      additionalProperties: false
+    CustomerInvoiceVatApi:
+      type: object
+      properties:
+        AmountInvoiceCurrency:
+          type: number
+          format: double
+          readOnly: true
+        VatAmountInvoiceCurrency:
+          type: number
+          format: double
+          readOnly: true
+        VatPercent:
+          type: number
+          format: double
+          readOnly: true
+      additionalProperties: false
+    PaymentReminderEmailApi:
+      type: object
+      properties:
+        LatePaymentFee:
+          maximum: 10000000
+          minimum: 0
+          type: number
+          description: Amount for late pament fee.
+          format: double
+        EmailDetails:
+          $ref: '#/components/schemas/EmailApi'
+      additionalProperties: false
+    SalesDocumentRotRutReductionPersonApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Ssn:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Social security number
+        Amount:
+          type: number
+          format: double
+      additionalProperties: false
+    CreditedByApi:
+      type: object
+      properties:
+        CreditInvoiceId:
+          type: string
+          description: The Id of the customer invoice
+          format: uuid
+      additionalProperties: false
+    EmailApi:
+      type: object
+      properties:
+        Email:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the customer's email address
+        CcRecipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Default value is the customer's cc email addresses (if omitted or empty list). Set to null to skip using any CC addresses.
+        Subject:
+          type:
+          - string
+          - 'null'
+          description: 'The default email subject found in the system followed by the company''s name.The special pattern #### in the subject text will be replaced by the sales document number (quote, order or invoice).This allows you to create a subject that contains the sales document number without querying for the document first'
+        Message:
+          type:
+          - string
+          - 'null'
+          description: Default value is the the domestic or foreign company text from /v2/companysettings
+      additionalProperties: false
+    InvoiceUrlApi:
+      type: object
+      properties:
+        Url:
+          type:
+          - string
+          - 'null'
+          description: The URL to the invoice.
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
       additionalProperties: false
     CustomerInvoiceApi:
       required:
@@ -1158,6 +1333,22 @@ components:
           description: Identifier for the background image or template used on the PDF printout
           format: uuid
       additionalProperties: false
+    ContributionMarginApi:
+      type: object
+      properties:
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: Amount of contribution margin
+          format: double
+        Percentage:
+          type:
+          - number
+          - 'null'
+          description: Percentage of contribution margin
+          format: double
+      additionalProperties: false
     ElectronicInvoiceRequestApi:
       type: object
       properties:
@@ -1165,196 +1356,6 @@ components:
           type: integer
           description: <strong>Possible values:</strong><br/>1 = AutoInvoiceElectronic,<br/>2 = AutoInvoicePrint,<br/>3 = AutoInvoiceB2C,<br/>4 = Kivra<br/><br/>Used for sending the invoice via Autoinvoice. Possible values are.
           format: int32
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    CustomerInvoiceRowApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system for every row
-          format: uuid
-          readOnly: true
-        ArticleNumber:
-          type:
-          - string
-          - 'null'
-          description: Number of the article on the row
-          readOnly: true
-        ArticleId:
-          type:
-          - string
-          - 'null'
-          description: 'Purpose: Null if text row'
-          format: uuid
-        IsServiceArticle:
-          type: boolean
-          description: True if the article is a service article. False otherwise
-          readOnly: true
-        AmountNoVat:
-          type: number
-          description: Amount on the row excluding VAT
-          format: double
-          readOnly: true
-        PercentVat:
-          type: number
-          format: double
-          readOnly: true
-          deprecated: true
-        VatRate:
-          type:
-          - number
-          - 'null'
-          description: When row is a text row the value is null. Default value is also null
-          format: double
-          readOnly: true
-        LineNumber:
-          type: integer
-          description: Number of the line in order on the row
-          format: int32
-          readOnly: true
-        IsTextRow:
-          type: boolean
-          description: True if this is a text row. False otherwise
-          readOnly: true
-        Text:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'Default: For non text rows, default value will be the article''s name; for text rows, there should be at least one character in place'
-        UnitPrice:
-          type: number
-          description: 'Format: 2 decimals allowed if the customer and currency are domestic or 4 decimals if customer or currency is foreign'
-          format: double
-        UnitAbbreviation:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        UnitAbbreviationEnglish:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        IsDiscountInFixedAmount:
-          type: boolean
-          description: True if the discount on the row is a fixed amount, false otherwise
-          readOnly: true
-        DiscountFixedAmount:
-          type:
-          - number
-          - 'null'
-          description: 'Fixed amount discount on the row. Only applicable if IsDiscountInFixedAmount is true. Format: 2 decimals'
-          format: double
-          readOnly: true
-        DiscountPercentage:
-          maximum: 1
-          minimum: 0
-          type: number
-          description: 'Percentage discount n the row. Format: 4 decimals'
-          format: double
-        Quantity:
-          type: number
-          description: 'Format: 4 decimals'
-          format: double
-        IsWorkCost:
-          type: boolean
-          description: Only used for Rot/Rut
-          readOnly: true
-        IsVatFree:
-          type: boolean
-          description: True if this row is marked as VAT free. False otherwise
-        CostCenterItemId1:
-          type:
-          - string
-          - 'null'
-          description: 'Source: Get from /v2/costcenters'
-          format: uuid
-        CostCenterItemId2:
-          type:
-          - string
-          - 'null'
-          description: 'Source: Get from /v2/costcenters'
-          format: uuid
-        CostCenterItemId3:
-          type:
-          - string
-          - 'null'
-          description: 'Source: Get from /v2/costcenters'
-          format: uuid
-        UnitId:
-          type:
-          - string
-          - 'null'
-          description: 'Source: Get from /v2/units/{id}'
-          format: uuid
-          readOnly: true
-        ProjectId:
-          type:
-          - string
-          - 'null'
-          description: Get from /v2/projects
-          format: uuid
-        WorkCostType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>None = 0,<br/>RotConstructionWork = 1,<br/>RotElectricalWork = 2,<br/>RotGlassSheetMetalWork = 3,<br/>RotGroundWork = 4,<br/>RotBrickWork = 5,<br/>RotPaintDecorateWork = 6,<br/>RotPlumbWork = 7,<br/>RutCleanJobWork = 9,<br/>RutCareClothTextile = 10,<br/>RutSnowRemove = 12,<br/>RutGarden = 13,<br/>RutBabySitting = 14,<br/>RutOtherCare = 15,<br/>RutRemovalServices = 18,<br/>RutITServices = 19,<br/>RotHeatPump = 20,<br/>RotHeatPump2 = 21,<br/>RutHomeAppliances = 22,<br/>RotSolarHeatingSystem = 23,<br/>RotWoodBoiler = 24,<br/>RotFuelBoiler = 25,<br/>RutLaundry = 26,<br/>RutFurnishing = 27,<br/>RutGoodsTransport = 28,<br/>RutHomeSupervision = 29<br/><br/>Only used for Rot/Rut.
-          format: int32
-        WorkHours:
-          type:
-          - number
-          - 'null'
-          description: Only used for Rot/Rut
-          format: double
-        MaterialCosts:
-          type:
-          - number
-          - 'null'
-          description: Only used for Rot/Rut
-          format: double
-        GreenTechnologyType:
-          maximum: 3
-          minimum: 0
-          type: integer
-          description: <strong>Possible values:</strong><br/>None = 0,<br/>SolarCellInstallation = 1,<br/>ElectricEnergyStorageInstallation = 2,<br/>ElectricVehicleChargingPointInstallation = 3<br/><br/>Type of green technology for the row.
-          format: int32
-        ContributionMargin:
-          $ref: '#/components/schemas/ContributionMarginApi'
-        PurchasePrice:
-          type: number
-          description: Purchase price for the article on this row, valid only if it is an article row
-          format: double
-          readOnly: true
-        FreightCosts:
-          type: number
-          description: Freight costs for the article on this row, valid only if it is an article row
-          format: double
-          readOnly: true
-        Amount:
-          type: number
-          description: 'Returns a total amount of row. Format: 2 decimals'
-          format: double
-          readOnly: true
       additionalProperties: false
     CollectiveCustomerInvoiceRelationToOrderApi:
       type: object
@@ -1389,26 +1390,25 @@ components:
             format: int32
           description: List of invoice row numbers related to the order
       additionalProperties: false
-    InvoiceUrlApi:
+    CommonError:
       type: object
       properties:
-        Url:
+        Field:
           type:
           - string
           - 'null'
-          description: The URL to the invoice.
-      additionalProperties: false
-    PaymentReminderEmailApi:
-      type: object
-      properties:
-        LatePaymentFee:
-          maximum: 10000000
-          minimum: 0
-          type: number
-          description: Amount for late pament fee.
-          format: double
-        EmailDetails:
-          $ref: '#/components/schemas/EmailApi'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

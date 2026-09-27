@@ -433,118 +433,29 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    AttachmentDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the attachment.
-        id:
-          type: string
-          description: The ID of the attachment
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        revision:
-          type: integer
-          description: The version of the attachment.
-          format: int32
-    InventoryTransferUpdateDto:
-      type: object
-      properties:
-        warehouseId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        toWarehouseId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        transferLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/InventoryTransferLineUpdateDto'
-          description: The inventory issue lines
-        referenceNumber:
-          $ref: '#/components/schemas/referenceNumberInInventoryTransferUpdateDto'
-        hold:
-          $ref: '#/components/schemas/holdInInventoryTransferUpdateDto'
-        date:
-          $ref: '#/components/schemas/dateInInventoryTransferUpdateDto'
-        postPeriod:
-          $ref: '#/components/schemas/postPeriodInInventoryTransferUpdateDto'
-        externalReference:
-          $ref: '#/components/schemas/externalReferenceInInventoryTransferUpdateDto'
-        description:
-          $ref: '#/components/schemas/descriptionInInventoryTransferUpdateDto'
-        controlQuantity:
-          $ref: '#/components/schemas/controlQuantityInInventoryTransferUpdateDto'
-        branchNumber:
-          $ref: '#/components/schemas/branchNumberInInventoryTransferUpdateDto'
-      description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
-    descriptionInInventoryTransferUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A brief description of the inventory issue or its transactions.
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    locationInInventoryTransferLineDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Location &gt; The warehouse location from which the goods are transferred.
-    LocationDescriptionDto:
-      type: object
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
     holdInInventoryTransferUpdateDto:
       properties:
         value:
           type: boolean
       description: A check box that you select to give the receipt the On Hold status. Clear the check box to save the receipt with the Balanced status.
-    warehouseInInventoryTransferDto:
+    inventoryItemInInventoryTransferLineDto:
       properties:
-        id:
+        number:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
+          description: Number of item
         description:
           type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part &gt; From warehouse* &gt; The warehouse from which the goods are transferred.'
-    dateInInventoryTransferUpdateDto:
+          description: Name of item/description
+      description: 'Mandatory field: Item ID* &gt; The ID of the goods to be transferred.'
+    BranchNumberDto:
+      type: object
       properties:
-        value:
+        number:
           type: string
-          format: date-time
-      description: The date when the receipt was created. All transactions included in this document will have this transaction date.
-    controlQuantityInInventoryTransferUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The manually entered quantity of inventory items. Control Qty. is available only if the Validate Document Totals on Entry option is selected on the Inventory Preferences form. If the Control Qty. and Total Qty.values do not match, the system generates a warning message and the issue cannot be saved.
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
     InventoryTransferLineUpdateDto:
       type: object
       properties:
@@ -584,6 +495,34 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         branchNumber:
           $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
     AllocationsUpdateBasicDto:
       type: object
       properties:
@@ -603,12 +542,29 @@ components:
         quantity:
           $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
       description: This class represents an Allocation. Used to add/update data.
-    DtoValueOfInt32:
+    AllocationsBasicDto:
       type: object
       properties:
-        value:
+        lineNbr:
           type: integer
           format: int32
+        location:
+          $ref: '#/components/schemas/LocationDescriptionDto'
+        lotSerialNumber:
+          type: string
+        quantity:
+          type: number
+          format: double
+      description: This class represents a basic Allocation/Kit Allocation
+    toWarehouseInInventoryTransferDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; To warehouse &gt; The warehouse to which the goods are transferred.'
     branchNumberInInventoryTransferUpdateDto:
       properties:
         value:
@@ -619,38 +575,6 @@ components:
         value:
           type: string
       description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    BranchNumberDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    toWarehouseInInventoryTransferDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part &gt; To warehouse &gt; The warehouse to which the goods are transferred.'
     InventoryTransferDto:
       type: object
       properties:
@@ -719,46 +643,34 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
-    ReleaseInventoryDocumentActionResultDto:
+    dateInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: The date when the receipt was created. All transactions included in this document will have this transaction date.
+    LocationDescriptionDto:
       type: object
       properties:
-        actionId:
+        countryId:
           type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
+          description: Location*.
+        id:
           type: string
-        errorInfo:
+          description: Click the magnifier &gt; The identifier
+        name:
           type: string
-    DtoValueOfNullableOfDecimal:
+          description: Click the magnifier &gt; The displayed name
+    DtoValueOfString:
       type: object
       properties:
         value:
-          type: number
-          format: double
-    externalReferenceInInventoryTransferUpdateDto:
+          type: string
+    descriptionInInventoryTransferUpdateDto:
       properties:
         value:
           type: string
-      description: The external reference number of the inventory issue document (for example, the vendor’s reference code).
-    referenceNumberInInventoryTransferUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The unique reference number of the receipt, which the system automatically assigns according to the numbering sequence selected for receipts on the Inventory Preferences IN.10.10.00) form.
-    inventoryItemInInventoryTransferLineDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Item ID* &gt; The ID of the goods to be transferred.'
+      description: A brief description of the inventory issue or its transactions.
     InventoryTransferLineDto:
       type: object
       properties:
@@ -798,6 +710,108 @@ components:
             $ref: '#/components/schemas/AttachmentDto'
         branchNumber:
           $ref: '#/components/schemas/BranchNumberDto'
+    ReleaseInventoryDocumentActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    warehouseInInventoryTransferDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; From warehouse* &gt; The warehouse from which the goods are transferred.'
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    referenceNumberInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The unique reference number of the receipt, which the system automatically assigns according to the numbering sequence selected for receipts on the Inventory Preferences IN.10.10.00) form.
+    InventoryTransferUpdateDto:
+      type: object
+      properties:
+        warehouseId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        toWarehouseId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        transferLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryTransferLineUpdateDto'
+          description: The inventory issue lines
+        referenceNumber:
+          $ref: '#/components/schemas/referenceNumberInInventoryTransferUpdateDto'
+        hold:
+          $ref: '#/components/schemas/holdInInventoryTransferUpdateDto'
+        date:
+          $ref: '#/components/schemas/dateInInventoryTransferUpdateDto'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInInventoryTransferUpdateDto'
+        externalReference:
+          $ref: '#/components/schemas/externalReferenceInInventoryTransferUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInInventoryTransferUpdateDto'
+        controlQuantity:
+          $ref: '#/components/schemas/controlQuantityInInventoryTransferUpdateDto'
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInInventoryTransferUpdateDto'
+      description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
+    controlQuantityInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The manually entered quantity of inventory items. Control Qty. is available only if the Validate Document Totals on Entry option is selected on the Inventory Preferences form. If the Control Qty. and Total Qty.values do not match, the system generates a warning message and the issue cannot be saved.
+    externalReferenceInInventoryTransferUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The external reference number of the inventory issue document (for example, the vendor’s reference code).
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    locationInInventoryTransferLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Location &gt; The warehouse location from which the goods are transferred.
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
     branchNumberInInventoryTransferDto:
       properties:
         number:
@@ -816,20 +830,6 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Reason code &gt; The reason code associated with the transferred goods.
-    AllocationsBasicDto:
-      type: object
-      properties:
-        lineNbr:
-          type: integer
-          format: int32
-        location:
-          $ref: '#/components/schemas/LocationDescriptionDto'
-        lotSerialNumber:
-          type: string
-        quantity:
-          type: number
-          format: double
-      description: This class represents a basic Allocation/Kit Allocation
   securitySchemes:
     interactiveapi:
       type: oauth2

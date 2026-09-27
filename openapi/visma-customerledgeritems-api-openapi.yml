@@ -180,239 +180,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    CustomerLedgerItemWithVoucherApi:
-      required:
-      - CurrencyCode
-      - CustomerId
-      - DueDate
-      - InvoiceDate
-      - InvoiceNumber
-      - IsCreditInvoice
-      - RemainingAmountInvoiceCurrency
-      - TotalAmountInvoiceCurrency
-      - Voucher
-      type: object
-      properties:
-        CurrencyCode:
-          maxLength: 3
-          minLength: 0
-          type: string
-          description: 'Maximum length: 3 characters'
-        CurrencyRate:
-          type: number
-          format: double
-        CurrencyRateUnit:
-          type: integer
-          format: int32
-        CustomerId:
-          type: string
-          description: 'Source: Get from /v2/customers.'
-          format: uuid
-        DueDate:
-          type: string
-          description: 'Format: YYYY-MM-DD'
-          format: date-time
-        Id:
-          type: string
-          description: Unique Id provided by eAccounting
-          format: uuid
-          readOnly: true
-        InvoiceDate:
-          type: string
-          description: 'Format: YYYY-MM-DD'
-          format: date-time
-        InvoiceNumber:
-          type: integer
-          description: The number of the invoice to create
-          format: int32
-        ModifiedUtc:
-          type: string
-          format: date-time
-          readOnly: true
-        PaymentReferenceNumber:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'Maximum length: 50 characters'
-        RemainingAmountInvoiceCurrency:
-          maximum: 99999999.99
-          minimum: -99999999.99
-          type: number
-          description: 'Remaining amount in invoice currency. Precision: 2 decimals'
-          format: double
-        RoundingsAmountInvoiceCurrency:
-          type: number
-          description: 'Rounding amount in invoice currency. Precision: 2 decimals'
-          format: double
-        TotalAmountInvoiceCurrency:
-          maximum: 99999999.99
-          minimum: -99999999.99
-          type: number
-          description: 'Total amount in invoice currency. Precision: 2 decimals'
-          format: double
-        VATAmountInvoiceCurrency:
-          type: number
-          description: 'VAT amount in invoice currency. Precision: 2 decimals'
-          format: double
-        IsCreditInvoice:
-          type: boolean
-        Voucher:
-          $ref: '#/components/schemas/VoucherApi'
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    PaginatedResponseOfCustomerLedgerItemApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerLedgerItemApi'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    VoucherApi:
-      required:
-      - Rows
-      - VoucherDate
-      - VoucherText
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system
-          format: uuid
-          readOnly: true
-        VoucherDate:
-          type: string
-          description: 'Bookkeeping date. Format: yyyy-mm-dd'
-          format: date-time
-        VoucherText:
-          maxLength: 1000
-          minLength: 0
-          type: string
-          description: Voucher's description
-        Rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/VoucherRowApi'
-          description: The accounting rows/lines of the voucher
-        NumberAndNumberSeries:
-          type:
-          - string
-          - 'null'
-          description: Returns the voucher number
-          readOnly: true
-        NumberSeries:
-          type:
-          - string
-          - 'null'
-          description: Returns the number series. Use parameter useDefaultVoucherSeries with false value to set Series.
-        ImportedVoucherNumber:
-          type:
-          - string
-          - 'null'
-          description: Returns original voucher number if the voucher is imported from another system.
-          readOnly: true
-        Attachments:
-          $ref: '#/components/schemas/AttachmentLinkApi'
-        ModifiedUtc:
-          type:
-          - string
-          - 'null'
-          description: The UTC date and time when the voucher was last modified.
-          format: date-time
-          readOnly: true
-        VoucherType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>2 = ManualVoucher,<br/>5 = BankAccountTransferDeposit,<br/>6 = BankAccountTransferWithDrawal,<br/>7 = PurchaseReceipt,<br/>8 = VatReport,<br/>9 = SieImport,<br/>10 = BankTransactionDeposit,<br/>11 = BankTransactionWithdrawal,<br/>12 = SupplierInvoiceDebit,<br/>13 = SupplierInvoiceCredit,<br/>14 = CustomerInvoiceDebit,<br/>15 = CustomerInvoiceCredit,<br/>16 = ClaimOnCardAcquirer,<br/>17 = TaxReturn,<br/>18 = AllocationPeriod,<br/>19 = AllocationPeriodCorrection,<br/>20 = InventoryEvent,<br/>21 = EmployerReport,<br/>22 = Payslip,<br/>23 = CustomerQuickInvoiceDebit,<br/>24 = CustomerQuickInvoiceCredit,<br/>25 = SupplierQuickInvoiceDebit,<br/>26 = SupplierQuickInvoiceCredit,<br/>27 = IZettleVoucher,<br/>28 = StockValuation,<br/>29 = ClaimOnSpotFactoring,<br/>30 = RecourseFactoring,<br/>32 = DirectDebit,<br/>33 = DirectDebitCorrection,<br/>34 = PaymentLinks
-          format: int32
-        SourceId:
-          type:
-          - string
-          - 'null'
-          description: The source of the voucher, e.g. invoice id.
-          format: uuid
-          readOnly: true
-        CreatedUtc:
-          type: string
-          description: The UTC date and time when the voucher was created.
-          format: date-time
-          readOnly: true
-      additionalProperties: false
     VoucherRowApi:
       required:
       - AccountNumber
@@ -537,6 +304,26 @@ components:
             format: uuid
           description: List of guids representing the attachment ids fetched from the system
       additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
     CustomerLedgerItemApi:
       required:
       - CurrencyCode
@@ -619,6 +406,219 @@ components:
           type: string
           description: 'Source: Get from /v2/vouchers.'
           format: uuid
+      additionalProperties: false
+    CustomerLedgerItemWithVoucherApi:
+      required:
+      - CurrencyCode
+      - CustomerId
+      - DueDate
+      - InvoiceDate
+      - InvoiceNumber
+      - IsCreditInvoice
+      - RemainingAmountInvoiceCurrency
+      - TotalAmountInvoiceCurrency
+      - Voucher
+      type: object
+      properties:
+        CurrencyCode:
+          maxLength: 3
+          minLength: 0
+          type: string
+          description: 'Maximum length: 3 characters'
+        CurrencyRate:
+          type: number
+          format: double
+        CurrencyRateUnit:
+          type: integer
+          format: int32
+        CustomerId:
+          type: string
+          description: 'Source: Get from /v2/customers.'
+          format: uuid
+        DueDate:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+          format: date-time
+        Id:
+          type: string
+          description: Unique Id provided by eAccounting
+          format: uuid
+          readOnly: true
+        InvoiceDate:
+          type: string
+          description: 'Format: YYYY-MM-DD'
+          format: date-time
+        InvoiceNumber:
+          type: integer
+          description: The number of the invoice to create
+          format: int32
+        ModifiedUtc:
+          type: string
+          format: date-time
+          readOnly: true
+        PaymentReferenceNumber:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'Maximum length: 50 characters'
+        RemainingAmountInvoiceCurrency:
+          maximum: 99999999.99
+          minimum: -99999999.99
+          type: number
+          description: 'Remaining amount in invoice currency. Precision: 2 decimals'
+          format: double
+        RoundingsAmountInvoiceCurrency:
+          type: number
+          description: 'Rounding amount in invoice currency. Precision: 2 decimals'
+          format: double
+        TotalAmountInvoiceCurrency:
+          maximum: 99999999.99
+          minimum: -99999999.99
+          type: number
+          description: 'Total amount in invoice currency. Precision: 2 decimals'
+          format: double
+        VATAmountInvoiceCurrency:
+          type: number
+          description: 'VAT amount in invoice currency. Precision: 2 decimals'
+          format: double
+        IsCreditInvoice:
+          type: boolean
+        Voucher:
+          $ref: '#/components/schemas/VoucherApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfCustomerLedgerItemApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerLedgerItemApi'
+      additionalProperties: false
+    VoucherApi:
+      required:
+      - Rows
+      - VoucherDate
+      - VoucherText
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        VoucherDate:
+          type: string
+          description: 'Bookkeeping date. Format: yyyy-mm-dd'
+          format: date-time
+        VoucherText:
+          maxLength: 1000
+          minLength: 0
+          type: string
+          description: Voucher's description
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/VoucherRowApi'
+          description: The accounting rows/lines of the voucher
+        NumberAndNumberSeries:
+          type:
+          - string
+          - 'null'
+          description: Returns the voucher number
+          readOnly: true
+        NumberSeries:
+          type:
+          - string
+          - 'null'
+          description: Returns the number series. Use parameter useDefaultVoucherSeries with false value to set Series.
+        ImportedVoucherNumber:
+          type:
+          - string
+          - 'null'
+          description: Returns original voucher number if the voucher is imported from another system.
+          readOnly: true
+        Attachments:
+          $ref: '#/components/schemas/AttachmentLinkApi'
+        ModifiedUtc:
+          type:
+          - string
+          - 'null'
+          description: The UTC date and time when the voucher was last modified.
+          format: date-time
+          readOnly: true
+        VoucherType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>2 = ManualVoucher,<br/>5 = BankAccountTransferDeposit,<br/>6 = BankAccountTransferWithDrawal,<br/>7 = PurchaseReceipt,<br/>8 = VatReport,<br/>9 = SieImport,<br/>10 = BankTransactionDeposit,<br/>11 = BankTransactionWithdrawal,<br/>12 = SupplierInvoiceDebit,<br/>13 = SupplierInvoiceCredit,<br/>14 = CustomerInvoiceDebit,<br/>15 = CustomerInvoiceCredit,<br/>16 = ClaimOnCardAcquirer,<br/>17 = TaxReturn,<br/>18 = AllocationPeriod,<br/>19 = AllocationPeriodCorrection,<br/>20 = InventoryEvent,<br/>21 = EmployerReport,<br/>22 = Payslip,<br/>23 = CustomerQuickInvoiceDebit,<br/>24 = CustomerQuickInvoiceCredit,<br/>25 = SupplierQuickInvoiceDebit,<br/>26 = SupplierQuickInvoiceCredit,<br/>27 = IZettleVoucher,<br/>28 = StockValuation,<br/>29 = ClaimOnSpotFactoring,<br/>30 = RecourseFactoring,<br/>32 = DirectDebit,<br/>33 = DirectDebitCorrection,<br/>34 = PaymentLinks
+          format: int32
+        SourceId:
+          type:
+          - string
+          - 'null'
+          description: The source of the voucher, e.g. invoice id.
+          format: uuid
+          readOnly: true
+        CreatedUtc:
+          type: string
+          description: The UTC date and time when the voucher was created.
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

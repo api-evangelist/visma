@@ -537,18 +537,26 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    DtoValueOfString:
+    DtoValueOfBoolean:
       type: object
       properties:
         value:
+          type: boolean
+    DtoSegmentValueUpdateDtoBase:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
+        value:
+          type: string
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        active:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
     DtoSegmentValue:
       type: object
       properties:
@@ -579,6 +587,32 @@ components:
           type: string
           format: date-time
         mappedSegValue:
+          type: string
+    DtoSegmentUpdateDto:
+      type: object
+      properties:
+        segmentValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoSegmentValueUpdateDtoBase'
+        dimensionId:
+          type: string
+        segementId:
+          type: integer
+          format: int32
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
           type: string
     DtoDimension:
       type: object
@@ -645,40 +679,6 @@ components:
           type: integer
           description: Select segment and click View segment &gt; Consol. order &gt; The number that represents the order of this string among other strings in the parent company's subaccount; this column is displayed for only the SUBACCOUNT key.
           format: int32
-    DtoSegmentUpdateDto:
-      type: object
-      properties:
-        segmentValues:
-          type: array
-          items:
-            $ref: '#/components/schemas/DtoSegmentValueUpdateDtoBase'
-        dimensionId:
-          type: string
-        segementId:
-          type: integer
-          format: int32
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    DtoSegmentValueUpdateDtoBase:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        value:
-          type: string
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        active:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
   securitySchemes:
     interactiveapi:
       type: oauth2

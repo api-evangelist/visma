@@ -103,6 +103,61 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfCountryApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryApi'
+      additionalProperties: false
+    CountryApi:
+      type: object
+      properties:
+        Name:
+          type:
+          - string
+          - 'null'
+          description: The localized name of the country
+        NameEnglish:
+          type:
+          - string
+          - 'null'
+          description: The English name of the country
+        Code:
+          type:
+          - string
+          - 'null'
+          description: <strong>Possible values:</strong><br/>3166-1 alpha-2)<br/><br/>The two letter country code (ISO.
+        IsEuMember:
+          type: boolean
+          description: Indicates whether the country is a member of the European Union
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -152,61 +207,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    PaginatedResponseOfCountryApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CountryApi'
-      additionalProperties: false
-    CountryApi:
-      type: object
-      properties:
-        Name:
-          type:
-          - string
-          - 'null'
-          description: The localized name of the country
-        NameEnglish:
-          type:
-          - string
-          - 'null'
-          description: The English name of the country
-        Code:
-          type:
-          - string
-          - 'null'
-          description: <strong>Possible values:</strong><br/>3166-1 alpha-2)<br/><br/>The two letter country code (ISO.
-        IsEuMember:
-          type: boolean
-          description: Indicates whether the country is a member of the European Union
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

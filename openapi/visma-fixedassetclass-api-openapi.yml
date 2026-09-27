@@ -132,6 +132,70 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    bookSettingsInFixedAssetClassDto:
+      properties:
+        bookID:
+          type: string
+          description: The book id
+        depreciationMethodID:
+          type: string
+          description: The depreciation method id
+      description: Default book settings for the fixed asset using this fixed asset class
+    FixedAssetClassDto:
+      type: object
+      properties:
+        classID:
+          type: string
+          description: The id that identifies this fixed asset class
+        recordType:
+          type: string
+          description: The type of the record. This value is 'C' for fixed asset classes
+        description:
+          type: string
+          description: The description of this fixed asset class
+        active:
+          type: boolean
+          description: Indicates whether this fixed asset class is active or not
+        assetTypeID:
+          type: string
+          description: The type id of this fixed asset class
+        isTangible:
+          type: boolean
+          description: Indicates whether the fixed asset using this fixed asset class is tangible or not by default
+        depreciable:
+          type: boolean
+          description: Indicates whether the fixed asset using this fixed asset class can be depreciated or not by default
+        usefulLife:
+          type: number
+          description: Default useful life in years of the fixed asset using this fixed asset class
+          format: double
+        acceleratedDepreciation:
+          type: boolean
+          description: Indicates whether the fixed asset using this fixed asset class will use accelerated depreciation depending on selected depreciation method
+        bookSettings:
+          $ref: '#/components/schemas/bookSettingsInFixedAssetClassDto'
+        accounts:
+          $ref: '#/components/schemas/accountsInFixedAssetClassDto'
+        subAccountMask:
+          type: string
+          description: The sub account mask for this fixed asset class
+        accumulatedDepreciationSubAccountMask:
+          type: string
+          description: The accumulated depreciation sub account mask for this fixed asset class
+        depreciatedExpenseSubAccountMask:
+          type: string
+          description: The depreciated expense sub account mask for this fixed asset class
+        proceedSubAccountMask:
+          type: string
+          description: The proceed sub account mask for this fixed asset class
+        gainLossSubAccountMask:
+          type: string
+          description: The gain/loss sub account mask for this fixed asset class
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents an attribute in FixedAssetClass. Used for getting data.
     MetadataDto:
       type: object
       properties:
@@ -205,70 +269,6 @@ components:
           type: string
           description: The credit sub account
       description: Default accounts for the fixed asset using this fixed asset class
-    bookSettingsInFixedAssetClassDto:
-      properties:
-        bookID:
-          type: string
-          description: The book id
-        depreciationMethodID:
-          type: string
-          description: The depreciation method id
-      description: Default book settings for the fixed asset using this fixed asset class
-    FixedAssetClassDto:
-      type: object
-      properties:
-        classID:
-          type: string
-          description: The id that identifies this fixed asset class
-        recordType:
-          type: string
-          description: The type of the record. This value is 'C' for fixed asset classes
-        description:
-          type: string
-          description: The description of this fixed asset class
-        active:
-          type: boolean
-          description: Indicates whether this fixed asset class is active or not
-        assetTypeID:
-          type: string
-          description: The type id of this fixed asset class
-        isTangible:
-          type: boolean
-          description: Indicates whether the fixed asset using this fixed asset class is tangible or not by default
-        depreciable:
-          type: boolean
-          description: Indicates whether the fixed asset using this fixed asset class can be depreciated or not by default
-        usefulLife:
-          type: number
-          description: Default useful life in years of the fixed asset using this fixed asset class
-          format: double
-        acceleratedDepreciation:
-          type: boolean
-          description: Indicates whether the fixed asset using this fixed asset class will use accelerated depreciation depending on selected depreciation method
-        bookSettings:
-          $ref: '#/components/schemas/bookSettingsInFixedAssetClassDto'
-        accounts:
-          $ref: '#/components/schemas/accountsInFixedAssetClassDto'
-        subAccountMask:
-          type: string
-          description: The sub account mask for this fixed asset class
-        accumulatedDepreciationSubAccountMask:
-          type: string
-          description: The accumulated depreciation sub account mask for this fixed asset class
-        depreciatedExpenseSubAccountMask:
-          type: string
-          description: The depreciated expense sub account mask for this fixed asset class
-        proceedSubAccountMask:
-          type: string
-          description: The proceed sub account mask for this fixed asset class
-        gainLossSubAccountMask:
-          type: string
-          description: The gain/loss sub account mask for this fixed asset class
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: This class represents an attribute in FixedAssetClass. Used for getting data.
   securitySchemes:
     interactiveapi:
       type: oauth2

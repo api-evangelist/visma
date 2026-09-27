@@ -197,68 +197,104 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    expenseAccrualAccountInInventoryAccountInformationDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Only used for Non-stock items.
-
-        Purchase accrual account &gt; Purchase order accrual account &gt; The liability account to be used for this stock item to accrue amounts on purchase orders related to this item.'
-    BackgroundApiAcceptedDto:
+    AttributeIdValueDto:
       type: object
       properties:
         id:
           type: string
-        stateLocation:
+        value:
           type: string
-    expenseEuAccountInInventoryAccountInformationDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
+          description: Value &gt; The value of the attribute.
         description:
           type: string
-          description: Name of item/description
-      description: Expense EU account &gt; The income account to be used for this stock item to record EU expenses.
-    cogsSubaccountInInventoryAccountInformationDto:
+          description: Attribute &gt; The description of the attribute.
+    postingClassInInventoryDto:
       properties:
-        active:
-          type: boolean
+        id:
+          type: string
+          description: The identifier.
+        description:
+          type: string
+          description: The description.
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; Posting class* &gt; The posting class of the stock item, which by default is the posting class assigned to the item class.'
+    priceClassInInventoryDto:
+      properties:
         id:
           type: string
           description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
+      description: The Price/cost information tab &gt; Price management section &gt; Price class &gt; The item price class associated with the non-stock item. Group stock or non-stock items with similar price calculation methods.
+    defaultReceiptToInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: General information tab &gt; Warehouse defaults section &gt; Default receipt to &gt; The location of warehouse to be used by default to receive certain quantities of the specified stock item.
+    SalesCategoryLineDto:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          format: int32
+        description:
+          type: string
+    defaultWarehouseInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: General information tab &gt; Warehouse defaults section &gt; Default warehouse &gt; The default warehouse used to store the stock item with the specified item ID.
+    costPriceStatisticsInInventoryDto:
+      properties:
+        lastCost:
+          type: number
+          description: Cost price statistics section &gt; Last cost &gt; The last standard cost used for the stock item.
+          format: double
+        averageCost:
+          type: number
+          description: Cost price statistics section &gt; Average cost &gt; The average cost for the stock item.
+          format: double
+        minCost:
+          type: number
+          description: Cost price statistics section &gt; Min. cost &gt; The minimum cost for the stock item.
+          format: double
+        maxCost:
+          type: number
+          description: Cost price statistics section &gt; Max. cost &gt; The maximum cost for the stock item.
+          format: double
+      description: Price/cost information tab &gt;
+    cogsAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
       description: 'Only used for Stock items.
 
-        COGS sub. &gt; The subaccount to be used for this item with the COGS account.'
-    intrastatInInventoryDto:
+        COGS account &gt; The expense account to be used for this stock item to record the cost of goods sold (COGS) once the sales order is released.'
+    defaultIssueFromInInventoryDto:
       properties:
-        cN8:
+        id:
           type: string
-          description: 'Represents the 8 digit level Combine Nomenclature commodity code specific for the year
-
-            for which the creating / actualizations Intrastat declarations is drafted.'
-        countryOfOrigin:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-          description: 'The country of origin of the commodity will be selected,
-
-            that country where the good has been produced or had the last substantial transformation.'
-        supplementaryMeasureUnit:
-          type: string
-          description: 'The requirement for Supplementary Measure Units applies only to certain classes of goods(NC8 Positions)
-
-            that may be expressed from quantitative point of view in other measurement units but kilo also.'
-      description: General information tab &gt; Intrastat section
+          description: Click on the magnifier. &gt; The description.
+      description: General information tab &gt; Warehouse defaults section &gt; Default issue from &gt; The location of the warehouse to be used by default to issue quantities of the selected stock item.
     AttachmentDto:
       type: object
       properties:
@@ -274,73 +310,173 @@ components:
           type: integer
           description: The version of the attachment.
           format: int32
-    accountInformationInInventoryDto:
-      properties:
-        expenseAccrualAccount:
-          $ref: '#/components/schemas/expenseAccrualAccountInInventoryAccountInformationDto'
-        inventoryAccount:
-          $ref: '#/components/schemas/inventoryAccountInInventoryAccountInformationDto'
-        expenseAccount:
-          $ref: '#/components/schemas/expenseAccountInInventoryAccountInformationDto'
-        cogsAccount:
-          $ref: '#/components/schemas/cogsAccountInInventoryAccountInformationDto'
-        expenseNonTaxableAccount:
-          $ref: '#/components/schemas/expenseNonTaxableAccountInInventoryAccountInformationDto'
-        expenseEuAccount:
-          $ref: '#/components/schemas/expenseEuAccountInInventoryAccountInformationDto'
-        expenseImportAccount:
-          $ref: '#/components/schemas/expenseImportAccountInInventoryAccountInformationDto'
-        expenseSubaccount:
-          $ref: '#/components/schemas/expenseSubaccountInInventoryAccountInformationDto'
-        cogsSubaccount:
-          $ref: '#/components/schemas/cogsSubaccountInInventoryAccountInformationDto'
-        salesAccount:
-          $ref: '#/components/schemas/salesAccountInInventoryAccountInformationDto'
-        salesNonTaxableAccount:
-          $ref: '#/components/schemas/salesNonTaxableAccountInInventoryAccountInformationDto'
-        salesEuAccount:
-          $ref: '#/components/schemas/salesEuAccountInInventoryAccountInformationDto'
-        salesExportAccount:
-          $ref: '#/components/schemas/salesExportAccountInInventoryAccountInformationDto'
-        salesSubaccount:
-          $ref: '#/components/schemas/salesSubaccountInInventoryAccountInformationDto'
-      description: General ledger account tab &gt;
-    SalesCategoryLineDto:
+    BackgroundApiAcceptedDto:
       type: object
       properties:
-        categoryId:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    InventoryCrossReferenceDto:
+      type: object
+      properties:
+        alternateType:
+          enum:
+          - CPN
+          - VPN
+          - Global
+          - Barcode
+          type: string
+          description: Alternate type &gt; The type of alternate codification used for the item if applicable.
+        bAccount:
+          $ref: '#/components/schemas/bAccountInInventoryCrossReferenceDto'
+        alternateID:
+          type: string
+          description: 'Mandatory field: Alternate ID &gt; The alternate ID of the stock item (under the specified item ID) as used by the supplier or customer.'
+        description:
+          type: string
+          description: Description &gt; Any comments applicable to the specified cross-reference.
+        isDefault:
+          type: boolean
+          description: Default &gt; Indicates whether this cross-reference is marked as the default one.
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure used for this component.
+        timestamp:
+          type: string
+          description: Timestamp of the inventory item the crossreference belongs to
+    salesNonTaxableAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Sales - non-taxable account &gt; The income account to be used for this stock item to record non-taxable sales.
+    ClassAttributeDto:
+      type: object
+      properties:
+        attributeId:
+          type: string
+          description: The Attributes tab &gt; Attribute ID &gt; The identifier of the attribute.
+        description:
+          type: string
+          description: The Attributes tab &gt; Description &gt; A read-only column that displays the detailed description of the attribute.
+        sortOrder:
           type: integer
+          description: The Attributes tab &gt; Sort order &gt; A number that represents the order of the attribute in the list of class attributes.The lower the number, the higher the attribute will be in the list of class attributes.
+          format: int32
+        required:
+          type: boolean
+          description: The Attributes tab &gt; Required &gt; This check box indicates (if selected) that the attribute value is required for items of the class.
+        attributeType:
+          enum:
+          - Text
+          - Combo
+          - MultiSelectCombo
+          - Lookup
+          - Checkbox
+          - Datetime
+          type: string
+        defaultValue:
+          type: string
+          description: The Attributes tab &gt; Default value &gt; The default value of the attribute.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDetailDto'
+    expenseAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Only used for Non-stock items.
+
+        Mandatory field: Expense account* &gt; The default expense account to be used for this non-stock item.'
+    SalesCategoryDto:
+      type: object
+      properties:
+        categoryID:
+          type: integer
+          description: 'The left pane &gt; Categories. See the list of category members on the right side.
+
+            The right pane &gt; Item ID &gt; The unique identifier of the sales category.'
           format: int32
         description:
           type: string
-    ItemClassDto:
-      type: object
-      properties:
-        type:
-          enum:
-          - NonStockItem
-          - LaborItem
-          - ServiceItem
-          - ChargeItem
-          - ExpenseItem
-          - FinishedGoodItem
-          - ComponentPartItem
-          - SubassemblyItem
-          type: string
-        attributes:
+          description: The right pane &gt; Description &gt; The description of the sales category, which can serve as an identifier.
+        parentID:
+          type: integer
+          description: The right pane &gt; Parent category &gt; The primary/main category for Item sales.
+          format: int32
+        sortOrder:
+          type: integer
+          format: int32
+        subCategories:
           type: array
           items:
-            $ref: '#/components/schemas/ClassAttributeDto'
-        id:
+            $ref: '#/components/schemas/SalesCategoryDto'
+          description: A list can be expanded on the left side.
+      description: This class represents a Sales Category in SalesCategoryController. Used by getting data.
+    InventoryUnitDto:
+      type: object
+      properties:
+        unitType:
+          type: integer
+          format: int32
+        itemClass:
+          $ref: '#/components/schemas/ItemClassDto'
+        inventoryID:
+          type: integer
+          description: The top part &gt; Item ID &gt; The unique alphanumeric identifier of the stock item.
+          format: int32
+        toUnit:
           type: string
-          description: The identifier.
+          description: To unit &gt; The unit of measure selected as the base unit for the item.
+        sampleToUnit:
+          type: string
+        fromUnit:
+          type: string
+          description: 'Mandatory field: From unit &gt; The unit of measure for which the conversion parameters are specified.'
+        unitMultDiv:
+          type: string
+          description: Multiply/divide &gt; The operation to be performed for unit conversion.
+        unitRate:
+          type: number
+          format: double
+        priceAdjustmentMultiplier:
+          type: number
+          description: Price adjustment multiplier &gt; Changes the price automatically if you change the UoM.
+          format: double
+        recordID:
+          type: integer
+          format: int64
+    salesEuAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
         description:
           type: string
-          description: The description.
-        errorInfo:
+          description: Name of item/description
+      description: Sales - EU account &gt; The income account to be used for this stock item to record EU sales.
+    priceManagerInInventoryDto:
+      properties:
+        id:
           type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
+        name:
+          type: string
+      description: The Price/cost information tab &gt; Price management section &gt; Price manager &gt; The manager responsible for the product pricing.
     InventoryDto:
       type: object
       properties:
@@ -510,17 +646,33 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    salesEuAccountInInventoryAccountInformationDto:
+    intrastatInInventoryDto:
       properties:
-        type:
+        cN8:
           type: string
-        number:
+          description: 'Represents the 8 digit level Combine Nomenclature commodity code specific for the year
+
+            for which the creating / actualizations Intrastat declarations is drafted.'
+        countryOfOrigin:
           type: string
-          description: Number of item
+          description: 'The country of origin of the commodity will be selected,
+
+            that country where the good has been produced or had the last substantial transformation.'
+        supplementaryMeasureUnit:
+          type: string
+          description: 'The requirement for Supplementary Measure Units applies only to certain classes of goods(NC8 Positions)
+
+            that may be expressed from quantitative point of view in other measurement units but kilo also.'
+      description: General information tab &gt; Intrastat section
+    lotSerialClassInInventoryDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
-          description: Name of item/description
-      description: Sales - EU account &gt; The income account to be used for this stock item to record EU sales.
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; Lot/Serial Class* &gt; The lot serial class ID of the stock item, which by default is the ID associated with the item class.'
     salesAccountInInventoryAccountInformationDto:
       properties:
         type:
@@ -532,172 +684,37 @@ components:
           type: string
           description: Name of item/description
       description: 'Mandatory field: Sales account *&gt; The income account to be used for this stock item to record sales.'
-    postingClassInInventoryDto:
+    accountInformationInInventoryDto:
       properties:
-        id:
-          type: string
-          description: The identifier.
-        description:
-          type: string
-          description: The description.
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; Posting class* &gt; The posting class of the stock item, which by default is the posting class assigned to the item class.'
-    ClassAttributeDetailDto:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-    SalesCategoryDto:
-      type: object
-      properties:
-        categoryID:
-          type: integer
-          description: 'The left pane &gt; Categories. See the list of category members on the right side.
-
-            The right pane &gt; Item ID &gt; The unique identifier of the sales category.'
-          format: int32
-        description:
-          type: string
-          description: The right pane &gt; Description &gt; The description of the sales category, which can serve as an identifier.
-        parentID:
-          type: integer
-          description: The right pane &gt; Parent category &gt; The primary/main category for Item sales.
-          format: int32
-        sortOrder:
-          type: integer
-          format: int32
-        subCategories:
-          type: array
-          items:
-            $ref: '#/components/schemas/SalesCategoryDto'
-          description: A list can be expanded on the left side.
-      description: This class represents a Sales Category in SalesCategoryController. Used by getting data.
-    InventoryCrossReferenceDto:
-      type: object
-      properties:
-        alternateType:
-          enum:
-          - CPN
-          - VPN
-          - Global
-          - Barcode
-          type: string
-          description: Alternate type &gt; The type of alternate codification used for the item if applicable.
-        bAccount:
-          $ref: '#/components/schemas/bAccountInInventoryCrossReferenceDto'
-        alternateID:
-          type: string
-          description: 'Mandatory field: Alternate ID &gt; The alternate ID of the stock item (under the specified item ID) as used by the supplier or customer.'
-        description:
-          type: string
-          description: Description &gt; Any comments applicable to the specified cross-reference.
-        isDefault:
-          type: boolean
-          description: Default &gt; Indicates whether this cross-reference is marked as the default one.
-        uom:
-          type: string
-          description: UoM &gt; The unit of measure used for this component.
-        timestamp:
-          type: string
-          description: Timestamp of the inventory item the crossreference belongs to
-    priceClassInInventoryDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Price/cost information tab &gt; Price management section &gt; Price class &gt; The item price class associated with the non-stock item. Group stock or non-stock items with similar price calculation methods.
-    salesNonTaxableAccountInInventoryAccountInformationDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Sales - non-taxable account &gt; The income account to be used for this stock item to record non-taxable sales.
-    bAccountInInventoryCrossReferenceDto:
-      properties:
-        internalId:
-          type: integer
-          format: int32
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: 'Mandatory field: Supplier/Customer*, click magnifier &gt; Account ID &gt; Account no. identifying the business account.'
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    salesExportAccountInInventoryAccountInformationDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Sales - export account &gt; The income account to be used for this stock item to record export sales.
-    cogsAccountInInventoryAccountInformationDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Only used for Stock items.
-
-        COGS account &gt; The expense account to be used for this stock item to record the cost of goods sold (COGS) once the sales order is released.'
-    AttributeIdValueDto:
-      type: object
-      properties:
-        id:
-          type: string
-        value:
-          type: string
-          description: Value &gt; The value of the attribute.
-        description:
-          type: string
-          description: Attribute &gt; The description of the attribute.
-    packagingInInventoryDto:
-      properties:
-        baseItemWeight:
-          type: number
-          description: The weight of the <see cref="!:BaseUnit">Base Unit</see> of the item.
-          format: double
-        weightUOM:
-          type: string
-          description: The <see cref="!:INUnit">Unit of Measure</see> used for the <see cref="P:Visma.net.ERP.Web.Api.Model.V1.IN.PackagingDto.BaseItemWeight">Weight</see> of the item.
-        baseItemVolume:
-          type: number
-          description: The volume of the <see cref="!:BaseUnit">Base Unit</see> of the item.
-          format: double
-        volumeUOM:
-          type: string
-          description: The <see cref="!:INUnit">Unit of Measure</see> used for the <see cref="P:Visma.net.ERP.Web.Api.Model.V1.IN.PackagingDto.BaseItemVolume">Volume</see> of the item.
-      description: Packaging tab
+        expenseAccrualAccount:
+          $ref: '#/components/schemas/expenseAccrualAccountInInventoryAccountInformationDto'
+        inventoryAccount:
+          $ref: '#/components/schemas/inventoryAccountInInventoryAccountInformationDto'
+        expenseAccount:
+          $ref: '#/components/schemas/expenseAccountInInventoryAccountInformationDto'
+        cogsAccount:
+          $ref: '#/components/schemas/cogsAccountInInventoryAccountInformationDto'
+        expenseNonTaxableAccount:
+          $ref: '#/components/schemas/expenseNonTaxableAccountInInventoryAccountInformationDto'
+        expenseEuAccount:
+          $ref: '#/components/schemas/expenseEuAccountInInventoryAccountInformationDto'
+        expenseImportAccount:
+          $ref: '#/components/schemas/expenseImportAccountInInventoryAccountInformationDto'
+        expenseSubaccount:
+          $ref: '#/components/schemas/expenseSubaccountInInventoryAccountInformationDto'
+        cogsSubaccount:
+          $ref: '#/components/schemas/cogsSubaccountInInventoryAccountInformationDto'
+        salesAccount:
+          $ref: '#/components/schemas/salesAccountInInventoryAccountInformationDto'
+        salesNonTaxableAccount:
+          $ref: '#/components/schemas/salesNonTaxableAccountInInventoryAccountInformationDto'
+        salesEuAccount:
+          $ref: '#/components/schemas/salesEuAccountInInventoryAccountInformationDto'
+        salesExportAccount:
+          $ref: '#/components/schemas/salesExportAccountInInventoryAccountInformationDto'
+        salesSubaccount:
+          $ref: '#/components/schemas/salesSubaccountInInventoryAccountInformationDto'
+      description: General ledger account tab &gt;
     salesSubaccountInInventoryAccountInformationDto:
       properties:
         active:
@@ -709,40 +726,7 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: 'Mandatory field: Sales sub. *&gt; The subaccount to be used for this item to record sales.'
-    InventoryUnitDto:
-      type: object
-      properties:
-        unitType:
-          type: integer
-          format: int32
-        itemClass:
-          $ref: '#/components/schemas/ItemClassDto'
-        inventoryID:
-          type: integer
-          description: The top part &gt; Item ID &gt; The unique alphanumeric identifier of the stock item.
-          format: int32
-        toUnit:
-          type: string
-          description: To unit &gt; The unit of measure selected as the base unit for the item.
-        sampleToUnit:
-          type: string
-        fromUnit:
-          type: string
-          description: 'Mandatory field: From unit &gt; The unit of measure for which the conversion parameters are specified.'
-        unitMultDiv:
-          type: string
-          description: Multiply/divide &gt; The operation to be performed for unit conversion.
-        unitRate:
-          type: number
-          format: double
-        priceAdjustmentMultiplier:
-          type: number
-          description: Price adjustment multiplier &gt; Changes the price automatically if you change the UoM.
-          format: double
-        recordID:
-          type: integer
-          format: int64
-    expenseAccountInInventoryAccountInformationDto:
+    expenseImportAccountInInventoryAccountInformationDto:
       properties:
         type:
           type: string
@@ -752,142 +736,7 @@ components:
         description:
           type: string
           description: Name of item/description
-      description: 'Only used for Non-stock items.
-
-        Mandatory field: Expense account* &gt; The default expense account to be used for this non-stock item.'
-    expenseSubaccountInInventoryAccountInformationDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Only used for Non-stock items.
-
-        Mandatory field: Expense sub* &gt; The subaccount to be used by default with the expense account for transactions related to this non-stock item.'
-    WarehouseDetailDto:
-      type: object
-      properties:
-        isDefault:
-          type: boolean
-        warehouse:
-          type: string
-          description: Warehouse &gt; The warehouse where the stock item is available.
-        quantityOnHand:
-          type: number
-          description: Qty. on hand &gt; The quantity of this item available (on hand) at the warehouse.
-          format: double
-        available:
-          type: number
-          format: double
-        availableForShipment:
-          type: number
-          format: double
-        lastModifiedDateTime:
-          type: string
-          format: date-time
-      description: This class represents a WarehouseDetail part of InventoryItem in InventoryItemController. Used for getting data.
-    defaultIssueFromInInventoryDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: General information tab &gt; Warehouse defaults section &gt; Default issue from &gt; The location of the warehouse to be used by default to issue quantities of the selected stock item.
-    lotSerialClassInInventoryDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; Lot/Serial Class* &gt; The lot serial class ID of the stock item, which by default is the ID associated with the item class.'
-    defaultReceiptToInInventoryDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: General information tab &gt; Warehouse defaults section &gt; Default receipt to &gt; The location of warehouse to be used by default to receive certain quantities of the specified stock item.
-    vatCodeInInventoryDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; VAT category* &gt; The VAT code of the stock item, which by default is the VAT code associated with the item class.'
-    costPriceStatisticsInInventoryDto:
-      properties:
-        lastCost:
-          type: number
-          description: Cost price statistics section &gt; Last cost &gt; The last standard cost used for the stock item.
-          format: double
-        averageCost:
-          type: number
-          description: Cost price statistics section &gt; Average cost &gt; The average cost for the stock item.
-          format: double
-        minCost:
-          type: number
-          description: Cost price statistics section &gt; Min. cost &gt; The minimum cost for the stock item.
-          format: double
-        maxCost:
-          type: number
-          description: Cost price statistics section &gt; Max. cost &gt; The maximum cost for the stock item.
-          format: double
-      description: Price/cost information tab &gt;
-    ClassAttributeDto:
-      type: object
-      properties:
-        attributeId:
-          type: string
-          description: The Attributes tab &gt; Attribute ID &gt; The identifier of the attribute.
-        description:
-          type: string
-          description: The Attributes tab &gt; Description &gt; A read-only column that displays the detailed description of the attribute.
-        sortOrder:
-          type: integer
-          description: The Attributes tab &gt; Sort order &gt; A number that represents the order of the attribute in the list of class attributes.The lower the number, the higher the attribute will be in the list of class attributes.
-          format: int32
-        required:
-          type: boolean
-          description: The Attributes tab &gt; Required &gt; This check box indicates (if selected) that the attribute value is required for items of the class.
-        attributeType:
-          enum:
-          - Text
-          - Combo
-          - MultiSelectCombo
-          - Lookup
-          - Checkbox
-          - Datetime
-          type: string
-        defaultValue:
-          type: string
-          description: The Attributes tab &gt; Default value &gt; The default value of the attribute.
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClassAttributeDetailDto'
-    expenseNonTaxableAccountInInventoryAccountInformationDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Expense account, non-taxable &gt; The income account to be used for this stock item to record non-taxable expenses.
+      description: Expense account, import &gt; The income account to be used for this stock item to record import expenses.
     SupplierDetailsLineDto:
       type: object
       properties:
@@ -948,7 +797,49 @@ components:
       description: 'Only used for Stock items.
 
         Inventory account &gt; The asset account to be used to keep the inventory balance resulting from transactions with this stock item.'
-    defaultWarehouseInInventoryDto:
+    packagingInInventoryDto:
+      properties:
+        baseItemWeight:
+          type: number
+          description: The weight of the <see cref="!:BaseUnit">Base Unit</see> of the item.
+          format: double
+        weightUOM:
+          type: string
+          description: The <see cref="!:INUnit">Unit of Measure</see> used for the <see cref="P:Visma.net.ERP.Web.Api.Model.V1.IN.PackagingDto.BaseItemWeight">Weight</see> of the item.
+        baseItemVolume:
+          type: number
+          description: The volume of the <see cref="!:BaseUnit">Base Unit</see> of the item.
+          format: double
+        volumeUOM:
+          type: string
+          description: The <see cref="!:INUnit">Unit of Measure</see> used for the <see cref="P:Visma.net.ERP.Web.Api.Model.V1.IN.PackagingDto.BaseItemVolume">Volume</see> of the item.
+      description: Packaging tab
+    expenseAccrualAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Only used for Non-stock items.
+
+        Purchase accrual account &gt; Purchase order accrual account &gt; The liability account to be used for this stock item to accrue amounts on purchase orders related to this item.'
+    bAccountInInventoryCrossReferenceDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: Supplier/Customer*, click magnifier &gt; Account ID &gt; Account no. identifying the business account.'
+    vatCodeInInventoryDto:
       properties:
         id:
           type: string
@@ -956,14 +847,31 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: General information tab &gt; Warehouse defaults section &gt; Default warehouse &gt; The default warehouse used to store the stock item with the specified item ID.
-    priceManagerInInventoryDto:
+      description: 'Mandatory field: General information tab &gt; Item defaults section &gt; VAT category* &gt; The VAT code of the stock item, which by default is the VAT code associated with the item class.'
+    expenseEuAccountInInventoryAccountInformationDto:
       properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Expense EU account &gt; The income account to be used for this stock item to record EU expenses.
+    expenseSubaccountInInventoryAccountInformationDto:
+      properties:
+        active:
+          type: boolean
         id:
           type: string
-        name:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-      description: The Price/cost information tab &gt; Price management section &gt; Price manager &gt; The manager responsible for the product pricing.
+          description: Click on the magnifier. &gt; The description.
+      description: 'Only used for Non-stock items.
+
+        Mandatory field: Expense sub* &gt; The subaccount to be used by default with the expense account for transactions related to this non-stock item.'
     itemClassInInventoryDto:
       properties:
         type:
@@ -992,7 +900,29 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: 'Mandatory field: General information tab &gt; Item defaults section &gt; Item class* &gt; The item class to which the stock item is assigned.'
-    expenseImportAccountInInventoryAccountInformationDto:
+    WarehouseDetailDto:
+      type: object
+      properties:
+        isDefault:
+          type: boolean
+        warehouse:
+          type: string
+          description: Warehouse &gt; The warehouse where the stock item is available.
+        quantityOnHand:
+          type: number
+          description: Qty. on hand &gt; The quantity of this item available (on hand) at the warehouse.
+          format: double
+        available:
+          type: number
+          format: double
+        availableForShipment:
+          type: number
+          format: double
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+      description: This class represents a WarehouseDetail part of InventoryItem in InventoryItemController. Used for getting data.
+    expenseNonTaxableAccountInInventoryAccountInformationDto:
       properties:
         type:
           type: string
@@ -1002,7 +932,77 @@ components:
         description:
           type: string
           description: Name of item/description
-      description: Expense account, import &gt; The income account to be used for this stock item to record import expenses.
+      description: Expense account, non-taxable &gt; The income account to be used for this stock item to record non-taxable expenses.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    salesExportAccountInInventoryAccountInformationDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Sales - export account &gt; The income account to be used for this stock item to record export sales.
+    cogsSubaccountInInventoryAccountInformationDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Only used for Stock items.
+
+        COGS sub. &gt; The subaccount to be used for this item with the COGS account.'
+    ClassAttributeDetailDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    ItemClassDto:
+      type: object
+      properties:
+        type:
+          enum:
+          - NonStockItem
+          - LaborItem
+          - ServiceItem
+          - ChargeItem
+          - ExpenseItem
+          - FinishedGoodItem
+          - ComponentPartItem
+          - SubassemblyItem
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDto'
+        id:
+          type: string
+          description: The identifier.
+        description:
+          type: string
+          description: The description.
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
   securitySchemes:
     interactiveapi:
       type: oauth2

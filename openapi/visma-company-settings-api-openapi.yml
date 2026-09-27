@@ -147,6 +147,21 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    AccountingLockDateApi:
+      type: object
+      properties:
+        Year:
+          type: integer
+          description: Year
+          format: int32
+        Month:
+          maximum: 12
+          minimum: 1
+          type: integer
+          description: Month
+          format: int32
+      additionalProperties: false
+      description: 'Accounting locked as of year and month. Default: No lock'
     CompanySettingsApi:
       required:
       - Address1
@@ -517,61 +532,26 @@ components:
           format: int32
           readOnly: true
       additionalProperties: false
-    AutoInvoiceApi:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        AutoInvoiceActivationStatus:
+        ErrorCode:
           type: integer
-          description: <strong>Possible values:</strong><br/>0 = Unregistered,<br/>1 = Registered,<br/>2 = Activated<br/><br/>Auto invoice activation status.
           format: int32
-          readOnly: true
-        AutoInvoiceB2CStatus:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = NotActivated,<br/>1 = Pending,<br/>2 = Activated<br/><br/>Auto invoice B2C status, only for Norway and Finland.
-          format: int32
-          readOnly: true
-        AutoInvoiceInboundStatus:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Deactivated,<br/>1 = Activated<br/><br/>Auto invoice inbound status.
-          format: int32
-          readOnly: true
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
-      description: Auto invoice settings
-    CompanyScanningAddressApi:
-      type: object
-      properties:
-        Name:
-          type:
-          - string
-          - 'null'
-          description: The name of the person to receive the invoice scanning
-        Address1:
-          type:
-          - string
-          - 'null'
-          description: The first line of the address
-        Address2:
-          type:
-          - string
-          - 'null'
-          description: The second line of the address
-        PostCode:
-          type:
-          - string
-          - 'null'
-          description: The postal code of the address
-        PostOffice:
-          type:
-          - string
-          - 'null'
-          description: The postal office of the address
-        Email:
-          type:
-          - string
-          - 'null'
-          description: The email of the person to receive the invoice scanning
-      additionalProperties: false
-      description: Electronic invoice scanning address. Only valid if autoinvoice scanning is activated otherwise null
     CommonError:
       type: object
       properties:
@@ -592,34 +572,41 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    ApprovalSettingsApi:
+    CompanyRotRutSettingsApi:
       type: object
       properties:
-        UsesSupplierInvoiceApproval:
-          type: boolean
-          description: 'Whether supplier invoice approval is used. Used with: /v2/approval/supplierinvoice/{id}'
-          readOnly: true
-        UsesVatReportApproval:
-          type: boolean
-          description: 'Whether VAT report approval is used. Used with: /v2/approval/vatreport/{id}'
-          readOnly: true
-      additionalProperties: false
-      description: Approval company settings
-    CompanyGreenTechnologySettingsApi:
-      type: object
-      properties:
-        GreenTechnologyDeductionMaxAmount:
+        RutMaxAmountForPersBelow65Year:
+          maximum: 999999
+          minimum: 0
           type: number
-          description: Green technology deduction maximum amount
+          description: RUT maximum amount for persons below 65 years
           format: double
-          readOnly: true
-        SollarCellDiscountPercentage:
+        RutMaxAmountForPersOver65Year:
+          maximum: 999999
+          minimum: 0
           type: number
-          description: Solar cell discount percentage
+          description: RUT maximum amount for persons over 65 years
           format: double
-          readOnly: true
+        RutReducedInvoicingPercent:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: RUT reduced invoicing percentage
+          format: double
+        RotReducedInvoicingMaxAmount:
+          maximum: 999999
+          minimum: 0
+          type: number
+          description: ROT reduced invoicing maximum amount
+          format: double
+        RotReducedInvoicingPercent:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: ROT reduced invoicing percentage
+          format: double
       additionalProperties: false
-      description: Green Technology settings
+      description: ROT/RUT settings for Swedish companies. Use PUT v2/companysettings/rotrutsettings to update in combination with UsesRotReducedInvoicing set to true
     CompanyTextsApi:
       type: object
       properties:
@@ -723,41 +710,6 @@ components:
           description: Purchase order email text for foreign suppliers.
       additionalProperties: false
       description: Company additional text information
-    CompanyRotRutSettingsApi:
-      type: object
-      properties:
-        RutMaxAmountForPersBelow65Year:
-          maximum: 999999
-          minimum: 0
-          type: number
-          description: RUT maximum amount for persons below 65 years
-          format: double
-        RutMaxAmountForPersOver65Year:
-          maximum: 999999
-          minimum: 0
-          type: number
-          description: RUT maximum amount for persons over 65 years
-          format: double
-        RutReducedInvoicingPercent:
-          maximum: 1
-          minimum: 0
-          type: number
-          description: RUT reduced invoicing percentage
-          format: double
-        RotReducedInvoicingMaxAmount:
-          maximum: 999999
-          minimum: 0
-          type: number
-          description: ROT reduced invoicing maximum amount
-          format: double
-        RotReducedInvoicingPercent:
-          maximum: 1
-          minimum: 0
-          type: number
-          description: ROT reduced invoicing percentage
-          format: double
-      additionalProperties: false
-      description: ROT/RUT settings for Swedish companies. Use PUT v2/companysettings/rotrutsettings to update in combination with UsesRotReducedInvoicing set to true
     AccountingLockSettingsApi:
       type: object
       properties:
@@ -772,21 +724,6 @@ components:
         TaxDeclarationDate:
           $ref: '#/components/schemas/TaxDeclarationDateApi'
       additionalProperties: false
-    AccountingLockDateApi:
-      type: object
-      properties:
-        Year:
-          type: integer
-          description: Year
-          format: int32
-        Month:
-          maximum: 12
-          minimum: 1
-          type: integer
-          description: Month
-          format: int32
-      additionalProperties: false
-      description: 'Accounting locked as of year and month. Default: No lock'
     TaxDeclarationDateApi:
       type: object
       properties:
@@ -804,26 +741,89 @@ components:
           format: int32
       additionalProperties: false
       description: Tax declaration day and month. Only for Sweden and Finland
-    CommonExtendedBadRequest:
+    ApprovalSettingsApi:
       type: object
       properties:
-        ErrorCode:
+        UsesSupplierInvoiceApproval:
+          type: boolean
+          description: 'Whether supplier invoice approval is used. Used with: /v2/approval/supplierinvoice/{id}'
+          readOnly: true
+        UsesVatReportApproval:
+          type: boolean
+          description: 'Whether VAT report approval is used. Used with: /v2/approval/vatreport/{id}'
+          readOnly: true
+      additionalProperties: false
+      description: Approval company settings
+    AutoInvoiceApi:
+      type: object
+      properties:
+        AutoInvoiceActivationStatus:
           type: integer
+          description: <strong>Possible values:</strong><br/>0 = Unregistered,<br/>1 = Registered,<br/>2 = Activated<br/><br/>Auto invoice activation status.
           format: int32
-        DeveloperErrorMessage:
+          readOnly: true
+        AutoInvoiceB2CStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = NotActivated,<br/>1 = Pending,<br/>2 = Activated<br/><br/>Auto invoice B2C status, only for Norway and Finland.
+          format: int32
+          readOnly: true
+        AutoInvoiceInboundStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Deactivated,<br/>1 = Activated<br/><br/>Auto invoice inbound status.
+          format: int32
+          readOnly: true
+      additionalProperties: false
+      description: Auto invoice settings
+    CompanyScanningAddressApi:
+      type: object
+      properties:
+        Name:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+          description: The name of the person to receive the invoice scanning
+        Address1:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+          description: The first line of the address
+        Address2:
+          type:
+          - string
+          - 'null'
+          description: The second line of the address
+        PostCode:
+          type:
+          - string
+          - 'null'
+          description: The postal code of the address
+        PostOffice:
+          type:
+          - string
+          - 'null'
+          description: The postal office of the address
+        Email:
+          type:
+          - string
+          - 'null'
+          description: The email of the person to receive the invoice scanning
       additionalProperties: false
+      description: Electronic invoice scanning address. Only valid if autoinvoice scanning is activated otherwise null
+    CompanyGreenTechnologySettingsApi:
+      type: object
+      properties:
+        GreenTechnologyDeductionMaxAmount:
+          type: number
+          description: Green technology deduction maximum amount
+          format: double
+          readOnly: true
+        SollarCellDiscountPercentage:
+          type: number
+          description: Solar cell discount percentage
+          format: double
+          readOnly: true
+      additionalProperties: false
+      description: Green Technology settings
 x-tagGroups:
 - name: Sales
   tags:

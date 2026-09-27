@@ -269,20 +269,58 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    StandardAccountApi:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        AccountType:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-          description: The account type
-        AccountNumber:
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
           type:
-          - integer
+          - array
           - 'null'
-          description: The account number
-          format: int64
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfAccountApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountApi'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     CommonPaginationMetadata:
       required:
@@ -314,25 +352,18 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    CommonError:
+    PaginatedResponseOfStandardAccountApi:
+      required:
+      - Data
+      - Meta
       type: object
       properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StandardAccountApi'
       additionalProperties: false
     AccountApi:
       required:
@@ -419,51 +450,20 @@ components:
           description: If the account has account search information connected to it, will be shown as description
           readOnly: true
       additionalProperties: false
-    PaginatedResponseOfStandardAccountApi:
-      required:
-      - Data
-      - Meta
+    StandardAccountApi:
       type: object
       properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/StandardAccountApi'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        AccountType:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+          description: The account type
+        AccountNumber:
           type:
-          - array
+          - integer
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    PaginatedResponseOfAccountApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountApi'
+          description: The account number
+          format: int64
       additionalProperties: false
 x-tagGroups:
 - name: Sales

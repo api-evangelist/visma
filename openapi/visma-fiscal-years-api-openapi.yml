@@ -298,143 +298,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    FiscalYearApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: The unique identifier for the fiscal year
-          format: uuid
-          readOnly: true
-        StartDate:
-          type: string
-          description: The start date of the fiscal year
-          format: date-time
-        EndDate:
-          type: string
-          description: The end date of the fiscal year
-          format: date-time
-        IsLockedForAccounting:
-          type: boolean
-          description: Indicates if the fiscal year is locked for accounting purposes
-        BookkeepingMethod:
-          enum:
-          - 0
-          - 1
-          - 2
-          type: integer
-          description: The bookkeeping method used for the fiscal year
-          format: int32
-      additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    AccountOpeningBalanceApi:
-      type: object
-      properties:
-        AccountNumber:
-          type: integer
-          description: The account number to update
-          format: int64
-        Balance:
-          type: number
-          description: The opening balance amount to set
-          format: double
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    FiscalYearUpdateApi:
-      type: object
-      properties:
-        IsLockedForAccounting:
-          type: boolean
-          description: Indicates if the fiscal year should be locked for accounting purposes
-        BookkeepingMethod:
-          enum:
-          - 0
-          - 1
-          - 2
-          type:
-          - integer
-          - 'null'
-          description: The bookkeeping method used for the fiscal year. Defaults to the existing value if null
-          format: int32
-      additionalProperties: false
-    PaginatedResponseOfOpeningBalancesApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/OpeningBalancesApi'
-      additionalProperties: false
-    OpeningBalancesApi:
-      type: object
-      properties:
-        Name:
-          type:
-          - string
-          - 'null'
-          description: The name of the account
-        Number:
-          type: integer
-          description: The account number
-          format: int64
-        Balance:
-          type: number
-          description: The opening balance amount on the account
-          format: double
-      additionalProperties: false
     CommonExtendedBadRequest:
       type: object
       properties:
@@ -492,6 +355,143 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FiscalYearApi'
+      additionalProperties: false
+    FiscalYearUpdateApi:
+      type: object
+      properties:
+        IsLockedForAccounting:
+          type: boolean
+          description: Indicates if the fiscal year should be locked for accounting purposes
+        BookkeepingMethod:
+          enum:
+          - 0
+          - 1
+          - 2
+          type:
+          - integer
+          - 'null'
+          description: The bookkeeping method used for the fiscal year. Defaults to the existing value if null
+          format: int32
+      additionalProperties: false
+    OpeningBalancesApi:
+      type: object
+      properties:
+        Name:
+          type:
+          - string
+          - 'null'
+          description: The name of the account
+        Number:
+          type: integer
+          description: The account number
+          format: int64
+        Balance:
+          type: number
+          description: The opening balance amount on the account
+          format: double
+      additionalProperties: false
+    PaginatedResponseOfOpeningBalancesApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpeningBalancesApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    FiscalYearApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier for the fiscal year
+          format: uuid
+          readOnly: true
+        StartDate:
+          type: string
+          description: The start date of the fiscal year
+          format: date-time
+        EndDate:
+          type: string
+          description: The end date of the fiscal year
+          format: date-time
+        IsLockedForAccounting:
+          type: boolean
+          description: Indicates if the fiscal year is locked for accounting purposes
+        BookkeepingMethod:
+          enum:
+          - 0
+          - 1
+          - 2
+          type: integer
+          description: The bookkeeping method used for the fiscal year
+          format: int32
+      additionalProperties: false
+    AccountOpeningBalanceApi:
+      type: object
+      properties:
+        AccountNumber:
+          type: integer
+          description: The account number to update
+          format: int64
+        Balance:
+          type: number
+          description: The opening balance amount to set
+          format: double
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

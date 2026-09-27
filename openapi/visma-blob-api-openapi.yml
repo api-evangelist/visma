@@ -209,6 +209,35 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    BlobMetadata:
+      type: object
+      properties:
+        blobId:
+          type: string
+          format: uuid
+        blobName:
+          type: string
+        contentType:
+          type: string
+        mD5Hash:
+          type: string
+        fileChecksum:
+          type: string
+        size:
+          type: integer
+          format: int64
+        countryCode:
+          type: string
+        createdDateTimeUtc:
+          type: string
+          format: date-time
+    PresignedUrlResponse:
+      type: object
+      properties:
+        preSignedUrl:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/BlobMetadata'
     Stream:
       type: object
       properties:
@@ -244,35 +273,6 @@ components:
           type: string
         stateLocation:
           type: string
-    BlobMetadata:
-      type: object
-      properties:
-        blobId:
-          type: string
-          format: uuid
-        blobName:
-          type: string
-        contentType:
-          type: string
-        mD5Hash:
-          type: string
-        fileChecksum:
-          type: string
-        size:
-          type: integer
-          format: int64
-        countryCode:
-          type: string
-        createdDateTimeUtc:
-          type: string
-          format: date-time
-    PresignedUrlResponse:
-      type: object
-      properties:
-        preSignedUrl:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/BlobMetadata'
   securitySchemes:
     interactiveapi:
       type: oauth2

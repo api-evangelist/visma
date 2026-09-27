@@ -479,6 +479,42 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    countyInAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    contactInSupplierLocationDto:
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: General information tab &gt; Location contact section &gt;
     BackgroundApiAcceptedDto:
       type: object
       properties:
@@ -486,11 +522,43 @@ components:
           type: string
         stateLocation:
           type: string
+    AddressUpdateDto:
+      type: object
+      properties:
+        addressLine1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postalCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        city:
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        county:
+          $ref: '#/components/schemas/DtoValueOfString'
     DtoValueOfAddressUpdateDto:
       type: object
       properties:
         value:
           $ref: '#/components/schemas/AddressUpdateDto'
+    baccountIdInSupplierLocationUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field for creating a new location. Can not be updated after it has been created.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfContactInfoUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/ContactInfoUpdateDto'
     TaxCategoryNumberDescriptionDto:
       type: object
       properties:
@@ -500,11 +568,45 @@ components:
         description:
           type: string
           description: Name of item/description
-    baccountIdInSupplierLocationUpdateDto:
+    locationIdInSupplierLocationUpdateDto:
       properties:
         value:
           type: string
       description: Mandatory field for creating a new location. Can not be updated after it has been created.
+    ContactInfoUpdateDto:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        attention:
+          $ref: '#/components/schemas/DtoValueOfString'
+        email:
+          $ref: '#/components/schemas/DtoValueOfString'
+        web:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        fax:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    baccountInSupplierLocationDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: The top part &gt; Business connection* &gt; The business account this location is associated with. Click the magnifier.'
     SupplierLocationUpdateDto:
       type: object
       properties:
@@ -535,11 +637,6 @@ components:
         corporateId:
           $ref: '#/components/schemas/DtoValueOfString'
       description: This class represents a Location in LocationController. Used to create and update Location.
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
     addressInSupplierLocationDto:
       properties:
         addressId:
@@ -578,30 +675,6 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: Country &gt; The country.
-    DtoValueOfContactInfoUpdateDto:
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/ContactInfoUpdateDto'
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    locationIdInSupplierLocationUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field for creating a new location. Can not be updated after it has been created.
     SupplierLocationDto:
       type: object
       properties:
@@ -654,32 +727,6 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a Location in LocationController. Used for getting data.
-    countyInAddressDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
-    AddressUpdateDto:
-      type: object
-      properties:
-        addressLine1:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine2:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine3:
-          $ref: '#/components/schemas/DtoValueOfString'
-        postalCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        city:
-          $ref: '#/components/schemas/DtoValueOfString'
-        countryId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        county:
-          $ref: '#/components/schemas/DtoValueOfString'
     vatZoneInSupplierLocationDto:
       properties:
         id:
@@ -698,62 +745,15 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: General information tab &gt; Location address section &gt; VAT zone &gt; The VAT zone associated with the account location.
-    baccountInSupplierLocationDto:
-      properties:
-        internalId:
-          type: integer
-          format: int32
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: 'Mandatory field: The top part &gt; Business connection* &gt; The business account this location is associated with. Click the magnifier.'
-    contactInSupplierLocationDto:
-      properties:
-        contactId:
-          type: integer
-          format: int32
-        name:
-          type: string
-          description: Name &gt; The legal name of to appear on the documents.
-        attention:
-          type: string
-          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
-        email:
-          type: string
-          description: Email &gt; The email address of the customer/supplier/company as a business entity.
-        web:
-          type: string
-          description: Web &gt; The website of the company, if one exists.
-        phone1:
-          type: string
-          description: Phone 1 &gt; The default phone number.
-        phone2:
-          type: string
-          description: Phone 2 &gt; An additional phone number.
-        fax:
-          type: string
-          description: Fax &gt; The fax number.
-      description: General information tab &gt; Location contact section &gt;
-    ContactInfoUpdateDto:
+    MetadataDto:
       type: object
       properties:
-        name:
-          $ref: '#/components/schemas/DtoValueOfString'
-        attention:
-          $ref: '#/components/schemas/DtoValueOfString'
-        email:
-          $ref: '#/components/schemas/DtoValueOfString'
-        web:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone1:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone2:
-          $ref: '#/components/schemas/DtoValueOfString'
-        fax:
-          $ref: '#/components/schemas/DtoValueOfString'
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     SupplierPaymentMethodDetailDto:
       type: object
       properties:
