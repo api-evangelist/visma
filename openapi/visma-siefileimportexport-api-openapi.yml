@@ -131,72 +131,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    Sie4Api:
-      required:
-      - Encoding
-      - EndYearAdjustment
-      - ImportAccountNames
-      - ImportOpeningBalance
-      - MapLedgerAccount
-      - SieData
-      type: object
-      properties:
-        SieData:
-          minLength: 1
-          type: string
-          description: Base64 string containing SIE data
-        Encoding:
-          type: integer
-          description: <strong>Possible values:</strong><br/>Default = 1 (Codepage 437),<br/>Administration = 2 (Codepage 850),<br/>Utf8 = 3,<br/>Ascii = 4<br/><br/>File encoding type.
-          format: int32
-        MapLedgerAccount:
-          type: boolean
-          description: Map ledger accounts to company default
-        ImportOpeningBalance:
-          type: boolean
-          description: Import opening balance for accounts
-        EndYearAdjustment:
-          type: boolean
-          description: Perform end-year adjustment
-        ImportAccountNames:
-          type: boolean
-          description: Import account names from SIE
-        SeriesMappings:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/SeriesMapping'
-          description: 'Array of series mappings: from original series in SIE file, to new series in company'
-      additionalProperties: false
-    CommonBatchResponseApi:
-      type: object
-      properties:
-        CreatedRows:
-          type: integer
-          description: The number of rows created in the batch operation.
-          format: int32
-      additionalProperties: false
     DocumentApi:
       type: object
       properties:
@@ -244,19 +178,43 @@ components:
           - 'null'
           description: Title or descriptive name of the document
       additionalProperties: false
-    SeriesMapping:
+    Sie4Api:
+      required:
+      - Encoding
+      - EndYearAdjustment
+      - ImportAccountNames
+      - ImportOpeningBalance
+      - MapLedgerAccount
+      - SieData
       type: object
       properties:
-        OriginalSeries:
+        SieData:
+          minLength: 1
+          type: string
+          description: Base64 string containing SIE data
+        Encoding:
+          type: integer
+          description: <strong>Possible values:</strong><br/>Default = 1 (Codepage 437),<br/>Administration = 2 (Codepage 850),<br/>Utf8 = 3,<br/>Ascii = 4<br/><br/>File encoding type.
+          format: int32
+        MapLedgerAccount:
+          type: boolean
+          description: Map ledger accounts to company default
+        ImportOpeningBalance:
+          type: boolean
+          description: Import opening balance for accounts
+        EndYearAdjustment:
+          type: boolean
+          description: Perform end-year adjustment
+        ImportAccountNames:
+          type: boolean
+          description: Import account names from SIE
+        SeriesMappings:
           type:
-          - string
+          - array
           - 'null'
-          description: Original series name from the SIE file
-        NewSeries:
-          type:
-          - string
-          - 'null'
-          description: New series name to map to in the company
+          items:
+            $ref: '#/components/schemas/SeriesMapping'
+          description: 'Array of series mappings: from original series in SIE file, to new series in company'
       additionalProperties: false
     CommonError:
       type: object
@@ -277,6 +235,48 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    SeriesMapping:
+      type: object
+      properties:
+        OriginalSeries:
+          type:
+          - string
+          - 'null'
+          description: Original series name from the SIE file
+        NewSeries:
+          type:
+          - string
+          - 'null'
+          description: New series name to map to in the company
+      additionalProperties: false
+    CommonBatchResponseApi:
+      type: object
+      properties:
+        CreatedRows:
+          type: integer
+          description: The number of rows created in the batch operation.
+          format: int32
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

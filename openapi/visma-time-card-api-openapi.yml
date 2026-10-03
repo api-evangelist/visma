@@ -627,6 +627,109 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    projectInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The project that the employee worked on.
+    wedInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Wednesday, including overtime.
+    friInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Friday.
+    descriptionInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The description of the reported quantity.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    projectInTimeCardMaterialsDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
+    wedInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Wednesday.
+    TimeCardMaterialsDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: The time card line number
+          format: int32
+        itemId:
+          type: string
+          description: Item Id
+        description:
+          type: string
+          description: Description &gt; The description of the reported quantity.
+        uoM:
+          type: string
+          description: The unit of measure of item
+        project:
+          $ref: '#/components/schemas/projectInTimeCardMaterialsDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInTimeCardMaterialsDto'
+        mon:
+          type: number
+          description: Mon &gt; The quantity reported for Monday.
+          format: double
+        tue:
+          type: number
+          description: Tue &gt; The quantity reported for Tuesday.
+          format: double
+        wed:
+          type: number
+          description: Wed &gt; The quantity reported for Wednesday.
+          format: double
+        thu:
+          type: number
+          description: Thu &gt; The quantity reported for Thursday.
+          format: double
+        fri:
+          type: number
+          description: Fri &gt; The quantity reported for Friday.
+          format: double
+        sat:
+          type: number
+          description: Sat &gt; The quantity reported for Saturday.
+          format: double
+        sun:
+          type: number
+          description: Sun &gt; The quantity reported for Sunday.
+          format: double
+        totalQty:
+          type: number
+          description: Total Qty
+          format: double
+        lastModifiedDateTime:
+          type: string
+          format: date-time
     TimeCardDto:
       type: object
       properties:
@@ -718,104 +821,13 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    wedInTimeCardMaterialsUpdateDto:
+    thuInTimeCardMaterialsUpdateDto:
       properties:
         value:
           type: number
           format: double
-      description: The quantity reported for Wednesday.
-    projectTaskInTimeCardSummaryUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The project task that the employee worked on.
-    TimeCardMaterialsDto:
-      type: object
-      properties:
-        lineNumber:
-          type: integer
-          description: The time card line number
-          format: int32
-        itemId:
-          type: string
-          description: Item Id
-        description:
-          type: string
-          description: Description &gt; The description of the reported quantity.
-        uoM:
-          type: string
-          description: The unit of measure of item
-        project:
-          $ref: '#/components/schemas/projectInTimeCardMaterialsDto'
-        projectTask:
-          $ref: '#/components/schemas/projectTaskInTimeCardMaterialsDto'
-        mon:
-          type: number
-          description: Mon &gt; The quantity reported for Monday.
-          format: double
-        tue:
-          type: number
-          description: Tue &gt; The quantity reported for Tuesday.
-          format: double
-        wed:
-          type: number
-          description: Wed &gt; The quantity reported for Wednesday.
-          format: double
-        thu:
-          type: number
-          description: Thu &gt; The quantity reported for Thursday.
-          format: double
-        fri:
-          type: number
-          description: Fri &gt; The quantity reported for Friday.
-          format: double
-        sat:
-          type: number
-          description: Sat &gt; The quantity reported for Saturday.
-          format: double
-        sun:
-          type: number
-          description: Sun &gt; The quantity reported for Sunday.
-          format: double
-        totalQty:
-          type: number
-          description: Total Qty
-          format: double
-        lastModifiedDateTime:
-          type: string
-          format: date-time
-    friInTimeCardSummaryUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: The work time reported for Friday, including overtime.
-    projectInTimeCardMaterialsDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
-    projectInTimeCardSummaryUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The project that the employee worked on.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    PutTimeCardOnHoldActionResultDto:
+      description: The quantity reported for Thursday.
+    SendTimeCardToApprovalActionResultDto:
       type: object
       properties:
         actionId:
@@ -830,41 +842,6 @@ components:
           type: string
         errorInfo:
           type: string
-    TimeCardMaterialsUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        itemId:
-          $ref: '#/components/schemas/itemIdInTimeCardMaterialsUpdateDto'
-        description:
-          $ref: '#/components/schemas/descriptionInTimeCardMaterialsUpdateDto'
-        uoM:
-          $ref: '#/components/schemas/uoMInTimeCardMaterialsUpdateDto'
-        project:
-          $ref: '#/components/schemas/projectInTimeCardMaterialsUpdateDto'
-        projectTask:
-          $ref: '#/components/schemas/projectTaskInTimeCardMaterialsUpdateDto'
-        mon:
-          $ref: '#/components/schemas/monInTimeCardMaterialsUpdateDto'
-        tue:
-          $ref: '#/components/schemas/tueInTimeCardMaterialsUpdateDto'
-        wed:
-          $ref: '#/components/schemas/wedInTimeCardMaterialsUpdateDto'
-        thu:
-          $ref: '#/components/schemas/thuInTimeCardMaterialsUpdateDto'
-        fri:
-          $ref: '#/components/schemas/friInTimeCardMaterialsUpdateDto'
-        sat:
-          $ref: '#/components/schemas/satInTimeCardMaterialsUpdateDto'
-        sun:
-          $ref: '#/components/schemas/sunInTimeCardMaterialsUpdateDto'
     TimeCardSummaryDto:
       type: object
       properties:
@@ -943,37 +920,25 @@ components:
           type: string
           description: The last time the time card line was modified
           format: date-time
-    weekInTimeCardDto:
+    projectInTimeCardSummaryDto:
       properties:
-        number:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
           type: string
-          description: Number of item
+          description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
-          description: Name of item/description
-      description: The top part &gt; Week &gt; The week for which the time card has been created.
-    sunInTimeCardMaterialsUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The quantity reported for Sunday.
-    invoiceableInTimeCardSummaryUpdateDto:
-      properties:
-        value:
-          type: boolean
-      description: A check box that you select to indicate that these work hours are invoiceable.
-    itemIdInTimeCardMaterialsUpdateDto:
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
+    descriptionInTimeCardSummaryUpdateDto:
       properties:
         value:
           type: string
-      description: Item Id
-    descriptionInTimeCardMaterialsUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The description of the reported quantity.
-    SendTimeCardToApprovalActionResultDto:
+      description: The description of the reported work hours.
+    PutTimeCardOnHoldActionResultDto:
       type: object
       properties:
         actionId:
@@ -988,17 +953,6 @@ components:
           type: string
         errorInfo:
           type: string
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    monInTimeCardMaterialsUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The quantity reported for Monday.
     TimeCardUpdateDto:
       type: object
       properties:
@@ -1016,22 +970,30 @@ components:
           items:
             $ref: '#/components/schemas/TimeCardMaterialsUpdateDto'
           description: Time Card Materials information
-    descriptionInTimeCardSummaryUpdateDto:
+    monInTimeCardSummaryUpdateDto:
       properties:
         value:
+          type: integer
+          format: int32
+      description: The work time reported for Monday, including overtime.
+    invoiceableInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: A check box that you select to indicate that these work hours are invoiceable.
+    projectTaskInTimeCardSummaryDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
           type: string
-      description: The description of the reported work hours.
-    earningTypeInTimeCardSummaryUpdateDto:
-      properties:
-        value:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-      description: The type of the work time spent by the employee
-    tueInTimeCardMaterialsUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The quantity reported for Tuesday.
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The project task that the employee worked on.
     employeeInTimeCardDto:
       properties:
         internalId:
@@ -1043,27 +1005,80 @@ components:
           type: string
           description: The name of the particular destination of the selected type.
       description: The top part &gt; Employee &gt; The name of the employee whose time card is currently open.
-    thuInTimeCardMaterialsUpdateDto:
+    thuInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Thursday, including overtime.
+    satInTimeCardMaterialsUpdateDto:
       properties:
         value:
           type: number
           format: double
-      description: The quantity reported for Thursday.
-    SubmitTimeCardActionResultDto:
+      description: The quantity reported for Saturday.
+    projectTaskInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The project task that the employee worked on.
+    MetadataDto:
       type: object
       properties:
-        actionId:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    sunInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Sunday.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
           type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
+    projectInTimeCardSummaryUpdateDto:
+      properties:
+        value:
           type: string
-        errorInfo:
+      description: The project that the employee worked on.
+    earningTypeInTimeCardSummaryDto:
+      properties:
+        code:
           type: string
+          description: 'Mandatory field: Code* &gt; The unique ID of the type of hour.'
+        description:
+          type: string
+          description: 'Mandatory field: Description &gt; The brief description of the type of hour.'
+        isOvertime:
+          type: boolean
+          description: Overtime &gt; A check box that indicates (if selected) that the type of hour is treated as overtime.
+        isBillable:
+          type: boolean
+          description: Invoicable &gt; A check box that indicates (if selected) that the type is treated as invoiceable by default.
+        isActive:
+          type: boolean
+          description: Active &gt; A check box that indicates (if selected) that the type of hour is active and can be used.
+        overtimeMultiplier:
+          type: number
+          description: Multiplier &gt; The value by which the employee cost for this type of hour is multiplied when the time activity is released.
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+      description: Earning type &gt; The type of the work time spent by the employee
+    sunInTimeCardSummaryUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The work time reported for Sunday, including overtime.
     projectTaskInTimeCardMaterialsUpdateDto:
       properties:
         value:
@@ -1104,36 +1119,27 @@ components:
           $ref: '#/components/schemas/invoiceableInTimeCardSummaryUpdateDto'
         description:
           $ref: '#/components/schemas/descriptionInTimeCardSummaryUpdateDto'
-    satInTimeCardMaterialsUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The quantity reported for Saturday.
-    sunInTimeCardSummaryUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: The work time reported for Sunday, including overtime.
-    friInTimeCardMaterialsUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The quantity reported for Friday.
     satInTimeCardSummaryUpdateDto:
       properties:
         value:
           type: integer
           format: int32
       description: The work time reported for Saturday, including overtime.
-    thuInTimeCardSummaryUpdateDto:
+    friInTimeCardSummaryUpdateDto:
       properties:
         value:
           type: integer
           format: int32
-      description: The work time reported for Thursday, including overtime.
+      description: The work time reported for Friday, including overtime.
+    weekInTimeCardDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The top part &gt; Week &gt; The week for which the time card has been created.
     projectTaskInTimeCardMaterialsDto:
       properties:
         internalId:
@@ -1147,101 +1153,95 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Project task &gt; The project task that the employee worked on.
-    projectInTimeCardMaterialsUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The project that the employee worked on.
-    earningTypeInTimeCardSummaryDto:
-      properties:
-        code:
-          type: string
-          description: 'Mandatory field: Code* &gt; The unique ID of the type of hour.'
-        description:
-          type: string
-          description: 'Mandatory field: Description &gt; The brief description of the type of hour.'
-        isOvertime:
-          type: boolean
-          description: Overtime &gt; A check box that indicates (if selected) that the type of hour is treated as overtime.
-        isBillable:
-          type: boolean
-          description: Invoicable &gt; A check box that indicates (if selected) that the type is treated as invoiceable by default.
-        isActive:
-          type: boolean
-          description: Active &gt; A check box that indicates (if selected) that the type of hour is active and can be used.
-        overtimeMultiplier:
-          type: number
-          description: Multiplier &gt; The value by which the employee cost for this type of hour is multiplied when the time activity is released.
-          format: double
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-      description: Earning type &gt; The type of the work time spent by the employee
-    projectTaskInTimeCardSummaryDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The project task that the employee worked on.
-    wedInTimeCardSummaryUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: The work time reported for Wednesday, including overtime.
-    uoMInTimeCardMaterialsUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The unit of measure of item
     tueInTimeCardSummaryUpdateDto:
       properties:
         value:
           type: integer
           format: int32
       description: The work time reported for Tuesday, including overtime.
+    TimeCardMaterialsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        itemId:
+          $ref: '#/components/schemas/itemIdInTimeCardMaterialsUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInTimeCardMaterialsUpdateDto'
+        uoM:
+          $ref: '#/components/schemas/uoMInTimeCardMaterialsUpdateDto'
+        project:
+          $ref: '#/components/schemas/projectInTimeCardMaterialsUpdateDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInTimeCardMaterialsUpdateDto'
+        mon:
+          $ref: '#/components/schemas/monInTimeCardMaterialsUpdateDto'
+        tue:
+          $ref: '#/components/schemas/tueInTimeCardMaterialsUpdateDto'
+        wed:
+          $ref: '#/components/schemas/wedInTimeCardMaterialsUpdateDto'
+        thu:
+          $ref: '#/components/schemas/thuInTimeCardMaterialsUpdateDto'
+        fri:
+          $ref: '#/components/schemas/friInTimeCardMaterialsUpdateDto'
+        sat:
+          $ref: '#/components/schemas/satInTimeCardMaterialsUpdateDto'
+        sun:
+          $ref: '#/components/schemas/sunInTimeCardMaterialsUpdateDto'
+    tueInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Tuesday.
+    SubmitTimeCardActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    itemIdInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Item Id
+    uoMInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The unit of measure of item
+    monInTimeCardMaterialsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The quantity reported for Monday.
     DtoValueOfInt32:
       type: object
       properties:
         value:
           type: integer
           format: int32
-    monInTimeCardSummaryUpdateDto:
+    earningTypeInTimeCardSummaryUpdateDto:
       properties:
         value:
-          type: integer
-          format: int32
-      description: The work time reported for Monday, including overtime.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    projectInTimeCardSummaryDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
+      description: The type of the work time spent by the employee
   securitySchemes:
     interactiveapi:
       type: oauth2

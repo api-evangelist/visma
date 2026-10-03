@@ -155,76 +155,80 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    RelatedAccounts:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
       type: object
       properties:
-        AccountNumber1:
-          type:
-          - integer
-          - 'null'
-          description: The first account number for VAT.
-          format: int64
-        AccountNumber2:
-          type:
-          - integer
-          - 'null'
-          description: The second account number for VAT.
-          format: int64
-        AccountNumber3:
-          type:
-          - integer
-          - 'null'
-          description: The third account number for VAT.
-          format: int64
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
+        CurrentPage:
           type: integer
+          description: The current page number
           format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
           type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
       additionalProperties: false
-    VatCodeApi:
+    VatRateApi:
       type: object
       properties:
-        Id:
+        VatRateDate:
           type: string
-          description: The unique identifier of the vat code.
-          format: uuid
-          readOnly: true
-        Code:
-          type:
-          - string
-          - 'null'
-          description: The code representing the VAT category.
-        Description:
-          type:
-          - string
-          - 'null'
-          description: The description of the VAT code.
+          description: Vat rate start date
+          format: date-time
         VatRate:
           type: number
           description: The VAT rate as a percentage.
           format: double
-        OssCodeType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Sales,<br/>2 = Vat
-          format: int32
-        RelatedAccounts:
-          $ref: '#/components/schemas/RelatedAccounts'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfVatCodeRateApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VatCodeRateApi'
       additionalProperties: false
     VatCodeRateApi:
       type: object
@@ -258,36 +262,6 @@ components:
         RelatedAccounts:
           $ref: '#/components/schemas/RelatedAccounts'
       additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
     PaginatedResponseOfVatCodeApi:
       required:
       - Data
@@ -301,50 +275,76 @@ components:
           items:
             $ref: '#/components/schemas/VatCodeApi'
       additionalProperties: false
-    VatRateApi:
+    VatCodeApi:
       type: object
       properties:
-        VatRateDate:
+        Id:
           type: string
-          description: Vat rate start date
-          format: date-time
+          description: The unique identifier of the vat code.
+          format: uuid
+          readOnly: true
+        Code:
+          type:
+          - string
+          - 'null'
+          description: The code representing the VAT category.
+        Description:
+          type:
+          - string
+          - 'null'
+          description: The description of the VAT code.
         VatRate:
           type: number
           description: The VAT rate as a percentage.
           format: double
+        OssCodeType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Sales,<br/>2 = Vat
+          format: int32
+        RelatedAccounts:
+          $ref: '#/components/schemas/RelatedAccounts'
       additionalProperties: false
-    PaginatedResponseOfVatCodeRateApi:
-      required:
-      - Data
-      - Meta
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/VatCodeRateApi'
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
         ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-        Message:
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
           type:
-          - string
+          - array
           - 'null'
-        Key:
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    RelatedAccounts:
+      type: object
+      properties:
+        AccountNumber1:
           type:
-          - string
+          - integer
           - 'null'
+          description: The first account number for VAT.
+          format: int64
+        AccountNumber2:
+          type:
+          - integer
+          - 'null'
+          description: The second account number for VAT.
+          format: int64
+        AccountNumber3:
+          type:
+          - integer
+          - 'null'
+          description: The third account number for VAT.
+          format: int64
       additionalProperties: false
 x-tagGroups:
 - name: Sales

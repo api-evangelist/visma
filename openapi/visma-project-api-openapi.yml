@@ -1041,6 +1041,85 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    ProjectEmployeeUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        employeeId:
+          $ref: '#/components/schemas/DtoValueOfString'
+    contactInEmployeeDto:
+      properties:
+        employeeContact:
+          type: string
+          description: Employee contact &gt; The link to the contact record associated with the employee.
+        title:
+          enum:
+          - Doctor
+          - Miss
+          - Mr
+          - Mrs
+          - Ms
+          - Prof
+          type: string
+          description: Title &gt; The courtesy title to be used for the employee.
+        firstName:
+          type: string
+          description: First name &gt; The first name of the employee.
+        midName:
+          type: string
+          description: Middle name &gt; The middle name of the employee.
+        lastName:
+          type: string
+          description: 'Mandatory field: Last name* &gt; The last name of the employee.'
+        phone3:
+          type: string
+          description: Phone 3 &gt; An additional phone number of the employee.
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: General information tab &gt; Contact section &gt;
+    defAccrualSubInTaskExtendedDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: General ledger accounts tab &gt; Default values section &gt; Accrual subaccount &gt; The default accrual subaccount to be used in project transactions for the project task.
+    descriptionInProjectUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field
     allocationRuleInProjectDto:
       properties:
         active:
@@ -1060,46 +1139,6 @@ components:
           type: string
           description: Click the magnifier. &gt; The name.
       description: The top part &gt; Customer &gt; The customer for the project if this project is external.
-    AttributeIdValueDto:
-      type: object
-      properties:
-        id:
-          type: string
-        value:
-          type: string
-          description: Value &gt; The value of the attribute.
-        description:
-          type: string
-          description: Attribute &gt; The description of the attribute.
-    branchInTaskExtendedDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Summary tab &gt; Billing and Allocation settings &gt; Branch information: branch number and name.'
-    defAccountInTaskExtendedDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: General ledger accounts tab &gt; Default values section &gt; Default account &gt; The account to be used as one of the sources of possible accounts for the invoices and transactions for the project task.
-    BranchNumberDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
     countyInAddressDto:
       properties:
         id:
@@ -1109,50 +1148,116 @@ components:
           type: string
           description: Click the magnifier &gt; The displayed name
       description: County &gt; The county or province.
-    DtoValueOfNullableOfDateTime:
-      type: object
+    defSubInTaskExtendedDto:
       properties:
-        value:
+        active:
+          type: boolean
+        id:
           type: string
-          format: date-time
-    branchInTaskDto:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: General ledger accounts tab &gt; Default values section &gt; Default subaccount* &gt; The subaccount to be used as one of the sources of possible segment values for subaccounts to be used in the invoices and transactions for the project task.
+    billingRuleInProjectDto:
       properties:
-        number:
+        active:
+          type: boolean
+        id:
           type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Summary tab &gt; Billing and Allocation settings &gt; Branch information: branch number and name.'
-    startDateInProjectUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: Mandatory field
-    VisibilityUpdateDto:
+          description: Click on the magnifier. &gt; The description.
+      description: Summary tab &gt; Invoicing and allocation settings section &gt; Invoicing rule &gt; The default invoicing rule that is used for the tasks created for the project.
+    VisibilityDto:
       type: object
       properties:
         visibleInGl:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: General ledger
         visibleInAp:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Supplier ledger
         visibleInAr:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Customer ledger
         visibleInSo:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Sales
         visibleInPo:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Purchases
         visibleInEa:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Expenses
         visibleInTa:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Time entries
         visibleInIn:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Inventory
         visibleInCa:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Cash management
         visibleInCr:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+    visibilityInProjectDto:
+      properties:
+        visibleInGl:
+          type: boolean
+          description: General ledger
+        visibleInAp:
+          type: boolean
+          description: Supplier ledger
+        visibleInAr:
+          type: boolean
+          description: Customer ledger
+        visibleInSo:
+          type: boolean
+          description: Sales
+        visibleInPo:
+          type: boolean
+          description: Purchases
+        visibleInEa:
+          type: boolean
+          description: Expenses
+        visibleInTa:
+          type: boolean
+          description: Time entries
+        visibleInIn:
+          type: boolean
+          description: Inventory
+        visibleInCa:
+          type: boolean
+          description: Cash management
+        visibleInCr:
+          type: boolean
+      description: Summary tab &gt; Visibility settings section &gt;
+    taxCategoryInTaskExtendedDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT category &gt; The tax category for the project task.
+    ChangeProjectIdActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
     BackgroundApiAcceptedDto:
       type: object
       properties:
@@ -1160,17 +1265,207 @@ components:
           type: string
         stateLocation:
           type: string
-    defAccountInProjectDto:
+    DtoValueOfNullableOfProjTaskStatus:
+      type: object
       properties:
-        type:
+        value:
+          enum:
+          - Planned
+          - Active
+          - Cancelled
+          - Canceled
+          - Completed
           type: string
-        number:
+    TaskExtendedDto:
+      type: object
+      properties:
+        internalId:
+          type: integer
+          description: Internal ID* &gt; The internal ID of the task.
+          format: int32
+        projectInternalId:
+          type: integer
+          description: Project Internal ID* &gt; The internal ID of the project.
+          format: int32
+        defAccount:
+          $ref: '#/components/schemas/defAccountInTaskExtendedDto'
+        defSub:
+          $ref: '#/components/schemas/defSubInTaskExtendedDto'
+        defAccrualAccount:
+          $ref: '#/components/schemas/defAccrualAccountInTaskExtendedDto'
+        defAccrualSub:
+          $ref: '#/components/schemas/defAccrualSubInTaskExtendedDto'
+        taxCategory:
+          $ref: '#/components/schemas/taxCategoryInTaskExtendedDto'
+        lastModifiedDateTime:
           type: string
-          description: Number of item
+          description: Information collected from system.
+          format: date-time
+        createdDateTime:
+          type: string
+          description: Information collected from the system. Not visible on the screen.
+          format: date-time
+        taskId:
+          type: string
+          description: 'Mandatory field: &gt; Task ID* &gt; The ID of the task.'
         description:
           type: string
-          description: Name of item/description
-      description: General ledger accounts tab &gt; Default values section &gt; Default account &gt; The account to be used as one of the sources of possible accounts for the invoices and transactions for the project.
+          description: 'Mandatory field: Description &gt; The description of the task.'
+        plannedStart:
+          type: string
+          format: date-time
+        plannedEnd:
+          type: string
+          format: date-time
+        startDate:
+          type: string
+          description: Start date &gt; The date when the task was actually started.
+          format: date-time
+        endDate:
+          type: string
+          description: End date &gt; The date when the task was actually finished.
+          format: date-time
+        branch:
+          $ref: '#/components/schemas/branchInTaskExtendedDto'
+        rateTable:
+          $ref: '#/components/schemas/rateTableInTaskExtendedDto'
+        status:
+          enum:
+          - Planned
+          - Active
+          - Cancelled
+          - Canceled
+          - Completed
+          type: string
+          description: 'Mandatory field: Status* &gt; The status of the task, which can be one of the following: In planning, Active, Cancelled, Completed.'
+        restrictEmployees:
+          type: boolean
+          description: Summary tab &gt; Task properties section &gt; Restrict employees &gt; A check box that indicates (if selected) that only the employees listed on the Employees tab of this window can create activities and documents associated with the current task.
+        visibility:
+          $ref: '#/components/schemas/visibilityInTaskExtendedDto'
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        employees:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeeDto'
+          description: The Employees tab &gt; Information in this tab is retreived from EP203000 (Employees)
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeIdValueDto'
+          description: Attributes
+    EmployeeDto:
+      type: object
+      properties:
+        employeeUserId:
+          type: string
+          description: Employee internal user ID. This is the ID of the user linked to the employee
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        employeeId:
+          type: integer
+          description: 'Mandatory field: The top part &gt; Employee ID* &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEE segmented key.'
+          format: int32
+        employeeNumber:
+          type: string
+          description: General information tab &gt; Employee settings section &gt; Employee ref. no. &gt; A reference number for the employee.
+        employeeName:
+          type: string
+          description: The top part &gt; Employee name &gt; The name of this employee.
+        status:
+          enum:
+          - Active
+          - OnHold
+          - HoldPayments
+          - Inactive
+          - OneTime
+          type: string
+          description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
+        department:
+          type: string
+          description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
+        contact:
+          $ref: '#/components/schemas/contactInEmployeeDto'
+        address:
+          $ref: '#/components/schemas/addressInEmployeeDto'
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        employeeClass:
+          $ref: '#/components/schemas/employeeClassInEmployeeDto'
+        branch:
+          $ref: '#/components/schemas/BranchNumberDto'
+        calendarID:
+          type: string
+        employeeLogin:
+          type: string
+        workGroupDescription:
+          type: array
+          items:
+            type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents an Employee in EmployeeController. Used for getting data.
+    branchInProjectDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Summary tab &gt; Billing and Allocation Settings &gt; The branch information: branch number and name.'
+    TaskUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        taskId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        plannedStart:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        plannedEnd:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        startDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        rateTable:
+          $ref: '#/components/schemas/DtoValueOfString'
+        status:
+          $ref: '#/components/schemas/DtoValueOfNullableOfProjTaskStatus'
+        restrictEmployees:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        employees:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskEmployeeUpdateDto'
+    RateTableIdDescriptionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
     ProjectUpdateDto:
       required:
       - description
@@ -1245,11 +1540,78 @@ components:
         note:
           $ref: '#/components/schemas/DtoValueOfString'
       description: This class represent a Project in Project Controller. Used to pass data to server for creating or updating an project
-    DtoValueOfNullableOfBoolean:
+    branchInTaskExtendedDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Summary tab &gt; Billing and Allocation settings &gt; Branch information: branch number and name.'
+    TaskDto:
+      type: object
+      properties:
+        taskId:
+          type: string
+          description: 'Mandatory field: &gt; Task ID* &gt; The ID of the task.'
+        description:
+          type: string
+          description: 'Mandatory field: Description &gt; The description of the task.'
+        plannedStart:
+          type: string
+          format: date-time
+        plannedEnd:
+          type: string
+          format: date-time
+        startDate:
+          type: string
+          description: Start date &gt; The date when the task was actually started.
+          format: date-time
+        endDate:
+          type: string
+          description: End date &gt; The date when the task was actually finished.
+          format: date-time
+        branch:
+          $ref: '#/components/schemas/branchInTaskDto'
+        rateTable:
+          $ref: '#/components/schemas/RateTableIdDescriptionDto'
+        status:
+          enum:
+          - Planned
+          - Active
+          - Cancelled
+          - Canceled
+          - Completed
+          type: string
+          description: 'Mandatory field: Status* &gt; The status of the task, which can be one of the following: In planning, Active, Cancelled, Completed.'
+        restrictEmployees:
+          type: boolean
+          description: Summary tab &gt; Task properties section &gt; Restrict employees &gt; A check box that indicates (if selected) that only the employees listed on the Employees tab of this window can create activities and documents associated with the current task.
+        visibility:
+          $ref: '#/components/schemas/VisibilityDto'
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        employees:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeeDto'
+          description: The Employees tab &gt; Information in this tab is retreived from EP203000 (Employees)
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeIdValueDto'
+          description: Attributes
+    DtoValueOfNullableOfInt32:
       type: object
       properties:
         value:
-          type: boolean
+          type: integer
+          format: int32
     ProjectDto:
       type: object
       properties:
@@ -1392,35 +1754,7 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a Project in ProjectController. Used for getting data.
-    customerLocationInProjectDto:
-      properties:
-        id:
-          type: integer
-          description: Click the magnifier &gt; The identifier
-          format: int32
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Summary tab &gt; Invoice to section &gt; Customer location &gt; The location of the project's customer.
-    templateInProjectDto:
-      properties:
-        status:
-          enum:
-          - Planned
-          - Active
-          - Completed
-          - Cancelled
-          - OnHold
-          - PendingApproval
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: The top part &gt; Templated ID &gt; The template used for creating this project, if applicable.
-    defAccrualSubInProjectDto:
+    defSubInProjectDto:
       properties:
         active:
           type: boolean
@@ -1430,311 +1764,12 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: General ledger accounts tab &gt; Default values section &gt; Accrual subaccount &gt; The default accrual subaccount to be used in project transactions for the project.
-    billingRuleInProjectDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Summary tab &gt; Invoicing and allocation settings section &gt; Invoicing rule &gt; The default invoicing rule that is used for the tasks created for the project.
-    defAccrualSubInTaskExtendedDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: General ledger accounts tab &gt; Default values section &gt; Accrual subaccount &gt; The default accrual subaccount to be used in project transactions for the project task.
-    descriptionInProjectUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field
-    branchInProjectDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Summary tab &gt; Billing and Allocation Settings &gt; The branch information: branch number and name.'
-    defAccrualAccountInProjectDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: General ledger accounts tab &gt; Default values section &gt; Accrual account &gt; The default accrual account to be used in project transactions for the project.
-    DtoValueOfNullableOfProjTaskStatus:
+      description: 'Mandatory field: General ledger accounts tab &gt; Default values section &gt; Default subaccount* &gt; The subaccount to be used as one of the sources of possible segment values for subaccounts to be used in the invoices and transactions for the project.'
+    DtoValueOfNullableOfBoolean:
       type: object
       properties:
         value:
-          enum:
-          - Planned
-          - Active
-          - Cancelled
-          - Canceled
-          - Completed
-          type: string
-    ProjectEmployeeUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        employeeId:
-          $ref: '#/components/schemas/DtoValueOfString'
-    DtoValueOfNullableOfBillingPeriod:
-      type: object
-      properties:
-        value:
-          enum:
-          - Weekly
-          - Monthly
-          - Quarterly
-          - Annual
-          - OnDemand
-          type: string
-    RateTableIdDescriptionDto:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    VisibilityDto:
-      type: object
-      properties:
-        visibleInGl:
           type: boolean
-          description: General ledger
-        visibleInAp:
-          type: boolean
-          description: Supplier ledger
-        visibleInAr:
-          type: boolean
-          description: Customer ledger
-        visibleInSo:
-          type: boolean
-          description: Sales
-        visibleInPo:
-          type: boolean
-          description: Purchases
-        visibleInEa:
-          type: boolean
-          description: Expenses
-        visibleInTa:
-          type: boolean
-          description: Time entries
-        visibleInIn:
-          type: boolean
-          description: Inventory
-        visibleInCa:
-          type: boolean
-          description: Cash management
-        visibleInCr:
-          type: boolean
-    employeeClassInEmployeeDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Additional information about Employee User
-
-        ///'
-    defAccrualAccountInTaskExtendedDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: General ledger accounts tab &gt; Default values section &gt; Accrual account &gt; The default accrual account to be used in project transactions for the project task.
-    branchInProjectUpdateDto:
-      properties:
-        value:
-          type: string
-      description: 'Summary tab &gt; Billing and Allocation Settings &gt; The branch information: branch number and name.'
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    defSubInTaskExtendedDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: General ledger accounts tab &gt; Default values section &gt; Default subaccount* &gt; The subaccount to be used as one of the sources of possible segment values for subaccounts to be used in the invoices and transactions for the project task.
-    TaskDto:
-      type: object
-      properties:
-        taskId:
-          type: string
-          description: 'Mandatory field: &gt; Task ID* &gt; The ID of the task.'
-        description:
-          type: string
-          description: 'Mandatory field: Description &gt; The description of the task.'
-        plannedStart:
-          type: string
-          format: date-time
-        plannedEnd:
-          type: string
-          format: date-time
-        startDate:
-          type: string
-          description: Start date &gt; The date when the task was actually started.
-          format: date-time
-        endDate:
-          type: string
-          description: End date &gt; The date when the task was actually finished.
-          format: date-time
-        branch:
-          $ref: '#/components/schemas/branchInTaskDto'
-        rateTable:
-          $ref: '#/components/schemas/RateTableIdDescriptionDto'
-        status:
-          enum:
-          - Planned
-          - Active
-          - Cancelled
-          - Canceled
-          - Completed
-          type: string
-          description: 'Mandatory field: Status* &gt; The status of the task, which can be one of the following: In planning, Active, Cancelled, Completed.'
-        restrictEmployees:
-          type: boolean
-          description: Summary tab &gt; Task properties section &gt; Restrict employees &gt; A check box that indicates (if selected) that only the employees listed on the Employees tab of this window can create activities and documents associated with the current task.
-        visibility:
-          $ref: '#/components/schemas/VisibilityDto'
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-        employees:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmployeeDto'
-          description: The Employees tab &gt; Information in this tab is retreived from EP203000 (Employees)
-        attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributeIdValueDto'
-          description: Attributes
-    rateTableInProjectDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Summary tab &gt; Invoicing and allocation settings section &gt; Rate table &gt; The rate table to be used with the allocation rules, if applicable.
-    EmployeeDto:
-      type: object
-      properties:
-        employeeUserId:
-          type: string
-          description: Employee internal user ID. This is the ID of the user linked to the employee
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        employeeId:
-          type: integer
-          description: 'Mandatory field: The top part &gt; Employee ID* &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEE segmented key.'
-          format: int32
-        employeeNumber:
-          type: string
-          description: General information tab &gt; Employee settings section &gt; Employee ref. no. &gt; A reference number for the employee.
-        employeeName:
-          type: string
-          description: The top part &gt; Employee name &gt; The name of this employee.
-        status:
-          enum:
-          - Active
-          - OnHold
-          - HoldPayments
-          - Inactive
-          - OneTime
-          type: string
-          description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
-        department:
-          type: string
-          description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
-        contact:
-          $ref: '#/components/schemas/contactInEmployeeDto'
-        address:
-          $ref: '#/components/schemas/addressInEmployeeDto'
-        lastModifiedDateTime:
-          type: string
-          format: date-time
-        employeeClass:
-          $ref: '#/components/schemas/employeeClassInEmployeeDto'
-        branch:
-          $ref: '#/components/schemas/BranchNumberDto'
-        calendarID:
-          type: string
-        employeeLogin:
-          type: string
-        workGroupDescription:
-          type: array
-          items:
-            type: string
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: This class represents an Employee in EmployeeController. Used for getting data.
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
     countryInAddressDto:
       properties:
         id:
@@ -1748,304 +1783,65 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: Country &gt; The country.
-    TaskExtendedDto:
-      type: object
+    defAccountInTaskExtendedDto:
       properties:
-        internalId:
-          type: integer
-          description: Internal ID* &gt; The internal ID of the task.
-          format: int32
-        projectInternalId:
-          type: integer
-          description: Project Internal ID* &gt; The internal ID of the project.
-          format: int32
-        defAccount:
-          $ref: '#/components/schemas/defAccountInTaskExtendedDto'
-        defSub:
-          $ref: '#/components/schemas/defSubInTaskExtendedDto'
-        defAccrualAccount:
-          $ref: '#/components/schemas/defAccrualAccountInTaskExtendedDto'
-        defAccrualSub:
-          $ref: '#/components/schemas/defAccrualSubInTaskExtendedDto'
-        taxCategory:
-          $ref: '#/components/schemas/taxCategoryInTaskExtendedDto'
-        lastModifiedDateTime:
+        type:
           type: string
-          description: Information collected from system.
-          format: date-time
-        createdDateTime:
-          type: string
-          description: Information collected from the system. Not visible on the screen.
-          format: date-time
-        taskId:
-          type: string
-          description: 'Mandatory field: &gt; Task ID* &gt; The ID of the task.'
-        description:
-          type: string
-          description: 'Mandatory field: Description &gt; The description of the task.'
-        plannedStart:
-          type: string
-          format: date-time
-        plannedEnd:
-          type: string
-          format: date-time
-        startDate:
-          type: string
-          description: Start date &gt; The date when the task was actually started.
-          format: date-time
-        endDate:
-          type: string
-          description: End date &gt; The date when the task was actually finished.
-          format: date-time
-        branch:
-          $ref: '#/components/schemas/branchInTaskExtendedDto'
-        rateTable:
-          $ref: '#/components/schemas/rateTableInTaskExtendedDto'
-        status:
-          enum:
-          - Planned
-          - Active
-          - Cancelled
-          - Canceled
-          - Completed
-          type: string
-          description: 'Mandatory field: Status* &gt; The status of the task, which can be one of the following: In planning, Active, Cancelled, Completed.'
-        restrictEmployees:
-          type: boolean
-          description: Summary tab &gt; Task properties section &gt; Restrict employees &gt; A check box that indicates (if selected) that only the employees listed on the Employees tab of this window can create activities and documents associated with the current task.
-        visibility:
-          $ref: '#/components/schemas/visibilityInTaskExtendedDto'
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-        employees:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmployeeDto'
-          description: The Employees tab &gt; Information in this tab is retreived from EP203000 (Employees)
-        attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributeIdValueDto'
-          description: Attributes
-    TaskUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        taskId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        plannedStart:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        plannedEnd:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        startDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        rateTable:
-          $ref: '#/components/schemas/DtoValueOfString'
-        status:
-          $ref: '#/components/schemas/DtoValueOfNullableOfProjTaskStatus'
-        restrictEmployees:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        employees:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaskEmployeeUpdateDto'
-    addressInEmployeeDto:
-      properties:
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInAddressDto'
-      description: General information tab &gt; Address info section &gt;
-    TaskEmployeeUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        employeeId:
-          $ref: '#/components/schemas/DtoValueOfString'
-    defSubInProjectDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: General ledger accounts tab &gt; Default values section &gt; Default subaccount* &gt; The subaccount to be used as one of the sources of possible segment values for subaccounts to be used in the invoices and transactions for the project.'
-    contactInEmployeeDto:
-      properties:
-        employeeContact:
-          type: string
-          description: Employee contact &gt; The link to the contact record associated with the employee.
-        title:
-          enum:
-          - Doctor
-          - Miss
-          - Mr
-          - Mrs
-          - Ms
-          - Prof
-          type: string
-          description: Title &gt; The courtesy title to be used for the employee.
-        firstName:
-          type: string
-          description: First name &gt; The first name of the employee.
-        midName:
-          type: string
-          description: Middle name &gt; The middle name of the employee.
-        lastName:
-          type: string
-          description: 'Mandatory field: Last name* &gt; The last name of the employee.'
-        phone3:
-          type: string
-          description: Phone 3 &gt; An additional phone number of the employee.
-        contactId:
-          type: integer
-          format: int32
-        name:
-          type: string
-          description: Name &gt; The legal name of to appear on the documents.
-        attention:
-          type: string
-          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
-        email:
-          type: string
-          description: Email &gt; The email address of the customer/supplier/company as a business entity.
-        web:
-          type: string
-          description: Web &gt; The website of the company, if one exists.
-        phone1:
-          type: string
-          description: Phone 1 &gt; The default phone number.
-        phone2:
-          type: string
-          description: Phone 2 &gt; An additional phone number.
-        fax:
-          type: string
-          description: Fax &gt; The fax number.
-      description: General information tab &gt; Contact section &gt;
-    ChangeProjectIdActionDto:
-      type: object
-      properties:
-        projectId:
-          type: string
-    visibilityInTaskExtendedDto:
-      properties:
-        visibleInGl:
-          type: boolean
-          description: General ledger
-        visibleInAp:
-          type: boolean
-          description: Supplier ledger
-        visibleInAr:
-          type: boolean
-          description: Customer ledger
-        visibleInSo:
-          type: boolean
-          description: Sales
-        visibleInPo:
-          type: boolean
-          description: Purchases
-        visibleInEa:
-          type: boolean
-          description: Expenses
-        visibleInTa:
-          type: boolean
-          description: Time entries
-        visibleInIn:
-          type: boolean
-          description: Inventory
-        visibleInCa:
-          type: boolean
-          description: Cash management
-        visibleInCr:
-          type: boolean
-      description: Information retrieved from the Summary tab
-    visibilityInProjectDto:
-      properties:
-        visibleInGl:
-          type: boolean
-          description: General ledger
-        visibleInAp:
-          type: boolean
-          description: Supplier ledger
-        visibleInAr:
-          type: boolean
-          description: Customer ledger
-        visibleInSo:
-          type: boolean
-          description: Sales
-        visibleInPo:
-          type: boolean
-          description: Purchases
-        visibleInEa:
-          type: boolean
-          description: Expenses
-        visibleInTa:
-          type: boolean
-          description: Time entries
-        visibleInIn:
-          type: boolean
-          description: Inventory
-        visibleInCa:
-          type: boolean
-          description: Cash management
-        visibleInCr:
-          type: boolean
-      description: Summary tab &gt; Visibility settings section &gt;
-    taxCategoryInTaskExtendedDto:
-      properties:
         number:
           type: string
           description: Number of item
         description:
           type: string
           description: Name of item/description
-      description: VAT category &gt; The tax category for the project task.
-    MetadataDto:
+      description: General ledger accounts tab &gt; Default values section &gt; Default account &gt; The account to be used as one of the sources of possible accounts for the invoices and transactions for the project task.
+    SegmentUpdateDto:
       type: object
       properties:
-        totalCount:
+        segmentId:
           type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
+          format: int32
+        segmentValue:
+          type: string
+    employeeClassInEmployeeDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Additional information about Employee User
+
+        ///'
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    VisibilityUpdateDto:
+      type: object
+      properties:
+        visibleInGl:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        visibleInAp:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        visibleInAr:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        visibleInSo:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        visibleInPo:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        visibleInEa:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        visibleInTa:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        visibleInIn:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        visibleInCa:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        visibleInCr:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
     DtoValueOfNullableOfProjectStatus:
       type: object
       properties:
@@ -2058,30 +1854,80 @@ components:
           - OnHold
           - PendingApproval
           type: string
-    ChangeProjectIdActionResultDto:
+    MetadataDto:
       type: object
       properties:
-        actionId:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
           type: string
-          format: uuid
-        actionResult:
+    DtoValueOfNullableOfBillingPeriod:
+      type: object
+      properties:
+        value:
           enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
+          - Weekly
+          - Monthly
+          - Quarterly
+          - Annual
+          - OnDemand
           type: string
-        errorInfo:
-          type: string
-    rateTableInTaskExtendedDto:
+    customerLocationInProjectDto:
       properties:
         id:
+          type: integer
+          description: Click the magnifier &gt; The identifier
+          format: int32
+        name:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
+          description: Click the magnifier &gt; The displayed name
+      description: Summary tab &gt; Invoice to section &gt; Customer location &gt; The location of the project's customer.
+    branchInProjectUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Summary tab &gt; Billing and Allocation Settings &gt; The branch information: branch number and name.'
+    branchInTaskDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Summary tab &gt; Billing and Allocation settings &gt; Branch information: branch number and name.'
+    ChangeProjectIdActionDto:
+      type: object
+      properties:
+        projectId:
+          type: string
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    defAccountInProjectDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
         description:
           type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Rate table &gt; The rate table to be used in the allocation rules, if applicable.
+          description: Name of item/description
+      description: General ledger accounts tab &gt; Default values section &gt; Default account &gt; The account to be used as one of the sources of possible accounts for the invoices and transactions for the project.
     projectManagerInProjectDto:
       properties:
         employeeUserId:
@@ -2141,6 +1987,160 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: Summary tab &gt; Project properties section &gt; Project manager &gt; The person who is responsible for managing the project and authorised to approve the project task and task activities.
+    TaskEmployeeUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        employeeId:
+          $ref: '#/components/schemas/DtoValueOfString'
+    defAccrualSubInProjectDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: General ledger accounts tab &gt; Default values section &gt; Accrual subaccount &gt; The default accrual subaccount to be used in project transactions for the project.
+    visibilityInTaskExtendedDto:
+      properties:
+        visibleInGl:
+          type: boolean
+          description: General ledger
+        visibleInAp:
+          type: boolean
+          description: Supplier ledger
+        visibleInAr:
+          type: boolean
+          description: Customer ledger
+        visibleInSo:
+          type: boolean
+          description: Sales
+        visibleInPo:
+          type: boolean
+          description: Purchases
+        visibleInEa:
+          type: boolean
+          description: Expenses
+        visibleInTa:
+          type: boolean
+          description: Time entries
+        visibleInIn:
+          type: boolean
+          description: Inventory
+        visibleInCa:
+          type: boolean
+          description: Cash management
+        visibleInCr:
+          type: boolean
+      description: Information retrieved from the Summary tab
+    addressInEmployeeDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: General information tab &gt; Address info section &gt;
+    templateInProjectDto:
+      properties:
+        status:
+          enum:
+          - Planned
+          - Active
+          - Completed
+          - Cancelled
+          - OnHold
+          - PendingApproval
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The top part &gt; Templated ID &gt; The template used for creating this project, if applicable.
+    rateTableInProjectDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Summary tab &gt; Invoicing and allocation settings section &gt; Rate table &gt; The rate table to be used with the allocation rules, if applicable.
+    AttributeIdValueDto:
+      type: object
+      properties:
+        id:
+          type: string
+        value:
+          type: string
+          description: Value &gt; The value of the attribute.
+        description:
+          type: string
+          description: Attribute &gt; The description of the attribute.
+    defAccrualAccountInProjectDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: General ledger accounts tab &gt; Default values section &gt; Accrual account &gt; The default accrual account to be used in project transactions for the project.
+    startDateInProjectUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: Mandatory field
+    defAccrualAccountInTaskExtendedDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: General ledger accounts tab &gt; Default values section &gt; Accrual account &gt; The default accrual account to be used in project transactions for the project task.
+    rateTableInTaskExtendedDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Rate table &gt; The rate table to be used in the allocation rules, if applicable.
   securitySchemes:
     interactiveapi:
       type: oauth2

@@ -130,6 +130,86 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    DeliveryMethodApi:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the delivery method
+          format: uuid
+          readOnly: true
+        Name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name of the delivery method
+        NameEnglish:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: English name of the delivery method
+        Code:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Code of the delivery method
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     PaginatedResponseOfDeliveryMethodApi:
       required:
       - Data
@@ -162,86 +242,6 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    DeliveryMethodApi:
-      required:
-      - Name
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier for the delivery method
-          format: uuid
-          readOnly: true
-        Name:
-          maxLength: 100
-          minLength: 0
-          type: string
-          description: Name of the delivery method
-        NameEnglish:
-          maxLength: 200
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: English name of the delivery method
-        Code:
-          maxLength: 20
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Code of the delivery method
-      additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

@@ -467,31 +467,49 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a contact in ContactController. Used by getting data.
-    addressInContactDto:
+    BackgroundApiAcceptedDto:
+      type: object
       properties:
-        addressId:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
           type: integer
-          format: int32
-        addressLine1:
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
           type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
+    DtoValueOfAddressUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/AddressUpdateDto'
+    DtoValueOfEmployeeTitles:
+      type: object
+      properties:
+        value:
+          enum:
+          - Doctor
+          - Miss
+          - Mr
+          - Mrs
+          - Ms
+          - Prof
           type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInAddressDto'
-      description: The Details tab &gt; Address section &gt;
     countyInAddressDto:
       properties:
         id:
@@ -546,37 +564,44 @@ components:
           $ref: '#/components/schemas/DtoValueOfBoolean'
         noMarketing:
           $ref: '#/components/schemas/DtoValueOfBoolean'
-    DtoValueOfAddressUpdateDto:
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/AddressUpdateDto'
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    BackgroundApiAcceptedDto:
-      type: object
+    countryInAddressDto:
       properties:
         id:
           type: string
-        stateLocation:
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
           type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    addressInContactDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: The Details tab &gt; Address section &gt;
     DtoValueOfContactMethods:
       type: object
       properties:
@@ -605,31 +630,6 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         county:
           $ref: '#/components/schemas/DtoValueOfString'
-    countryInAddressDto:
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
-          type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    DtoValueOfEmployeeTitles:
-      type: object
-      properties:
-        value:
-          enum:
-          - Doctor
-          - Miss
-          - Mr
-          - Mrs
-          - Ms
-          - Prof
-          type: string
   securitySchemes:
     interactiveapi:
       type: oauth2

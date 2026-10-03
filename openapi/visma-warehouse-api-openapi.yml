@@ -282,24 +282,81 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    projectInWarehouseLocationDto:
+    WarehouseLocationDto:
+      type: object
       properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
+        locationId:
+          type: string
+          description: Location ID &gt; The unique ID of the warehouse location.
+        description:
+          type: string
+          description: Description &gt; A brief description of the warehouse location.
+        active:
+          type: boolean
+          description: Active &gt; This check box indicates whether this location is active.
+        inclQtyAvail:
+          type: boolean
+          description: Include in qty. available &gt; You select this check box if the quantities of goods available at this location will be included in the quantities of available goods and used in inventory transactions, such as issues and transfers.
+        isCosted:
+          type: boolean
+          description: Cost separately &gt; You select this check box if the costs for goods available at this location will be calculated separately from costs calculated at the system-level; that is, for FIFO and specific valuation methods, separate cost layers will be created for this location.
+        salesValid:
+          type: boolean
+          description: Sales allowed &gt; You select this check box if sales are allowed from this location.
+        receiptsValid:
+          type: boolean
+          description: Receipts allowed &gt; You select this check box if receipts are allowed at this location.
+        transfersValid:
+          type: boolean
+          description: Transfers allowed &gt; You select this check box if transfers are allowed for this location.
+        assemblyValid:
+          type: boolean
+          description: Assembly allowed &gt; You select this check box if assembly operations are allowed at this location.
+        primaryItemValid:
+          enum:
+          - PrimaryNothing
+          - PrimaryItemWarning
+          - PrimaryItemError
+          - PrimaryItemClassWarning
+          - PrimaryItemClassError
+          type: string
+          description: Primary item validation &gt; An option indicating whether the operations with the primary item should be validated for this location and how.
+        primaryItem:
+          $ref: '#/components/schemas/primaryItemInWarehouseLocationDto'
+        primaryItemClass:
+          $ref: '#/components/schemas/primaryItemClassInWarehouseLocationDto'
+        project:
+          $ref: '#/components/schemas/projectInWarehouseLocationDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInWarehouseLocationDto'
+    primaryItemIdInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Primary item &gt; The primary item for this location, which is the item that is received the most often or stored here in the highest volumes.
+    shipLocationInWarehouseDto:
+      properties:
         id:
           type: string
           description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Project &gt; The project to associate with this location by default.
-    salesValidInWarehouseLocationUpdateDto:
+      description: Location table tab &gt; Shipping location &gt; The warehouse location to be used to ship goods.
+    replenishmentClassInWarehouseDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Replenishment class &gt; The replenishment class associated with this warehouse.
+    primaryItemClassIdInWarehouseLocationUpdateDto:
       properties:
         value:
-          type: boolean
-      description: Sales allowed &gt; You select this check box if sales are allowed from this location.
+          type: string
+      description: Primary item class &gt; The primary item class for this location; items of this class are received the most often or stored here in the highest volumes.
     receiptsValidInWarehouseLocationUpdateDto:
       properties:
         value:
@@ -312,68 +369,11 @@ components:
           type: string
         stateLocation:
           type: string
-    addressInWarehouseDto:
-      properties:
-        addressId:
-          type: integer
-          description: Information retrieved from the system.
-          format: int32
-        addressType:
-          type: string
-          description: Information retrieved from the system.
-        validated:
-          type: boolean
-          description: Information retrieved from the system.
-        addressLine1:
-          type: string
-          description: Address ! &gt; The first line in the address of the warehouse.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line in the warehouse address.
-        city:
-          type: string
-          description: City &gt; The city of the warehouse address.
-        country:
-          $ref: '#/components/schemas/countryInWarehouseAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInWarehouseAddressDto'
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode relevant for the warehouse address.
-      description: Address information tab &gt; Address section &gt;
-    primaryItemIdInWarehouseLocationUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Primary item &gt; The primary item for this location, which is the item that is received the most often or stored here in the highest volumes.
-    countyInWarehouseAddressDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county where the warehouse is located.
-    isCostedInWarehouseLocationUpdateDto:
+    inclQtyAvailInWarehouseLocationUpdateDto:
       properties:
         value:
           type: boolean
-      description: Cost separately &gt; You select this check box if the costs for goods available at this location will be calculated separately from costs calculated at the system-level; that is, for FIFO and specific valuation methods, separate cost layers will be created for this location.
-    assemblyValidInWarehouseLocationUpdateDto:
-      properties:
-        value:
-          type: boolean
-      description: Assembly allowed &gt; You select this check box if assembly operations are allowed at this location.
-    returnLocationInWarehouseDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Location table tab &gt; RMA location &gt; The RMA warehouse location.
+      description: Include in qty. available &gt; You select this check box if the quantities of goods available at this location will be included in the quantities of available goods and used in inventory transactions, such as issues and transfers.
     ClassAttributeDto:
       type: object
       properties:
@@ -411,6 +411,11 @@ components:
         value:
           type: string
       description: Project &gt; The project to associate with this location by default.
+    activeInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Active &gt; This check box indicates whether this location is active.
     contactInWarehouseDto:
       properties:
         contactId:
@@ -439,13 +444,8 @@ components:
           type: string
           description: Fax &gt; The fax number of the contact person assigned to this warehouse.
       description: Address information tab &gt; Contact section &gt;
-    pickPriorityInWarehouseLocationUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: Pick priority &gt; The order of which location should have priority.
-    replenishmentClassInWarehouseDto:
+    ClassAttributeDetailDto:
+      type: object
       properties:
         id:
           type: string
@@ -453,58 +453,20 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; Replenishment class &gt; The replenishment class associated with this warehouse.
-    branchInWarehouseDto:
+    countyInWarehouseAddressDto:
       properties:
-        number:
+        id:
           type: string
-          description: Click the magnifier. &gt; The identifier.
+          description: Click the magnifier &gt; The identifier
         name:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: The top part &gt; Branch* &gt; The branch associated with the company.'
-    dropShipLocationInWarehouseDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Location table tab &gt; Drop-ship location &gt; The warehouse location used to account for drop shipments.
-    primaryItemClassInWarehouseLocationDto:
-      properties:
-        type:
-          enum:
-          - NonStockItem
-          - LaborItem
-          - ServiceItem
-          - ChargeItem
-          - ExpenseItem
-          - FinishedGoodItem
-          - ComponentPartItem
-          - SubassemblyItem
-          type: string
-        attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClassAttributeDto'
-        id:
-          type: string
-          description: The identifier.
-        description:
-          type: string
-          description: The description.
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Primary item class &gt; The primary item class for this location; items of this class are received the most often or stored here in the highest volumes.
-    activeInWarehouseLocationUpdateDto:
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county where the warehouse is located.
+    locationIdInWarehouseLocationUpdateDto:
       properties:
         value:
-          type: boolean
-      description: Active &gt; This check box indicates whether this location is active.
+          type: string
+      description: Location ID &gt; The unique ID of the warehouse location.
     countryInWarehouseAddressDto:
       properties:
         id:
@@ -518,6 +480,19 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: Country &gt; The country where the warehouse is located.
+    projectTaskInWarehouseLocationDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The project task to associate with this location by default.
     WarehouseDto:
       type: object
       properties:
@@ -588,24 +563,51 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Location table tab &gt; Receiving location &gt; The warehouse location to be used to receive goods.
-    projectTaskInWarehouseLocationDto:
+    primaryItemValidInWarehouseLocationUpdateDto:
       properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
+        value:
+          enum:
+          - PrimaryNothing
+          - PrimaryItemWarning
+          - PrimaryItemError
+          - PrimaryItemClassWarning
+          - PrimaryItemClassError
+          type: string
+      description: Primary item validation &gt; An option indicating whether the operations with the primary item should be validated for this location and how.
+    transfersValidInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Transfers allowed &gt; You select this check box if transfers are allowed for this location.
+    dropShipLocationInWarehouseDto:
+      properties:
         id:
           type: string
           description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The project task to associate with this location by default.
-    projectTaskIdInWarehouseLocationUpdateDto:
+      description: Location table tab &gt; Drop-ship location &gt; The warehouse location used to account for drop shipments.
+    salesValidInWarehouseLocationUpdateDto:
       properties:
         value:
-          type: string
-      description: Project task &gt; The project task to associate with this location by default.
+          type: boolean
+      description: Sales allowed &gt; You select this check box if sales are allowed from this location.
+    pickPriorityInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: Pick priority &gt; The order of which location should have priority.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     WarehouseLocationUpdateDto:
       type: object
       properties:
@@ -639,7 +641,92 @@ components:
           $ref: '#/components/schemas/projectIdInWarehouseLocationUpdateDto'
         projectTaskId:
           $ref: '#/components/schemas/projectTaskIdInWarehouseLocationUpdateDto'
-    shipLocationInWarehouseDto:
+    assemblyValidInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Assembly allowed &gt; You select this check box if assembly operations are allowed at this location.
+    addressInWarehouseDto:
+      properties:
+        addressId:
+          type: integer
+          description: Information retrieved from the system.
+          format: int32
+        addressType:
+          type: string
+          description: Information retrieved from the system.
+        validated:
+          type: boolean
+          description: Information retrieved from the system.
+        addressLine1:
+          type: string
+          description: Address ! &gt; The first line in the address of the warehouse.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line in the warehouse address.
+        city:
+          type: string
+          description: City &gt; The city of the warehouse address.
+        country:
+          $ref: '#/components/schemas/countryInWarehouseAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInWarehouseAddressDto'
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode relevant for the warehouse address.
+      description: Address information tab &gt; Address section &gt;
+    isCostedInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: Cost separately &gt; You select this check box if the costs for goods available at this location will be calculated separately from costs calculated at the system-level; that is, for FIFO and specific valuation methods, separate cost layers will be created for this location.
+    projectTaskIdInWarehouseLocationUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Project task &gt; The project task to associate with this location by default.
+    projectInWarehouseLocationDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project &gt; The project to associate with this location by default.
+    primaryItemClassInWarehouseLocationDto:
+      properties:
+        type:
+          enum:
+          - NonStockItem
+          - LaborItem
+          - ServiceItem
+          - ChargeItem
+          - ExpenseItem
+          - FinishedGoodItem
+          - ComponentPartItem
+          - SubassemblyItem
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassAttributeDto'
+        id:
+          type: string
+          description: The identifier.
+        description:
+          type: string
+          description: The description.
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Primary item class &gt; The primary item class for this location; items of this class are received the most often or stored here in the highest volumes.
+    returnLocationInWarehouseDto:
       properties:
         id:
           type: string
@@ -647,12 +734,12 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Location table tab &gt; Shipping location &gt; The warehouse location to be used to ship goods.
-    transfersValidInWarehouseLocationUpdateDto:
+      description: Location table tab &gt; RMA location &gt; The RMA warehouse location.
+    descriptionInWarehouseLocationUpdateDto:
       properties:
         value:
-          type: boolean
-      description: Transfers allowed &gt; You select this check box if transfers are allowed for this location.
+          type: string
+      description: Description &gt; A brief description of the warehouse location.
     primaryItemInWarehouseLocationDto:
       properties:
         number:
@@ -662,102 +749,15 @@ components:
           type: string
           description: Name of item/description
       description: Primary item &gt; The primary item for this location, which is the item that is received the most often or stored here in the highest volumes.
-    inclQtyAvailInWarehouseLocationUpdateDto:
+    branchInWarehouseDto:
       properties:
-        value:
-          type: boolean
-      description: Include in qty. available &gt; You select this check box if the quantities of goods available at this location will be included in the quantities of available goods and used in inventory transactions, such as issues and transfers.
-    locationIdInWarehouseLocationUpdateDto:
-      properties:
-        value:
+        number:
           type: string
-      description: Location ID &gt; The unique ID of the warehouse location.
-    WarehouseLocationDto:
-      type: object
-      properties:
-        locationId:
+          description: Click the magnifier. &gt; The identifier.
+        name:
           type: string
-          description: Location ID &gt; The unique ID of the warehouse location.
-        description:
-          type: string
-          description: Description &gt; A brief description of the warehouse location.
-        active:
-          type: boolean
-          description: Active &gt; This check box indicates whether this location is active.
-        inclQtyAvail:
-          type: boolean
-          description: Include in qty. available &gt; You select this check box if the quantities of goods available at this location will be included in the quantities of available goods and used in inventory transactions, such as issues and transfers.
-        isCosted:
-          type: boolean
-          description: Cost separately &gt; You select this check box if the costs for goods available at this location will be calculated separately from costs calculated at the system-level; that is, for FIFO and specific valuation methods, separate cost layers will be created for this location.
-        salesValid:
-          type: boolean
-          description: Sales allowed &gt; You select this check box if sales are allowed from this location.
-        receiptsValid:
-          type: boolean
-          description: Receipts allowed &gt; You select this check box if receipts are allowed at this location.
-        transfersValid:
-          type: boolean
-          description: Transfers allowed &gt; You select this check box if transfers are allowed for this location.
-        assemblyValid:
-          type: boolean
-          description: Assembly allowed &gt; You select this check box if assembly operations are allowed at this location.
-        primaryItemValid:
-          enum:
-          - PrimaryNothing
-          - PrimaryItemWarning
-          - PrimaryItemError
-          - PrimaryItemClassWarning
-          - PrimaryItemClassError
-          type: string
-          description: Primary item validation &gt; An option indicating whether the operations with the primary item should be validated for this location and how.
-        primaryItem:
-          $ref: '#/components/schemas/primaryItemInWarehouseLocationDto'
-        primaryItemClass:
-          $ref: '#/components/schemas/primaryItemClassInWarehouseLocationDto'
-        project:
-          $ref: '#/components/schemas/projectInWarehouseLocationDto'
-        projectTask:
-          $ref: '#/components/schemas/projectTaskInWarehouseLocationDto'
-    primaryItemClassIdInWarehouseLocationUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Primary item class &gt; The primary item class for this location; items of this class are received the most often or stored here in the highest volumes.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    primaryItemValidInWarehouseLocationUpdateDto:
-      properties:
-        value:
-          enum:
-          - PrimaryNothing
-          - PrimaryItemWarning
-          - PrimaryItemError
-          - PrimaryItemClassWarning
-          - PrimaryItemClassError
-          type: string
-      description: Primary item validation &gt; An option indicating whether the operations with the primary item should be validated for this location and how.
-    descriptionInWarehouseLocationUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Description &gt; A brief description of the warehouse location.
-    ClassAttributeDetailDto:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: The top part &gt; Branch* &gt; The branch associated with the company.'
   securitySchemes:
     interactiveapi:
       type: oauth2

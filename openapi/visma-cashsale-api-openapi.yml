@@ -580,7 +580,144 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    branchNumberInCashSaleLineDto:
+    CashSaleUpdateDto:
+      type: object
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        creditTermsId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        paymentReference:
+          $ref: '#/components/schemas/paymentReferenceInCashSaleUpdateDto'
+        cashSaleLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashSaleLinesUpdateDto'
+        referenceNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        childCustomerNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        consolidateInvoices:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        documentDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        origInvoiceDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInCashSaleUpdateDto'
+        financialPeriod:
+          $ref: '#/components/schemas/financialPeriodInCashSaleUpdateDto'
+        invoiceText:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        salesPersonID:
+          $ref: '#/components/schemas/salesPersonIDInCashSaleUpdateDto'
+        salesperson:
+          $ref: '#/components/schemas/salespersonInCashSaleUpdateDto'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        cashAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        dontPrint:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        dontEmail:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+    paymentMethodInCashSaleDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    accountInCashSaleDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
+    subaccountInCashSaleDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
+    locationInCashSaleDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
+
+        location of the selected customer or, if the invoice is created from an opportunity,
+
+        it is the customer location specified for the opportunity.'
+    branchNumberInCashSaleDto:
       properties:
         number:
           type: string
@@ -588,7 +725,189 @@ components:
         name:
           type: string
           description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: Branch* &gt; The branch that sells the line item or provides the service.'
+      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    postPeriodInCashSaleUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    subaccountInCashSaleLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: Subaccount* &gt; The corresponding subaccount used for this transaction.'
+    countryInCustomerDocumentAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    salesPersonIDInCashSaleUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The field is deprecated for customer document endpoints, please use Salesperson instead
+    invoiceAddressInCashSaleDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInCustomerDocumentAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInCustomerDocumentAddressDto'
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box that indicates (if selected) that the invoice address is not the default invoice address of the customer.
+      description: The Invoice address tab &gt; The Invoice address section.
+    creditTermsInCashSaleDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The Financial details tab &gt; Payment info section &gt; Terms*'
+    salespersonInCashSaleUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The identifier of the salesperson involved.
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    invoiceContactInCashSaleDto:
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        businessName:
+          type: string
+        attention:
+          type: string
+        email:
+          type: string
+        phone1:
+          type: string
+        overrideContact:
+          type: boolean
+      description: The Invoice address tab &gt; The Invoice contact section.
+    financialPeriodInCashSaleUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
     countyInCustomerDocumentAddressDto:
       properties:
         id:
@@ -598,6 +917,53 @@ components:
           type: string
           description: Click the magnifier &gt; The displayed name
       description: County &gt; The county or province.
+    vatCodeInCashSaleLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: VAT category &gt; The VAT category (if applied) for the transaction. The category represents the type of goods or services.
+    paymentReferenceInCashSaleUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory
+    customerInCashSaleDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The top part &gt; Customer &gt; The customer associated with the document.
+    accountInCashSaleLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Account* &gt; The sales account used for the transaction.'
     CashSaleDto:
       type: object
       properties:
@@ -811,93 +1177,57 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a invoice in InvoiceController. Used by getting data.
-    BackgroundApiAcceptedDto:
+    CashSaleLinesUpdateDto:
       type: object
       properties:
-        id:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
-        stateLocation:
-          type: string
-    invoiceAddressInCashSaleDto:
-      properties:
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInCustomerDocumentAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInCustomerDocumentAddressDto'
-        overrideAddress:
-          type: boolean
-          description: Override address &gt; A check box that indicates (if selected) that the invoice address is not the default invoice address of the customer.
-      description: The Invoice address tab &gt; The Invoice address section.
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    paymentReferenceInCashSaleUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory
-    sellerInCashSaleLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
         description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Salesperson ID &gt; The identifier of the salesperson involved.
-    subaccountInCashSaleDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        unitPriceInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        accountNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        vatCodeId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        discountPercent:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        discountAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualDiscount:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        subaccount:
           type: array
           items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        salesperson:
+          $ref: '#/components/schemas/DtoValueOfString'
+        deferralSchedule:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        deferralCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        termStartDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        termEndDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
     ArAdjustDto:
       type: object
       properties:
@@ -937,65 +1267,16 @@ components:
           type: string
         invoiceText:
           type: string
-    subaccountInCashSaleLineDto:
+    salesPersonInCashSaleDto:
       properties:
-        subaccountNumber:
+        id:
           type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
+          description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: 'Mandatory field: Subaccount* &gt; The corresponding subaccount used for this transaction.'
-    accountInCashSaleLineDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Account* &gt; The sales account used for the transaction.'
-    branchNumberInCashSaleDto:
+          description: Click on the magnifier. &gt; The description.
+      description: The document details tab &gt; Salesperson ID &gt; The salesperson involved.
+    branchNumberInCashSaleLineDto:
       properties:
         number:
           type: string
@@ -1003,77 +1284,7 @@ components:
         name:
           type: string
           description: Click the magnifier. &gt; The name.
-      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
-    invoiceContactInCashSaleDto:
-      properties:
-        contactId:
-          type: integer
-          format: int32
-        businessName:
-          type: string
-        attention:
-          type: string
-        email:
-          type: string
-        phone1:
-          type: string
-        overrideContact:
-          type: boolean
-      description: The Invoice address tab &gt; The Invoice contact section.
-    CashSaleUpdateDto:
-      type: object
-      properties:
-        paymentMethodId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        creditTermsId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        paymentReference:
-          $ref: '#/components/schemas/paymentReferenceInCashSaleUpdateDto'
-        cashSaleLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/CashSaleLinesUpdateDto'
-        referenceNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        customerNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        childCustomerNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        consolidateInvoices:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        documentDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        origInvoiceDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        hold:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        postPeriod:
-          $ref: '#/components/schemas/postPeriodInCashSaleUpdateDto'
-        financialPeriod:
-          $ref: '#/components/schemas/financialPeriodInCashSaleUpdateDto'
-        invoiceText:
-          $ref: '#/components/schemas/DtoValueOfString'
-        locationId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        salesPersonID:
-          $ref: '#/components/schemas/salesPersonIDInCashSaleUpdateDto'
-        salesperson:
-          $ref: '#/components/schemas/salespersonInCashSaleUpdateDto'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        cashAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        dontPrint:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        dontEmail:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
+      description: 'Mandatory field: Branch* &gt; The branch that sells the line item or provides the service.'
     CashSaleLineDto:
       type: object
       properties:
@@ -1195,73 +1406,21 @@ components:
           $ref: '#/components/schemas/branchNumberInCashSaleLineDto'
         externalLink:
           type: string
-    DtoValueOfDecimal:
-      type: object
+    sellerInCashSaleLineDto:
       properties:
-        value:
-          type: number
-          format: double
-    financialPeriodInCashSaleUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    postPeriodInCashSaleUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    locationInCashSaleDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
         id:
           type: string
-          description: Click the magnifier &gt; The identifier
-        name:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
-
-        location of the selected customer or, if the invoice is created from an opportunity,
-
-        it is the customer location specified for the opportunity.'
-    DtoValueOfDateTime:
+          description: Click on the magnifier. &gt; The description.
+      description: Salesperson ID &gt; The identifier of the salesperson involved.
+    DtoValueOfInt32:
       type: object
       properties:
         value:
-          type: string
-          format: date-time
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
           type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
           format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
     projectInCashSaleDto:
       properties:
         internalId:
@@ -1275,165 +1434,6 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
-    customerInCashSaleDto:
-      properties:
-        number:
-          type: string
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The top part &gt; Customer &gt; The customer associated with the document.
-    salespersonInCashSaleUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The identifier of the salesperson involved.
-    salesPersonInCashSaleDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The document details tab &gt; Salesperson ID &gt; The salesperson involved.
-    accountInCashSaleDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
-    paymentMethodInCashSaleDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
-    salesPersonIDInCashSaleUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: The field is deprecated for customer document endpoints, please use Salesperson instead
-    CashSaleLinesUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        inventoryNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        unitPriceInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        manualAmountInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        accountNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        vatCodeId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        discountPercent:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        discountAmountInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        manualDiscount:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        subaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-        salesperson:
-          $ref: '#/components/schemas/DtoValueOfString'
-        deferralSchedule:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        deferralCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        termStartDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        termEndDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-    vatCodeInCashSaleLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: VAT category &gt; The VAT category (if applied) for the transaction. The category represents the type of goods or services.
-    countryInCustomerDocumentAddressDto:
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
-          type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    creditTermsInCashSaleDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The Financial details tab &gt; Payment info section &gt; Terms*'
   securitySchemes:
     interactiveapi:
       type: oauth2

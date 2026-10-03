@@ -298,50 +298,35 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    FiscalYearCreateApi:
+    CommonPaginationMetadata:
       required:
-      - EndDate
-      - StartDate
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
       type: object
       properties:
-        StartDate:
-          type: string
-          description: The start date of the fiscal year
-          format: date-time
-        EndDate:
-          type: string
-          description: The end date of the fiscal year
-          format: date-time
-        BookkeepingMethod:
-          enum:
-          - 0
-          - 1
-          - 2
-          type:
-          - integer
-          - 'null'
-          description: The bookkeeping method used for the fiscal year. Defaults to the bookkeeping method of the closest existing fiscal year if null
+        CurrentPage:
+          type: integer
+          description: The current page number
           format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
       additionalProperties: false
     PaginatedResponseOfFiscalYearApi:
       required:
@@ -356,22 +341,53 @@ components:
           items:
             $ref: '#/components/schemas/FiscalYearApi'
       additionalProperties: false
-    FiscalYearUpdateApi:
+    FiscalYearApi:
       type: object
       properties:
+        Id:
+          type: string
+          description: The unique identifier for the fiscal year
+          format: uuid
+          readOnly: true
+        StartDate:
+          type: string
+          description: The start date of the fiscal year
+          format: date-time
+        EndDate:
+          type: string
+          description: The end date of the fiscal year
+          format: date-time
         IsLockedForAccounting:
           type: boolean
-          description: Indicates if the fiscal year should be locked for accounting purposes
+          description: Indicates if the fiscal year is locked for accounting purposes
         BookkeepingMethod:
           enum:
           - 0
           - 1
           - 2
-          type:
-          - integer
-          - 'null'
-          description: The bookkeeping method used for the fiscal year. Defaults to the existing value if null
+          type: integer
+          description: The bookkeeping method used for the fiscal year
           format: int32
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     OpeningBalancesApi:
       type: object
@@ -403,44 +419,12 @@ components:
           items:
             $ref: '#/components/schemas/OpeningBalancesApi'
       additionalProperties: false
-    CommonPaginationMetadata:
+    FiscalYearCreateApi:
       required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
+      - EndDate
+      - StartDate
       type: object
       properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    FiscalYearApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: The unique identifier for the fiscal year
-          format: uuid
-          readOnly: true
         StartDate:
           type: string
           description: The start date of the fiscal year
@@ -449,17 +433,53 @@ components:
           type: string
           description: The end date of the fiscal year
           format: date-time
-        IsLockedForAccounting:
-          type: boolean
-          description: Indicates if the fiscal year is locked for accounting purposes
         BookkeepingMethod:
           enum:
           - 0
           - 1
           - 2
-          type: integer
-          description: The bookkeeping method used for the fiscal year
+          type:
+          - integer
+          - 'null'
+          description: The bookkeeping method used for the fiscal year. Defaults to the bookkeeping method of the closest existing fiscal year if null
           format: int32
+      additionalProperties: false
+    FiscalYearUpdateApi:
+      type: object
+      properties:
+        IsLockedForAccounting:
+          type: boolean
+          description: Indicates if the fiscal year should be locked for accounting purposes
+        BookkeepingMethod:
+          enum:
+          - 0
+          - 1
+          - 2
+          type:
+          - integer
+          - 'null'
+          description: The bookkeeping method used for the fiscal year. Defaults to the existing value if null
+          format: int32
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     AccountOpeningBalanceApi:
       type: object
@@ -472,26 +492,6 @@ components:
           type: number
           description: The opening balance amount to set
           format: double
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

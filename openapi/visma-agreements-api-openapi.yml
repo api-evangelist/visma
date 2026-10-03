@@ -147,25 +147,121 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
-    CommonExtendedBadRequest:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
       type: object
       properties:
-        ErrorCode:
+        CurrentPage:
           type: integer
+          description: The current page number
           format: int32
-        DeveloperErrorMessage:
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    InconvenientTimeRuleApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the inconvenient time rule
+          format: uuid
+        DayFilter:
+          type:
+          - integer
+          - 'null'
+          description: Code indicating which day the rule applies to. For possible enum values see https://developer.vismaonline.com/docs/enums#dayfilter
+          format: int32
+        CodedDay:
+          type:
+          - integer
+          - 'null'
+          description: Numeric code corresponding to a specific holiday or related day. For possible enum values see https://developer.vismaonline.com/docs/enums#codedday
+          format: int32
+        InconvenientTimeCode:
+          type: integer
+          description: Code representing the type of inconvenient time compensation. For possible enum values see https://developer.vismaonline.com/docs/enums#inconvenienttimecode
+          format: int32
+        StartTime:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+          description: 'Start time of the inconvenient time period (format: HH:mm)'
+        EndTime:
           type:
-          - array
+          - string
           - 'null'
+          description: 'End time of the inconvenient time period (format: HH:mm)'
+        CreatedUtc:
+          type: string
+          description: UTC timestamp when the rule was created
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the rule was last modified
+          format: date-time
+        OrderNumber:
+          type: integer
+          description: Order in which this rule should be evaluated relative to other rules
+          format: int32
+        TimeRuleAnnualDateId:
+          type:
+          - string
+          - 'null'
+          description: 'Reference to a specific annual date for this rule. Source: Get from /v1/timeruleannualdates'
+          format: uuid
+      additionalProperties: false
+    PaginatedResponseOfAgreementApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
           items:
-            $ref: '#/components/schemas/CommonError'
+            $ref: '#/components/schemas/AgreementApi'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     AgreementApi:
       type: object
@@ -368,58 +464,6 @@ components:
             $ref: '#/components/schemas/OverTimeRuleApi'
           description: Collection of overtime rules associated with this agreement
       additionalProperties: false
-    InconvenientTimeRuleApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier for the inconvenient time rule
-          format: uuid
-        DayFilter:
-          type:
-          - integer
-          - 'null'
-          description: Code indicating which day the rule applies to. For possible enum values see https://developer.vismaonline.com/docs/enums#dayfilter
-          format: int32
-        CodedDay:
-          type:
-          - integer
-          - 'null'
-          description: Numeric code corresponding to a specific holiday or related day. For possible enum values see https://developer.vismaonline.com/docs/enums#codedday
-          format: int32
-        InconvenientTimeCode:
-          type: integer
-          description: Code representing the type of inconvenient time compensation. For possible enum values see https://developer.vismaonline.com/docs/enums#inconvenienttimecode
-          format: int32
-        StartTime:
-          type:
-          - string
-          - 'null'
-          description: 'Start time of the inconvenient time period (format: HH:mm)'
-        EndTime:
-          type:
-          - string
-          - 'null'
-          description: 'End time of the inconvenient time period (format: HH:mm)'
-        CreatedUtc:
-          type: string
-          description: UTC timestamp when the rule was created
-          format: date-time
-        ModifiedUtc:
-          type: string
-          description: UTC timestamp when the rule was last modified
-          format: date-time
-        OrderNumber:
-          type: integer
-          description: Order in which this rule should be evaluated relative to other rules
-          format: int32
-        TimeRuleAnnualDateId:
-          type:
-          - string
-          - 'null'
-          description: 'Reference to a specific annual date for this rule. Source: Get from /v1/timeruleannualdates'
-          format: uuid
-      additionalProperties: false
     OverTimeRuleApi:
       type: object
       properties:
@@ -476,314 +520,25 @@ components:
           description: 'Reference to a specific annual date for this rule. Source: Get from /v1/timeruleannualdates'
           format: uuid
       additionalProperties: false
-    PaginatedResponseOfAgreementApi:
-      required:
-      - Data
-      - Meta
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgreementApi'
-      additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
-          format: date-time
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
         ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    OverTimeRuleResponse:
-      type: object
-      properties:
-        Id:
+        ErrorId:
           type: string
-          description: Unique identifier for the overtime rule
           format: uuid
-        DayFilter:
-          type:
-          - integer
-          - 'null'
-          description: Code indicating which day the rule applies to. For possible enum values see https://developer.vismaonline.com/docs/enums#dayfilter
-          format: int32
-        CodedDay:
-          type:
-          - integer
-          - 'null'
-          description: Numeric code corresponding to a specific holiday or related day. For possible enum values see https://developer.vismaonline.com/docs/enums#codedday
-          format: int32
-        StartTime:
-          type:
-          - string
-          - 'null'
-          description: 'Start time of the overtime period (format: HH:mm)'
-        EndTime:
-          type:
-          - string
-          - 'null'
-          description: 'End time of the overtime period (format: HH:mm)'
-        OvertimeCode:
-          type: integer
-          description: Code indicating the classification of overtime based on defined compensation categories. For possible enum values see https://developer.vismaonline.com/docs/enums#overtimecode
-          format: int32
-        CompensationTimeCode:
-          type: integer
-          description: Code indicating the classification of time compensation based on defined compensation categories. For possible enum values see https://developer.vismaonline.com/docs/enums#compensationtimecode
-          format: int32
-        CreatedUtc:
-          type: string
-          description: UTC timestamp when the rule was created
-          format: date-time
-        ModifiedUtc:
-          type: string
-          description: UTC timestamp when the rule was last modified
-          format: date-time
-        OrderNumber:
-          type: integer
-          description: Order in which this rule should be evaluated relative to other rules
-          format: int32
-        TimeRuleAnnualDateId:
-          type:
-          - string
-          - 'null'
-          description: 'Reference to a specific annual date for this rule. Source: Get from /v2/timeruleannualdates'
-          format: uuid
-      additionalProperties: false
-    OverTimeRuleRequest:
-      type: object
-      properties:
-        DayFilter:
-          type:
-          - integer
-          - 'null'
-          description: Code indicating which day the rule applies to. For possible enum values see https://developer.vismaonline.com/docs/enums#dayfilter
-          format: int32
-        CodedDay:
-          type:
-          - integer
-          - 'null'
-          description: Numeric code corresponding to a specific holiday or related day. For possible enum values see https://developer.vismaonline.com/docs/enums#codedday
-          format: int32
-        StartTime:
-          type:
-          - string
-          - 'null'
-          description: 'Start time of the overtime period (format: HH:mm)'
-        EndTime:
-          type:
-          - string
-          - 'null'
-          description: 'End time of the overtime period (format: HH:mm)'
-        OvertimeCode:
-          type: integer
-          description: Code indicating the classification of overtime based on defined compensation categories. For possible enum values see https://developer.vismaonline.com/docs/enums#overtimecode
-          format: int32
-        CompensationTimeCode:
-          type: integer
-          description: Code indicating the classification of time compensation based on defined compensation categories. For possible enum values see https://developer.vismaonline.com/docs/enums#compensationtimecode
-          format: int32
-        TimeRuleAnnualDateId:
-          type:
-          - string
-          - 'null'
-          description: 'Reference to a specific annual date for this rule. Source: Get from /v2/timeruleannualdates'
-          format: uuid
-      additionalProperties: false
-    CreateAgreementRequest:
-      required:
-      - Discriminator
-      - Name
-      - UsesOvertime
-      type: object
-      properties:
-        Name:
-          minLength: 1
-          type: string
-          description: Name of the agreement
-        UsesOvertime:
-          type: boolean
-          description: Indicates whether overtime compensation is enabled for this agreement. When set to true, overtime rules must be provided
-        Overtime1CompensationAfterMinutes:
-          type:
-          - integer
-          - 'null'
-          description: Number of minutes after which overtime level 1 compensation begins
-          format: int32
-        Overtime2CompensationAfterMinutes:
-          type:
-          - integer
-          - 'null'
-          description: Number of minutes after which overtime level 2 compensation begins
-          format: int32
-        Overtime3CompensationAfterMinutes:
-          type:
-          - integer
-          - 'null'
-          description: Number of minutes after which overtime level 3 compensation begins
-          format: int32
-        Overtime4CompensationAfterMinutes:
-          type:
-          - integer
-          - 'null'
-          description: Number of minutes after which overtime level 4 compensation begins
-          format: int32
-        UsesInconvenientTime:
-          type: boolean
-          description: Indicates whether inconvenient time compensation is enabled for this agreement. When set to true, inconvenient time rules must be provided
-        Discriminator:
-          minLength: 1
-          type: string
-          description: 'Type discriminator for the agreement. Possible values are: HotelAgreement or WhiteCollarAgreement'
-        CompensateInMoney:
-          type: boolean
-          description: Indicates whether overtime can be compensated in money
-        CompensateInTime:
-          type: boolean
-          description: Indicates whether overtime can be compensated in time off
-        ExtraTimeCompensationAfterMinutes:
-          type:
-          - integer
-          - 'null'
-          description: Number of minutes after which extra time compensation begins
-          format: int32
-        CompMinInHoursAndMinutes:
-          type:
-          - string
-          - 'null'
-          description: Minimum compensation limit in hours and minutes format (HH:mm)
-        CompMaxInHoursAndMinutes:
-          type:
-          - string
-          - 'null'
-          description: Maximum compensation limit in hours and minutes format (HH:mm)
-        CompensationTime1Multiplier:
-          type: number
-          description: Multiplier factor for calculating time compensation at level 1 (e.g., 1.5 means 150%)
-          format: double
-        CompensationTime2Multiplier:
-          type: number
-          description: Multiplier factor for calculating time compensation at level 2 (e.g., 2.0 means 200%)
-          format: double
-        CompensationTime3Multiplier:
-          type: number
-          description: Multiplier factor for calculating time compensation at level 3 (e.g., 2.5 means 250%)
-          format: double
-        CompensationTime4Multiplier:
-          type:
-          - number
-          - 'null'
-          description: Multiplier factor for calculating time compensation at level 4. Only applied when provided; omit to keep the agreement's default.
-          format: double
-        UsesTwoHoursRule:
-          type: boolean
-          description: Indicates whether the two-hour rule is applied
-        UsesExtraTime:
-          type: boolean
-          description: Indicates whether extra time compensation is enabled for this agreement
-        OvertimeCodeBeforeTwoHours:
-          type:
-          - integer
-          - 'null'
-          description: Overtime code to use before the two-hour threshold is reached. For possible enum values see https://developer.vismaonline.com/docs/enums#overtimecode
-          format: int32
-        OvertimeCodeAfterTwoHours:
-          type:
-          - integer
-          - 'null'
-          description: Overtime code to use after the two-hour threshold is reached. For possible enum values see https://developer.vismaonline.com/docs/enums#overtimecode
-          format: int32
-        CompensationCodeBeforeTwoHours:
-          type:
-          - integer
-          - 'null'
-          description: Compensation code to use before the two-hour threshold is reached. For possible enum values see https://developer.vismaonline.com/docs/enums#compensationtimecode
-          format: int32
-        CompensationCodeAfterTwoHours:
-          type:
-          - integer
-          - 'null'
-          description: Compensation code to use after the two-hour threshold is reached. For possible enum values see https://developer.vismaonline.com/docs/enums#compensationtimecode
-          format: int32
-        IsActive:
-          type:
-          - boolean
-          - 'null'
-          description: 'Indicates whether the agreement is currently active and can be used. Default: True if not provided'
-        InconvenientTimeRules:
+        Errors:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/InconvenientTimeRuleRequest'
-          description: Collection of inconvenient time rules to apply to the agreement. Required if UsesInconvenientTime is true
-        OverTimeRules:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/OverTimeRuleRequest'
-          description: Collection of overtime rules to apply to the agreement. Required if UsesOvertime is true
-      additionalProperties: false
-    PaginatedResponseOfAgreementResponse:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgreementResponse'
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     AgreementResponse:
       type: object
@@ -934,6 +689,141 @@ components:
             $ref: '#/components/schemas/OverTimeRuleResponse'
           description: Collection of overtime rules associated with this agreement
       additionalProperties: false
+    CreateAgreementRequest:
+      required:
+      - Discriminator
+      - Name
+      - UsesOvertime
+      type: object
+      properties:
+        Name:
+          minLength: 1
+          type: string
+          description: Name of the agreement
+        UsesOvertime:
+          type: boolean
+          description: Indicates whether overtime compensation is enabled for this agreement. When set to true, overtime rules must be provided
+        Overtime1CompensationAfterMinutes:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes after which overtime level 1 compensation begins
+          format: int32
+        Overtime2CompensationAfterMinutes:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes after which overtime level 2 compensation begins
+          format: int32
+        Overtime3CompensationAfterMinutes:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes after which overtime level 3 compensation begins
+          format: int32
+        Overtime4CompensationAfterMinutes:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes after which overtime level 4 compensation begins
+          format: int32
+        UsesInconvenientTime:
+          type: boolean
+          description: Indicates whether inconvenient time compensation is enabled for this agreement. When set to true, inconvenient time rules must be provided
+        Discriminator:
+          minLength: 1
+          type: string
+          description: 'Type discriminator for the agreement. Possible values are: HotelAgreement or WhiteCollarAgreement'
+        CompensateInMoney:
+          type: boolean
+          description: Indicates whether overtime can be compensated in money
+        CompensateInTime:
+          type: boolean
+          description: Indicates whether overtime can be compensated in time off
+        ExtraTimeCompensationAfterMinutes:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes after which extra time compensation begins
+          format: int32
+        CompMinInHoursAndMinutes:
+          type:
+          - string
+          - 'null'
+          description: Minimum compensation limit in hours and minutes format (HH:mm)
+        CompMaxInHoursAndMinutes:
+          type:
+          - string
+          - 'null'
+          description: Maximum compensation limit in hours and minutes format (HH:mm)
+        CompensationTime1Multiplier:
+          type: number
+          description: Multiplier factor for calculating time compensation at level 1 (e.g., 1.5 means 150%)
+          format: double
+        CompensationTime2Multiplier:
+          type: number
+          description: Multiplier factor for calculating time compensation at level 2 (e.g., 2.0 means 200%)
+          format: double
+        CompensationTime3Multiplier:
+          type: number
+          description: Multiplier factor for calculating time compensation at level 3 (e.g., 2.5 means 250%)
+          format: double
+        CompensationTime4Multiplier:
+          type:
+          - number
+          - 'null'
+          description: Multiplier factor for calculating time compensation at level 4. Only applied when provided; omit to keep the agreement's default.
+          format: double
+        UsesTwoHoursRule:
+          type: boolean
+          description: Indicates whether the two-hour rule is applied
+        UsesExtraTime:
+          type: boolean
+          description: Indicates whether extra time compensation is enabled for this agreement
+        OvertimeCodeBeforeTwoHours:
+          type:
+          - integer
+          - 'null'
+          description: Overtime code to use before the two-hour threshold is reached. For possible enum values see https://developer.vismaonline.com/docs/enums#overtimecode
+          format: int32
+        OvertimeCodeAfterTwoHours:
+          type:
+          - integer
+          - 'null'
+          description: Overtime code to use after the two-hour threshold is reached. For possible enum values see https://developer.vismaonline.com/docs/enums#overtimecode
+          format: int32
+        CompensationCodeBeforeTwoHours:
+          type:
+          - integer
+          - 'null'
+          description: Compensation code to use before the two-hour threshold is reached. For possible enum values see https://developer.vismaonline.com/docs/enums#compensationtimecode
+          format: int32
+        CompensationCodeAfterTwoHours:
+          type:
+          - integer
+          - 'null'
+          description: Compensation code to use after the two-hour threshold is reached. For possible enum values see https://developer.vismaonline.com/docs/enums#compensationtimecode
+          format: int32
+        IsActive:
+          type:
+          - boolean
+          - 'null'
+          description: 'Indicates whether the agreement is currently active and can be used. Default: True if not provided'
+        InconvenientTimeRules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InconvenientTimeRuleRequest'
+          description: Collection of inconvenient time rules to apply to the agreement. Required if UsesInconvenientTime is true
+        OverTimeRules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/OverTimeRuleRequest'
+          description: Collection of overtime rules to apply to the agreement. Required if UsesOvertime is true
+      additionalProperties: false
     InconvenientTimeRuleRequest:
       required:
       - EndTime
@@ -964,6 +854,62 @@ components:
           minLength: 1
           type: string
           description: 'End time of the inconvenient time period (format: HH:mm)'
+        TimeRuleAnnualDateId:
+          type:
+          - string
+          - 'null'
+          description: 'Reference to a specific annual date for this rule. Source: Get from /v2/timeruleannualdates'
+          format: uuid
+      additionalProperties: false
+    OverTimeRuleResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the overtime rule
+          format: uuid
+        DayFilter:
+          type:
+          - integer
+          - 'null'
+          description: Code indicating which day the rule applies to. For possible enum values see https://developer.vismaonline.com/docs/enums#dayfilter
+          format: int32
+        CodedDay:
+          type:
+          - integer
+          - 'null'
+          description: Numeric code corresponding to a specific holiday or related day. For possible enum values see https://developer.vismaonline.com/docs/enums#codedday
+          format: int32
+        StartTime:
+          type:
+          - string
+          - 'null'
+          description: 'Start time of the overtime period (format: HH:mm)'
+        EndTime:
+          type:
+          - string
+          - 'null'
+          description: 'End time of the overtime period (format: HH:mm)'
+        OvertimeCode:
+          type: integer
+          description: Code indicating the classification of overtime based on defined compensation categories. For possible enum values see https://developer.vismaonline.com/docs/enums#overtimecode
+          format: int32
+        CompensationTimeCode:
+          type: integer
+          description: Code indicating the classification of time compensation based on defined compensation categories. For possible enum values see https://developer.vismaonline.com/docs/enums#compensationtimecode
+          format: int32
+        CreatedUtc:
+          type: string
+          description: UTC timestamp when the rule was created
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: UTC timestamp when the rule was last modified
+          format: date-time
+        OrderNumber:
+          type: integer
+          description: Order in which this rule should be evaluated relative to other rules
+          format: int32
         TimeRuleAnnualDateId:
           type:
           - string
@@ -1015,6 +961,60 @@ components:
         OrderNumber:
           type: integer
           description: Order in which this rule should be evaluated relative to other rules
+          format: int32
+        TimeRuleAnnualDateId:
+          type:
+          - string
+          - 'null'
+          description: 'Reference to a specific annual date for this rule. Source: Get from /v2/timeruleannualdates'
+          format: uuid
+      additionalProperties: false
+    PaginatedResponseOfAgreementResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgreementResponse'
+      additionalProperties: false
+    OverTimeRuleRequest:
+      type: object
+      properties:
+        DayFilter:
+          type:
+          - integer
+          - 'null'
+          description: Code indicating which day the rule applies to. For possible enum values see https://developer.vismaonline.com/docs/enums#dayfilter
+          format: int32
+        CodedDay:
+          type:
+          - integer
+          - 'null'
+          description: Numeric code corresponding to a specific holiday or related day. For possible enum values see https://developer.vismaonline.com/docs/enums#codedday
+          format: int32
+        StartTime:
+          type:
+          - string
+          - 'null'
+          description: 'Start time of the overtime period (format: HH:mm)'
+        EndTime:
+          type:
+          - string
+          - 'null'
+          description: 'End time of the overtime period (format: HH:mm)'
+        OvertimeCode:
+          type: integer
+          description: Code indicating the classification of overtime based on defined compensation categories. For possible enum values see https://developer.vismaonline.com/docs/enums#overtimecode
+          format: int32
+        CompensationTimeCode:
+          type: integer
+          description: Code indicating the classification of time compensation based on defined compensation categories. For possible enum values see https://developer.vismaonline.com/docs/enums#compensationtimecode
           format: int32
         TimeRuleAnnualDateId:
           type:

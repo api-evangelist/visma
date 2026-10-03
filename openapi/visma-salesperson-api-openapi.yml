@@ -379,56 +379,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    SalesPersonUpdateDto:
-      type: object
-      properties:
-        salespersonID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        name:
-          $ref: '#/components/schemas/DtoValueOfString'
-        isActive:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        commissionPct:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        salesSub:
-          $ref: '#/components/schemas/DtoValueOfString'
-        customers:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustSalesPeopleUpdateDto'
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    SubAccountDescriptionDto:
-      type: object
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-    BasePaginationDtoOfSalesPersonDto:
-      type: object
-      properties:
-        pageNumber:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        totalCount:
-          type: integer
-          format: int64
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/SalesPersonDto'
     ARSPCommnHistoryDto:
       type: object
       properties:
@@ -447,6 +397,35 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    CustSalesPeopleUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        customerID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        commissionPct:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
     SalesPersonDto:
       type: object
       properties:
@@ -480,42 +459,38 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a salesperson in SalesPersonController. Used for getting data.
-    DtoValueOfString:
+    BasePaginationDtoOfSalesPersonDto:
       type: object
       properties:
-        value:
-          type: string
-    CustSalesPeopleUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        customerID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        locationID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        commissionPct:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    MetadataDto:
-      type: object
-      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
         totalCount:
           type: integer
           format: int64
-        maxPageSize:
-          type: integer
-          format: int64
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesPersonDto'
+    SubAccountDescriptionDto:
+      type: object
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
     CustSalesPeopleDto:
       type: object
       properties:
@@ -544,11 +519,36 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    DtoValueOfNullableOfBoolean:
+    DtoValueOfNullableOfDecimal:
       type: object
       properties:
         value:
-          type: boolean
+          type: number
+          format: double
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    SalesPersonUpdateDto:
+      type: object
+      properties:
+        salespersonID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        isActive:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        commissionPct:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        salesSub:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustSalesPeopleUpdateDto'
   securitySchemes:
     interactiveapi:
       type: oauth2

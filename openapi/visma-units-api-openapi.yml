@@ -102,54 +102,18 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    UnitApi:
+    PaginatedResponseOfUnitApi:
+      required:
+      - Data
+      - Meta
       type: object
       properties:
-        Id:
-          type: string
-          description: The unique identifier of the unit
-          format: uuid
-          readOnly: true
-        Name:
-          type:
-          - string
-          - 'null'
-          description: Name of the unit
-        Code:
-          type:
-          - string
-          - 'null'
-          description: Code of the unit
-        Abbreviation:
-          type:
-          - string
-          - 'null'
-          description: Abbreviation of the unit
-        AbbreviationEnglish:
-          type:
-          - string
-          - 'null'
-          description: English abbreviation of the unit
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
           items:
-            $ref: '#/components/schemas/CommonError'
+            $ref: '#/components/schemas/UnitApi'
       additionalProperties: false
     CommonPaginationMetadata:
       required:
@@ -181,18 +145,34 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    PaginatedResponseOfUnitApi:
-      required:
-      - Data
-      - Meta
+    UnitApi:
       type: object
       properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/UnitApi'
+        Id:
+          type: string
+          description: The unique identifier of the unit
+          format: uuid
+          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the unit
+        Code:
+          type:
+          - string
+          - 'null'
+          description: Code of the unit
+        Abbreviation:
+          type:
+          - string
+          - 'null'
+          description: Abbreviation of the unit
+        AbbreviationEnglish:
+          type:
+          - string
+          - 'null'
+          description: English abbreviation of the unit
       additionalProperties: false
     CommonError:
       type: object
@@ -213,6 +193,26 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

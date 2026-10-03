@@ -609,23 +609,166 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    ownerInCashTransactionDto:
+    CashTransactionDetailUpdateDto:
+      type: object
       properties:
-        internalId:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: The top part &gt; Owner &gt; The user who created the cash transaction.
-    DtoValueOfNullableOfDateTime:
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        price:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        offsetAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        offsetSubaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        vatCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        notInvoiceable:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        project:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectTask:
+          $ref: '#/components/schemas/DtoValueOfString'
+    CashTransactionTaxDetailUpdateDto:
+      type: object
+      properties:
+        vatId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taxableAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        expenseAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+    DtoValueOfBoolean:
       type: object
       properties:
         value:
+          type: boolean
+    DtoValueOfNullableOfTaxCalcMode:
+      type: object
+      properties:
+        value:
+          enum:
+          - TaxSetting
+          - Gross
+          - Net
           type: string
-          format: date-time
+    branchInTransactionDetailDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Branch &gt; The branch that created the transaction.'
+    entryTypeInCashTransactionDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Entry type* &gt; The user-defined transaction type.'
+    CashTransactionUpdateDto:
+      type: object
+      properties:
+        referenceNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        tranDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        finanacialPeriod:
+          $ref: '#/components/schemas/finanacialPeriodInCashTransactionUpdateDto'
+        financialPeriod:
+          $ref: '#/components/schemas/financialPeriodInCashTransactionUpdateDto'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        cashAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        entryType:
+          $ref: '#/components/schemas/DtoValueOfString'
+        documentRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        controlTotal:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatZone:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taxCalculationMode:
+          $ref: '#/components/schemas/DtoValueOfNullableOfTaxCalcMode'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        cashTransactionDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashTransactionDetailUpdateDto'
+        cashTransactionTaxDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/CashTransactionTaxDetailUpdateDto'
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    projectTaskInTransactionDetailDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The particular task of the project with which this transaction is associated.
+    projectInTransactionDetailDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project &gt; The project with which this transaction is associated, or the code indicating that this transaction is not associated with any project.
     itemInTransactionDetailDto:
       properties:
         number:
@@ -635,13 +778,56 @@ components:
           type: string
           description: Name of item/description
       description: Item ID &gt; The ID of the non-stock item specified as the transaction subject.
-    BackgroundApiAcceptedDto:
+    ReverseCashTransactionActionDto:
       type: object
       properties:
-        id:
+        returnCashTransaction:
+          type: boolean
+    CashTranTaxDetailDto:
+      type: object
+      properties:
+        tax:
+          $ref: '#/components/schemas/taxInCashTranTaxDetailDto'
+        taxRate:
+          type: number
+          description: VAT rate &gt; The rate of the VAT.
+          format: double
+        taxableAmount:
+          type: number
+          description: Taxable amount &gt; The taxable amount of the transaction.
+          format: double
+        taxAmount:
+          type: number
+          description: VAT amount &gt; The VAT amount calculated for the transaction.
+          format: double
+        deductibleTaxRate:
+          type: number
+          description: Deductible VAT rate &gt; The percent of deduction that applies to the VAT amount paid to the supplier for specific purchases.
+          format: double
+        expenseAmount:
+          type: number
+          description: Expense amount &gt; The percentage that is deducted from the VAT amount paid to the supplier for specific purchases.
+          format: double
+        includeInVatExemptTotal:
+          type: boolean
+          description: Include in VAT exempt total &gt; A check box that indicates (if selected) that this value-added VAT has a zero rate and is used to calculate a document subtotal that is actually exempt from VAT.
+        pendingVat:
+          type: boolean
+          description: Pending VAT &gt; A check box that indicates (if selected) that the VAT that should be calculated in documents, but should not be recorded to the VAT report until the VAT invoice is received.
+        statisticalVat:
+          type: boolean
+          description: Statistical VAT &gt; A check box that indicates (if selected) that the VAT on documents will be calculated only for statistical purposes or will be reported only but not actually paid.
+        reverseVat:
+          type: boolean
+          description: Reverse VAT &gt; A check box that indicates (if selected) that this is a reverse VAT.
+        taxType:
+          enum:
+          - Sales
+          - Use
+          - Vat
+          - Withholding
           type: string
-        stateLocation:
-          type: string
+          description: VAT type &gt; The type of VAT.
     CashTransactionDto:
       type: object
       properties:
@@ -745,6 +931,88 @@ components:
 
             It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
           format: byte
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    ReverseCashTransactionActionResultDto:
+      type: object
+      properties:
+        referenceNbr:
+          type: string
+        cashTransaction:
+          $ref: '#/components/schemas/CashTransactionDto'
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    offsetSubAccountInTransactionDetailDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: Offset subaccount* &gt; The corresponding subaccount to be used for the transaction.'
+    branchInFinancialsDetailDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: "Link to general ledger section &gt; Branch &gt; \tThe branch that initiated the transaction."
     taxCategoryInTransactionDetailDto:
       properties:
         number:
@@ -754,11 +1022,118 @@ components:
           type: string
           description: Name of item/description
       description: VAT category &gt; The category that applies to the transaction.
-    DtoValueOfNullableOfBoolean:
+    ReleaseCashTransactionActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    financialsDetailInCashTransactionDto:
+      properties:
+        batchNumber:
+          type: string
+          description: Link to general ledger section &gt; Batch number &gt; The number of the batch generated to implement the cash transaction.
+        branch:
+          $ref: '#/components/schemas/branchInFinancialsDetailDto'
+        cleared:
+          type: boolean
+          description: Link to general ledger section &gt; Cleared &gt; A check box that indicates (if selected) that the transaction was cleared.
+        clearDate:
+          type: string
+          description: "Link to general ledger section &gt; Clear date &gt; \tThe date when the transaction was cleared."
+          format: date-time
+        taxZone:
+          $ref: '#/components/schemas/taxZoneInFinancialsDetailDto'
+        taxCalcMode:
+          enum:
+          - TaxSetting
+          - Gross
+          - Net
+          type: string
+          description: VAT settings section &gt; VAT calculation &gt; The VAT calculation mode, which defines which amounts (VAT-inclusive or VAT-exclusive) should be entered in the detail lines of a document.
+      description: Financial details tab &gt;
+    taxZoneInFinancialsDetailDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        description:
+          type: string
+          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultVatCategory:
+          type: string
+          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultTaxCategory:
+          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: VAT settings section &gt; VAT zone &gt; The VAT zone that applies to the transaction.
+    finanacialPeriodInCashTransactionUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The property is now considered obsolete. Use Financial Period instead
+    DtoValueOfNullableOfDateTime:
       type: object
       properties:
         value:
-          type: boolean
+          type: string
+          format: date-time
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    offsetAccountInTransactionDetailDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Offset account* &gt; The account to be updated by the transaction.'
+    ownerInCashTransactionDto:
+      properties:
+        internalId:
+          type: string
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: The top part &gt; Owner &gt; The user who created the cash transaction.
     TaxCategoryNumberDescriptionDto:
       type: object
       properties:
@@ -768,45 +1143,31 @@ components:
         description:
           type: string
           description: Name of item/description
-    CashTransactionUpdateDto:
-      type: object
+    financialPeriodInCashTransactionUpdateDto:
       properties:
-        referenceNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        hold:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        tranDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        finanacialPeriod:
-          $ref: '#/components/schemas/finanacialPeriodInCashTransactionUpdateDto'
-        financialPeriod:
-          $ref: '#/components/schemas/financialPeriodInCashTransactionUpdateDto'
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
+    taxInCashTranTaxDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
         description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        cashAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        entryType:
-          $ref: '#/components/schemas/DtoValueOfString'
-        documentRef:
-          $ref: '#/components/schemas/DtoValueOfString'
-        controlTotal:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        vatAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        vatZone:
-          $ref: '#/components/schemas/DtoValueOfString'
-        taxCalculationMode:
-          $ref: '#/components/schemas/DtoValueOfNullableOfTaxCalcMode'
-        overrideNumberSeries:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        cashTransactionDetails:
-          type: array
-          items:
-            $ref: '#/components/schemas/CashTransactionDetailUpdateDto'
-        cashTransactionTaxDetails:
-          type: array
-          items:
-            $ref: '#/components/schemas/CashTransactionTaxDetailUpdateDto'
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: VAT ID &gt; The VAT that applies to the cash transaction.'
+    offsetCashAccountInTransactionDetailDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Offset cash account &gt; The cash account to be used for the transaction.
     TransactionDetailDto:
       type: object
       properties:
@@ -851,243 +1212,6 @@ components:
           $ref: '#/components/schemas/projectInTransactionDetailDto'
         projectTask:
           $ref: '#/components/schemas/projectTaskInTransactionDetailDto'
-    financialPeriodInCashTransactionUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
-    finanacialPeriodInCashTransactionUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The property is now considered obsolete. Use Financial Period instead
-    CashTranTaxDetailDto:
-      type: object
-      properties:
-        tax:
-          $ref: '#/components/schemas/taxInCashTranTaxDetailDto'
-        taxRate:
-          type: number
-          description: VAT rate &gt; The rate of the VAT.
-          format: double
-        taxableAmount:
-          type: number
-          description: Taxable amount &gt; The taxable amount of the transaction.
-          format: double
-        taxAmount:
-          type: number
-          description: VAT amount &gt; The VAT amount calculated for the transaction.
-          format: double
-        deductibleTaxRate:
-          type: number
-          description: Deductible VAT rate &gt; The percent of deduction that applies to the VAT amount paid to the supplier for specific purchases.
-          format: double
-        expenseAmount:
-          type: number
-          description: Expense amount &gt; The percentage that is deducted from the VAT amount paid to the supplier for specific purchases.
-          format: double
-        includeInVatExemptTotal:
-          type: boolean
-          description: Include in VAT exempt total &gt; A check box that indicates (if selected) that this value-added VAT has a zero rate and is used to calculate a document subtotal that is actually exempt from VAT.
-        pendingVat:
-          type: boolean
-          description: Pending VAT &gt; A check box that indicates (if selected) that the VAT that should be calculated in documents, but should not be recorded to the VAT report until the VAT invoice is received.
-        statisticalVat:
-          type: boolean
-          description: Statistical VAT &gt; A check box that indicates (if selected) that the VAT on documents will be calculated only for statistical purposes or will be reported only but not actually paid.
-        reverseVat:
-          type: boolean
-          description: Reverse VAT &gt; A check box that indicates (if selected) that this is a reverse VAT.
-        taxType:
-          enum:
-          - Sales
-          - Use
-          - Vat
-          - Withholding
-          type: string
-          description: VAT type &gt; The type of VAT.
-    branchInFinancialsDetailDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: "Link to general ledger section &gt; Branch &gt; \tThe branch that initiated the transaction."
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    taxZoneInFinancialsDetailDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        description:
-          type: string
-          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultVatCategory:
-          type: string
-          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultTaxCategory:
-          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: VAT settings section &gt; VAT zone &gt; The VAT zone that applies to the transaction.
-    branchInTransactionDetailDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: Branch &gt; The branch that created the transaction.'
-    offsetAccountInTransactionDetailDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Offset account* &gt; The account to be updated by the transaction.'
-    offsetSubAccountInTransactionDetailDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: 'Mandatory field: Offset subaccount* &gt; The corresponding subaccount to be used for the transaction.'
-    projectTaskInTransactionDetailDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The particular task of the project with which this transaction is associated.
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
-    ReverseCashTransactionActionResultDto:
-      type: object
-      properties:
-        referenceNbr:
-          type: string
-        cashTransaction:
-          $ref: '#/components/schemas/CashTransactionDto'
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    ReverseCashTransactionActionDto:
-      type: object
-      properties:
-        returnCashTransaction:
-          type: boolean
-    projectInTransactionDetailDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project &gt; The project with which this transaction is associated, or the code indicating that this transaction is not associated with any project.
-    DtoValueOfNullableOfTaxCalcMode:
-      type: object
-      properties:
-        value:
-          enum:
-          - TaxSetting
-          - Gross
-          - Net
-          type: string
-    entryTypeInCashTransactionDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part &gt; Entry type* &gt; The user-defined transaction type.'
     cashAccountInCashTransactionDto:
       properties:
         type:
@@ -1099,130 +1223,6 @@ components:
           type: string
           description: Name of item/description
       description: 'Mandatory field: The top part &gt; Cash account* &gt; The cash account that is a source account for the transaction.'
-    CashTransactionTaxDetailUpdateDto:
-      type: object
-      properties:
-        vatId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        taxableAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        vatAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        expenseAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    financialsDetailInCashTransactionDto:
-      properties:
-        batchNumber:
-          type: string
-          description: Link to general ledger section &gt; Batch number &gt; The number of the batch generated to implement the cash transaction.
-        branch:
-          $ref: '#/components/schemas/branchInFinancialsDetailDto'
-        cleared:
-          type: boolean
-          description: Link to general ledger section &gt; Cleared &gt; A check box that indicates (if selected) that the transaction was cleared.
-        clearDate:
-          type: string
-          description: "Link to general ledger section &gt; Clear date &gt; \tThe date when the transaction was cleared."
-          format: date-time
-        taxZone:
-          $ref: '#/components/schemas/taxZoneInFinancialsDetailDto'
-        taxCalcMode:
-          enum:
-          - TaxSetting
-          - Gross
-          - Net
-          type: string
-          description: VAT settings section &gt; VAT calculation &gt; The VAT calculation mode, which defines which amounts (VAT-inclusive or VAT-exclusive) should be entered in the detail lines of a document.
-      description: Financial details tab &gt;
-    CashTransactionDetailUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        inventoryNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        price:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        amount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        offsetAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        offsetSubaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-        vatCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        notInvoiceable:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        project:
-          $ref: '#/components/schemas/DtoValueOfString'
-        projectTask:
-          $ref: '#/components/schemas/DtoValueOfString'
-    offsetCashAccountInTransactionDetailDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Offset cash account &gt; The cash account to be used for the transaction.
-    ReleaseCashTransactionActionResultDto:
-      type: object
-      properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    taxInCashTranTaxDetailDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: VAT ID &gt; The VAT that applies to the cash transaction.'
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
     DtoValueOfInt32:
       type: object
       properties:

@@ -1008,113 +1008,85 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    customDec1InShipmentCreateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    customStr2InShipmentUpdateDto:
+    customDateTimeUTC1InShipmentDetailLineUpdateDto:
       properties:
         value:
           type: string
-      description: A free custom colum of type string with max length 100.
-    customStr1InShipmentCreateDto:
+          format: date-time
+      description: A free custom colum of type DateTime - in UTC timezone
+    locationInAllocationsUpdateDto:
       properties:
         value:
           type: string
-      description: A free custom colum of type string with max length 100.
-    customDec2InShipmentUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    locationInAllocationsDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
       description: Location &gt; The location in the warehouse.
-    deliveryContactInShipmentDto:
+    quantityInAllocationsUpdateDto:
       properties:
-        overrideContact:
-          type: boolean
-          description: Override contact &gt; A check box that you select to not use+ the default contact information and to type new contact information.
-        contactId:
+        value:
+          type: number
+          format: double
+      description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
+    transactionTypeInShipmentDto:
+      properties:
+        id:
+          type: integer
+          description: Click on the magnifier. &gt; The identifier.
+          format: int32
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Intrastat section &gt; Transaction type &gt; The 1-digit code that describes the nature of the transaction (according to EU regulations for Intrastat reporting).
+    customerInShipmentDto:
+      properties:
+        internalId:
           type: integer
           format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
         name:
           type: string
-          description: Name &gt; The legal name of to appear on the documents.
-        attention:
-          type: string
-          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
-        email:
-          type: string
-          description: Email &gt; The email address of the customer/supplier/company as a business entity.
-        web:
-          type: string
-          description: Web &gt; The website of the company, if one exists.
-        phone1:
-          type: string
-          description: Phone 1 &gt; The default phone number.
-        phone2:
-          type: string
-          description: Phone 2 &gt; An additional phone number.
-        fax:
-          type: string
-          description: Fax &gt; The fax number.
-      description: Delivery settings tab &gt; Delivery address contact section &gt;
-    ShipmentDetailLineAddDto:
-      required:
-      - inventoryNumber
+          description: The name of the particular destination of the selected type.
+      description: The top part &gt; Customer &gt; The customer to whom the goods specified in the document should be shipped. (This field does not appear for transfers.)
+    DtoValueOfNullableOfShipmentOperations:
       type: object
       properties:
-        operation:
+        value:
           enum:
-          - Insert
-          - Update
-          - Delete
+          - Issue
+          - Receipt
           type: string
-        inventoryNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        warehouse:
-          $ref: '#/components/schemas/DtoValueOfString'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        shippedQty:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        customStr1:
-          $ref: '#/components/schemas/customStr1InShipmentDetailLineAddDto'
-        customStr2:
-          $ref: '#/components/schemas/customStr2InShipmentDetailLineAddDto'
-        customStr3:
-          $ref: '#/components/schemas/customStr3InShipmentDetailLineAddDto'
-        customStr4:
-          $ref: '#/components/schemas/customStr4InShipmentDetailLineAddDto'
-        customStr5:
-          $ref: '#/components/schemas/customStr5InShipmentDetailLineAddDto'
-        customDec1:
-          $ref: '#/components/schemas/customDec1InShipmentDetailLineAddDto'
-        customDec2:
-          $ref: '#/components/schemas/customDec2InShipmentDetailLineAddDto'
-        customInt1:
-          $ref: '#/components/schemas/customInt1InShipmentDetailLineAddDto'
-        customInt2:
-          $ref: '#/components/schemas/customInt2InShipmentDetailLineAddDto'
-        customDateTimeUTC1:
-          $ref: '#/components/schemas/customDateTimeUTC1InShipmentDetailLineAddDto'
+    customDec1InShipmentUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    customStr5InShipmentDetailLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    fobPointInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; FOB point &gt; The point where obligation of goods passes to the customer.
+    customDec2InShipmentDetailLineAddDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
     ShipmentPackageLineUpdateDto:
       type: object
       properties:
@@ -1146,27 +1118,255 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         customRefNbr2:
           $ref: '#/components/schemas/DtoValueOfString'
-    DtoValueOfNullableOfBoolean:
+    deliveryAddressInShipmentDto:
+      properties:
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box that you select to not include the default address information and to type new address information.
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInShipmentAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInShipmentAddressDto'
+      description: Delivery settings tab &gt; Delivery address section &gt;
+    DtoValueOfNullableOfDateTime:
       type: object
       properties:
         value:
-          type: boolean
+          type: string
+          format: date-time
+    uomInAllocationsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
+    customStr4InShipmentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    customStr1InShipmentCreateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    shippingZoneInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; Shipping zone ID &gt; The shipping zone of the customer.
+    DtoValueOfNullableOfShipmentTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Issue
+          - DropShip
+          - Transfer
+          type: string
+    customStr1InShipmentDetailLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    customStr4InShipmentDetailLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    AllocationsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+          description: The operation &gt;  Insert=1, Update=2, Delete=3
+        lineNbr:
+          $ref: '#/components/schemas/lineNbrInAllocationsUpdateDto'
+        location:
+          $ref: '#/components/schemas/locationInAllocationsUpdateDto'
+        lotSerialNumber:
+          $ref: '#/components/schemas/lotSerialNumberInAllocationsUpdateDto'
+        quantity:
+          $ref: '#/components/schemas/quantityInAllocationsUpdateDto'
+        uom:
+          $ref: '#/components/schemas/uomInAllocationsUpdateDto'
+        expirationDate:
+          $ref: '#/components/schemas/expirationDateInAllocationsUpdateDto'
+      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptEndpoint. Used to add/update data.
+    customDec1InShipmentDetailLineAddDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    ShipmentUpdateDeleteLineDto:
+      required:
+      - deleteSOLine
+      type: object
+      properties:
+        deleteSOLine:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+    locationInAllocationsDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Location &gt; The location in the warehouse.
+    ShipmentDetailLineUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        warehouse:
+          $ref: '#/components/schemas/DtoValueOfString'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        shippedQty:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        lotSerialNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expirationDate:
+          $ref: '#/components/schemas/expirationDateInShipmentDetailLineUpdateDto'
+        reasonCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationsUpdateDto'
+        customStr1:
+          $ref: '#/components/schemas/customStr1InShipmentDetailLineUpdateDto'
+        customStr2:
+          $ref: '#/components/schemas/customStr2InShipmentDetailLineUpdateDto'
+        customStr3:
+          $ref: '#/components/schemas/customStr3InShipmentDetailLineUpdateDto'
+        customStr4:
+          $ref: '#/components/schemas/customStr4InShipmentDetailLineUpdateDto'
+        customStr5:
+          $ref: '#/components/schemas/customStr5InShipmentDetailLineUpdateDto'
+        customDec1:
+          $ref: '#/components/schemas/customDec1InShipmentDetailLineUpdateDto'
+        customDec2:
+          $ref: '#/components/schemas/customDec2InShipmentDetailLineUpdateDto'
+        customInt1:
+          $ref: '#/components/schemas/customInt1InShipmentDetailLineUpdateDto'
+        customInt2:
+          $ref: '#/components/schemas/customInt2InShipmentDetailLineUpdateDto'
+        customDateTimeUTC1:
+          $ref: '#/components/schemas/customDateTimeUTC1InShipmentDetailLineUpdateDto'
+    ShipmentSOLine:
+      type: object
+      properties:
+        orderType:
+          type: string
+          description: Sales Order Type
+        orderNumber:
+          type: string
+          description: Sales Order Number
+        orderLineNumber:
+          type: integer
+          description: Sales Order Line Number, optional if Inventory Id is entered
+          format: int32
+        inventoryId:
+          type: string
+          description: Inventory Id, ignored if Order Line Number is specified. If more that one line on the Sales order has this Inventory Id, it will not work.
+    customInt1InShipmentDetailLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    customInt1InShipmentUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    customDateTimeUTC1InShipmentCreateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: A free custom colum of type DateTime - in UTC timezone
+    customStr2InShipmentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    toWarehouseInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; To warehouse &gt; The warehouse to which the goods should be shipped in case of a transfer.
+    customInt1InShipmentDetailLineAddDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
     expirationDateInAllocationsUpdateDto:
       properties:
         value:
           type: string
           format: date-time
       description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
-    customStr4InShipmentDetailLineUpdateDto:
+    ownerInShipmentDto:
       properties:
-        value:
+        id:
           type: string
-      description: A free custom colum of type string with max length 100.
-    customStr1InShipmentDetailLineUpdateDto:
-      properties:
-        value:
+          description: Click the magnifier &gt; The identifier
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
           type: string
-      description: A free custom colum of type string with max length 100.
+          description: Click the magnifier &gt; The displayed name
+      description: The top part &gt; Owner &gt; The user assigned to approve the document.
     ShipmentOrderLineDto:
       type: object
       properties:
@@ -1202,46 +1402,69 @@ components:
           description: Orders tab &gt; Inventory ref. no. &gt; The reference number of the inventory document that lists the items for this shipment.
         note:
           type: string
-    DtoValueOfNullableOfShipmentTypes:
-      type: object
-      properties:
-        value:
-          enum:
-          - Issue
-          - DropShip
-          - Transfer
-          type: string
-    DtoValueOfString:
-      type: object
+    customStr2InShipmentDetailLineAddDto:
       properties:
         value:
           type: string
-    customInt2InShipmentDetailLineUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    customDateTimeUTC1InShipmentDetailLineUpdateDto:
+      description: A free custom colum of type string with max length 100.
+    customStr3InShipmentDetailLineUpdateDto:
       properties:
         value:
           type: string
-          format: date-time
-      description: A free custom colum of type DateTime - in UTC timezone
-    ShipmentUpdateDeleteLineDto:
-      required:
-      - deleteSOLine
-      type: object
+      description: A free custom colum of type string with max length 100.
+    customStr1InShipmentDetailLineAddDto:
       properties:
-        deleteSOLine:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-    customDec2InShipmentDetailLineAddDto:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    customDec1InShipmentCreateDto:
       properties:
         value:
           type: number
           format: double
       description: A free custom colum of type decimal with max 4 decimals.
-    shippingZoneInShipmentDto:
+    AllocationsDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          description: Line no. &gt; The line of the purchase order that contains the selected item.
+          format: int32
+        itemId:
+          type: string
+          description: ItemId &gt; The id of the item.
+        location:
+          $ref: '#/components/schemas/locationInAllocationsDto'
+        lotSerialNumber:
+          type: string
+          description: Lot/Serial no. &gt; The lot or serial number of the item.
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
+          format: double
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
+        expirationDate:
+          type: string
+          description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
+          format: date-time
+        description:
+          type: string
+          description: Description &gt; The description of the stock item.
+      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptController. Used for getting data.
+    lineNbrInAllocationsUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: Line no. &gt; The line of the purchase order that contains the selected item.
+    customStr2InShipmentDetailLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    fromWarehouseInShipmentDto:
       properties:
         id:
           type: string
@@ -1249,7 +1472,171 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; Shipping zone ID &gt; The shipping zone of the customer.
+      description: 'Mandatory field: The top part &gt; Warehouse ID* &gt; The warehouse from which the goods should be shipped.'
+    deliveryContactInShipmentDto:
+      properties:
+        overrideContact:
+          type: boolean
+          description: Override contact &gt; A check box that you select to not use+ the default contact information and to type new contact information.
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: Delivery settings tab &gt; Delivery address contact section &gt;
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    ShipmentSOOrder:
+      type: object
+      properties:
+        orderType:
+          type: string
+          description: Sales Order Type
+        orderNumber:
+          type: string
+          description: Sales Order Number
+    customDec1InShipmentDetailLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    customStr5InShipmentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    customStr5InShipmentCreateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    customStr4InShipmentCreateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    countyInShipmentAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    lotSerialNumberInAllocationsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Lot/Serial no. &gt; The lot or serial number of the item.
+    customInt2InShipmentDetailLineAddDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    customDateTimeUTC1InShipmentUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: A free custom colum of type DateTime - in UTC timezone
+    customDec2InShipmentUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    customStr5InShipmentDetailLineAddDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    DtoValueOfNullableOfTransportationModes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Unknown
+          - BySea
+          - ByRail
+          - ByRoad
+          - ByAeroPlane
+          - ConsignmentsByPosts
+          - FixedInstallations
+          - InlandWaterway
+          type: string
+    customStr2InShipmentCreateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    expirationDateInShipmentDetailLineUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: Property will become obsolete after version 5.31
+    customInt2InShipmentCreateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    customStr3InShipmentCreateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
     ShipmentCreateDto:
       type: object
       properties:
@@ -1355,293 +1742,6 @@ components:
           $ref: '#/components/schemas/customInt2InShipmentCreateDto'
         customDateTimeUTC1:
           $ref: '#/components/schemas/customDateTimeUTC1InShipmentCreateDto'
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    customerInShipmentDto:
-      properties:
-        internalId:
-          type: integer
-          format: int32
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: The top part &gt; Customer &gt; The customer to whom the goods specified in the document should be shipped. (This field does not appear for transfers.)
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    customDec1InShipmentDetailLineAddDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    ConfirmShipmentActionResultDto:
-      type: object
-      properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    customInt1InShipmentDetailLineUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    customStr4InShipmentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customStr1InShipmentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    ShipmentSOOrder:
-      type: object
-      properties:
-        orderType:
-          type: string
-          description: Sales Order Type
-        orderNumber:
-          type: string
-          description: Sales Order Number
-    DtoValueOfNullableOfTransportationModes:
-      type: object
-      properties:
-        value:
-          enum:
-          - Unknown
-          - BySea
-          - ByRail
-          - ByRoad
-          - ByAeroPlane
-          - ConsignmentsByPosts
-          - FixedInstallations
-          - InlandWaterway
-          type: string
-    customStr3InShipmentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customDateTimeUTC1InShipmentUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: A free custom colum of type DateTime - in UTC timezone
-    countyInShipmentAddressDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    customStr5InShipmentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    AllocationsUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-          description: The operation &gt;  Insert=1, Update=2, Delete=3
-        lineNbr:
-          $ref: '#/components/schemas/lineNbrInAllocationsUpdateDto'
-        location:
-          $ref: '#/components/schemas/locationInAllocationsUpdateDto'
-        lotSerialNumber:
-          $ref: '#/components/schemas/lotSerialNumberInAllocationsUpdateDto'
-        quantity:
-          $ref: '#/components/schemas/quantityInAllocationsUpdateDto'
-        uom:
-          $ref: '#/components/schemas/uomInAllocationsUpdateDto'
-        expirationDate:
-          $ref: '#/components/schemas/expirationDateInAllocationsUpdateDto'
-      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptEndpoint. Used to add/update data.
-    DtoValueOfNullableOfShipmentOperations:
-      type: object
-      properties:
-        value:
-          enum:
-          - Issue
-          - Receipt
-          type: string
-    deliveryAddressInShipmentDto:
-      properties:
-        overrideAddress:
-          type: boolean
-          description: Override address &gt; A check box that you select to not include the default address information and to type new address information.
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInShipmentAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInShipmentAddressDto'
-      description: Delivery settings tab &gt; Delivery address section &gt;
-    modeOfTrasportInShipmentDto:
-      properties:
-        id:
-          type: integer
-          description: Click on the magnifier. &gt; The identifier.
-          format: int32
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Intrastat section &gt; Mode of transportation &gt; The method of transportation.
-    fromWarehouseInShipmentDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part &gt; Warehouse ID* &gt; The warehouse from which the goods should be shipped.'
-    PackageDetailLineDto:
-      type: object
-      properties:
-        lineNumber:
-          type: integer
-          description: Packages tab &gt; Line number. The sequence of the lines.
-          format: int32
-        confirmed:
-          type: boolean
-          description: Packages tab &gt; Confirmed &gt; This check box indicates (if selected) that shipping of the package specified on the line has been confirmed.
-        boxId:
-          type: string
-          description: 'Mandatory field: Packages tab &gt; Box ID* &gt; The box used for the package.'
-        type:
-          type: string
-          description: 'Packages tab &gt; Type &gt; The type of package: Auto or Manual.'
-        description:
-          type: string
-          description: Packages tab &gt; Description &gt; The description of the item or description of the box contents.
-        weight:
-          type: number
-          description: Packages tab &gt; Weight &gt; The gross weight of the package.
-          format: double
-        uom:
-          type: string
-          description: Packages tab &gt; UoM &gt; The unit of measure in which the weight of the package is specified.
-        volume:
-          type: number
-          description: Packages tab &gt; Volume &gt; The gross volume of the package.
-          format: double
-        volumeUOM:
-          type: string
-          description: Packages tab &gt; VolumeUoM &gt; The unit of measure in which the volume of the package is specified.
-        declaredValue:
-          type: number
-          description: Packages tab &gt; Declared value &gt; The amount of the package specified for insurance, you can edit the value if needed.
-          format: double
-        coDAmount:
-          type: number
-          description: Packages tab &gt; Cost of delivery amount &gt; The amount to be charged on delivery of the package, you can edit the value if needed.
-          format: double
-        trackingNumber:
-          type: string
-          description: Packages tab &gt; Tracking number &gt; The tracking number provided for the package by the carrier if integration with carrier is configured.
-        customRefNbr1:
-          type: string
-          description: Packages tab &gt; Customer ref. no. 1 &gt; An auxiliary reference number to appear on the carrier label for the box.
-        customRefNbr2:
-          type: string
-          description: Packages tab &gt; Customer ref. no. 2 &gt; An additional auxiliary reference number to appear on the carrier label for the box.
-    customDec2InShipmentDetailLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    shippingTermsInShipmentDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; Shipping terms &gt; The shipping terms used in relations with the customer.
-    customInt1InShipmentDetailLineAddDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    lotSerialNumberInAllocationsUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Lot/Serial no. &gt; The lot or serial number of the item.
-    customDec1InShipmentUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    customDec1InShipmentDetailLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
     ShipmentDto:
       type: object
       properties:
@@ -1824,123 +1924,18 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a Shipment in ShipmentController. Used by getting data.
-    customStr3InShipmentDetailLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    ownerInShipmentDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: The top part &gt; Owner &gt; The user assigned to approve the document.
-    ShipmentSOLine:
-      type: object
-      properties:
-        orderType:
-          type: string
-          description: Sales Order Type
-        orderNumber:
-          type: string
-          description: Sales Order Number
-        orderLineNumber:
-          type: integer
-          description: Sales Order Line Number, optional if Inventory Id is entered
-          format: int32
-        inventoryId:
-          type: string
-          description: Inventory Id, ignored if Order Line Number is specified. If more that one line on the Sales order has this Inventory Id, it will not work.
-    lineNbrInAllocationsUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: Line no. &gt; The line of the purchase order that contains the selected item.
     customInt1InShipmentCreateDto:
       properties:
         value:
           type: integer
           format: int32
       description: A free custom colum of type int
-    customStr4InShipmentDetailLineAddDto:
+    customInt2InShipmentUpdateDto:
       properties:
         value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    ShipmentDetailLineUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        warehouse:
-          $ref: '#/components/schemas/DtoValueOfString'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        shippedQty:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        lotSerialNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expirationDate:
-          $ref: '#/components/schemas/expirationDateInShipmentDetailLineUpdateDto'
-        reasonCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        allocations:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllocationsUpdateDto'
-        customStr1:
-          $ref: '#/components/schemas/customStr1InShipmentDetailLineUpdateDto'
-        customStr2:
-          $ref: '#/components/schemas/customStr2InShipmentDetailLineUpdateDto'
-        customStr3:
-          $ref: '#/components/schemas/customStr3InShipmentDetailLineUpdateDto'
-        customStr4:
-          $ref: '#/components/schemas/customStr4InShipmentDetailLineUpdateDto'
-        customStr5:
-          $ref: '#/components/schemas/customStr5InShipmentDetailLineUpdateDto'
-        customDec1:
-          $ref: '#/components/schemas/customDec1InShipmentDetailLineUpdateDto'
-        customDec2:
-          $ref: '#/components/schemas/customDec2InShipmentDetailLineUpdateDto'
-        customInt1:
-          $ref: '#/components/schemas/customInt1InShipmentDetailLineUpdateDto'
-        customInt2:
-          $ref: '#/components/schemas/customInt2InShipmentDetailLineUpdateDto'
-        customDateTimeUTC1:
-          $ref: '#/components/schemas/customDateTimeUTC1InShipmentDetailLineUpdateDto'
-    customDateTimeUTC1InShipmentCreateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: A free custom colum of type DateTime - in UTC timezone
-    toWarehouseInShipmentDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; To warehouse &gt; The warehouse to which the goods should be shipped in case of a transfer.
+          type: integer
+          format: int32
+      description: A free custom colum of type int
     ShipmentDetailLineDto:
       type: object
       properties:
@@ -2042,63 +2037,7 @@ components:
           type: string
           description: A free custom colum of type DateTime - in UTC timezone
           format: date-time
-    customStr4InShipmentCreateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    locationInShipmentDetailLineDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Document details tab &gt; Location &gt; The location in the warehouse from which the item is shipped.
-    customDec2InShipmentCreateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    locationInShipmentDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location to receive the shipment.'
-    customStr2InShipmentDetailLineAddDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customInt1InShipmentUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    customStr5InShipmentDetailLineAddDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    uomInAllocationsUpdateDto:
-      properties:
-        value:
-          type: string
-      description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
-    fobPointInShipmentDto:
+    shippingTermsInShipmentDto:
       properties:
         id:
           type: string
@@ -2106,95 +2045,33 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; FOB point &gt; The point where obligation of goods passes to the customer.
-    countryInShipmentAddressDto:
+      description: Delivery settings tab &gt; Shipping information section &gt; Shipping terms &gt; The shipping terms used in relations with the customer.
+    warehouseInShipmentDetailLineDto:
       properties:
         id:
           type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    locationInAllocationsUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Location &gt; The location in the warehouse.
-    customInt2InShipmentUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    customStr1InShipmentDetailLineAddDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customStr5InShipmentDetailLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customStr2InShipmentCreateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    MetadataDto:
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Document details tab &gt; Warehouse* &gt; The warehouse from which the items is shipped.'
+    DtoValueOfNullableOfDecimal:
       type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    expirationDateInShipmentDetailLineUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: Property will become obsolete after version 5.31
-    customStr3InShipmentCreateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    quantityInAllocationsUpdateDto:
       properties:
         value:
           type: number
           format: double
-      description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
-    customStr5InShipmentCreateDto:
+    customStr4InShipmentDetailLineAddDto:
       properties:
         value:
           type: string
       description: A free custom colum of type string with max length 100.
-    customInt2InShipmentDetailLineAddDto:
+    customDec2InShipmentDetailLineUpdateDto:
       properties:
         value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
     ShipmentUpdateDto:
       type: object
       properties:
@@ -2300,72 +2177,161 @@ components:
           $ref: '#/components/schemas/customInt2InShipmentUpdateDto'
         customDateTimeUTC1:
           $ref: '#/components/schemas/customDateTimeUTC1InShipmentUpdateDto'
-    customInt2InShipmentCreateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    transactionTypeInShipmentDto:
-      properties:
-        id:
-          type: integer
-          description: Click on the magnifier. &gt; The identifier.
-          format: int32
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Intrastat section &gt; Transaction type &gt; The 1-digit code that describes the nature of the transaction (according to EU regulations for Intrastat reporting).
-    customStr2InShipmentDetailLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    AllocationsDto:
+    ShipmentDetailLineAddDto:
+      required:
+      - inventoryNumber
       type: object
       properties:
-        lineNbr:
-          type: integer
-          description: Line no. &gt; The line of the purchase order that contains the selected item.
-          format: int32
-        itemId:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
-          description: ItemId &gt; The id of the item.
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        warehouse:
+          $ref: '#/components/schemas/DtoValueOfString'
         location:
-          $ref: '#/components/schemas/locationInAllocationsDto'
-        lotSerialNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        shippedQty:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        customStr1:
+          $ref: '#/components/schemas/customStr1InShipmentDetailLineAddDto'
+        customStr2:
+          $ref: '#/components/schemas/customStr2InShipmentDetailLineAddDto'
+        customStr3:
+          $ref: '#/components/schemas/customStr3InShipmentDetailLineAddDto'
+        customStr4:
+          $ref: '#/components/schemas/customStr4InShipmentDetailLineAddDto'
+        customStr5:
+          $ref: '#/components/schemas/customStr5InShipmentDetailLineAddDto'
+        customDec1:
+          $ref: '#/components/schemas/customDec1InShipmentDetailLineAddDto'
+        customDec2:
+          $ref: '#/components/schemas/customDec2InShipmentDetailLineAddDto'
+        customInt1:
+          $ref: '#/components/schemas/customInt1InShipmentDetailLineAddDto'
+        customInt2:
+          $ref: '#/components/schemas/customInt2InShipmentDetailLineAddDto'
+        customDateTimeUTC1:
+          $ref: '#/components/schemas/customDateTimeUTC1InShipmentDetailLineAddDto'
+    PackageDetailLineDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: Packages tab &gt; Line number. The sequence of the lines.
+          format: int32
+        confirmed:
+          type: boolean
+          description: Packages tab &gt; Confirmed &gt; This check box indicates (if selected) that shipping of the package specified on the line has been confirmed.
+        boxId:
           type: string
-          description: Lot/Serial no. &gt; The lot or serial number of the item.
-        quantity:
+          description: 'Mandatory field: Packages tab &gt; Box ID* &gt; The box used for the package.'
+        type:
+          type: string
+          description: 'Packages tab &gt; Type &gt; The type of package: Auto or Manual.'
+        description:
+          type: string
+          description: Packages tab &gt; Description &gt; The description of the item or description of the box contents.
+        weight:
           type: number
-          description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
+          description: Packages tab &gt; Weight &gt; The gross weight of the package.
           format: double
         uom:
           type: string
-          description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
-        expirationDate:
+          description: Packages tab &gt; UoM &gt; The unit of measure in which the weight of the package is specified.
+        volume:
+          type: number
+          description: Packages tab &gt; Volume &gt; The gross volume of the package.
+          format: double
+        volumeUOM:
           type: string
-          description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
-          format: date-time
-        description:
+          description: Packages tab &gt; VolumeUoM &gt; The unit of measure in which the volume of the package is specified.
+        declaredValue:
+          type: number
+          description: Packages tab &gt; Declared value &gt; The amount of the package specified for insurance, you can edit the value if needed.
+          format: double
+        coDAmount:
+          type: number
+          description: Packages tab &gt; Cost of delivery amount &gt; The amount to be charged on delivery of the package, you can edit the value if needed.
+          format: double
+        trackingNumber:
           type: string
-          description: Description &gt; The description of the stock item.
-      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptController. Used for getting data.
+          description: Packages tab &gt; Tracking number &gt; The tracking number provided for the package by the carrier if integration with carrier is configured.
+        customRefNbr1:
+          type: string
+          description: Packages tab &gt; Customer ref. no. 1 &gt; An auxiliary reference number to appear on the carrier label for the box.
+        customRefNbr2:
+          type: string
+          description: Packages tab &gt; Customer ref. no. 2 &gt; An additional auxiliary reference number to appear on the carrier label for the box.
+    locationInShipmentDetailLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Document details tab &gt; Location &gt; The location in the warehouse from which the item is shipped.
+    ConfirmShipmentActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
     customDateTimeUTC1InShipmentDetailLineAddDto:
       properties:
         value:
           type: string
           format: date-time
       description: A free custom colum of type DateTime - in UTC timezone
-    warehouseInShipmentDetailLineDto:
+    customStr3InShipmentDetailLineAddDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    customStr3InShipmentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    countryInShipmentAddressDto:
       properties:
         id:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
           type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Document details tab &gt; Warehouse* &gt; The warehouse from which the items is shipped.'
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    customDec2InShipmentCreateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
     shipViaInShipmentDto:
       properties:
         id:
@@ -2375,11 +2341,45 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Delivery settings tab &gt; Shipping information section &gt; Ship via &gt; The carrier used for shipping the goods.
-    customStr3InShipmentDetailLineAddDto:
+    customInt2InShipmentDetailLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    modeOfTrasportInShipmentDto:
+      properties:
+        id:
+          type: integer
+          description: Click on the magnifier. &gt; The identifier.
+          format: int32
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Intrastat section &gt; Mode of transportation &gt; The method of transportation.
+    locationInShipmentDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location to receive the shipment.'
+    customStr1InShipmentUpdateDto:
       properties:
         value:
           type: string
       description: A free custom colum of type string with max length 100.
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
   securitySchemes:
     interactiveapi:
       type: oauth2

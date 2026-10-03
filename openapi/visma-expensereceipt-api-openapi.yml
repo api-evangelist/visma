@@ -467,15 +467,6 @@ components:
           type: string
           description: Name of item/description
       description: Receipt details tab &gt; Expense details section &gt; VAT category &gt; The tax category for the expense receipt.
-    BranchNumberDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
     countyInAddressDto:
       properties:
         id:
@@ -485,12 +476,102 @@ components:
           type: string
           description: Click the magnifier &gt; The displayed name
       description: County &gt; The county or province.
-    DtoValueOfNullableOfDateTime:
+    expenseSubInExpenseReceiptDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Receipt details tab &gt; Financial details section &gt; Expense sub. &gt; The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.
+    DtoValueOfNullableOfDecimal:
       type: object
       properties:
         value:
+          type: number
+          format: double
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    customerInExpenseReceiptDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Receipt details tab &gt; Financial details section &gt; Customer &gt; The customer, which should be specified if the employee incurred the expenses while working for a particular customer.
+    claimedByInExpenseReceiptDto:
+      properties:
+        employeeUserId:
+          type: string
+          description: Employee internal user ID. This is the ID of the user linked to the employee
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        employeeId:
+          type: integer
+          description: 'Mandatory field: The top part &gt; Employee ID* &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEE segmented key.'
+          format: int32
+        employeeNumber:
+          type: string
+          description: General information tab &gt; Employee settings section &gt; Employee ref. no. &gt; A reference number for the employee.
+        employeeName:
+          type: string
+          description: The top part &gt; Employee name &gt; The name of this employee.
+        status:
+          enum:
+          - Active
+          - OnHold
+          - HoldPayments
+          - Inactive
+          - OneTime
+          type: string
+          description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
+        department:
+          type: string
+          description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
+        contact:
+          $ref: '#/components/schemas/contactInEmployeeDto'
+        address:
+          $ref: '#/components/schemas/addressInEmployeeDto'
+        lastModifiedDateTime:
           type: string
           format: date-time
+        employeeClass:
+          $ref: '#/components/schemas/employeeClassInEmployeeDto'
+        branch:
+          $ref: '#/components/schemas/BranchNumberDto'
+        calendarID:
+          type: string
+        employeeLogin:
+          type: string
+        workGroupDescription:
+          type: array
+          items:
+            type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: "Mandatory field: The top part &gt; Claimed by* &gt; \tThe name of the employee who is claiming the expenses."
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
     salesSubInExpenseReceiptDto:
       properties:
         active:
@@ -502,13 +583,19 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Receipt details tab &gt; Financial details section &gt; Sales sub. &gt; The corresponding subaccount the system uses to record the amount to charge the customer for.
-    BackgroundApiAcceptedDto:
-      type: object
+    countryInAddressDto:
       properties:
         id:
           type: string
-        stateLocation:
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
           type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
     locationInExpenseReceiptDto:
       properties:
         id:
@@ -518,11 +605,187 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Receipt details tab &gt; Financial details section &gt; Location &gt; The location of the customer related to the expenses.
-    DtoValueOfNullableOfBoolean:
+    DtoValueOfNullableOfDateTime:
       type: object
       properties:
         value:
-          type: boolean
+          type: string
+          format: date-time
+    employeeClassInEmployeeDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Additional information about Employee User
+
+        ///'
+    salesAccountInExpenseReceiptDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Receipt details tab &gt; Financial details section &gt; Sales account &gt; The sales account to which the system records the part of the amount to charge the customer for.
+    currencyInExpenseReceiptDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Both tabs &gt; Currency &gt; The currency of the expense receipt.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    imageInExpenseReceiptDto:
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+      description: Receipt details tab &gt; Image section
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    branchInExpenseReceiptDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: The top part &gt; Branch &gt; The company branch that will incur the expenses.'
+    expenseClaimInExpenseReceiptDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Receipt details tab &gt; Expense details section &gt; Expense claim &gt; The expense claim with which the expense receipt is associated.
+    projectTaskInExpenseReceiptDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Receipt details tab &gt; Expense details section &gt; Project task &gt; The project task to which the expenses are related.
+    addressInEmployeeDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: General information tab &gt; Address info section &gt;
+    ExpenseReceiptUpdateDto:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        currency:
+          $ref: '#/components/schemas/DtoValueOfString'
+        refNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        inventory:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        unitCost:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        totalAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        employeePart:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        claimedBy:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branch:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseClaim:
+          $ref: '#/components/schemas/DtoValueOfString'
+        invoiceable:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        project:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectTask:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customer:
+          $ref: '#/components/schemas/DtoValueOfString'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseSub:
+          $ref: '#/components/schemas/DtoValueOfString'
+        salesAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        salesSub:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taxCategory:
+          $ref: '#/components/schemas/DtoValueOfString'
+      description: This class represents a Expense Receipt in ExpenseReceiptController. Used to post data to server.
     ExpenseReceiptDto:
       type: object
       properties:
@@ -620,87 +883,6 @@ components:
             It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
           format: byte
       description: This class represents a Expense Receipt in ExpenseReceiptController. Used by getting data.
-    expenseClaimInExpenseReceiptDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Receipt details tab &gt; Expense details section &gt; Expense claim &gt; The expense claim with which the expense receipt is associated.
-    imageInExpenseReceiptDto:
-      properties:
-        name:
-          type: string
-          description: The name of the attachment.
-        id:
-          type: string
-          description: The ID of the attachment
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        revision:
-          type: integer
-          description: The version of the attachment.
-          format: int32
-      description: Receipt details tab &gt; Image section
-    projectTaskInExpenseReceiptDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Receipt details tab &gt; Expense details section &gt; Project task &gt; The project task to which the expenses are related.
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    customerInExpenseReceiptDto:
-      properties:
-        number:
-          type: string
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Receipt details tab &gt; Financial details section &gt; Customer &gt; The customer, which should be specified if the employee incurred the expenses while working for a particular customer.
-    currencyInExpenseReceiptDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Both tabs &gt; Currency &gt; The currency of the expense receipt.
-    expenseSubInExpenseReceiptDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Receipt details tab &gt; Financial details section &gt; Expense sub. &gt; The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.
-    employeeClassInEmployeeDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Additional information about Employee User
-
-        ///'
     InventoryNumberDescriptionDto:
       type: object
       properties:
@@ -710,192 +892,6 @@ components:
         description:
           type: string
           description: Name of item/description
-    salesAccountInExpenseReceiptDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Receipt details tab &gt; Financial details section &gt; Sales account &gt; The sales account to which the system records the part of the amount to charge the customer for.
-    ExpenseReceiptUpdateDto:
-      type: object
-      properties:
-        date:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        currency:
-          $ref: '#/components/schemas/DtoValueOfString'
-        refNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        inventory:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        unitCost:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        totalAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        employeePart:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        claimedBy:
-          $ref: '#/components/schemas/DtoValueOfString'
-        branch:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expenseClaim:
-          $ref: '#/components/schemas/DtoValueOfString'
-        invoiceable:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        project:
-          $ref: '#/components/schemas/DtoValueOfString'
-        projectTask:
-          $ref: '#/components/schemas/DtoValueOfString'
-        customer:
-          $ref: '#/components/schemas/DtoValueOfString'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expenseAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expenseSub:
-          $ref: '#/components/schemas/DtoValueOfString'
-        salesAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        salesSub:
-          $ref: '#/components/schemas/DtoValueOfString'
-        taxCategory:
-          $ref: '#/components/schemas/DtoValueOfString'
-      description: This class represents a Expense Receipt in ExpenseReceiptController. Used to post data to server.
-    projectInExpenseReceiptDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Receipt details tab &gt; Expense details section &gt; Project/contract &gt; The project or contract, which should be specified if the employee incurred the expenses while working on a particular project or contract.
-    countryInAddressDto:
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
-          type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    claimedByInExpenseReceiptDto:
-      properties:
-        employeeUserId:
-          type: string
-          description: Employee internal user ID. This is the ID of the user linked to the employee
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        employeeId:
-          type: integer
-          description: 'Mandatory field: The top part &gt; Employee ID* &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEE segmented key.'
-          format: int32
-        employeeNumber:
-          type: string
-          description: General information tab &gt; Employee settings section &gt; Employee ref. no. &gt; A reference number for the employee.
-        employeeName:
-          type: string
-          description: The top part &gt; Employee name &gt; The name of this employee.
-        status:
-          enum:
-          - Active
-          - OnHold
-          - HoldPayments
-          - Inactive
-          - OneTime
-          type: string
-          description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
-        department:
-          type: string
-          description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
-        contact:
-          $ref: '#/components/schemas/contactInEmployeeDto'
-        address:
-          $ref: '#/components/schemas/addressInEmployeeDto'
-        lastModifiedDateTime:
-          type: string
-          format: date-time
-        employeeClass:
-          $ref: '#/components/schemas/employeeClassInEmployeeDto'
-        branch:
-          $ref: '#/components/schemas/BranchNumberDto'
-        calendarID:
-          type: string
-        employeeLogin:
-          type: string
-        workGroupDescription:
-          type: array
-          items:
-            type: string
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: "Mandatory field: The top part &gt; Claimed by* &gt; \tThe name of the employee who is claiming the expenses."
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    addressInEmployeeDto:
-      properties:
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInAddressDto'
-      description: General information tab &gt; Address info section &gt;
-    branchInExpenseReceiptDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: The top part &gt; Branch &gt; The company branch that will incur the expenses.'
     contactInEmployeeDto:
       properties:
         employeeContact:
@@ -948,15 +944,19 @@ components:
           type: string
           description: Fax &gt; The fax number.
       description: General information tab &gt; Contact section &gt;
-    MetadataDto:
-      type: object
+    projectInExpenseReceiptDto:
       properties:
-        totalCount:
+        internalId:
           type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Receipt details tab &gt; Expense details section &gt; Project/contract &gt; The project or contract, which should be specified if the employee incurred the expenses while working on a particular project or contract.
     expenseAccountInExpenseReceiptDto:
       properties:
         type:

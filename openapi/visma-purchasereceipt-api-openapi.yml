@@ -816,6 +816,285 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    PurchaseReceiptOrderUpdateDto:
+      type: object
+      properties:
+        orderNbr:
+          type: string
+          description: The reference number of the Purchase Order.
+        orderType:
+          enum:
+          - RegularOrder
+          - DropShip
+          - Blanket
+          - StandardBlanket
+          type: string
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationsUpdateDto'
+      description: This class represents a Purchase Order reference number to add to a Purchase Receipt.
+    warehouseIdInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The warehouse where the item has been received.
+    customStr1InPurchaseReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    taxCategoryInLandedCostDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Landed costs tab &gt; VAT category &gt; VAT category associated with supplier's VAT zone.
+    locationInAllocationsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Location &gt; The location in the warehouse.
+    DtoValueOfCustomerDocumentTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Invoice
+          - DebitNote
+          - CreditNote
+          - Payment
+          - VoidPayment
+          - Prepayment
+          - Refund
+          - FinCharge
+          - SmallBalanceWo
+          - SmallCreditWo
+          - CashSale
+          - CashReturn
+          - Undefined
+          - NoUpdate
+          type: string
+    quantityInAllocationsUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
+    branchIdInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: BranchId is deprecated, please use BranchNumber instead.
+    customInt1InPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    transferOrderNbrInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The reference number of the transfer order to which this receipt is linked.
+    supplierInPurchaseReceiptDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: The top part &gt; Supplier* &gt; The supplier from which the items have been received or to which they will be returned.'
+    customDateTimeUTC1InPurchaseReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: A free custom colum of type DateTime - in UTC timezone
+    PurchaseReceiptUpdateDto:
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseReceiptLineUpdateDto'
+        landedCost:
+          type: array
+          items:
+            $ref: '#/components/schemas/LandedCostUpdateDto'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        receiptType:
+          $ref: '#/components/schemas/DtoValueOfPurchaseReceiptType'
+        receiptNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        date:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInPurchaseReceiptUpdateDto'
+        warehouseId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        supplierId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        currency:
+          $ref: '#/components/schemas/DtoValueOfString'
+        exchangeRate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        createBill:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        supplierRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        controlQty:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        controlAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customStr1:
+          $ref: '#/components/schemas/customStr1InPurchaseReceiptUpdateDto'
+        customStr2:
+          $ref: '#/components/schemas/customStr2InPurchaseReceiptUpdateDto'
+        customStr3:
+          $ref: '#/components/schemas/customStr3InPurchaseReceiptUpdateDto'
+        customStr4:
+          $ref: '#/components/schemas/customStr4InPurchaseReceiptUpdateDto'
+        customStr5:
+          $ref: '#/components/schemas/customStr5InPurchaseReceiptUpdateDto'
+        customDec1:
+          $ref: '#/components/schemas/customDec1InPurchaseReceiptUpdateDto'
+        customDec2:
+          $ref: '#/components/schemas/customDec2InPurchaseReceiptUpdateDto'
+        customInt1:
+          $ref: '#/components/schemas/customInt1InPurchaseReceiptUpdateDto'
+        customInt2:
+          $ref: '#/components/schemas/customInt2InPurchaseReceiptUpdateDto'
+        customDateTimeUTC1:
+          $ref: '#/components/schemas/customDateTimeUTC1InPurchaseReceiptUpdateDto'
+        timeStamp:
+          type: string
+          format: byte
+      description: This class represents a Purchase Receipt in PurchaseReceiptController. Used for getting data.
+    locationInLandedCostDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: Landed costs tab &gt; Location* &gt; The location of the selected landed cost supplier.'
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    uomInAllocationsUpdateDto:
+      properties:
+        value:
+          type: string
+      description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
+    amountInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The Document details tab &gt; The amount calculated (after discount has been taken) for the item.
+    warehouseInPurchaseReceiptLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Document details tab &gt; Warehouse* &gt; The warehouse where the item has been received.'
+    customDec2InPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    poOrderTypeInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          enum:
+          - RegularOrder
+          - DropShip
+          - Blanket
+          - StandardBlanket
+          type: string
+      description: The Document details tab &gt; The type of the purchase order related to this purchase receipt.
+    actualSubInPurchaseReceiptLineDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Document details tab &gt; Accrual sub. &gt; The subaccount used to record the item amount on the purchase receipt, used for stock items and non-stock items for which a receipt is required.
+    DtoValueOfPurchaseReceiptType:
+      type: object
+      properties:
+        value:
+          enum:
+          - PoReceipt
+          - PoReturn
+          - TransferReceipt
+          type: string
+    PurchaseReceiptOrderLineNbrUpdateDto:
+      type: object
+      properties:
+        lineNbr:
+          type: string
+          description: The line number of the Purchase Order line.
+      description: Represents a Purchase Order line number to add to a Purchase Receipt.
+    customInt2InPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    AllocationsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+          description: The operation &gt;  Insert=1, Update=2, Delete=3
+        lineNbr:
+          $ref: '#/components/schemas/lineNbrInAllocationsUpdateDto'
+        location:
+          $ref: '#/components/schemas/locationInAllocationsUpdateDto'
+        lotSerialNumber:
+          $ref: '#/components/schemas/lotSerialNumberInAllocationsUpdateDto'
+        quantity:
+          $ref: '#/components/schemas/quantityInAllocationsUpdateDto'
+        uom:
+          $ref: '#/components/schemas/uomInAllocationsUpdateDto'
+        expirationDate:
+          $ref: '#/components/schemas/expirationDateInAllocationsUpdateDto'
+      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptEndpoint. Used to add/update data.
     projectTaskInPurchaseReceiptLineDto:
       properties:
         internalId:
@@ -829,117 +1108,146 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Document details tab &gt; Project task &gt; The project task with which the document is associated.
-    PurchaseReceiptLineUpdateDto:
+    PurchaseReceiptDto:
       type: object
       properties:
-        allocations:
+        landedCost:
           type: array
           items:
-            $ref: '#/components/schemas/AllocationsUpdateDto'
+            $ref: '#/components/schemas/LandedCostDto'
+          description: Landed costs tab &gt; Landed cost code &gt; The landed cost code specified in the line of the landed cost document.
         note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
           type: string
-        lineNbr:
-          $ref: '#/components/schemas/lineNbrInPurchaseReceiptLineUpdateDto'
-        lineType:
-          $ref: '#/components/schemas/lineTypeInPurchaseReceiptLineUpdateDto'
-        branchId:
-          $ref: '#/components/schemas/branchIdInPurchaseReceiptLineUpdateDto'
+        timeStamp:
+          type: string
+          description: The top part &gt; Tstamp &gt; The timestamp of the purchase receipt.
+          format: byte
+        receiptType:
+          enum:
+          - PoReceipt
+          - PoReturn
+          - TransferReceipt
+          type: string
+          description: 'The top part &gt; Type &gt; The type of the document, which can be one of the following options: Receipt, Return, Transfer receipt.'
+        receiptNbr:
+          type: string
+          description: The top part &gt; Receipt no. &gt; The unique reference number of the purchase receipt.
+        hold:
+          type: boolean
+          description: The top part &gt; Hold &gt; A check box that indicates (if selected) that the document has the On hold status.
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          - Cancelled
+          type: string
+          description: The top part &gt; Status &gt; The current status of the purchase or transfer receipt, or return, which the system assigns automatically. On hold, Balanced, Released.
+        date:
+          type: string
+          description: 'Mandatory field: The top part &gt; Date* &gt; The date when the receipt document was created.'
+          format: date-time
+        postPeriod:
+          type: string
+          description: 'Mandatory field: The top part &gt; Post period* &gt; The financial period to which the transactions recorded in the document should be posted. Format MMYYYY.'
+        warehouse:
+          $ref: '#/components/schemas/warehouseInPurchaseReceiptDto'
+        supplier:
+          $ref: '#/components/schemas/supplierInPurchaseReceiptDto'
+        location:
+          $ref: '#/components/schemas/locationInPurchaseReceiptDto'
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency the supplier uses for invoicing.
+        exchangeRate:
+          type: number
+          format: double
+        createBill:
+          type: boolean
+          description: The top part &gt; Create invoice &gt; A check box that you select if the system must create an appropriate invoice (or adjustment) automatically when the purchase receipt is released.
+        supplierRef:
+          type: string
+          description: The top part &gt; Supplier ref. &gt; The reference number of the supplier document this receipt or return is based on.
+        totalQty:
+          type: number
+          description: The top part &gt; Total qty. &gt; The total quantity of items received from or returned to the supplier.
+          format: double
+        controlQty:
+          type: number
+          description: The top part &gt; Control qty. &gt; The total quantity of goods on the receipt or return
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
+          format: double
+        vatTaxableTotal:
+          type: number
+          description: The top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
+          format: double
+        totalAmt:
+          type: number
+          description: The top part &gt; Total amt. &gt; The total amount calculated for items received from or returned to the supplier.
+          format: double
+        controlTotal:
+          type: number
+          description: The top part &gt; Control amt. &gt; The total amount of the receipt or return, which you manually enter.
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
         branchNumber:
-          $ref: '#/components/schemas/branchNumberInPurchaseReceiptLineUpdateDto'
-        inventoryId:
-          $ref: '#/components/schemas/inventoryIdInPurchaseReceiptLineUpdateDto'
-        warehouseId:
-          $ref: '#/components/schemas/warehouseIdInPurchaseReceiptLineUpdateDto'
-        locationId:
-          $ref: '#/components/schemas/locationIdInPurchaseReceiptLineUpdateDto'
-        transactionDescription:
-          $ref: '#/components/schemas/transactionDescriptionInPurchaseReceiptLineUpdateDto'
-        uom:
-          $ref: '#/components/schemas/uomInPurchaseReceiptLineUpdateDto'
-        receiptQty:
-          $ref: '#/components/schemas/receiptQtyInPurchaseReceiptLineUpdateDto'
-        unitCost:
-          $ref: '#/components/schemas/unitCostInPurchaseReceiptLineUpdateDto'
-        extCost:
-          $ref: '#/components/schemas/extCostInPurchaseReceiptLineUpdateDto'
-        discountPercent:
-          $ref: '#/components/schemas/discountPercentInPurchaseReceiptLineUpdateDto'
-        discountAmount:
-          $ref: '#/components/schemas/discountAmountInPurchaseReceiptLineUpdateDto'
-        manualDiscount:
-          $ref: '#/components/schemas/manualDiscountInPurchaseReceiptLineUpdateDto'
-        discountCodeId:
-          $ref: '#/components/schemas/discountCodeIdInPurchaseReceiptLineUpdateDto'
-        amount:
-          $ref: '#/components/schemas/amountInPurchaseReceiptLineUpdateDto'
-        taxCategoryId:
-          $ref: '#/components/schemas/taxCategoryIdInPurchaseReceiptLineUpdateDto'
-        accountId:
-          $ref: '#/components/schemas/accountIdInPurchaseReceiptLineUpdateDto'
-        accountDescription:
-          $ref: '#/components/schemas/accountDescriptionInPurchaseReceiptLineUpdateDto'
-        subaccount:
+          $ref: '#/components/schemas/branchNumberInPurchaseReceiptDto'
+        lines:
           type: array
           items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-          description: The Document details tab &gt; The subaccount to be used to record the non-stock item amount on the purchase receipt (for non-stock items for which receipts are not required).
-        actualAccountId:
-          $ref: '#/components/schemas/actualAccountIdInPurchaseReceiptLineUpdateDto'
-        actualSubaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-          description: The Document details tab &gt; The subaccount used to record the item amount on the purchase receipt, used for stock items and non-stock items for which a receipt is required.
-        projectId:
-          $ref: '#/components/schemas/projectIdInPurchaseReceiptLineUpdateDto'
-        projectTaskId:
-          $ref: '#/components/schemas/projectTaskIdInPurchaseReceiptLineUpdateDto'
-        expirationDate:
-          $ref: '#/components/schemas/expirationDateInPurchaseReceiptLineUpdateDto'
-        lotSerialNumber:
-          $ref: '#/components/schemas/lotSerialNumberInPurchaseReceiptLineUpdateDto'
-        poOrderType:
-          $ref: '#/components/schemas/poOrderTypeInPurchaseReceiptLineUpdateDto'
-        poOrderNbr:
-          $ref: '#/components/schemas/poOrderNbrInPurchaseReceiptLineUpdateDto'
-        poOrderLineNbr:
-          $ref: '#/components/schemas/poOrderLineNbrInPurchaseReceiptLineUpdateDto'
-        transferOrderType:
-          $ref: '#/components/schemas/transferOrderTypeInPurchaseReceiptLineUpdateDto'
-        transferOrderNbr:
-          $ref: '#/components/schemas/transferOrderNbrInPurchaseReceiptLineUpdateDto'
-        transferOrderLineNbr:
-          $ref: '#/components/schemas/transferOrderLineNbrInPurchaseReceiptLineUpdateDto'
-        completePoLine:
-          $ref: '#/components/schemas/completePoLineInPurchaseReceiptLineUpdateDto'
+            $ref: '#/components/schemas/PurchaseReceiptLineDto'
+          description: Document details tab &gt; Line no &gt; The number of the purchase receipt line on the document.
+        dueDate:
+          type: string
+          description: This value indicates the date the document is due
+          format: date-time
         customStr1:
-          $ref: '#/components/schemas/customStr1InPurchaseReceiptLineUpdateDto'
+          type: string
+          description: A free custom colum of type string with max length 100.
         customStr2:
-          $ref: '#/components/schemas/customStr2InPurchaseReceiptLineUpdateDto'
+          type: string
+          description: A free custom colum of type string with max length 100.
         customStr3:
-          $ref: '#/components/schemas/customStr3InPurchaseReceiptLineUpdateDto'
+          type: string
+          description: A free custom colum of type string with max length 100.
         customStr4:
-          $ref: '#/components/schemas/customStr4InPurchaseReceiptLineUpdateDto'
+          type: string
+          description: A free custom colum of type string with max length 100.
         customStr5:
-          $ref: '#/components/schemas/customStr5InPurchaseReceiptLineUpdateDto'
+          type: string
+          description: A free custom colum of type string with max length 100.
         customDec1:
-          $ref: '#/components/schemas/customDec1InPurchaseReceiptLineUpdateDto'
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
         customDec2:
-          $ref: '#/components/schemas/customDec2InPurchaseReceiptLineUpdateDto'
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
         customInt1:
-          $ref: '#/components/schemas/customInt1InPurchaseReceiptLineUpdateDto'
+          type: integer
+          description: A free custom colum of type int
+          format: int32
         customInt2:
-          $ref: '#/components/schemas/customInt2InPurchaseReceiptLineUpdateDto'
+          type: integer
+          description: A free custom colum of type int
+          format: int32
         customDateTimeUTC1:
-          $ref: '#/components/schemas/customDateTimeUTC1InPurchaseReceiptLineUpdateDto'
-      description: This class represents a Purchase Order Line in PurchaseReceiptContraoller. Used for getting data.
-    locationInPurchaseReceiptDto:
+          type: string
+          description: A free custom colum of type DateTime - in UTC timezone
+          format: date-time
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a Purchase Receipt in PurchaseReceiptController. Used for getting data.
+    locationInAllocationsDto:
       properties:
         countryId:
           type: string
@@ -950,27 +1258,57 @@ components:
         name:
           type: string
           description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: The top part Location* &gt; The supplier location from which the items should be received or to which they should be returned.'
+      description: Location &gt; The location in the warehouse.
+    termsInLandedCostDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Landed costs tab &gt; Terms &gt; The credit terms used in relations with the landed cost supplier.
+    receiptQtyInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The Document details tab &gt; The quantity of the item in the specified UoM that has been received (listed on released receipts).
+    ReleasePurchaseReceiptActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    PurchaseReceiptOrderListUpdateDto:
+      type: object
+      properties:
+        purchaseOrders:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseReceiptOrderUpdateDto'
+          description: The array of reference numbers of the Purchase Orders.
+      description: This class represents a list of Purchase Orders to add to a Purchase Receipt.
     taxCategoryIdInPurchaseReceiptLineUpdateDto:
       properties:
         value:
           type: string
       description: The Document details tab &gt; The VAT category assigned to the stock item.
-    DtoValueOfPurchaseReceiptType:
-      type: object
+    expirationDateInAllocationsUpdateDto:
       properties:
         value:
-          enum:
-          - PoReceipt
-          - PoReturn
-          - TransferReceipt
           type: string
-    discountAmountInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The Document details tab &gt; The automatically calculated or manually entered discount amount on the line.
+          format: date-time
+      description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
     projectInPurchaseReceiptLineDto:
       properties:
         internalId:
@@ -984,18 +1322,255 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Document details tab &gt; Project &gt; The project with which the document is associated. If the document is based on a purchase order, the project is automatically copied from the respective purchase order line.
-    locationInAllocationsDto:
+    customDec1InPurchaseReceiptUpdateDto:
       properties:
-        countryId:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    accountDescriptionInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
           type: string
-          description: Location*.
-        id:
+      description: The Document details tab &gt; The description of this account.
+    lineTypeInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          enum:
+          - GoodsForInventory
+          - GoodsForSalesOrder
+          - GoodsForReplenishment
+          - GoodsForDropShip
+          - NonStockForDropShip
+          - NonStockForSalesOrder
+          - NonStock
+          - Service
+          - Freight
+          - Description
           type: string
-          description: Click the magnifier &gt; The identifier
+      description: The Document details tab &gt; The type of the purchase receipt line.
+    customStr2InPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    accountIdInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The account used to record the item amount on the purchase receipt; used for non-stock items for which receipt is not required.
+    customDateTimeUTC1InPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: A free custom colum of type DateTime - in UTC timezone
+    AllocationsDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          description: Line no. &gt; The line of the purchase order that contains the selected item.
+          format: int32
+        itemId:
+          type: string
+          description: ItemId &gt; The id of the item.
+        location:
+          $ref: '#/components/schemas/locationInAllocationsDto'
+        lotSerialNumber:
+          type: string
+          description: Lot/Serial no. &gt; The lot or serial number of the item.
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
+          format: double
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
+        expirationDate:
+          type: string
+          description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
+          format: date-time
+        description:
+          type: string
+          description: Description &gt; The description of the stock item.
+      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptController. Used for getting data.
+    actualAccountInPurchaseReceiptLineDto:
+      properties:
+        type:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Document details tab &gt; Accrual account &gt; The accrual account to record the item amount on the purchase receipt; used for stock items and non-stock items for which a receipt is required.
+    customStr5InPurchaseReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    supplierInLandedCostDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
         name:
           type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Location &gt; The location in the warehouse.
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: Landed costs tab &gt; Supplier* &gt; The landed cost supplier to whom the landed cost amount will be paid.'
+    AddOrdersToPurchaseReceiptActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    extCostInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The Document details tab &gt; The extended cost of the item, which is the unit price multiplied by the quantity.
+    LandedCostDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          description: Landed costs tab &gt; Line number
+          format: int32
+        landedCostCode:
+          type: string
+          description: 'Mandatory field: Landed costs tab &gt; Landed costs* &gt; Landed cost code &gt; The landed cost code associated with the landed costs incurred for this purchase or transfer receipt.'
+        description:
+          type: string
+          description: 'Mandatory field: Landed costs tab &gt; Description* &gt; The description of the landed cost code.'
+        purchaseInvoiceNbr:
+          type: string
+        supplier:
+          $ref: '#/components/schemas/supplierInLandedCostDto'
+        location:
+          $ref: '#/components/schemas/locationInLandedCostDto'
+        apBillDate:
+          type: string
+          description: Landed costs tab &gt; Purchase invoice date &gt; The date of the purchase invoice for the landed cost.
+          format: date-time
+        currency:
+          type: string
+          description: Landed costs tab &gt; Currency &gt; The currency used for the landed cost.
+        amount:
+          type: number
+          description: Landed costs tab &gt; Amount &gt; A non-zero amount of the landed cost.
+          format: double
+        taxCategory:
+          $ref: '#/components/schemas/taxCategoryInLandedCostDto'
+        terms:
+          $ref: '#/components/schemas/termsInLandedCostDto'
+        inventory:
+          $ref: '#/components/schemas/InventoryNumberDescriptionDto'
+        apDocType:
+          enum:
+          - Check
+          - CreditAdj
+          - DebitAdj
+          - Invoice
+          - Prepayment
+          - QuickCheck
+          - Refund
+          - VoidCheck
+          - VoidQuickCheck
+          type: string
+          description: Landed costs tab &gt; Supplier document type &gt; The type of the supplier document generated for the landed cost.
+        apRefNbr:
+          type: string
+          description: Landed costs tab &gt; Supplier ref. &gt; The reference number of the supplier document generated for the landed cost.
+        inDocType:
+          enum:
+          - Invoice
+          - DebitNote
+          - CreditNote
+          - Payment
+          - VoidPayment
+          - Prepayment
+          - Refund
+          - FinCharge
+          - SmallBalanceWo
+          - SmallCreditWo
+          - CashSale
+          - CashReturn
+          - Undefined
+          - NoUpdate
+          type: string
+          description: Landed costs tab &gt; Inventory doc. type &gt; The type of the document generated in the Inventory workspace for this landed cost.
+        inRefNbr:
+          type: string
+          description: Landed costs tab &gt; Inventory ref. no. &gt; The reference number of the document generated in the Inventory workspace for this landed cost.
+        postponePurchaseInvoiceCreation:
+          type: boolean
+          description: Landed costs tab &gt; Postpone creation of purchase invoice &gt; A check box that indicates (if selected) that a related supplier ledger invoice for the incurred landed costs must be created later.
+      description: This class represents a Landed Cost Line for Purchase Receipt in PurchaseReceiptController. Used for getting data.
+    DtoValueOfNullableOfSupplierDocumentType:
+      type: object
+      properties:
+        value:
+          enum:
+          - Check
+          - CreditAdj
+          - DebitAdj
+          - Invoice
+          - Prepayment
+          - QuickCheck
+          - Refund
+          - VoidCheck
+          - VoidQuickCheck
+          type: string
+    lineNbrInAllocationsUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: Line no. &gt; The line of the purchase order that contains the selected item.
+    PurchaseReceiptOrderLinesListUpdateDto:
+      type: object
+      properties:
+        purchaseOrderLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseReceiptOrderLinesUpdateDto'
+          description: The collection of Purchase Order reference numbers and their lines.
+      description: This class represents a collection of Purchase Orders reference numbers and associated line numbers. Used to add Purchase Order lines to a Purchase Receipt.
+    customInt1InPurchaseReceiptUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    branchInPurchaseReceiptLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Branch is deprecated, please use BranchNumber instead.
+    customStr3InPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
     PurchaseReceiptLineDto:
       type: object
       properties:
@@ -1181,44 +1756,148 @@ components:
           description: A free custom colum of type DateTime - in UTC timezone
           format: date-time
       description: This class represents a Purchase Order Line in PurchaseReceiptContraoller. Used for getting data.
-    branchNumberInPurchaseReceiptLineUpdateDto:
+    warehouseInPurchaseReceiptDto:
       properties:
-        value:
+        id:
           type: string
-      description: The Document details tab &gt; The number of the branch to which the purchase receipt line belongs.
-    DtoValueOfNullableOfBoolean:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part or the Documents details tab &gt; Warehouse* &gt; The warehouse from which the items have been received for transfer orders.'
+    BackgroundApiAcceptedDto:
       type: object
       properties:
-        value:
-          type: boolean
-    projectIdInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
+        id:
           type: string
-      description: The Document details tab &gt; The project with which the document is associated.
-    expirationDateInAllocationsUpdateDto:
-      properties:
-        value:
+        stateLocation:
           type: string
-          format: date-time
-      description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
-    customDec2InPurchaseReceiptLineUpdateDto:
+    PurchaseReceiptLineUpdateDto:
+      type: object
       properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    completePoLineInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: boolean
-      description: The Document details tab &gt; A check box that indicates to the system (if selected) that the purchase order line added to this receipt line should be considered completed upon release of this purchase receipt.
-    warehouseIdInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationsUpdateDto'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
-      description: The Document details tab &gt; The warehouse where the item has been received.
-    branchNumberInPurchaseReceiptLineDto:
+        lineNbr:
+          $ref: '#/components/schemas/lineNbrInPurchaseReceiptLineUpdateDto'
+        lineType:
+          $ref: '#/components/schemas/lineTypeInPurchaseReceiptLineUpdateDto'
+        branchId:
+          $ref: '#/components/schemas/branchIdInPurchaseReceiptLineUpdateDto'
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInPurchaseReceiptLineUpdateDto'
+        inventoryId:
+          $ref: '#/components/schemas/inventoryIdInPurchaseReceiptLineUpdateDto'
+        warehouseId:
+          $ref: '#/components/schemas/warehouseIdInPurchaseReceiptLineUpdateDto'
+        locationId:
+          $ref: '#/components/schemas/locationIdInPurchaseReceiptLineUpdateDto'
+        transactionDescription:
+          $ref: '#/components/schemas/transactionDescriptionInPurchaseReceiptLineUpdateDto'
+        uom:
+          $ref: '#/components/schemas/uomInPurchaseReceiptLineUpdateDto'
+        receiptQty:
+          $ref: '#/components/schemas/receiptQtyInPurchaseReceiptLineUpdateDto'
+        unitCost:
+          $ref: '#/components/schemas/unitCostInPurchaseReceiptLineUpdateDto'
+        extCost:
+          $ref: '#/components/schemas/extCostInPurchaseReceiptLineUpdateDto'
+        discountPercent:
+          $ref: '#/components/schemas/discountPercentInPurchaseReceiptLineUpdateDto'
+        discountAmount:
+          $ref: '#/components/schemas/discountAmountInPurchaseReceiptLineUpdateDto'
+        manualDiscount:
+          $ref: '#/components/schemas/manualDiscountInPurchaseReceiptLineUpdateDto'
+        discountCodeId:
+          $ref: '#/components/schemas/discountCodeIdInPurchaseReceiptLineUpdateDto'
+        amount:
+          $ref: '#/components/schemas/amountInPurchaseReceiptLineUpdateDto'
+        taxCategoryId:
+          $ref: '#/components/schemas/taxCategoryIdInPurchaseReceiptLineUpdateDto'
+        accountId:
+          $ref: '#/components/schemas/accountIdInPurchaseReceiptLineUpdateDto'
+        accountDescription:
+          $ref: '#/components/schemas/accountDescriptionInPurchaseReceiptLineUpdateDto'
+        subaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+          description: The Document details tab &gt; The subaccount to be used to record the non-stock item amount on the purchase receipt (for non-stock items for which receipts are not required).
+        actualAccountId:
+          $ref: '#/components/schemas/actualAccountIdInPurchaseReceiptLineUpdateDto'
+        actualSubaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+          description: The Document details tab &gt; The subaccount used to record the item amount on the purchase receipt, used for stock items and non-stock items for which a receipt is required.
+        projectId:
+          $ref: '#/components/schemas/projectIdInPurchaseReceiptLineUpdateDto'
+        projectTaskId:
+          $ref: '#/components/schemas/projectTaskIdInPurchaseReceiptLineUpdateDto'
+        expirationDate:
+          $ref: '#/components/schemas/expirationDateInPurchaseReceiptLineUpdateDto'
+        lotSerialNumber:
+          $ref: '#/components/schemas/lotSerialNumberInPurchaseReceiptLineUpdateDto'
+        poOrderType:
+          $ref: '#/components/schemas/poOrderTypeInPurchaseReceiptLineUpdateDto'
+        poOrderNbr:
+          $ref: '#/components/schemas/poOrderNbrInPurchaseReceiptLineUpdateDto'
+        poOrderLineNbr:
+          $ref: '#/components/schemas/poOrderLineNbrInPurchaseReceiptLineUpdateDto'
+        transferOrderType:
+          $ref: '#/components/schemas/transferOrderTypeInPurchaseReceiptLineUpdateDto'
+        transferOrderNbr:
+          $ref: '#/components/schemas/transferOrderNbrInPurchaseReceiptLineUpdateDto'
+        transferOrderLineNbr:
+          $ref: '#/components/schemas/transferOrderLineNbrInPurchaseReceiptLineUpdateDto'
+        completePoLine:
+          $ref: '#/components/schemas/completePoLineInPurchaseReceiptLineUpdateDto'
+        customStr1:
+          $ref: '#/components/schemas/customStr1InPurchaseReceiptLineUpdateDto'
+        customStr2:
+          $ref: '#/components/schemas/customStr2InPurchaseReceiptLineUpdateDto'
+        customStr3:
+          $ref: '#/components/schemas/customStr3InPurchaseReceiptLineUpdateDto'
+        customStr4:
+          $ref: '#/components/schemas/customStr4InPurchaseReceiptLineUpdateDto'
+        customStr5:
+          $ref: '#/components/schemas/customStr5InPurchaseReceiptLineUpdateDto'
+        customDec1:
+          $ref: '#/components/schemas/customDec1InPurchaseReceiptLineUpdateDto'
+        customDec2:
+          $ref: '#/components/schemas/customDec2InPurchaseReceiptLineUpdateDto'
+        customInt1:
+          $ref: '#/components/schemas/customInt1InPurchaseReceiptLineUpdateDto'
+        customInt2:
+          $ref: '#/components/schemas/customInt2InPurchaseReceiptLineUpdateDto'
+        customDateTimeUTC1:
+          $ref: '#/components/schemas/customDateTimeUTC1InPurchaseReceiptLineUpdateDto'
+      description: This class represents a Purchase Order Line in PurchaseReceiptContraoller. Used for getting data.
+    lineNbrInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The Document details tab &gt; The number of the purchase receipt line.
+    taxCategoryInPurchaseReceiptLineDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Document details tab &gt; VAT category &gt; The VAT category assigned to the stock item.
+    branchNumberInPurchaseReceiptDto:
       properties:
         number:
           type: string
@@ -1226,19 +1905,193 @@ components:
         name:
           type: string
           description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: Document details tab &gt; Branch* &gt; The branch for which the item is purchased.'
-    supplierInLandedCostDto:
+      description: 'Mandatory field: Document details tab &gt; Branch* &gt; The branch to which the document belongs.'
+    lotSerialNumberInAllocationsUpdateDto:
       properties:
-        internalId:
+        value:
+          type: string
+      description: Lot/Serial no. &gt; The lot or serial number of the item.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    transactionDescriptionInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The description of the receipt or return transaction.
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
           type: integer
           format: int32
-        number:
+        segmentValue:
           type: string
-          description: The identifier of the particular destination of the selected type.
+    subInPurchaseReceiptLineDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Document details tab &gt; Sub ID &gt; The subaccount to be used to record the non-stock item amount on the purchase receipt (for non-stock items for which receipts are not required).
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    customStr5InPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    expirationDateInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: The Document details tab &gt; The expiration date of the received item.
+    customDec2InPurchaseReceiptUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    unitCostInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The Document details tab &gt; The cost of a unit of the purchased item.
+    poOrderNbrInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: This property replaced by an action, please use the following sub-endpoint:/controller/api/v1/PurchaseReceipt/{receiptNumber}/action/addpurchaseorder.
+    locationInPurchaseReceiptLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
         name:
           type: string
-          description: The name of the particular destination of the selected type.
-      description: 'Mandatory field: Landed costs tab &gt; Supplier* &gt; The landed cost supplier to whom the landed cost amount will be paid.'
+          description: Click the magnifier &gt; The displayed name
+      description: Document details tab &gt; Location &gt; The location where the item has been received.
+    customStr1InPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    actualAccountIdInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The accrual account to record the item amount on the purchase receipt; used for stock items and non-stock items for which a receipt is required.
+    transferOrderLineNbrInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The Document details tab &gt; The line number in the transfer order to which this receipt is linked.
+    discountAmountInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The Document details tab &gt; The automatically calculated or manually entered discount amount on the line.
+    locationInPurchaseReceiptDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part Location* &gt; The supplier location from which the items should be received or to which they should be returned.'
+    customStr2InPurchaseReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    customDec1InPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    poOrderLineNbrInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: This property replaced by an action please use the following sub-endpoint:/controller/api/v1/PurchaseReceipt/{receiptNumber}/action/addpurchaseorderlines
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    projectIdInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The project with which the document is associated.
+    customInt2InPurchaseReceiptUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    discountCodeIdInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The code of the line discount that has been applied to this line automatically.
+    inventoryIdInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The item ID of the received item.
+    locationIdInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The location where the item has been received.
+    customStr4InPurchaseReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    postPeriodInPurchaseReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    uomInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The unit of measure (UoM) used for the purchased or transferred item. By default, it is the purchase unit.
     AddOrderLinesToPurchaseReceiptActionResultDto:
       type: object
       properties:
@@ -1254,336 +2107,12 @@ components:
           type: string
         errorInfo:
           type: string
-    actualAccountIdInPurchaseReceiptLineUpdateDto:
+    completePoLineInPurchaseReceiptLineUpdateDto:
       properties:
         value:
-          type: string
-      description: The Document details tab &gt; The accrual account to record the item amount on the purchase receipt; used for stock items and non-stock items for which a receipt is required.
-    branchNumberInPurchaseReceiptDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: Document details tab &gt; Branch* &gt; The branch to which the document belongs.'
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
+          type: boolean
+      description: The Document details tab &gt; A check box that indicates to the system (if selected) that the purchase order line added to this receipt line should be considered completed upon release of this purchase receipt.
     customStr4InPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customInt2InPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    actualSubInPurchaseReceiptLineDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Document details tab &gt; Accrual sub. &gt; The subaccount used to record the item amount on the purchase receipt, used for stock items and non-stock items for which a receipt is required.
-    subInPurchaseReceiptLineDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Document details tab &gt; Sub ID &gt; The subaccount to be used to record the non-stock item amount on the purchase receipt (for non-stock items for which receipts are not required).
-    poOrderNbrInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: This property replaced by an action, please use the following sub-endpoint:/controller/api/v1/PurchaseReceipt/{receiptNumber}/action/addpurchaseorder.
-    inventoryIdInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The item ID of the received item.
-    DtoValueOfNullableOfSupplierDocumentType:
-      type: object
-      properties:
-        value:
-          enum:
-          - Check
-          - CreditAdj
-          - DebitAdj
-          - Invoice
-          - Prepayment
-          - QuickCheck
-          - Refund
-          - VoidCheck
-          - VoidQuickCheck
-          type: string
-    transferOrderNbrInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The reference number of the transfer order to which this receipt is linked.
-    amountInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The Document details tab &gt; The amount calculated (after discount has been taken) for the item.
-    LandedCostDto:
-      type: object
-      properties:
-        lineNbr:
-          type: integer
-          description: Landed costs tab &gt; Line number
-          format: int32
-        landedCostCode:
-          type: string
-          description: 'Mandatory field: Landed costs tab &gt; Landed costs* &gt; Landed cost code &gt; The landed cost code associated with the landed costs incurred for this purchase or transfer receipt.'
-        description:
-          type: string
-          description: 'Mandatory field: Landed costs tab &gt; Description* &gt; The description of the landed cost code.'
-        purchaseInvoiceNbr:
-          type: string
-        supplier:
-          $ref: '#/components/schemas/supplierInLandedCostDto'
-        location:
-          $ref: '#/components/schemas/locationInLandedCostDto'
-        apBillDate:
-          type: string
-          description: Landed costs tab &gt; Purchase invoice date &gt; The date of the purchase invoice for the landed cost.
-          format: date-time
-        currency:
-          type: string
-          description: Landed costs tab &gt; Currency &gt; The currency used for the landed cost.
-        amount:
-          type: number
-          description: Landed costs tab &gt; Amount &gt; A non-zero amount of the landed cost.
-          format: double
-        taxCategory:
-          $ref: '#/components/schemas/taxCategoryInLandedCostDto'
-        terms:
-          $ref: '#/components/schemas/termsInLandedCostDto'
-        inventory:
-          $ref: '#/components/schemas/InventoryNumberDescriptionDto'
-        apDocType:
-          enum:
-          - Check
-          - CreditAdj
-          - DebitAdj
-          - Invoice
-          - Prepayment
-          - QuickCheck
-          - Refund
-          - VoidCheck
-          - VoidQuickCheck
-          type: string
-          description: Landed costs tab &gt; Supplier document type &gt; The type of the supplier document generated for the landed cost.
-        apRefNbr:
-          type: string
-          description: Landed costs tab &gt; Supplier ref. &gt; The reference number of the supplier document generated for the landed cost.
-        inDocType:
-          enum:
-          - Invoice
-          - DebitNote
-          - CreditNote
-          - Payment
-          - VoidPayment
-          - Prepayment
-          - Refund
-          - FinCharge
-          - SmallBalanceWo
-          - SmallCreditWo
-          - CashSale
-          - CashReturn
-          - Undefined
-          - NoUpdate
-          type: string
-          description: Landed costs tab &gt; Inventory doc. type &gt; The type of the document generated in the Inventory workspace for this landed cost.
-        inRefNbr:
-          type: string
-          description: Landed costs tab &gt; Inventory ref. no. &gt; The reference number of the document generated in the Inventory workspace for this landed cost.
-        postponePurchaseInvoiceCreation:
-          type: boolean
-          description: Landed costs tab &gt; Postpone creation of purchase invoice &gt; A check box that indicates (if selected) that a related supplier ledger invoice for the incurred landed costs must be created later.
-      description: This class represents a Landed Cost Line for Purchase Receipt in PurchaseReceiptController. Used for getting data.
-    DtoValueOfCustomerDocumentTypes:
-      type: object
-      properties:
-        value:
-          enum:
-          - Invoice
-          - DebitNote
-          - CreditNote
-          - Payment
-          - VoidPayment
-          - Prepayment
-          - Refund
-          - FinCharge
-          - SmallBalanceWo
-          - SmallCreditWo
-          - CashSale
-          - CashReturn
-          - Undefined
-          - NoUpdate
-          type: string
-    customDec1InPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    customStr5InPurchaseReceiptUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    transferOrderTypeInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          enum:
-          - CreditNote
-          - DebitNote
-          - Invoice
-          - QuoteOrder
-          - RMAOrder
-          - SalesOrder
-          - StandardOrder
-          - TransferOrder
-          type: string
-      description: The Document details tab &gt; The type of the transfer order to which this receipt is linked.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    AllocationsUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-          description: The operation &gt;  Insert=1, Update=2, Delete=3
-        lineNbr:
-          $ref: '#/components/schemas/lineNbrInAllocationsUpdateDto'
-        location:
-          $ref: '#/components/schemas/locationInAllocationsUpdateDto'
-        lotSerialNumber:
-          $ref: '#/components/schemas/lotSerialNumberInAllocationsUpdateDto'
-        quantity:
-          $ref: '#/components/schemas/quantityInAllocationsUpdateDto'
-        uom:
-          $ref: '#/components/schemas/uomInAllocationsUpdateDto'
-        expirationDate:
-          $ref: '#/components/schemas/expirationDateInAllocationsUpdateDto'
-      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptEndpoint. Used to add/update data.
-    customStr5InPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    locationInLandedCostDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: Landed costs tab &gt; Location* &gt; The location of the selected landed cost supplier.'
-    warehouseInPurchaseReceiptDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part or the Documents details tab &gt; Warehouse* &gt; The warehouse from which the items have been received for transfer orders.'
-    customDateTimeUTC1InPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: A free custom colum of type DateTime - in UTC timezone
-    unitCostInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The Document details tab &gt; The cost of a unit of the purchased item.
-    uomInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The unit of measure (UoM) used for the purchased or transferred item. By default, it is the purchase unit.
-    transferOrderLineNbrInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: The Document details tab &gt; The line number in the transfer order to which this receipt is linked.
-    manualDiscountInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: boolean
-      description: The Document details tab &gt; A check box that indicates (if selected) that the discount has been applied manually.
-    taxCategoryInLandedCostDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Landed costs tab &gt; VAT category &gt; VAT category associated with supplier's VAT zone.
-    lineTypeInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          enum:
-          - GoodsForInventory
-          - GoodsForSalesOrder
-          - GoodsForReplenishment
-          - GoodsForDropShip
-          - NonStockForDropShip
-          - NonStockForSalesOrder
-          - NonStock
-          - Service
-          - Freight
-          - Description
-          type: string
-      description: The Document details tab &gt; The type of the purchase receipt line.
-    customStr1InPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    postPeriodInPurchaseReceiptUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    customStr2InPurchaseReceiptLineUpdateDto:
       properties:
         value:
           type: string
@@ -1604,103 +2133,31 @@ components:
           items:
             $ref: '#/components/schemas/AllocationsUpdateDto'
       description: Represents a collection of Purchase Order lines belonging to a specific Purchase Order.
-    DtoValueOfNullableOfDecimal:
-      type: object
+    transferOrderTypeInPurchaseReceiptLineUpdateDto:
       properties:
         value:
-          type: number
-          format: double
-    lotSerialNumberInAllocationsUpdateDto:
-      properties:
-        value:
+          enum:
+          - CreditNote
+          - DebitNote
+          - Invoice
+          - QuoteOrder
+          - RMAOrder
+          - SalesOrder
+          - StandardOrder
+          - TransferOrder
           type: string
-      description: Lot/Serial no. &gt; The lot or serial number of the item.
-    PurchaseReceiptUpdateDto:
-      type: object
-      properties:
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseReceiptLineUpdateDto'
-        landedCost:
-          type: array
-          items:
-            $ref: '#/components/schemas/LandedCostUpdateDto'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        receiptType:
-          $ref: '#/components/schemas/DtoValueOfPurchaseReceiptType'
-        receiptNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        hold:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        date:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        postPeriod:
-          $ref: '#/components/schemas/postPeriodInPurchaseReceiptUpdateDto'
-        warehouseId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        supplierId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        locationId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        currency:
-          $ref: '#/components/schemas/DtoValueOfString'
-        exchangeRate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        createBill:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        supplierRef:
-          $ref: '#/components/schemas/DtoValueOfString'
-        controlQty:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        controlAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        customStr1:
-          $ref: '#/components/schemas/customStr1InPurchaseReceiptUpdateDto'
-        customStr2:
-          $ref: '#/components/schemas/customStr2InPurchaseReceiptUpdateDto'
-        customStr3:
-          $ref: '#/components/schemas/customStr3InPurchaseReceiptUpdateDto'
-        customStr4:
-          $ref: '#/components/schemas/customStr4InPurchaseReceiptUpdateDto'
-        customStr5:
-          $ref: '#/components/schemas/customStr5InPurchaseReceiptUpdateDto'
-        customDec1:
-          $ref: '#/components/schemas/customDec1InPurchaseReceiptUpdateDto'
-        customDec2:
-          $ref: '#/components/schemas/customDec2InPurchaseReceiptUpdateDto'
-        customInt1:
-          $ref: '#/components/schemas/customInt1InPurchaseReceiptUpdateDto'
-        customInt2:
-          $ref: '#/components/schemas/customInt2InPurchaseReceiptUpdateDto'
-        customDateTimeUTC1:
-          $ref: '#/components/schemas/customDateTimeUTC1InPurchaseReceiptUpdateDto'
-        timeStamp:
-          type: string
-          format: byte
-      description: This class represents a Purchase Receipt in PurchaseReceiptController. Used for getting data.
-    supplierInPurchaseReceiptDto:
-      properties:
-        internalId:
-          type: integer
-          format: int32
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: 'Mandatory field: The top part &gt; Supplier* &gt; The supplier from which the items have been received or to which they will be returned.'
-    customDateTimeUTC1InPurchaseReceiptUpdateDto:
+      description: The Document details tab &gt; The type of the transfer order to which this receipt is linked.
+    customStr3InPurchaseReceiptUpdateDto:
       properties:
         value:
           type: string
-          format: date-time
-      description: A free custom colum of type DateTime - in UTC timezone
-    taxCategoryInPurchaseReceiptLineDto:
+      description: A free custom colum of type string with max length 100.
+    branchNumberInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The number of the branch to which the purchase receipt line belongs.
+    discountCodeInPurchaseReceiptLineDto:
       properties:
         number:
           type: string
@@ -1708,8 +2165,19 @@ components:
         description:
           type: string
           description: Name of item/description
-      description: Document details tab &gt; VAT category &gt; The VAT category assigned to the stock item.
-    branchInPurchaseReceiptLineDto:
+      description: Document details tab &gt; Discount code &gt; The code of the line discount that has been applied to this line automatically.
+    projectTaskIdInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The Document details tab &gt; The project task with which the document is associated.
+    discountPercentInPurchaseReceiptLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The Document details tab &gt; The automatically calculated or manually entered discount percent on the line.
+    branchNumberInPurchaseReceiptLineDto:
       properties:
         number:
           type: string
@@ -1717,7 +2185,7 @@ components:
         name:
           type: string
           description: Click the magnifier. &gt; The name.
-      description: Branch is deprecated, please use BranchNumber instead.
+      description: 'Mandatory field: Document details tab &gt; Branch* &gt; The branch for which the item is purchased.'
     LandedCostUpdateDto:
       type: object
       properties:
@@ -1762,343 +2230,11 @@ components:
         postponePurchaseInvoiceCreation:
           $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
       description: This class represents a Landed Cost Line for Purchase Receipt in PurchaseReceiptController. Used for getting data.
-    lineNbrInAllocationsUpdateDto:
+    manualDiscountInPurchaseReceiptLineUpdateDto:
       properties:
         value:
-          type: integer
-          format: int32
-      description: Line no. &gt; The line of the purchase order that contains the selected item.
-    discountCodeIdInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The code of the line discount that has been applied to this line automatically.
-    lotSerialNumberInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The lot or serial number assigned to the received quantity of the purchased item; &lt;SPLIT&gt; is displayed if multiple lot or serial numbers are assigned to the received quantity.
-    customInt2InPurchaseReceiptUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    customStr3InPurchaseReceiptUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    actualAccountInPurchaseReceiptLineDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Document details tab &gt; Accrual account &gt; The accrual account to record the item amount on the purchase receipt; used for stock items and non-stock items for which a receipt is required.
-    InventoryNumberDescriptionDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-    PurchaseReceiptOrderLineNbrUpdateDto:
-      type: object
-      properties:
-        lineNbr:
-          type: string
-          description: The line number of the Purchase Order line.
-      description: Represents a Purchase Order line number to add to a Purchase Receipt.
-    poOrderTypeInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          enum:
-          - RegularOrder
-          - DropShip
-          - Blanket
-          - StandardBlanket
-          type: string
-      description: The Document details tab &gt; The type of the purchase order related to this purchase receipt.
-    uomInAllocationsUpdateDto:
-      properties:
-        value:
-          type: string
-      description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
-    discountPercentInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The Document details tab &gt; The automatically calculated or manually entered discount percent on the line.
-    poOrderLineNbrInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: This property replaced by an action please use the following sub-endpoint:/controller/api/v1/PurchaseReceipt/{receiptNumber}/action/addpurchaseorderlines
-    locationInAllocationsUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Location &gt; The location in the warehouse.
-    accountIdInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The account used to record the item amount on the purchase receipt; used for non-stock items for which receipt is not required.
-    expirationDateInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: The Document details tab &gt; The expiration date of the received item.
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    customStr3InPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customDec2InPurchaseReceiptUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    locationIdInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The location where the item has been received.
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    extCostInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The Document details tab &gt; The extended cost of the item, which is the unit price multiplied by the quantity.
-    quantityInAllocationsUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
-    customInt1InPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    PurchaseReceiptOrderLinesListUpdateDto:
-      type: object
-      properties:
-        purchaseOrderLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseReceiptOrderLinesUpdateDto'
-          description: The collection of Purchase Order reference numbers and their lines.
-      description: This class represents a collection of Purchase Orders reference numbers and associated line numbers. Used to add Purchase Order lines to a Purchase Receipt.
-    locationInPurchaseReceiptLineDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Document details tab &gt; Location &gt; The location where the item has been received.
-    transactionDescriptionInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The description of the receipt or return transaction.
-    receiptQtyInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The Document details tab &gt; The quantity of the item in the specified UoM that has been received (listed on released receipts).
-    PurchaseReceiptDto:
-      type: object
-      properties:
-        landedCost:
-          type: array
-          items:
-            $ref: '#/components/schemas/LandedCostDto'
-          description: Landed costs tab &gt; Landed cost code &gt; The landed cost code specified in the line of the landed cost document.
-        note:
-          type: string
-        timeStamp:
-          type: string
-          description: The top part &gt; Tstamp &gt; The timestamp of the purchase receipt.
-          format: byte
-        receiptType:
-          enum:
-          - PoReceipt
-          - PoReturn
-          - TransferReceipt
-          type: string
-          description: 'The top part &gt; Type &gt; The type of the document, which can be one of the following options: Receipt, Return, Transfer receipt.'
-        receiptNbr:
-          type: string
-          description: The top part &gt; Receipt no. &gt; The unique reference number of the purchase receipt.
-        hold:
           type: boolean
-          description: The top part &gt; Hold &gt; A check box that indicates (if selected) that the document has the On hold status.
-        status:
-          enum:
-          - Hold
-          - Balanced
-          - Released
-          - Cancelled
-          type: string
-          description: The top part &gt; Status &gt; The current status of the purchase or transfer receipt, or return, which the system assigns automatically. On hold, Balanced, Released.
-        date:
-          type: string
-          description: 'Mandatory field: The top part &gt; Date* &gt; The date when the receipt document was created.'
-          format: date-time
-        postPeriod:
-          type: string
-          description: 'Mandatory field: The top part &gt; Post period* &gt; The financial period to which the transactions recorded in the document should be posted. Format MMYYYY.'
-        warehouse:
-          $ref: '#/components/schemas/warehouseInPurchaseReceiptDto'
-        supplier:
-          $ref: '#/components/schemas/supplierInPurchaseReceiptDto'
-        location:
-          $ref: '#/components/schemas/locationInPurchaseReceiptDto'
-        currency:
-          type: string
-          description: The top part &gt; Currency &gt; The currency the supplier uses for invoicing.
-        exchangeRate:
-          type: number
-          format: double
-        createBill:
-          type: boolean
-          description: The top part &gt; Create invoice &gt; A check box that you select if the system must create an appropriate invoice (or adjustment) automatically when the purchase receipt is released.
-        supplierRef:
-          type: string
-          description: The top part &gt; Supplier ref. &gt; The reference number of the supplier document this receipt or return is based on.
-        totalQty:
-          type: number
-          description: The top part &gt; Total qty. &gt; The total quantity of items received from or returned to the supplier.
-          format: double
-        controlQty:
-          type: number
-          description: The top part &gt; Control qty. &gt; The total quantity of goods on the receipt or return
-          format: double
-        vatExemptTotal:
-          type: number
-          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
-          format: double
-        vatTaxableTotal:
-          type: number
-          description: The top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
-          format: double
-        totalAmt:
-          type: number
-          description: The top part &gt; Total amt. &gt; The total amount calculated for items received from or returned to the supplier.
-          format: double
-        controlTotal:
-          type: number
-          description: The top part &gt; Control amt. &gt; The total amount of the receipt or return, which you manually enter.
-          format: double
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        branchNumber:
-          $ref: '#/components/schemas/branchNumberInPurchaseReceiptDto'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseReceiptLineDto'
-          description: Document details tab &gt; Line no &gt; The number of the purchase receipt line on the document.
-        dueDate:
-          type: string
-          description: This value indicates the date the document is due
-          format: date-time
-        customStr1:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr2:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr3:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr4:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr5:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customDec1:
-          type: number
-          description: A free custom colum of type decimal with max 4 decimals.
-          format: double
-        customDec2:
-          type: number
-          description: A free custom colum of type decimal with max 4 decimals.
-          format: double
-        customInt1:
-          type: integer
-          description: A free custom colum of type int
-          format: int32
-        customInt2:
-          type: integer
-          description: A free custom colum of type int
-          format: int32
-        customDateTimeUTC1:
-          type: string
-          description: A free custom colum of type DateTime - in UTC timezone
-          format: date-time
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: This class represents a Purchase Receipt in PurchaseReceiptController. Used for getting data.
-    accountDescriptionInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The description of this account.
-    PurchaseReceiptOrderListUpdateDto:
-      type: object
-      properties:
-        purchaseOrders:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseReceiptOrderUpdateDto'
-          description: The array of reference numbers of the Purchase Orders.
-      description: This class represents a list of Purchase Orders to add to a Purchase Receipt.
+      description: The Document details tab &gt; A check box that indicates (if selected) that the discount has been applied manually.
     accountInPurchaseReceiptLineDto:
       properties:
         type:
@@ -2110,66 +2246,8 @@ components:
           type: string
           description: Name of item/description
       description: Document details tab &gt; Account &gt; The account used to record the item amount on the purchase receipt;
-    termsInLandedCostDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Landed costs tab &gt; Terms &gt; The credit terms used in relations with the landed cost supplier.
-    lineNbrInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: The Document details tab &gt; The number of the purchase receipt line.
-    customStr4InPurchaseReceiptUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customDec1InPurchaseReceiptUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    ReleasePurchaseReceiptActionResultDto:
+    InventoryNumberDescriptionDto:
       type: object
-      properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    customStr2InPurchaseReceiptUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    branchIdInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: BranchId is deprecated, please use BranchNumber instead.
-    discountCodeInPurchaseReceiptLineDto:
       properties:
         number:
           type: string
@@ -2177,95 +2255,17 @@ components:
         description:
           type: string
           description: Name of item/description
-      description: Document details tab &gt; Discount code &gt; The code of the line discount that has been applied to this line automatically.
-    warehouseInPurchaseReceiptLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Document details tab &gt; Warehouse* &gt; The warehouse where the item has been received.'
-    AllocationsDto:
+    DtoValueOfInt32:
       type: object
-      properties:
-        lineNbr:
-          type: integer
-          description: Line no. &gt; The line of the purchase order that contains the selected item.
-          format: int32
-        itemId:
-          type: string
-          description: ItemId &gt; The id of the item.
-        location:
-          $ref: '#/components/schemas/locationInAllocationsDto'
-        lotSerialNumber:
-          type: string
-          description: Lot/Serial no. &gt; The lot or serial number of the item.
-        quantity:
-          type: number
-          description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
-          format: double
-        uom:
-          type: string
-          description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
-        expirationDate:
-          type: string
-          description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
-          format: date-time
-        description:
-          type: string
-          description: Description &gt; The description of the stock item.
-      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptController. Used for getting data.
-    projectTaskIdInPurchaseReceiptLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Document details tab &gt; The project task with which the document is associated.
-    PurchaseReceiptOrderUpdateDto:
-      type: object
-      properties:
-        orderNbr:
-          type: string
-          description: The reference number of the Purchase Order.
-        orderType:
-          enum:
-          - RegularOrder
-          - DropShip
-          - Blanket
-          - StandardBlanket
-          type: string
-        allocations:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllocationsUpdateDto'
-      description: This class represents a Purchase Order reference number to add to a Purchase Receipt.
-    customInt1InPurchaseReceiptUpdateDto:
       properties:
         value:
           type: integer
           format: int32
-      description: A free custom colum of type int
-    AddOrdersToPurchaseReceiptActionResultDto:
-      type: object
-      properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    customStr1InPurchaseReceiptUpdateDto:
+    lotSerialNumberInPurchaseReceiptLineUpdateDto:
       properties:
         value:
           type: string
-      description: A free custom colum of type string with max length 100.
+      description: The Document details tab &gt; The lot or serial number assigned to the received quantity of the purchased item; &lt;SPLIT&gt; is displayed if multiple lot or serial numbers are assigned to the received quantity.
   securitySchemes:
     interactiveapi:
       type: oauth2

@@ -211,6 +211,48 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    bookBalanceInFixedAssetDto:
+      properties:
+        acquisitionCost:
+          type: number
+          description: The acquisition cost of this fixed asset
+          format: double
+        depreciationMethodID:
+          type: string
+          description: The depreciation method id of this fixed asset
+        depreciationFromDate:
+          type: string
+          description: The date this asset is placed in service
+          format: date-time
+        depreciationFromPeriod:
+          type: string
+          description: The first period this fixed asset will start/has started depreciating
+        depreciationToPeriod:
+          type: string
+          description: The last period this fixed asset will depreciate/ was depreciated
+        lastDepreciationPeriod:
+          type: string
+          description: The last period this asset has been depreciated
+        salvageAmount:
+          type: number
+          description: The salvage amount of this fixed asset
+          format: double
+        usefulLife:
+          type: number
+          description: The useful life of this fixed asset in years
+          format: double
+        book:
+          $ref: '#/components/schemas/bookInBookBalanceDto'
+      description: The book balance details for this fixed asset
+    propertyTaxInFixedAssetDto:
+      properties:
+        propertyTaxID:
+          type: string
+          description: The property tax group id of this fixed asset
+        description:
+          type: string
+          description: The description of the property tax group of this fixed asset
+      description: The property tax group this fixed asset is conntected to
     detailsInFixedAssetDto:
       properties:
         propertyType:
@@ -276,6 +318,33 @@ components:
         leaseAndRentInfo:
           $ref: '#/components/schemas/leaseAndRentInfoInDetailsDto'
       description: The details of this fixed asset
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    bookInBookBalanceDto:
+      properties:
+        bookID:
+          type: string
+          description: The book id of this fixed asset
+        description:
+          type: string
+          description: The description of the book
+      description: The book details of this fixed asset
+    typeInFixedAssetDto:
+      properties:
+        assetTypeID:
+          type: string
+          description: The type id of this fixed asset
+        description:
+          type: string
+          description: The type description
+      description: The type of this fixed asset
     locationInFixedAssetDto:
       properties:
         departmentID:
@@ -338,15 +407,6 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents an attribute in FixedAssetController. Used for getting data.
-    bookInBookBalanceDto:
-      properties:
-        bookID:
-          type: string
-          description: The book id of this fixed asset
-        description:
-          type: string
-          description: The description of the book
-      description: The book details of this fixed asset
     accountsInFixedAssetDto:
       properties:
         accountID:
@@ -404,6 +464,13 @@ components:
           type: string
           description: The credit sub account
       description: All accounts selected for this fixed asset
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
     leaseAndRentInfoInDetailsDto:
       properties:
         lessorID:
@@ -424,79 +491,12 @@ components:
         manufacturingYear:
           type: string
       description: The lease and rent infor for this fixed asset
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
     disposalMethodInDetailsDto:
       properties:
         description:
           type: string
           description: The description of the disposal method
       description: The disposal method details of this fixed asset
-    bookBalanceInFixedAssetDto:
-      properties:
-        acquisitionCost:
-          type: number
-          description: The acquisition cost of this fixed asset
-          format: double
-        depreciationMethodID:
-          type: string
-          description: The depreciation method id of this fixed asset
-        depreciationFromDate:
-          type: string
-          description: The date this asset is placed in service
-          format: date-time
-        depreciationFromPeriod:
-          type: string
-          description: The first period this fixed asset will start/has started depreciating
-        depreciationToPeriod:
-          type: string
-          description: The last period this fixed asset will depreciate/ was depreciated
-        lastDepreciationPeriod:
-          type: string
-          description: The last period this asset has been depreciated
-        salvageAmount:
-          type: number
-          description: The salvage amount of this fixed asset
-          format: double
-        usefulLife:
-          type: number
-          description: The useful life of this fixed asset in years
-          format: double
-        book:
-          $ref: '#/components/schemas/bookInBookBalanceDto'
-      description: The book balance details for this fixed asset
-    propertyTaxInFixedAssetDto:
-      properties:
-        propertyTaxID:
-          type: string
-          description: The property tax group id of this fixed asset
-        description:
-          type: string
-          description: The description of the property tax group of this fixed asset
-      description: The property tax group this fixed asset is conntected to
-    typeInFixedAssetDto:
-      properties:
-        assetTypeID:
-          type: string
-          description: The type id of this fixed asset
-        description:
-          type: string
-          description: The type description
-      description: The type of this fixed asset
   securitySchemes:
     interactiveapi:
       type: oauth2

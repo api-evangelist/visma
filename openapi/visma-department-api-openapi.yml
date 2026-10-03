@@ -371,44 +371,13 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DepartmentUpdateBaseDto:
+    BackgroundApiAcceptedDto:
       type: object
       properties:
-        departmentId:
+        id:
           type: string
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expenseAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expenseSubaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-    expenseAccountInDepartmentDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
+        stateLocation:
           type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: The table &gt; Expense account &gt; The expense account to be used for recording department-related expenses.
     DepartmentDto:
       type: object
       properties:
@@ -436,14 +405,24 @@ components:
 
             It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
           format: byte
-    SegmentUpdateDto:
+    DtoValueOfString:
       type: object
       properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
+        value:
           type: string
+    DepartmentUpdateBaseDto:
+      type: object
+      properties:
+        departmentId:
+          type: string
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expenseSubaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
     expenseSubaccountInDepartmentDto:
       properties:
         active:
@@ -455,17 +434,38 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: The table &gt; Expense sub. &gt; The subaccount to be used for recording department related expenses.
-    DtoValueOfString:
+    expenseAccountInDepartmentDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The table &gt; Expense account &gt; The expense account to be used for recording department-related expenses.
+    SegmentUpdateDto:
       type: object
       properties:
-        value:
-          type: string
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
           type: string
   securitySchemes:
     interactiveapi:

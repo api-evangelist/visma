@@ -537,11 +537,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
     DtoSegmentValueUpdateDtoBase:
       type: object
       properties:
@@ -557,81 +552,6 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         active:
           $ref: '#/components/schemas/DtoValueOfBoolean'
-    DtoSegmentValue:
-      type: object
-      properties:
-        internalId:
-          type: string
-          description: Unique identifier for the segment value
-          format: uuid
-        segmentId:
-          type: integer
-          description: The top part &gt; Segment ID &gt; The system-generated number representing the order of the segment in the segmented key.
-          format: int32
-        valueId:
-          type: string
-          description: The table &gt; Value &gt; The string that is the value of the selected segment.
-        description:
-          type: string
-          description: The table &gt; Description &gt; The user-defined segment description.
-        publicId:
-          type: string
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        active:
-          type: boolean
-          description: The table &gt; Active &gt; A check box that indicates (if selected) that the value is active.
-        timeStamp:
-          type: string
-        lastModified:
-          type: string
-          format: date-time
-        mappedSegValue:
-          type: string
-    DtoSegmentUpdateDto:
-      type: object
-      properties:
-        segmentValues:
-          type: array
-          items:
-            $ref: '#/components/schemas/DtoSegmentValueUpdateDtoBase'
-        dimensionId:
-          type: string
-        segementId:
-          type: integer
-          format: int32
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    DtoDimension:
-      type: object
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: The top part &gt; Segment key ID* &gt; The ID of the segmented key. ACCGROUP, ACCOUNT, BIZACCT, CASHACCOUNT, CONTRACT, CONTRACTITEM, CUSTOMER, EMPLOYEE, INLOCATION, INSITE, INSUBITEM, INVENTORY, LOCATION, MLISTCD, PROJECT, PROTASK, SALESPER, SUBACCOUNT, TMCONTRACT, SUPLLIER'
-        length:
-          type: integer
-          description: The top part &gt; Length &gt; The total length of the key.
-          format: int32
-        description:
-          type: string
-          description: 'Mandatory field: The top part &gt; Description* &gt; A detailed description of the segmented key.'
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/DtoSegment'
-          description: The table &gt;
     DtoSegment:
       type: object
       properties:
@@ -679,6 +599,86 @@ components:
           type: integer
           description: Select segment and click View segment &gt; Consol. order &gt; The number that represents the order of this string among other strings in the parent company's subaccount; this column is displayed for only the SUBACCOUNT key.
           format: int32
+    DtoSegmentValue:
+      type: object
+      properties:
+        internalId:
+          type: string
+          description: Unique identifier for the segment value
+          format: uuid
+        segmentId:
+          type: integer
+          description: The top part &gt; Segment ID &gt; The system-generated number representing the order of the segment in the segmented key.
+          format: int32
+        valueId:
+          type: string
+          description: The table &gt; Value &gt; The string that is the value of the selected segment.
+        description:
+          type: string
+          description: The table &gt; Description &gt; The user-defined segment description.
+        publicId:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        active:
+          type: boolean
+          description: The table &gt; Active &gt; A check box that indicates (if selected) that the value is active.
+        timeStamp:
+          type: string
+        lastModified:
+          type: string
+          format: date-time
+        mappedSegValue:
+          type: string
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoSegmentUpdateDto:
+      type: object
+      properties:
+        segmentValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoSegmentValueUpdateDtoBase'
+        dimensionId:
+          type: string
+        segementId:
+          type: integer
+          format: int32
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoDimension:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: The top part &gt; Segment key ID* &gt; The ID of the segmented key. ACCGROUP, ACCOUNT, BIZACCT, CASHACCOUNT, CONTRACT, CONTRACTITEM, CUSTOMER, EMPLOYEE, INLOCATION, INSITE, INSUBITEM, INVENTORY, LOCATION, MLISTCD, PROJECT, PROTASK, SALESPER, SUBACCOUNT, TMCONTRACT, SUPLLIER'
+        length:
+          type: integer
+          description: The top part &gt; Length &gt; The total length of the key.
+          format: int32
+        description:
+          type: string
+          description: 'Mandatory field: The top part &gt; Description* &gt; A detailed description of the segmented key.'
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/DtoSegment'
+          description: The table &gt;
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
   securitySchemes:
     interactiveapi:
       type: oauth2

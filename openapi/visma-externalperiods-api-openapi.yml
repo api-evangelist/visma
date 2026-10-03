@@ -166,25 +166,83 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
       type: object
       properties:
-        ErrorCode:
+        CurrentPage:
           type: integer
+          description: The current page number
           format: int32
-        DeveloperErrorMessage:
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    ExternalPeriodResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+        EmployeeId:
+          type: string
+          description: The unique identifier of the employee
+          format: uuid
+        PayslipId:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
+          description: If the period is picked up on a payslip, the payslip ID will be here
           format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
+        DeviationPeriodToDate:
+          type: string
+          description: End date of the deviation period
+          format: date-time
+        ProjectCostCenterDistribution:
+          allOf:
+          - $ref: '#/components/schemas/ProjectCostCenterDistributionResponse'
+          description: Project/cost-center distribution for worked-time salary rows
+        CreatedUtc:
+          type: string
+          description: Timestamp when the external period was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp when the external period was last modified (UTC)
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfExternalPeriodResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
           items:
-            $ref: '#/components/schemas/CommonError'
+            $ref: '#/components/schemas/ExternalPeriodResponse'
       additionalProperties: false
     ProjectCostCenterAllocationRequest:
       type: object
@@ -197,25 +255,6 @@ components:
           type: number
           description: Allocation percentage for this entry. Allocations with a percentage of 0 are ignored.
           format: double
-      additionalProperties: false
-    ExternalPeriodRequest:
-      required:
-      - DeviationPeriodToDate
-      - EmployeeId
-      type: object
-      properties:
-        EmployeeId:
-          type: string
-          description: 'The unique identifier of the employee. Source: Get from /v2/employees'
-          format: uuid
-        DeviationPeriodToDate:
-          type: string
-          description: End date of the deviation period
-          format: date-time
-        ProjectCostCenterDistribution:
-          allOf:
-          - $ref: '#/components/schemas/ProjectCostCenterDistributionRequest'
-          description: Project/cost-center distribution for worked-time salary rows. The percentages within each of Project, CostCenter1, CostCenter2 and CostCenter3 must total at most 100%.
       additionalProperties: false
     ProjectCostCenterDistributionRequest:
       type: object
@@ -261,35 +300,44 @@ components:
           description: Allocation percentage for this entry.
           format: double
       additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
+    CommonError:
       type: object
       properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ExternalPeriodRequest:
+      required:
+      - DeviationPeriodToDate
+      - EmployeeId
+      type: object
+      properties:
+        EmployeeId:
           type: string
-          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          description: 'The unique identifier of the employee. Source: Get from /v2/employees'
+          format: uuid
+        DeviationPeriodToDate:
+          type: string
+          description: End date of the deviation period
           format: date-time
+        ProjectCostCenterDistribution:
+          allOf:
+          - $ref: '#/components/schemas/ProjectCostCenterDistributionRequest'
+          description: Project/cost-center distribution for worked-time salary rows. The percentages within each of Project, CostCenter1, CostCenter2 and CostCenter3 must total at most 100%.
       additionalProperties: false
     ProjectCostCenterDistributionResponse:
       type: object
@@ -323,71 +371,23 @@ components:
             $ref: '#/components/schemas/ProjectCostCenterAllocationResponse'
           description: 'Allocations on cost center 3. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
       additionalProperties: false
-    PaginatedResponseOfExternalPeriodResponse:
-      required:
-      - Data
-      - Meta
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalPeriodResponse'
-      additionalProperties: false
-    ExternalPeriodResponse:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier provided by VLS
-          format: uuid
-        EmployeeId:
-          type: string
-          description: The unique identifier of the employee
-          format: uuid
-        PayslipId:
-          type:
-          - string
-          - 'null'
-          description: If the period is picked up on a payslip, the payslip ID will be here
-          format: uuid
-        DeviationPeriodToDate:
-          type: string
-          description: End date of the deviation period
-          format: date-time
-        ProjectCostCenterDistribution:
-          allOf:
-          - $ref: '#/components/schemas/ProjectCostCenterDistributionResponse'
-          description: Project/cost-center distribution for worked-time salary rows
-        CreatedUtc:
-          type: string
-          description: Timestamp when the external period was created (UTC)
-          format: date-time
-        ModifiedUtc:
-          type: string
-          description: Timestamp when the external period was last modified (UTC)
-          format: date-time
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
         ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-        Message:
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
           type:
-          - string
+          - array
           - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false

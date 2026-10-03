@@ -355,6 +355,22 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     paymentMethodInSupplierDocumentDto:
       properties:
         id:
@@ -364,40 +380,19 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: The Financial details tab &gt; Payment method &gt; The payment method used for the payment.
-    accountInSupplierDocumentDto:
+    supplierInSupplierDocumentDto:
       properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Document details tab &gt; Account* &gt; The expense account to be updated by this transaction.'
-    BranchNumberDto:
-      type: object
-      properties:
+        internalId:
+          type: integer
+          description: The internal id of the supplier
+          format: int64
         number:
           type: string
           description: Click the magnifier. &gt; The identifier.
         name:
           type: string
           description: Click the magnifier. &gt; The name.
+      description: The Top part &gt; Supplier* &gt; The identifier of the supplier referred to in the document.
     SupplierDocumentDto:
       type: object
       properties:
@@ -546,6 +541,15 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
     SegmentDto:
       type: object
       properties:
@@ -562,19 +566,6 @@ components:
         segmentValueDescription:
           type: string
           description: The Segment values window &gt; The table &gt; The description of the segment value.
-    supplierInSupplierDocumentDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal id of the supplier
-          format: int64
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The Top part &gt; Supplier* &gt; The identifier of the supplier referred to in the document.
     subaccountInSupplierDocumentDto:
       properties:
         subaccountNumber:
@@ -608,15 +599,31 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: 'Mandatory field: Document details tab &gt; Subaccount* &gt; The corresponding subaccount to be used for invoices and adjustments.'
-    branchInSupplierDocumentDto:
+    accountInSupplierDocumentDto:
       properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
         number:
           type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
+          description: Number of item
+        description:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: Branch is deprecated, please use BranchNumber instead.
+          description: Name of item/description
+      description: 'Mandatory field: Document details tab &gt; Account* &gt; The expense account to be updated by this transaction.'
     locationInSupplierDocumentDto:
       properties:
         countryId:
@@ -629,22 +636,15 @@ components:
           type: string
           description: Click the magnifier &gt; The displayed name
       description: The Top part &gt; Location* &gt; The supplier location associated with the purchase.
-    MetadataDto:
-      type: object
+    branchInSupplierDocumentDto:
       properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
+        number:
           type: string
-        stateLocation:
+          description: Click the magnifier. &gt; The identifier.
+        name:
           type: string
+          description: Click the magnifier. &gt; The name.
+      description: Branch is deprecated, please use BranchNumber instead.
   securitySchemes:
     interactiveapi:
       type: oauth2

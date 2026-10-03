@@ -117,61 +117,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    ExchangeRateApi:
-      type: object
-      properties:
-        Date:
-          type: string
-          description: Date of the exchange rate
-          format: date-time
-          readOnly: true
-        SourceCurrency:
-          type:
-          - string
-          - 'null'
-          description: Source currency code
-          readOnly: true
-        TargetCurrency:
-          type:
-          - string
-          - 'null'
-          description: Target currency code
-          readOnly: true
-        Rate:
-          type: number
-          description: Exchange rate value
-          format: double
-          readOnly: true
-      additionalProperties: false
-    CurrencyApi:
-      type: object
-      properties:
-        Code:
-          type:
-          - string
-          - 'null'
-          description: Currency code
-      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -202,18 +147,14 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    PaginatedResponseOfCurrencyApi:
-      required:
-      - Data
-      - Meta
+    CurrencyApi:
       type: object
       properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CurrencyApi'
+        Code:
+          type:
+          - string
+          - 'null'
+          description: Currency code
       additionalProperties: false
     CommonError:
       type: object
@@ -234,6 +175,65 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    PaginatedResponseOfCurrencyApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurrencyApi'
+      additionalProperties: false
+    ExchangeRateApi:
+      type: object
+      properties:
+        Date:
+          type: string
+          description: Date of the exchange rate
+          format: date-time
+          readOnly: true
+        SourceCurrency:
+          type:
+          - string
+          - 'null'
+          description: Source currency code
+          readOnly: true
+        TargetCurrency:
+          type:
+          - string
+          - 'null'
+          description: Target currency code
+          readOnly: true
+        Rate:
+          type: number
+          description: Exchange rate value
+          format: double
+          readOnly: true
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

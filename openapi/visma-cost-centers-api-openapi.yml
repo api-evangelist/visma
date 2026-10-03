@@ -123,25 +123,93 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
       type: object
       properties:
-        ErrorCode:
+        CurrentPage:
           type: integer
+          description: The current page number
           format: int32
-        DeveloperErrorMessage:
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CostCenterItemApi:
+      required:
+      - CostCenterId
+      - IsActive
+      - Name
+      - ShortName
+      type: object
+      properties:
+        CostCenterId:
+          type: string
+          description: The unique identifier of the cost center this item belongs to. Get from /v2/costcenters endpoint.
+          format: uuid
+        Id:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
+          description: The unique identifier assigned by eAccounting (read-only).
           format: uuid
-        Errors:
+          readOnly: true
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: The name of the cost center item. Maximum 50 characters.
+        ShortName:
+          maxLength: 9
+          minLength: 0
+          type: string
+          description: The short name or code for the cost center item. Maximum 9 characters.
+        IsActive:
+          type: boolean
+          description: Indicates whether the cost center item is active or inactive.
+        CreatedUtc:
+          type: string
+          description: The UTC timestamp when this cost center item was created (read-only).
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     CostCenterApi:
       required:
@@ -188,93 +256,25 @@ components:
           items:
             $ref: '#/components/schemas/CostCenterApi'
       additionalProperties: false
-    CostCenterItemApi:
-      required:
-      - CostCenterId
-      - IsActive
-      - Name
-      - ShortName
+    CommonExtendedBadRequest:
       type: object
       properties:
-        CostCenterId:
-          type: string
-          description: The unique identifier of the cost center this item belongs to. Get from /v2/costcenters endpoint.
-          format: uuid
-        Id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier assigned by eAccounting (read-only).
-          format: uuid
-          readOnly: true
-        Name:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: The name of the cost center item. Maximum 50 characters.
-        ShortName:
-          maxLength: 9
-          minLength: 0
-          type: string
-          description: The short name or code for the cost center item. Maximum 9 characters.
-        IsActive:
-          type: boolean
-          description: Indicates whether the cost center item is active or inactive.
-        CreatedUtc:
-          type: string
-          description: The UTC timestamp when this cost center item was created (read-only).
-          format: date-time
-          readOnly: true
-      additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
         ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-        Message:
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
           type:
-          - string
+          - array
           - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

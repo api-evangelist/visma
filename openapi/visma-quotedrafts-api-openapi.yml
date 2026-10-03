@@ -240,253 +240,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    PaginatedResponseOfQuoteApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuoteApi'
-      additionalProperties: false
-    QuoteRowApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system for every row
-          format: uuid
-          readOnly: true
-        ArticleId:
-          type:
-          - string
-          - 'null'
-          description: 'Source: Get from /v2/articles'
-          format: uuid
-        IsServiceArticle:
-          type: boolean
-          description: True if the sales category of the article on the row is goods, false otherwise
-          readOnly: true
-        UnitId:
-          type:
-          - string
-          - 'null'
-          description: 'Source: Get from /v2/units/{id}'
-          format: uuid
-          readOnly: true
-        Text:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: For non text rows, default value will be the article's name; for text rows, there should be at least one character in place
-        UnitPrice:
-          type: number
-          description: 'Format: 2 decimals allowed if the customer and currency are domestic or 4 decimals if customer or currency is foreign'
-          format: double
-        Amount:
-          type: number
-          description: 'Total amount of row. Format: 2 decimals'
-          format: double
-        IsDiscountInFixedAmount:
-          type: boolean
-          description: True if the discount on the row is a fixed amount, false otherwise
-          readOnly: true
-        DiscountFixedAmount:
-          type:
-          - number
-          - 'null'
-          description: 'Fixed amount discount on the row. Only applicable if IsDiscountInFixedAmount is true. Format: 2 decimals'
-          format: double
-          readOnly: true
-        DiscountPercentage:
-          maximum: 1
-          minimum: 0
-          type: number
-          description: 'Percentage discount n the row. Format: 4 decimals'
-          format: double
-        Quantity:
-          type: number
-          description: 'Format: 4 decimals'
-          format: double
-        WorkCostType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>None = 0,<br/>RotConstructionWork = 1,<br/>RotElectricalWork = 2,<br/>RotGlassSheetMetalWork = 3,<br/>RotGroundWork = 4,<br/>RotBrickWork = 5,<br/>RotPaintDecorateWork = 6,<br/>RotPlumbWork = 7,<br/>RutCleanJobWork = 9,<br/>RutCareClothTextile = 10,<br/>RutSnowRemove = 12,<br/>RutGarden = 13,<br/>RutBabySitting = 14,<br/>RutOtherCare = 15,<br/>RutRemovalServices = 18,<br/>RutITServices = 19,<br/>RotHeatPump = 20,<br/>RotHeatPump2 = 21,<br/>RutHomeAppliances = 22,<br/>RotSolarHeatingSystem = 23,<br/>RotWoodBoiler = 24,<br/>RotFuelBoiler = 25,<br/>RutLaundry = 26,<br/>RutFurnishing = 27,<br/>RutGoodsTransport = 28,<br/>RutHomeSupervision = 29<br/><br/>Only used for Rot/Rut.
-          format: int32
-        IsWorkCost:
-          type: boolean
-          description: Only used for Rot/Rut
-          readOnly: true
-        WorkHours:
-          type:
-          - number
-          - 'null'
-          description: Only used for Rot/Rut
-          format: double
-        MaterialCosts:
-          type:
-          - number
-          - 'null'
-          description: Only used for Rot/Rut
-          format: double
-        IsVatFree:
-          type: boolean
-          description: True if the row has been marked VAT free
-        VatRate:
-          type:
-          - number
-          - 'null'
-          description: When row is a text row the value is null. Default value is also null
-          format: double
-          readOnly: true
-        LineNumber:
-          type: integer
-          description: Unique line number for this row
-          format: int32
-          readOnly: true
-        CostCenterItemId1:
-          type:
-          - string
-          - 'null'
-          description: 'Source: Get from /v2/costcenters'
-          format: uuid
-        CostCenterItemId2:
-          type:
-          - string
-          - 'null'
-          description: 'Source: Get from /v2/costcenters'
-          format: uuid
-        CostCenterItemId3:
-          type:
-          - string
-          - 'null'
-          description: 'Source: Get from /v2/costcenters'
-          format: uuid
-        ProjectId:
-          type:
-          - string
-          - 'null'
-          description: Get from /v2/projects
-          format: uuid
-        IsTextRow:
-          type: boolean
-          description: True if this is a text row. False otherwise
-          readOnly: true
-        ArticleNumber:
-          type:
-          - string
-          - 'null'
-          description: Article number on the row
-          readOnly: true
-        GreenTechnologyType:
-          maximum: 3
-          minimum: 0
-          type: integer
-          description: <strong>Possible values:</strong><br/>None = 0,<br/>SolarCellInstallation = 1,<br/>ElectricEnergyStorageInstallation = 2,<br/>ElectricVehicleChargingPointInstallation = 3<br/><br/>Type of green technology for the row.
-          format: int32
-        ContributionMargin:
-          $ref: '#/components/schemas/ContributionMarginApi'
-        PurchasePrice:
-          type: number
-          description: Purchase price for the article on this row, valid only if it is an article row
-          format: double
-          readOnly: true
-        FreightCosts:
-          type: number
-          description: Freight costs for the article on this row, valid only if it is an article row
-          format: double
-          readOnly: true
-      additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    ContributionMarginApi:
-      type: object
-      properties:
-        Amount:
-          type:
-          - number
-          - 'null'
-          description: Amount of contribution margin
-          format: double
-        Percentage:
-          type:
-          - number
-          - 'null'
-          description: Percentage of contribution margin
-          format: double
-      additionalProperties: false
-    SalesDocumentRotRutReductionPersonApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system
-          format: uuid
-          readOnly: true
-        Ssn:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Social security number
-        Amount:
-          type: number
-          format: double
-      additionalProperties: false
     QuoteApi:
       required:
       - CustomerId
@@ -798,6 +551,49 @@ components:
           format: double
           readOnly: true
       additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfQuoteApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteApi'
+      additionalProperties: false
     TermsOfPaymentApi:
       type: object
       properties:
@@ -854,6 +650,210 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    SalesDocumentRotRutReductionPersonApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Ssn:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Social security number
+        Amount:
+          type: number
+          format: double
+      additionalProperties: false
+    ContributionMarginApi:
+      type: object
+      properties:
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: Amount of contribution margin
+          format: double
+        Percentage:
+          type:
+          - number
+          - 'null'
+          description: Percentage of contribution margin
+          format: double
+      additionalProperties: false
+    QuoteRowApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system for every row
+          format: uuid
+          readOnly: true
+        ArticleId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/articles'
+          format: uuid
+        IsServiceArticle:
+          type: boolean
+          description: True if the sales category of the article on the row is goods, false otherwise
+          readOnly: true
+        UnitId:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/units/{id}'
+          format: uuid
+          readOnly: true
+        Text:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: For non text rows, default value will be the article's name; for text rows, there should be at least one character in place
+        UnitPrice:
+          type: number
+          description: 'Format: 2 decimals allowed if the customer and currency are domestic or 4 decimals if customer or currency is foreign'
+          format: double
+        Amount:
+          type: number
+          description: 'Total amount of row. Format: 2 decimals'
+          format: double
+        IsDiscountInFixedAmount:
+          type: boolean
+          description: True if the discount on the row is a fixed amount, false otherwise
+          readOnly: true
+        DiscountFixedAmount:
+          type:
+          - number
+          - 'null'
+          description: 'Fixed amount discount on the row. Only applicable if IsDiscountInFixedAmount is true. Format: 2 decimals'
+          format: double
+          readOnly: true
+        DiscountPercentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: 'Percentage discount n the row. Format: 4 decimals'
+          format: double
+        Quantity:
+          type: number
+          description: 'Format: 4 decimals'
+          format: double
+        WorkCostType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>RotConstructionWork = 1,<br/>RotElectricalWork = 2,<br/>RotGlassSheetMetalWork = 3,<br/>RotGroundWork = 4,<br/>RotBrickWork = 5,<br/>RotPaintDecorateWork = 6,<br/>RotPlumbWork = 7,<br/>RutCleanJobWork = 9,<br/>RutCareClothTextile = 10,<br/>RutSnowRemove = 12,<br/>RutGarden = 13,<br/>RutBabySitting = 14,<br/>RutOtherCare = 15,<br/>RutRemovalServices = 18,<br/>RutITServices = 19,<br/>RotHeatPump = 20,<br/>RotHeatPump2 = 21,<br/>RutHomeAppliances = 22,<br/>RotSolarHeatingSystem = 23,<br/>RotWoodBoiler = 24,<br/>RotFuelBoiler = 25,<br/>RutLaundry = 26,<br/>RutFurnishing = 27,<br/>RutGoodsTransport = 28,<br/>RutHomeSupervision = 29<br/><br/>Only used for Rot/Rut.
+          format: int32
+        IsWorkCost:
+          type: boolean
+          description: Only used for Rot/Rut
+          readOnly: true
+        WorkHours:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        MaterialCosts:
+          type:
+          - number
+          - 'null'
+          description: Only used for Rot/Rut
+          format: double
+        IsVatFree:
+          type: boolean
+          description: True if the row has been marked VAT free
+        VatRate:
+          type:
+          - number
+          - 'null'
+          description: When row is a text row the value is null. Default value is also null
+          format: double
+          readOnly: true
+        LineNumber:
+          type: integer
+          description: Unique line number for this row
+          format: int32
+          readOnly: true
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: 'Source: Get from /v2/costcenters'
+          format: uuid
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Get from /v2/projects
+          format: uuid
+        IsTextRow:
+          type: boolean
+          description: True if this is a text row. False otherwise
+          readOnly: true
+        ArticleNumber:
+          type:
+          - string
+          - 'null'
+          description: Article number on the row
+          readOnly: true
+        GreenTechnologyType:
+          maximum: 3
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>SolarCellInstallation = 1,<br/>ElectricEnergyStorageInstallation = 2,<br/>ElectricVehicleChargingPointInstallation = 3<br/><br/>Type of green technology for the row.
+          format: int32
+        ContributionMargin:
+          $ref: '#/components/schemas/ContributionMarginApi'
+        PurchasePrice:
+          type: number
+          description: Purchase price for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+        FreightCosts:
+          type: number
+          description: Freight costs for the article on this row, valid only if it is an article row
+          format: double
+          readOnly: true
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

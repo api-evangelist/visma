@@ -170,26 +170,6 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -261,20 +241,6 @@ components:
           type: boolean
           description: Indicates whether the payslip is locked and cannot be modified
       additionalProperties: false
-    PaginatedResponseOfPayslipApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PayslipApi'
-      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -295,7 +261,7 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    PaginatedResponseOfPayslipResponse:
+    PaginatedResponseOfPayslipApi:
       required:
       - Data
       - Meta
@@ -307,7 +273,27 @@ components:
         Data:
           type: array
           items:
-            $ref: '#/components/schemas/PayslipResponse'
+            $ref: '#/components/schemas/PayslipApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     PaginatedResponseOfPayslipDetailedResponse:
       required:
@@ -421,6 +407,20 @@ components:
         Locked:
           type: boolean
           description: Indicates whether the payslip is locked and cannot be modified
+      additionalProperties: false
+    PaginatedResponseOfPayslipResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayslipResponse'
       additionalProperties: false
 x-refined-from:
 - visma-payroll-api-v1-openapi-original.json

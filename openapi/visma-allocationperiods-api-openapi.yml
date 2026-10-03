@@ -165,26 +165,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
     PaginatedResponseOfAllocationPeriodApi:
       required:
       - Data
@@ -197,6 +177,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AllocationPeriodApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
       additionalProperties: false
     AllocationPeriodRowApi:
       required:
@@ -243,114 +253,6 @@ components:
           format: int32
       additionalProperties: false
       description: Row in an allocation period
-    AllocationPlan:
-      required:
-      - AllocationAccountNumber
-      - AmountToAllocate
-      - BookkeepingStartDate
-      - NumberOfAllocationPeriods
-      type: object
-      properties:
-        SupplierInvoiceDraftId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a supplier invoice draft. If assigned, SupplierInvoiceDraftRow must be set
-          format: uuid
-        SupplierInvoiceDraftRow:
-          type:
-          - integer
-          - 'null'
-          description: Reference to a supplier invoice draft row. Required if SupplierInvoiceDraftId is assigned
-          format: int32
-        SupplierInvoiceId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a supplier invoice. If assigned, SupplierInvoiceRow must be set
-          format: uuid
-        SupplierInvoiceRow:
-          type:
-          - integer
-          - 'null'
-          description: Reference to a supplier invoice row. Required if SupplierInvoiceId is assigned
-          format: int32
-        VoucherId:
-          type:
-          - string
-          - 'null'
-          description: Reference to a voucher. If assigned, VoucherRow must be set
-          format: uuid
-        VoucherRow:
-          type:
-          - integer
-          - 'null'
-          description: Reference to a voucher row. Required if VoucherId is assigned
-          format: int32
-        BookkeepingStartDate:
-          type: string
-          description: The start date for bookkeeping allocation
-          format: date-time
-        AmountToAllocate:
-          maximum: 1000000000
-          minimum: 1
-          type: number
-          description: The amount to allocate across periods
-          format: double
-        QuantityToAllocate:
-          type:
-          - number
-          - 'null'
-          description: Used for Dutch companies that use agricultural settings
-          format: double
-        WeightToAllocate:
-          type:
-          - number
-          - 'null'
-          description: Used for Dutch companies that use agricultural settings
-          format: double
-        AllocationAccountNumber:
-          type: integer
-          description: The account number for allocation
-          format: int64
-        NumberOfAllocationPeriods:
-          maximum: 9999
-          minimum: 1
-          type: integer
-          description: Number of allocation periods to create
-          format: int32
-      additionalProperties: false
-      description: Plan for creating allocation periods to distribute costs over time
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
     AllocationPeriodApi:
       required:
       - Rows
@@ -561,6 +463,104 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    AllocationPlan:
+      required:
+      - AllocationAccountNumber
+      - AmountToAllocate
+      - BookkeepingStartDate
+      - NumberOfAllocationPeriods
+      type: object
+      properties:
+        SupplierInvoiceDraftId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a supplier invoice draft. If assigned, SupplierInvoiceDraftRow must be set
+          format: uuid
+        SupplierInvoiceDraftRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a supplier invoice draft row. Required if SupplierInvoiceDraftId is assigned
+          format: int32
+        SupplierInvoiceId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a supplier invoice. If assigned, SupplierInvoiceRow must be set
+          format: uuid
+        SupplierInvoiceRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a supplier invoice row. Required if SupplierInvoiceId is assigned
+          format: int32
+        VoucherId:
+          type:
+          - string
+          - 'null'
+          description: Reference to a voucher. If assigned, VoucherRow must be set
+          format: uuid
+        VoucherRow:
+          type:
+          - integer
+          - 'null'
+          description: Reference to a voucher row. Required if VoucherId is assigned
+          format: int32
+        BookkeepingStartDate:
+          type: string
+          description: The start date for bookkeeping allocation
+          format: date-time
+        AmountToAllocate:
+          maximum: 1000000000
+          minimum: 1
+          type: number
+          description: The amount to allocate across periods
+          format: double
+        QuantityToAllocate:
+          type:
+          - number
+          - 'null'
+          description: Used for Dutch companies that use agricultural settings
+          format: double
+        WeightToAllocate:
+          type:
+          - number
+          - 'null'
+          description: Used for Dutch companies that use agricultural settings
+          format: double
+        AllocationAccountNumber:
+          type: integer
+          description: The account number for allocation
+          format: int64
+        NumberOfAllocationPeriods:
+          maximum: 9999
+          minimum: 1
+          type: integer
+          description: Number of allocation periods to create
+          format: int32
+      additionalProperties: false
+      description: Plan for creating allocation periods to distribute costs over time
 x-tagGroups:
 - name: Sales
   tags:

@@ -140,16 +140,13 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    subaccountInGeneralLedgerBalanceDto:
+    BackgroundApiAcceptedDto:
+      type: object
       properties:
-        subaccountNumber:
+        id:
           type: string
-          description: The subaccount number / code. Format 9-XX.
-        subaccountId:
-          type: integer
-          description: The internal SubID identifier of the subaccount.
-          format: int32
-      description: The subaccount of the balance row.
+        stateLocation:
+          type: string
     AccountNumberDescriptionDto:
       type: object
       properties:
@@ -178,33 +175,15 @@ components:
         description:
           type: string
           description: Name of item/description
-    BranchNumberDto:
+    MetadataDto:
       type: object
       properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-    LedgerDescriptionDto:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-    ExternalCodeNumberDescriptionDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     GeneralLedgerBalanceDto:
       type: object
       properties:
@@ -281,22 +260,43 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a General Ledger Balance in GeneralLedgerBalanceController. Used by getting data.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    BackgroundApiAcceptedDto:
+    LedgerDescriptionDto:
       type: object
       properties:
         id:
           type: string
-        stateLocation:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
+          description: Click on the magnifier. &gt; The description.
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    ExternalCodeNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    subaccountInGeneralLedgerBalanceDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: The subaccount number / code. Format 9-XX.
+        subaccountId:
+          type: integer
+          description: The internal SubID identifier of the subaccount.
+          format: int32
+      description: The subaccount of the balance row.
   securitySchemes:
     interactiveapi:
       type: oauth2
