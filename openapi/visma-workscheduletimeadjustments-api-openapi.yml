@@ -89,6 +89,20 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    PaginatedResponseOfWorkScheduleTimeAdjustmentResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkScheduleTimeAdjustmentResponse'
+      additionalProperties: false
     WorkScheduleTimeAdjustmentResponse:
       required:
       - Name
@@ -123,6 +137,26 @@ components:
             $ref: '#/components/schemas/WorkScheduleTimeAdjustmentWorkDayResponse'
           description: Time adjustment work days
       additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
     WorkScheduleTimeAdjustmentRequest:
       required:
       - Name
@@ -143,6 +177,62 @@ components:
           items:
             $ref: '#/components/schemas/WorkScheduleTimeAdjustmentWorkDayRequest'
           description: Time adjustment work days
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    WorkScheduleTimeAdjustmentWorkDayRequest:
+      type: object
+      properties:
+        CodedDay:
+          type:
+          - integer
+          - 'null'
+          description: 'Code corresponding to a specific holiday/event day of the year. Either CodedDay or AnnualDate must be provided.<br/>Possible values: 1 - NewYearsDay, 2 - TwelfthDay, 3 - GoodFriDay, 4 - EasterEve, 5 - EasterDay, 6 - DayAfterEasterDay, 7 - FirstOfMay, 8 - AscensionDay, 9 - WhitsunEve, 10 - WhitsunDay, 11 - DayAfterWhitsunDay, 12 - MidsummerEve, 13 - MidsummerDay, 14 - AllSaintsDay, 15 - ChristmasEve, 16 - ChristmasDay, 17 - DayAfterChristmasDay, 18 - NewYearsEve, 19 - MaundyThursday, 20 - TwelfthDayDayBefore, 21 - FirstOfMayDayBefore, 22 - AscensionDayDayBefore, 23 - MidsummerEveDayBefore, 24 - ChristmasEveDayBefore, 25 - NewYearsEveDayBefore, 26 - AscensionDayDayAfter, 27 - AllSaintsDayDayBefore, 30 - NationalDay, 31 - NationalDayDayBefore, 110 - NewYearsDayDayAfter, 120 - NationalDayDayAfter, 130 - MidsummerDayDayAfter'
+          format: int32
+        AnnualDate:
+          type:
+          - string
+          - 'null'
+          description: 'Date of a recurring day of the year (format: MM-dd). Either CodedDay or AnnualDate must be provided.'
+        MinutesToWork:
+          type:
+          - integer
+          - 'null'
+          description: Number of minutes to work on the specified day. Null indicates day is full time.
+          format: int32
+        Note:
+          type:
+          - string
+          - 'null'
+          description: Optional note/comment (max 50 characters)
       additionalProperties: false
     WorkScheduleTimeAdjustmentWorkDayResponse:
       type: object
@@ -182,36 +272,6 @@ components:
           description: Timestamp indicating when the time adjustment work day was last modified (UTC)
           format: date-time
       additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
-          format: date-time
-      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -231,64 +291,4 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    PaginatedResponseOfWorkScheduleTimeAdjustmentResponse:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkScheduleTimeAdjustmentResponse'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    WorkScheduleTimeAdjustmentWorkDayRequest:
-      type: object
-      properties:
-        CodedDay:
-          type:
-          - integer
-          - 'null'
-          description: 'Code corresponding to a specific holiday/event day of the year. Either CodedDay or AnnualDate must be provided.<br/>Possible values: 1 - NewYearsDay, 2 - TwelfthDay, 3 - GoodFriDay, 4 - EasterEve, 5 - EasterDay, 6 - DayAfterEasterDay, 7 - FirstOfMay, 8 - AscensionDay, 9 - WhitsunEve, 10 - WhitsunDay, 11 - DayAfterWhitsunDay, 12 - MidsummerEve, 13 - MidsummerDay, 14 - AllSaintsDay, 15 - ChristmasEve, 16 - ChristmasDay, 17 - DayAfterChristmasDay, 18 - NewYearsEve, 19 - MaundyThursday, 20 - TwelfthDayDayBefore, 21 - FirstOfMayDayBefore, 22 - AscensionDayDayBefore, 23 - MidsummerEveDayBefore, 24 - ChristmasEveDayBefore, 25 - NewYearsEveDayBefore, 26 - AscensionDayDayAfter, 27 - AllSaintsDayDayBefore, 30 - NationalDay, 31 - NationalDayDayBefore, 110 - NewYearsDayDayAfter, 120 - NationalDayDayAfter, 130 - MidsummerDayDayAfter'
-          format: int32
-        AnnualDate:
-          type:
-          - string
-          - 'null'
-          description: 'Date of a recurring day of the year (format: MM-dd). Either CodedDay or AnnualDate must be provided.'
-        MinutesToWork:
-          type:
-          - integer
-          - 'null'
-          description: Number of minutes to work on the specified day. Null indicates day is full time.
-          format: int32
-        Note:
-          type:
-          - string
-          - 'null'
-          description: Optional note/comment (max 50 characters)
       additionalProperties: false

@@ -140,50 +140,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    AccountNumberDescriptionDto:
-      type: object
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-        externalCode1:
-          type: string
-          description: ExternalCode1 is deprecated, please use ExternalCode1Info instead.
-        externalCode2:
-          type: string
-          description: ExternalCode2 is deprecated, please use ExternalCode2Info instead.
-        externalCode1Info:
-          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
-        externalCode2Info:
-          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
-        glConsolAccountCD:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
     GeneralLedgerBalanceDto:
       type: object
       properties:
@@ -260,6 +216,50 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a General Ledger Balance in GeneralLedgerBalanceController. Used by getting data.
+    AccountNumberDescriptionDto:
+      type: object
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+        externalCode1:
+          type: string
+          description: ExternalCode1 is deprecated, please use ExternalCode1Info instead.
+        externalCode2:
+          type: string
+          description: ExternalCode2 is deprecated, please use ExternalCode2Info instead.
+        externalCode1Info:
+          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
+        externalCode2Info:
+          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
+        glConsolAccountCD:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
     LedgerDescriptionDto:
       type: object
       properties:
@@ -269,6 +269,16 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
+    subaccountInGeneralLedgerBalanceDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: The subaccount number / code. Format 9-XX.
+        subaccountId:
+          type: integer
+          description: The internal SubID identifier of the subaccount.
+          format: int32
+      description: The subaccount of the balance row.
     BranchNumberDto:
       type: object
       properties:
@@ -287,16 +297,6 @@ components:
         description:
           type: string
           description: Name of item/description
-    subaccountInGeneralLedgerBalanceDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: The subaccount number / code. Format 9-XX.
-        subaccountId:
-          type: integer
-          description: The internal SubID identifier of the subaccount.
-          format: int32
-      description: The subaccount of the balance row.
   securitySchemes:
     interactiveapi:
       type: oauth2

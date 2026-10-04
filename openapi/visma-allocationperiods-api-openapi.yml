@@ -165,94 +165,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    PaginatedResponseOfAllocationPeriodApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllocationPeriodApi'
-      additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    AllocationPeriodRowApi:
-      required:
-      - DebitCredit
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier of the allocation period row
-          format: uuid
-          readOnly: true
-        AllocationPeriodId:
-          type: string
-          description: Reference to the allocation period this row belongs to
-          format: uuid
-          readOnly: true
-        AccountNumber:
-          type: integer
-          description: Account number
-          format: int64
-        Amount:
-          type: number
-          description: Amount to allocate
-          format: double
-        Quantity:
-          type:
-          - number
-          - 'null'
-          description: Used for dutch companies that use agricultural settings
-          format: double
-        Weight:
-          type:
-          - number
-          - 'null'
-          description: Used for dutch companies that use agricultural settings
-          format: double
-        DebitCredit:
-          type: integer
-          description: <strong>Possible values:</strong><br/>1 = Debit,<br/>2 = Credit
-          format: int32
-        AllocationPeriodRowType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>None = 0,<br/>InputVat = 1
-          format: int32
-      additionalProperties: false
-      description: Row in an allocation period
     AllocationPeriodApi:
       required:
       - Rows
@@ -443,26 +355,6 @@ components:
           readOnly: true
       additionalProperties: false
       description: Allocation period for distributing costs over time
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     CommonExtendedBadRequest:
       type: object
       properties:
@@ -482,6 +374,19 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfAllocationPeriodApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationPeriodApi'
       additionalProperties: false
     AllocationPlan:
       required:
@@ -561,6 +466,101 @@ components:
           format: int32
       additionalProperties: false
       description: Plan for creating allocation periods to distribute costs over time
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    AllocationPeriodRowApi:
+      required:
+      - DebitCredit
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier of the allocation period row
+          format: uuid
+          readOnly: true
+        AllocationPeriodId:
+          type: string
+          description: Reference to the allocation period this row belongs to
+          format: uuid
+          readOnly: true
+        AccountNumber:
+          type: integer
+          description: Account number
+          format: int64
+        Amount:
+          type: number
+          description: Amount to allocate
+          format: double
+        Quantity:
+          type:
+          - number
+          - 'null'
+          description: Used for dutch companies that use agricultural settings
+          format: double
+        Weight:
+          type:
+          - number
+          - 'null'
+          description: Used for dutch companies that use agricultural settings
+          format: double
+        DebitCredit:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = Debit,<br/>2 = Credit
+          format: int32
+        AllocationPeriodRowType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>None = 0,<br/>InputVat = 1
+          format: int32
+      additionalProperties: false
+      description: Row in an allocation period
 x-tagGroups:
 - name: Sales
   tags:

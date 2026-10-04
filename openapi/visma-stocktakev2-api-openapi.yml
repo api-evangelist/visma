@@ -355,6 +355,202 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    StocktakeUpdateDto:
+      type: object
+      properties:
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/StocktakeLineUpdateDto'
+      description: This class represents a Stocktake in StocktakeController. Used to update Stocktake.
+    StocktakeLineUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        physicalQuantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        inventoryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        reasonCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lotSerialNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expirationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+      description: This class represent a Stocktake line in StocktakeContoller. Used to update a Stocktake line
+    warehouseInStocktakeLineV2Dto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Warehouse &gt; An info field that shows the warehouse where the stocktaking count is performed.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    StocktakeV2ExceptionDto:
+      type: object
+      properties:
+        inventoryId:
+          type: string
+          description: Stocktaking details tab &gt; Item ID &gt; The item ID of the item.
+        locationId:
+          type: string
+          description: Stocktaking details tab &gt; Location &gt; The warehouse location of the item.
+        physicalQuantity:
+          type: number
+          description: Stocktaking details tab &gt; Variance quantity &gt; The difference between the book quantity and the physical quantity for the line item.
+          format: double
+        reasonCode:
+          type: string
+          description: Stocktaking details tab &gt; Reason code &gt; The reason code for the item.
+        lotSerialNumber:
+          type: string
+          description: Stocktaking details tab &gt; Expiration date &gt; The expiration date of the item with this specific lot or serial number.
+        expirationDate:
+          type: string
+          description: Stocktaking details tab &gt; Book quantity &gt; The book quantity of the item, which is calculated based on the system records.
+          format: date-time
+        message:
+          type: string
+          description: Exception message
+        errorCode:
+          enum:
+          - NotDefined
+          - InventoryIDNotFound
+          - LocationIDNotFound
+          - ReasonCodeNotFound
+          - ItemIsNotStockItem
+          - CombinationAlreadyInUse
+          - CombinationNotAllowed
+          - LotSerialNumberAlreadyInUse
+          type: string
+          description: Exception error code
+    StocktakeV2Dto:
+      type: object
+      properties:
+        referenceNbr:
+          type: string
+          description: The top part &gt; Ref. no. &gt; The reference number of the stocktaking document to be reviewed.
+        description:
+          type: string
+          description: The top part &gt; Description &gt; The description of the stocktaking.
+        summaryStatus:
+          enum:
+          - Cancelled
+          - Completed
+          - Counting
+          - Entering
+          type: string
+          description: The top part &gt; Status &gt; An info field that shows the current status of this stocktaking document.
+        freezeDate:
+          type: string
+          description: The top part &gt; Freeze date &gt; An info field that shows the date when the stocktaking document was created.
+          format: date-time
+        numberOfLines:
+          type: integer
+          format: int32
+        physicalQty:
+          type: number
+          description: The top part &gt; Total physical qty. &gt; An info field showing the total actual quantity of all stock items listed in the document.
+          format: double
+        varianceQty:
+          type: number
+          description: The top part &gt; Total variance qty. &gt; An info field showing the total variance quantity for the document.
+          format: double
+        varianceCost:
+          type: number
+          description: The top part &gt; Total variance cost &gt; An info field showing the total variance cost for all stock items listed in the document.
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/StocktakeLineV2Dto'
+          description: Stocktaking details tab &gt;
+        timestamp:
+          type: string
+          description: Timestamp of the stocktake record
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    locationInStocktakeLineV2Dto:
+      properties:
+        internalId:
+          type: integer
+          description: Click the magnifier &gt; The identifier
+          format: int32
+        id:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Stocktaking details tab &gt; Location &gt; The warehouse location of the item.
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    inventoryInStocktakeLineV2Dto:
+      properties:
+        internalId:
+          type: integer
+          description: Click the magnifier &gt; The identifier
+          format: int32
+        id:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Stocktaking details tab &gt; Item ID &gt; The item ID of the item.
     StocktakeLineV2Dto:
       type: object
       properties:
@@ -416,202 +612,6 @@ components:
         baseUnit:
           type: string
           description: Stocktaking details tab &gt; Base Unit &gt; The base unit for the item.
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    StocktakeUpdateDto:
-      type: object
-      properties:
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/StocktakeLineUpdateDto'
-      description: This class represents a Stocktake in StocktakeController. Used to update Stocktake.
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    StocktakeV2ExceptionDto:
-      type: object
-      properties:
-        inventoryId:
-          type: string
-          description: Stocktaking details tab &gt; Item ID &gt; The item ID of the item.
-        locationId:
-          type: string
-          description: Stocktaking details tab &gt; Location &gt; The warehouse location of the item.
-        physicalQuantity:
-          type: number
-          description: Stocktaking details tab &gt; Variance quantity &gt; The difference between the book quantity and the physical quantity for the line item.
-          format: double
-        reasonCode:
-          type: string
-          description: Stocktaking details tab &gt; Reason code &gt; The reason code for the item.
-        lotSerialNumber:
-          type: string
-          description: Stocktaking details tab &gt; Expiration date &gt; The expiration date of the item with this specific lot or serial number.
-        expirationDate:
-          type: string
-          description: Stocktaking details tab &gt; Book quantity &gt; The book quantity of the item, which is calculated based on the system records.
-          format: date-time
-        message:
-          type: string
-          description: Exception message
-        errorCode:
-          enum:
-          - NotDefined
-          - InventoryIDNotFound
-          - LocationIDNotFound
-          - ReasonCodeNotFound
-          - ItemIsNotStockItem
-          - CombinationAlreadyInUse
-          - CombinationNotAllowed
-          - LotSerialNumberAlreadyInUse
-          type: string
-          description: Exception error code
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    warehouseInStocktakeLineV2Dto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; Warehouse &gt; An info field that shows the warehouse where the stocktaking count is performed.
-    StocktakeV2Dto:
-      type: object
-      properties:
-        referenceNbr:
-          type: string
-          description: The top part &gt; Ref. no. &gt; The reference number of the stocktaking document to be reviewed.
-        description:
-          type: string
-          description: The top part &gt; Description &gt; The description of the stocktaking.
-        summaryStatus:
-          enum:
-          - Cancelled
-          - Completed
-          - Counting
-          - Entering
-          type: string
-          description: The top part &gt; Status &gt; An info field that shows the current status of this stocktaking document.
-        freezeDate:
-          type: string
-          description: The top part &gt; Freeze date &gt; An info field that shows the date when the stocktaking document was created.
-          format: date-time
-        numberOfLines:
-          type: integer
-          format: int32
-        physicalQty:
-          type: number
-          description: The top part &gt; Total physical qty. &gt; An info field showing the total actual quantity of all stock items listed in the document.
-          format: double
-        varianceQty:
-          type: number
-          description: The top part &gt; Total variance qty. &gt; An info field showing the total variance quantity for the document.
-          format: double
-        varianceCost:
-          type: number
-          description: The top part &gt; Total variance cost &gt; An info field showing the total variance cost for all stock items listed in the document.
-          format: double
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/StocktakeLineV2Dto'
-          description: Stocktaking details tab &gt;
-        timestamp:
-          type: string
-          description: Timestamp of the stocktake record
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-    inventoryInStocktakeLineV2Dto:
-      properties:
-        internalId:
-          type: integer
-          description: Click the magnifier &gt; The identifier
-          format: int32
-        id:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Stocktaking details tab &gt; Item ID &gt; The item ID of the item.
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    locationInStocktakeLineV2Dto:
-      properties:
-        internalId:
-          type: integer
-          description: Click the magnifier &gt; The identifier
-          format: int32
-        id:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Stocktaking details tab &gt; Location &gt; The warehouse location of the item.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    StocktakeLineUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        physicalQuantity:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        inventoryId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        locationId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        reasonCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lotSerialNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expirationDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-      description: This class represent a Stocktake line in StocktakeContoller. Used to update a Stocktake line
   securitySchemes:
     interactiveapi:
       type: oauth2

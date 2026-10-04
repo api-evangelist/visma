@@ -468,6 +468,114 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    BasePaginationDtoOfKitAssemblyDto:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitAssemblyDto'
+    orderTypeInKitAssemblyLinkInsertDto:
+      properties:
+        value:
+          type: string
+      description: Reference to the order type that the kit assembly is connected to
+    orderLineNumberInKitAssemblyLinkInsertDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: Reference to the order line number that the kit assembly is connected to
+    KitAssemblyStockComponentsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        itemId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uoM:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        unitCost:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        reasonCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        stockComponentLineAllocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitAssemblyStockComponentAllocationsUpdateDto'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    KitAssemblyNonStockComponentsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        itemId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uoM:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        unitCost:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        reasonCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+    orderNumberInKitAssemblyLinkInsertDto:
+      properties:
+        value:
+          type: string
+      description: Reference to the order number that the kit assembly is connected to
+    INAllocationsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+          description: The operation &gt;  Insert=1, Update=2, Delete=3
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lotSerialNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expirationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+      description: This class represents a Kit Allocations from Kit Assembly. Used to add/update data.
     INAllocationsDto:
       type: object
       properties:
@@ -487,11 +595,227 @@ components:
           type: string
           format: date-time
       description: This class represents Allocation/Kit Allocation. Used for getting data.
-    DtoValueOfBoolean:
+    DtoValueOfNullableOfDecimal:
       type: object
       properties:
         value:
+          type: number
+          format: double
+    LocationDescriptionDto:
+      type: object
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    KitAssemblyStockComponentAllocationsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        itemId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lotSerialNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        expirationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+      description: 'Lot/serial allocations for stock components in kit assemblies.
+
+        Used for adding and updating allocations.'
+    KitAssemblyLinkInsertDto:
+      type: object
+      properties:
+        orderType:
+          $ref: '#/components/schemas/orderTypeInKitAssemblyLinkInsertDto'
+        orderNumber:
+          $ref: '#/components/schemas/orderNumberInKitAssemblyLinkInsertDto'
+        orderLineNumber:
+          $ref: '#/components/schemas/orderLineNumberInKitAssemblyLinkInsertDto'
+    KitAssemblyUpdateDto:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Type, possible values: P - Production, D - Disassembly'
+        refNo:
+          type: string
+        hold:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        date:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        postPeriod:
+          $ref: '#/components/schemas/DtoValueOfString'
+        itemId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        revision:
+          $ref: '#/components/schemas/DtoValueOfString'
+        reasonCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        warehouse:
+          $ref: '#/components/schemas/DtoValueOfString'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uoM:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        stockComponentLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitAssemblyStockComponentsUpdateDto'
+        stockComponentAllocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitAssemblyStockComponentAllocationsUpdateDto'
+          description: "This property is deprecated and will be removed in a future version. \nUse StockComponentLineAllocations within each StockComponentLine instead."
+        nonStockComponentLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitAssemblyNonStockComponentsUpdateDto'
+        kitAllocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/INAllocationsUpdateDto'
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    KitAssemblyNonStockComponentDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          format: int32
+        itemId:
+          type: string
+        description:
+          type: string
+        uoM:
+          type: string
+        quantity:
+          type: number
+          format: double
+        unitCost:
+          type: number
+          format: double
+        reasonCode:
+          type: string
+        componentQty:
+          type: number
+          format: double
+        allowComponentQtyVariance:
           type: boolean
+        minComponentQty:
+          type: number
+          format: double
+        maxComponentQty:
+          type: number
+          format: double
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    KitAssemblyStockComponentsDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          format: int32
+        itemId:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        uoM:
+          type: string
+        quantity:
+          type: number
+          format: double
+        unitCost:
+          type: number
+          format: double
+        reasonCode:
+          type: string
+        componentQty:
+          type: number
+          format: double
+        minComponentQty:
+          type: number
+          format: double
+        allowComponentQtyVariance:
+          type: boolean
+        maxComponentQty:
+          type: number
+          format: double
+        allowComponentSubstitution:
+          type: boolean
+        disassemblyCoeff:
+          type: number
+          format: double
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/INAllocationsDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     KitAssemblyInsertDto:
       type: object
       properties:
@@ -541,6 +865,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/INAllocationsUpdateDto'
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
     KitAssemblyDto:
       type: object
       properties:
@@ -603,335 +932,6 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    KitAssemblyStockComponentAllocationsUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        itemId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lotSerialNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expirationDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-      description: 'Lot/serial allocations for stock components in kit assemblies.
-
-        Used for adding and updating allocations.'
-    orderLineNumberInKitAssemblyLinkInsertDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: Reference to the order line number that the kit assembly is connected to
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    orderNumberInKitAssemblyLinkInsertDto:
-      properties:
-        value:
-          type: string
-      description: Reference to the order number that the kit assembly is connected to
-    KitAssemblyStockComponentsUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        itemId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uoM:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        unitCost:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        reasonCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        stockComponentLineAllocations:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitAssemblyStockComponentAllocationsUpdateDto'
-    KitAssemblyUpdateDto:
-      type: object
-      properties:
-        type:
-          type: string
-          description: 'Type, possible values: P - Production, D - Disassembly'
-        refNo:
-          type: string
-        hold:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        date:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        postPeriod:
-          $ref: '#/components/schemas/DtoValueOfString'
-        itemId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        revision:
-          $ref: '#/components/schemas/DtoValueOfString'
-        reasonCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        warehouse:
-          $ref: '#/components/schemas/DtoValueOfString'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uoM:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        stockComponentLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitAssemblyStockComponentsUpdateDto'
-        stockComponentAllocations:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitAssemblyStockComponentAllocationsUpdateDto'
-          description: "This property is deprecated and will be removed in a future version. \nUse StockComponentLineAllocations within each StockComponentLine instead."
-        nonStockComponentLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitAssemblyNonStockComponentsUpdateDto'
-        kitAllocations:
-          type: array
-          items:
-            $ref: '#/components/schemas/INAllocationsUpdateDto'
-    DtoValueOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    BasePaginationDtoOfKitAssemblyDto:
-      type: object
-      properties:
-        pageNumber:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        totalCount:
-          type: integer
-          format: int64
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitAssemblyDto'
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    KitAssemblyNonStockComponentDto:
-      type: object
-      properties:
-        lineNbr:
-          type: integer
-          format: int32
-        itemId:
-          type: string
-        description:
-          type: string
-        uoM:
-          type: string
-        quantity:
-          type: number
-          format: double
-        unitCost:
-          type: number
-          format: double
-        reasonCode:
-          type: string
-        componentQty:
-          type: number
-          format: double
-        allowComponentQtyVariance:
-          type: boolean
-        minComponentQty:
-          type: number
-          format: double
-        maxComponentQty:
-          type: number
-          format: double
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    KitAssemblyStockComponentsDto:
-      type: object
-      properties:
-        lineNbr:
-          type: integer
-          format: int32
-        itemId:
-          type: string
-        description:
-          type: string
-        location:
-          type: string
-        uoM:
-          type: string
-        quantity:
-          type: number
-          format: double
-        unitCost:
-          type: number
-          format: double
-        reasonCode:
-          type: string
-        componentQty:
-          type: number
-          format: double
-        minComponentQty:
-          type: number
-          format: double
-        allowComponentQtyVariance:
-          type: boolean
-        maxComponentQty:
-          type: number
-          format: double
-        allowComponentSubstitution:
-          type: boolean
-        disassemblyCoeff:
-          type: number
-          format: double
-        allocations:
-          type: array
-          items:
-            $ref: '#/components/schemas/INAllocationsDto'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-    LocationDescriptionDto:
-      type: object
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-    KitAssemblyNonStockComponentsUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        itemId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uoM:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        unitCost:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        reasonCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-    orderTypeInKitAssemblyLinkInsertDto:
-      properties:
-        value:
-          type: string
-      description: Reference to the order type that the kit assembly is connected to
-    INAllocationsUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-          description: The operation &gt;  Insert=1, Update=2, Delete=3
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lotSerialNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expirationDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-      description: This class represents a Kit Allocations from Kit Assembly. Used to add/update data.
-    KitAssemblyLinkInsertDto:
-      type: object
-      properties:
-        orderType:
-          $ref: '#/components/schemas/orderTypeInKitAssemblyLinkInsertDto'
-        orderNumber:
-          $ref: '#/components/schemas/orderNumberInKitAssemblyLinkInsertDto'
-        orderLineNumber:
-          $ref: '#/components/schemas/orderLineNumberInKitAssemblyLinkInsertDto'
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
   securitySchemes:
     interactiveapi:
       type: oauth2

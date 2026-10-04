@@ -888,39 +888,31 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    taxCategoryInExpenseReceiptDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Receipt details tab &gt; Expense details section &gt; VAT category &gt; The tax category for the expense receipt.
-    taxCategoryInExpenseClaimDetailDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: VAT category &gt; The VAT category associated with the expense item.
-    DtoValueOfBoolean:
-      type: object
+    departmentInEmployeeUpdateDto:
       properties:
         value:
-          type: boolean
-    expenseItemInExpenseClaimDetailDto:
+          type: string
+      description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
+    customerInExpenseClaimDetailDto:
       properties:
         number:
           type: string
-          description: Number of item
-        description:
+        name:
           type: string
-          description: Name of item/description
-      description: 'Mandatory field: Expense item* &gt; The expense identifier, if an expense of this type is listed as an inventory nonstock item.'
-    statusInEmployeeUpdateDto:
+          description: Click the magnifier. &gt; The name.
+      description: Customer &gt; The identifier of the customer associated with the expense.
+    claimedByInExpenseClaimDto:
+      properties:
+        internalId:
+          type: string
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: The top part &gt; Claimed by &gt; The employee who is claiming the expenses. If the claim is released, an Accounts Payable bill will be generated to this employee.'
+    statusInEmployeeCreateDTO:
       properties:
         value:
           enum:
@@ -931,6 +923,55 @@ components:
           - OneTime
           type: string
       description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
+    projectTaskInExpenseClaimDetailDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The task associated with the contract or project.
+    salesSubInExpenseReceiptDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Receipt details tab &gt; Financial details section &gt; Sales sub. &gt; The corresponding subaccount the system uses to record the amount to charge the customer for.
+    expenseAccountInExpenseClaimDetailDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Expense account &gt; The expense account to which the system should record the part of the expense to be paid back to the employee.'
     AttachmentDto:
       type: object
       properties:
@@ -946,46 +987,7 @@ components:
           type: integer
           description: The version of the attachment.
           format: int32
-    countyInAddressDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
-    contactInEmployeeUpdateDto:
-      properties:
-        firstName:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lastName:
-          $ref: '#/components/schemas/DtoValueOfString'
-        middleName:
-          $ref: '#/components/schemas/DtoValueOfString'
-        email:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone1:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone2:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone3:
-          $ref: '#/components/schemas/DtoValueOfString'
-        fax:
-          $ref: '#/components/schemas/DtoValueOfString'
-      description: General information tab &gt; Contact section &gt;
-    expenseSubInExpenseReceiptDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Receipt details tab &gt; Financial details section &gt; Expense sub. &gt; The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.
-    projectTaskInExpenseClaimDetailDto:
+    projectTaskInTimeCardMaterialsDto:
       properties:
         internalId:
           type: integer
@@ -997,32 +999,8 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The task associated with the contract or project.
-    AddressUpdateDto:
-      type: object
-      properties:
-        addressLine1:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine2:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine3:
-          $ref: '#/components/schemas/DtoValueOfString'
-        postalCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        city:
-          $ref: '#/components/schemas/DtoValueOfString'
-        countryId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        county:
-          $ref: '#/components/schemas/DtoValueOfString'
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    projectInTimeCardMaterialsDto:
+      description: Project task &gt; The project task that the employee worked on.
+    projectTaskInTimeCardSummaryDto:
       properties:
         internalId:
           type: integer
@@ -1034,44 +1012,7 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
-    statusInEmployeeCreateDTO:
-      properties:
-        value:
-          enum:
-          - Active
-          - Hold
-          - HoldPayments
-          - Inactive
-          - OneTime
-          type: string
-      description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
-    addressInEmployeeUpdateDto:
-      properties:
-        addressLine1:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine2:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine3:
-          $ref: '#/components/schemas/DtoValueOfString'
-        postalCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        city:
-          $ref: '#/components/schemas/DtoValueOfString'
-        countryId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        county:
-          $ref: '#/components/schemas/DtoValueOfString'
-      description: General information tab &gt; Address info section &gt;
-    locationInExpenseClaimDetailDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Location &gt; The identifier of the customer location associated with the expense.
+      description: Project task &gt; The project task that the employee worked on.
     TimeCardMaterialsDto:
       type: object
       properties:
@@ -1127,631 +1068,6 @@ components:
         lastModifiedDateTime:
           type: string
           format: date-time
-    TimeCardDto:
-      type: object
-      properties:
-        refNbr:
-          type: string
-          description: The top part &gt; Ref. no. &gt; The unique reference number of the time card, which Acumatica ERP automatically assigns according to the numbering sequence specified as the Time Card Numbering Sequence on the Time and Expenses Preferences (EP.10.10.00) form.
-        status:
-          enum:
-          - Hold
-          - Open
-          - Approved
-          - Rejected
-          - Released
-          type: string
-          description: The top part &gt; Status &gt; The status of the time card
-        approvalStatus:
-          enum:
-          - New
-          - Canceled
-          - SentToApproval
-          - ReceivedByApproval
-          - InProgressApproval
-          - RejectedInApproval
-          - ApprovedInApproval
-          - ActiveWorkflowApproval
-          type: string
-          description: The top part &gt; Approval status &gt; The approval status of the time card
-        week:
-          $ref: '#/components/schemas/weekInTimeCardDto'
-        employee:
-          $ref: '#/components/schemas/employeeInTimeCardDto'
-        type:
-          enum:
-          - Normal
-          - Correction
-          - NormalCorrected
-          type: string
-          description: 'The top part &gt; Type &gt; The type of the time card. The following options are available:• Normal: Regular time card• Correction: Corrective time card, which is a time card that updates a released time card'
-        origRefNbr:
-          type: string
-          description: The top part &gt; Orig. ref. no. &gt; The reference number of the time card being corrected. This box is filled in only when Correction is specified in the Type box
-        timeSpent:
-          type: integer
-          description: 'The top part &gt; Regular column: Time spent &gt; The work hours spent by the employee during the week on activities with the Regular Hours earning type.'
-          format: int32
-        invoiceable:
-          type: integer
-          description: 'The top part &gt; Regular column: Invoicable &gt; The invoiceable work hours spent by the employee during the week'
-          format: int32
-        overtimeSpent:
-          type: integer
-          description: 'The top part &gt; Overtime column: Time spent &gt; The work hours spent by the employee during the week on activities with the Overtime earning type.'
-          format: int32
-        invoiceableOvertime:
-          type: integer
-          description: 'The top part &gt; Overtime column: Invoicable &gt; The invoiceable overtime spent by the employee during the week'
-          format: int32
-        totalTimeSpent:
-          type: integer
-          description: 'The top part &gt; Total column: Time spent &gt; The total working time (regular and overtime) for the week'
-          format: int32
-        invoiceableTotalTime:
-          type: integer
-          description: 'The top part &gt; Total column: Invoicable &gt; The total invoiceable working time (regular and overtime) for the week'
-          format: int32
-        lastModifiedDateTime:
-          type: string
-          description: 'System generated information: The last time the time card line was modified'
-          format: date-time
-        summary:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeCardSummaryDto'
-          description: Summary tab &gt; Time Card summary information
-        materials:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeCardMaterialsDto'
-          description: Summary tab &gt; Time Card materials information
-        approvalStatusText:
-          type: string
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-    EmployeeDto:
-      type: object
-      properties:
-        employeeUserId:
-          type: string
-          description: Employee internal user ID. This is the ID of the user linked to the employee
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        employeeId:
-          type: integer
-          description: 'Mandatory field: The top part &gt; Employee ID* &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEE segmented key.'
-          format: int32
-        employeeNumber:
-          type: string
-          description: General information tab &gt; Employee settings section &gt; Employee ref. no. &gt; A reference number for the employee.
-        employeeName:
-          type: string
-          description: The top part &gt; Employee name &gt; The name of this employee.
-        status:
-          enum:
-          - Active
-          - OnHold
-          - HoldPayments
-          - Inactive
-          - OneTime
-          type: string
-          description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
-        department:
-          type: string
-          description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
-        contact:
-          $ref: '#/components/schemas/contactInEmployeeDto'
-        address:
-          $ref: '#/components/schemas/addressInEmployeeDto'
-        lastModifiedDateTime:
-          type: string
-          format: date-time
-        employeeClass:
-          $ref: '#/components/schemas/employeeClassInEmployeeDto'
-        branch:
-          $ref: '#/components/schemas/BranchNumberDto'
-        calendarID:
-          type: string
-        employeeLogin:
-          type: string
-        workGroupDescription:
-          type: array
-          items:
-            type: string
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: This class represents an Employee in EmployeeController. Used for getting data.
-    ExpenseClaimDto:
-      type: object
-      properties:
-        refNbr:
-          type: string
-          description: The top part &gt; Ref. no. &gt; The unique reference number of the expense claim document.
-        status:
-          enum:
-          - Hold
-          - PendingApproval
-          - Approved
-          - Rejected
-          - Released
-          type: string
-          description: 'The top part &gt; Status &gt; The current status of the expense claim: On Hold/Pending Approval/Approved/Rejected/Released.'
-        approvalStatus:
-          enum:
-          - New
-          - Canceled
-          - SentToApproval
-          - ReceivedByApproval
-          - InProgressApproval
-          - RejectedInApproval
-          - ApprovedInApproval
-          - ActiveWorkflowApproval
-          type: string
-          description: The top part &gt; Approval status &gt; The status of the claim in Approval.
-        date:
-          type: string
-          description: 'Mandatory field: The top part &gt; Date* &gt; The date when the claim was entered.'
-          format: date-time
-        description:
-          type: string
-          description: 'Mandatory field: The top part &gt; Description &gt; A description of the claim.'
-        claimedBy:
-          $ref: '#/components/schemas/claimedByInExpenseClaimDto'
-        claimTotal:
-          type: number
-          description: The top part &gt; Claim total &gt; The total amount of the claim.
-          format: double
-        vatTaxableTotal:
-          type: number
-          description: The top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
-          format: double
-        vatExemptTotal:
-          type: number
-          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
-          format: double
-        customer:
-          $ref: '#/components/schemas/customerInExpenseClaimDto'
-        currency:
-          type: string
-          description: The top part &gt; Currency &gt; The currency of the claim.
-        approvalDate:
-          type: string
-          description: The top part &gt; Approval date &gt; The date when the claim was approved.
-          format: date-time
-        department:
-          $ref: '#/components/schemas/departmentInExpenseClaimDto'
-        location:
-          $ref: '#/components/schemas/locationInExpenseClaimDto'
-        lastModifiedDateTime:
-          type: string
-          description: 'System generated information: The lastest time the expense claim was modified'
-          format: date-time
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExpenseClaimDetailDto'
-          description: Expence claim details tab &gt;
-        approvalStatusText:
-          type: string
-          description: The top part &gt; Approval status &gt; A text field.
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: This class represents a Expense Claim in ExpenseClaimController. Used for getting data.
-    TimeCardSummaryDto:
-      type: object
-      properties:
-        lineNumber:
-          type: integer
-          description: The time card line number
-          format: int32
-        lineId:
-          type: string
-          description: The time card line id
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        earningType:
-          $ref: '#/components/schemas/earningTypeInTimeCardSummaryDto'
-        project:
-          $ref: '#/components/schemas/projectInTimeCardSummaryDto'
-        mon:
-          type: integer
-          description: Mon &gt; The work time reported for Monday, including overtime.
-          format: int32
-        tue:
-          type: integer
-          description: Tue &gt; The work time reported for Tuesday, including overtime.
-          format: int32
-        wed:
-          type: integer
-          description: Wed &gt; The work time reported for Wednesday, including overtime.
-          format: int32
-        thu:
-          type: integer
-          description: Thu &gt; The work time reported for Thursday, including overtime.
-          format: int32
-        fri:
-          type: integer
-          description: Fri &gt; The work time reported for Friday, including overtime.
-          format: int32
-        sat:
-          type: integer
-          description: Sat &gt; The work time reported for Saturday, including overtime.
-          format: int32
-        sun:
-          type: integer
-          description: Sun &gt; The work time reported for Sunday, including overtime.
-          format: int32
-        invoiceable:
-          type: boolean
-          description: Invoicable &gt; A check box that you select to indicate that these work hours are invoiceable.
-        projectTask:
-          $ref: '#/components/schemas/projectTaskInTimeCardSummaryDto'
-        timeSpent:
-          type: integer
-          description: Time spent &gt; The work time (regular and overtime) that the employee spent on the project and task during the week.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the reported work hours.
-        approvalStatus:
-          enum:
-          - New
-          - Canceled
-          - SentToApproval
-          - ReceivedByApproval
-          - InProgressApproval
-          - RejectedInApproval
-          - ApprovedInApproval
-          - ActiveWorkflowApproval
-          type: string
-          description: Approval status &gt; The approval status, which indicates whether the summary row requires approval and, if it does, what the current state of approval is.
-        approver:
-          type: string
-          description: The identifier of the person authorized to approve the activity, if approval is required. This is either the approver of the project task or, if no approver is assigned to the project task, the project manager.
-        approvalStatusText:
-          type: string
-          description: last approval comment &gt; The approval status text suitable for display
-        lastModifiedDateTime:
-          type: string
-          description: The last time the time card line was modified
-          format: date-time
-    customerInExpenseReceiptDto:
-      properties:
-        number:
-          type: string
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Receipt details tab &gt; Financial details section &gt; Customer &gt; The customer, which should be specified if the employee incurred the expenses while working for a particular customer.
-    claimedByInExpenseReceiptDto:
-      properties:
-        employeeUserId:
-          type: string
-          description: Employee internal user ID. This is the ID of the user linked to the employee
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        employeeId:
-          type: integer
-          description: 'Mandatory field: The top part &gt; Employee ID* &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEE segmented key.'
-          format: int32
-        employeeNumber:
-          type: string
-          description: General information tab &gt; Employee settings section &gt; Employee ref. no. &gt; A reference number for the employee.
-        employeeName:
-          type: string
-          description: The top part &gt; Employee name &gt; The name of this employee.
-        status:
-          enum:
-          - Active
-          - OnHold
-          - HoldPayments
-          - Inactive
-          - OneTime
-          type: string
-          description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
-        department:
-          type: string
-          description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
-        contact:
-          $ref: '#/components/schemas/contactInEmployeeDto'
-        address:
-          $ref: '#/components/schemas/addressInEmployeeDto'
-        lastModifiedDateTime:
-          type: string
-          format: date-time
-        employeeClass:
-          $ref: '#/components/schemas/employeeClassInEmployeeDto'
-        branch:
-          $ref: '#/components/schemas/BranchNumberDto'
-        calendarID:
-          type: string
-        employeeLogin:
-          type: string
-        workGroupDescription:
-          type: array
-          items:
-            type: string
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: "Mandatory field: The top part &gt; Claimed by* &gt; \tThe name of the employee who is claiming the expenses."
-    locationInExpenseClaimDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; Location &gt; The company location associated with the claim.
-    salesSubInExpenseReceiptDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Receipt details tab &gt; Financial details section &gt; Sales sub. &gt; The corresponding subaccount the system uses to record the amount to charge the customer for.
-    countryInAddressDto:
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
-          type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    projectInTimeCardSummaryDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
-    locationInExpenseReceiptDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Receipt details tab &gt; Financial details section &gt; Location &gt; The location of the customer related to the expenses.
-    EmployeeCreateDTO:
-      required:
-      - employeeCd
-      - department
-      - employeeClass
-      - branch
-      - calendar
-      - contact
-      type: object
-      properties:
-        employeeCd:
-          $ref: '#/components/schemas/DtoValueOfString'
-        department:
-          $ref: '#/components/schemas/DtoValueOfString'
-        employeeClass:
-          $ref: '#/components/schemas/DtoValueOfString'
-        branch:
-          $ref: '#/components/schemas/DtoValueOfString'
-        calendar:
-          $ref: '#/components/schemas/DtoValueOfString'
-        contact:
-          $ref: '#/components/schemas/EmployeeContactUpdateDto'
-        address:
-          $ref: '#/components/schemas/AddressUpdateDto'
-        status:
-          $ref: '#/components/schemas/statusInEmployeeCreateDTO'
-    projectTaskInTimeCardSummaryDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The project task that the employee worked on.
-    employeeInTimeCardDto:
-      properties:
-        internalId:
-          type: string
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: The top part &gt; Employee &gt; The name of the employee whose time card is currently open.
-    departmentInExpenseClaimDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part &gt; Department ID &gt; The department associated with the expense claim.'
-    projectInExpenseClaimDetailDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Project &gt; The project or customer contract associated with the expense claim, if the work performed was for a project or contract. Project Task The task associated with the contract or project.'
-    employeeClassInEmployeeDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Additional information about Employee User
-
-        ///'
-    salesAccountInExpenseReceiptDto:
-      properties:
-        type:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Receipt details tab &gt; Financial details section &gt; Sales account &gt; The sales account to which the system records the part of the amount to charge the customer for.
-    expenseSubaccountInExpenseClaimDetailDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'MAndatory field: Expense sub. &gt; The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.'
-    currencyInExpenseReceiptDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Both tabs &gt; Currency &gt; The currency of the expense receipt.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    expenseAccountInExpenseClaimDetailDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Expense account &gt; The expense account to which the system should record the part of the expense to be paid back to the employee.'
-    salesSubaccountInExpenseClaimDetailDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Sales sub. &gt; The corresponding subaccount the system uses to record the amount to charge the customer for. This is applicable only when a customer has been specified.
-    imageInExpenseReceiptDto:
-      properties:
-        name:
-          type: string
-          description: The name of the attachment.
-        id:
-          type: string
-          description: The ID of the attachment
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        revision:
-          type: integer
-          description: The version of the attachment.
-          format: int32
-      description: Receipt details tab &gt; Image section
-    claimedByInExpenseClaimDto:
-      properties:
-        internalId:
-          type: string
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: 'Mandatory field: The top part &gt; Claimed by &gt; The employee who is claiming the expenses. If the claim is released, an Accounts Payable bill will be generated to this employee.'
     EmployeeUpdateDto:
       required:
       - contact
@@ -1801,34 +1117,35 @@ components:
           description: System generated information.
           format: date-time
       description: Earning type &gt; The type of the work time spent by the employee
-    ChangeEmployeeNrActionDto:
-      type: object
+    locationInExpenseClaimDto:
       properties:
-        employeeNr:
+        id:
           type: string
-    CompanyTreeInfoDto:
-      type: object
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Location &gt; The company location associated with the claim.
+    expenseAccountInExpenseReceiptDto:
       properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
+        type:
           type: string
-        active:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        owner:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        workGroupID:
-          $ref: '#/components/schemas/DtoValueOfString'
-    customerInExpenseClaimDto:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Receipt details tab &gt; Financial details section &gt; Expense account &gt; The expense account to which the system records the part of the expense to be paid back to the employee.
+    InventoryNumberDescriptionDto:
+      type: object
       properties:
         number:
           type: string
-        name:
+          description: Number of item
+        description:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: The top part &gt; Customer &gt; The applicable customer.
+          description: Name of item/description
     ExpenseClaimDetailDto:
       type: object
       properties:
@@ -1957,23 +1274,250 @@ components:
           type: string
           description: Name of item/description
       description: Sales account &gt; The sales account to which the system should record the part of the amount to charge the customer for. This is applicable only when a customer has been specified.
-    customerInExpenseClaimDetailDto:
+    expenseItemInExpenseClaimDetailDto:
       properties:
         number:
           type: string
-        name:
+          description: Number of item
+        description:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: Customer &gt; The identifier of the customer associated with the expense.
-    BranchNumberDto:
+          description: Name of item/description
+      description: 'Mandatory field: Expense item* &gt; The expense identifier, if an expense of this type is listed as an inventory nonstock item.'
+    DtoValueOfString:
       type: object
       properties:
+        value:
+          type: string
+    CompanyTreeInfoDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        active:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        owner:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        workGroupID:
+          $ref: '#/components/schemas/DtoValueOfString'
+    ExpenseClaimDto:
+      type: object
+      properties:
+        refNbr:
+          type: string
+          description: The top part &gt; Ref. no. &gt; The unique reference number of the expense claim document.
+        status:
+          enum:
+          - Hold
+          - PendingApproval
+          - Approved
+          - Rejected
+          - Released
+          type: string
+          description: 'The top part &gt; Status &gt; The current status of the expense claim: On Hold/Pending Approval/Approved/Rejected/Released.'
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: The top part &gt; Approval status &gt; The status of the claim in Approval.
+        date:
+          type: string
+          description: 'Mandatory field: The top part &gt; Date* &gt; The date when the claim was entered.'
+          format: date-time
+        description:
+          type: string
+          description: 'Mandatory field: The top part &gt; Description &gt; A description of the claim.'
+        claimedBy:
+          $ref: '#/components/schemas/claimedByInExpenseClaimDto'
+        claimTotal:
+          type: number
+          description: The top part &gt; Claim total &gt; The total amount of the claim.
+          format: double
+        vatTaxableTotal:
+          type: number
+          description: The top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
+          format: double
+        customer:
+          $ref: '#/components/schemas/customerInExpenseClaimDto'
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency of the claim.
+        approvalDate:
+          type: string
+          description: The top part &gt; Approval date &gt; The date when the claim was approved.
+          format: date-time
+        department:
+          $ref: '#/components/schemas/departmentInExpenseClaimDto'
+        location:
+          $ref: '#/components/schemas/locationInExpenseClaimDto'
+        lastModifiedDateTime:
+          type: string
+          description: 'System generated information: The lastest time the expense claim was modified'
+          format: date-time
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseClaimDetailDto'
+          description: Expence claim details tab &gt;
+        approvalStatusText:
+          type: string
+          description: The top part &gt; Approval status &gt; A text field.
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a Expense Claim in ExpenseClaimController. Used for getting data.
+    employeeInTimeCardDto:
+      properties:
+        internalId:
+          type: string
         number:
           type: string
-          description: Click the magnifier. &gt; The identifier.
+          description: The identifier of the particular destination of the selected type.
         name:
           type: string
-          description: Click the magnifier. &gt; The name.
+          description: The name of the particular destination of the selected type.
+      description: The top part &gt; Employee &gt; The name of the employee whose time card is currently open.
+    contactInEmployeeDto:
+      properties:
+        employeeContact:
+          type: string
+          description: Employee contact &gt; The link to the contact record associated with the employee.
+        title:
+          enum:
+          - Doctor
+          - Miss
+          - Mr
+          - Mrs
+          - Ms
+          - Prof
+          type: string
+          description: Title &gt; The courtesy title to be used for the employee.
+        firstName:
+          type: string
+          description: First name &gt; The first name of the employee.
+        midName:
+          type: string
+          description: Middle name &gt; The middle name of the employee.
+        lastName:
+          type: string
+          description: 'Mandatory field: Last name* &gt; The last name of the employee.'
+        phone3:
+          type: string
+          description: Phone 3 &gt; An additional phone number of the employee.
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: General information tab &gt; Contact section &gt;
+    projectInExpenseReceiptDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Receipt details tab &gt; Expense details section &gt; Project/contract &gt; The project or contract, which should be specified if the employee incurred the expenses while working on a particular project or contract.
+    expenseSubInExpenseReceiptDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Receipt details tab &gt; Financial details section &gt; Expense sub. &gt; The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.
+    countyInAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    countryInAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    ChangeEmployeeNrActionDto:
+      type: object
+      properties:
+        employeeNr:
+          type: string
+    addressInEmployeeUpdateDto:
+      properties:
+        addressLine1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postalCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        city:
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        county:
+          $ref: '#/components/schemas/DtoValueOfString'
+      description: General information tab &gt; Address info section &gt;
     branchInExpenseReceiptDto:
       properties:
         number:
@@ -1983,33 +1527,6 @@ components:
           type: string
           description: Click the magnifier. &gt; The name.
       description: 'Mandatory field: The top part &gt; Branch &gt; The company branch that will incur the expenses.'
-    expenseClaimInExpenseReceiptDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Receipt details tab &gt; Expense details section &gt; Expense claim &gt; The expense claim with which the expense receipt is associated.
-    branchInExpenseClaimDetailDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: Branch &gt; The branch that will reimburse the expenses to the employee.'
-    weekInTimeCardDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: The top part &gt; Week &gt; The week for which the time card has been created.
     projectTaskInExpenseReceiptDto:
       properties:
         internalId:
@@ -2023,7 +1540,47 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Receipt details tab &gt; Expense details section &gt; Project task &gt; The project task to which the expenses are related.
-    projectTaskInTimeCardMaterialsDto:
+    EmployeeContactUpdateDto:
+      required:
+      - lastName
+      - email
+      type: object
+      properties:
+        firstName:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lastName:
+          $ref: '#/components/schemas/DtoValueOfString'
+        middleName:
+          $ref: '#/components/schemas/DtoValueOfString'
+        email:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        fax:
+          $ref: '#/components/schemas/DtoValueOfString'
+    locationInExpenseClaimDetailDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Location &gt; The identifier of the customer location associated with the expense.
+    taxCategoryInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT category &gt; The VAT category associated with the expense item.
+    projectInTimeCardMaterialsDto:
       properties:
         internalId:
           type: integer
@@ -2035,32 +1592,31 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The project task that the employee worked on.
-    addressInEmployeeDto:
+      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
+    AddressUpdateDto:
+      type: object
       properties:
-        addressId:
-          type: integer
-          format: int32
         addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+          $ref: '#/components/schemas/DtoValueOfString'
         addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
+          $ref: '#/components/schemas/DtoValueOfString'
         addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
+          $ref: '#/components/schemas/DtoValueOfString'
         postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
+          $ref: '#/components/schemas/DtoValueOfString'
         city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInAddressDto'
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
         county:
-          $ref: '#/components/schemas/countyInAddressDto'
-      description: General information tab &gt; Address info section &gt;
+          $ref: '#/components/schemas/DtoValueOfString'
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
     ExpenseReceiptDto:
       type: object
       properties:
@@ -2158,25 +1714,40 @@ components:
             It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
           format: byte
       description: This class represents a Expense Receipt in ExpenseReceiptController. Used by getting data.
-    departmentInEmployeeUpdateDto:
+    projectInExpenseClaimDetailDto:
       properties:
-        value:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
           type: string
-      description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
-    InventoryNumberDescriptionDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Number of item
+          description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
-          description: Name of item/description
-    EmployeeContactUpdateDto:
-      required:
-      - lastName
-      - email
-      type: object
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Project &gt; The project or customer contract associated with the expense claim, if the work performed was for a project or contract. Project Task The task associated with the contract or project.'
+    employeeClassInEmployeeDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Additional information about Employee User
+
+        ///'
+    locationInExpenseReceiptDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Receipt details tab &gt; Financial details section &gt; Location &gt; The location of the customer related to the expenses.
+    contactInEmployeeUpdateDto:
       properties:
         firstName:
           $ref: '#/components/schemas/DtoValueOfString'
@@ -2194,72 +1765,250 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         fax:
           $ref: '#/components/schemas/DtoValueOfString'
-    contactInEmployeeDto:
-      properties:
-        employeeContact:
-          type: string
-          description: Employee contact &gt; The link to the contact record associated with the employee.
-        title:
-          enum:
-          - Doctor
-          - Miss
-          - Mr
-          - Mrs
-          - Ms
-          - Prof
-          type: string
-          description: Title &gt; The courtesy title to be used for the employee.
-        firstName:
-          type: string
-          description: First name &gt; The first name of the employee.
-        midName:
-          type: string
-          description: Middle name &gt; The middle name of the employee.
-        lastName:
-          type: string
-          description: 'Mandatory field: Last name* &gt; The last name of the employee.'
-        phone3:
-          type: string
-          description: Phone 3 &gt; An additional phone number of the employee.
-        contactId:
-          type: integer
-          format: int32
-        name:
-          type: string
-          description: Name &gt; The legal name of to appear on the documents.
-        attention:
-          type: string
-          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
-        email:
-          type: string
-          description: Email &gt; The email address of the customer/supplier/company as a business entity.
-        web:
-          type: string
-          description: Web &gt; The website of the company, if one exists.
-        phone1:
-          type: string
-          description: Phone 1 &gt; The default phone number.
-        phone2:
-          type: string
-          description: Phone 2 &gt; An additional phone number.
-        fax:
-          type: string
-          description: Fax &gt; The fax number.
       description: General information tab &gt; Contact section &gt;
-    projectInExpenseReceiptDto:
+    currencyInExpenseReceiptDto:
       properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
         id:
           type: string
           description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Receipt details tab &gt; Expense details section &gt; Project/contract &gt; The project or contract, which should be specified if the employee incurred the expenses while working on a particular project or contract.
-    expenseAccountInExpenseReceiptDto:
+      description: Both tabs &gt; Currency &gt; The currency of the expense receipt.
+    departmentInExpenseClaimDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Department ID &gt; The department associated with the expense claim.'
+    customerInExpenseReceiptDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Receipt details tab &gt; Financial details section &gt; Customer &gt; The customer, which should be specified if the employee incurred the expenses while working for a particular customer.
+    statusInEmployeeUpdateDto:
+      properties:
+        value:
+          enum:
+          - Active
+          - Hold
+          - HoldPayments
+          - Inactive
+          - OneTime
+          type: string
+      description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
+    expenseClaimInExpenseReceiptDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Receipt details tab &gt; Expense details section &gt; Expense claim &gt; The expense claim with which the expense receipt is associated.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    weekInTimeCardDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The top part &gt; Week &gt; The week for which the time card has been created.
+    TimeCardDto:
+      type: object
+      properties:
+        refNbr:
+          type: string
+          description: The top part &gt; Ref. no. &gt; The unique reference number of the time card, which Acumatica ERP automatically assigns according to the numbering sequence specified as the Time Card Numbering Sequence on the Time and Expenses Preferences (EP.10.10.00) form.
+        status:
+          enum:
+          - Hold
+          - Open
+          - Approved
+          - Rejected
+          - Released
+          type: string
+          description: The top part &gt; Status &gt; The status of the time card
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: The top part &gt; Approval status &gt; The approval status of the time card
+        week:
+          $ref: '#/components/schemas/weekInTimeCardDto'
+        employee:
+          $ref: '#/components/schemas/employeeInTimeCardDto'
+        type:
+          enum:
+          - Normal
+          - Correction
+          - NormalCorrected
+          type: string
+          description: 'The top part &gt; Type &gt; The type of the time card. The following options are available:• Normal: Regular time card• Correction: Corrective time card, which is a time card that updates a released time card'
+        origRefNbr:
+          type: string
+          description: The top part &gt; Orig. ref. no. &gt; The reference number of the time card being corrected. This box is filled in only when Correction is specified in the Type box
+        timeSpent:
+          type: integer
+          description: 'The top part &gt; Regular column: Time spent &gt; The work hours spent by the employee during the week on activities with the Regular Hours earning type.'
+          format: int32
+        invoiceable:
+          type: integer
+          description: 'The top part &gt; Regular column: Invoicable &gt; The invoiceable work hours spent by the employee during the week'
+          format: int32
+        overtimeSpent:
+          type: integer
+          description: 'The top part &gt; Overtime column: Time spent &gt; The work hours spent by the employee during the week on activities with the Overtime earning type.'
+          format: int32
+        invoiceableOvertime:
+          type: integer
+          description: 'The top part &gt; Overtime column: Invoicable &gt; The invoiceable overtime spent by the employee during the week'
+          format: int32
+        totalTimeSpent:
+          type: integer
+          description: 'The top part &gt; Total column: Time spent &gt; The total working time (regular and overtime) for the week'
+          format: int32
+        invoiceableTotalTime:
+          type: integer
+          description: 'The top part &gt; Total column: Invoicable &gt; The total invoiceable working time (regular and overtime) for the week'
+          format: int32
+        lastModifiedDateTime:
+          type: string
+          description: 'System generated information: The last time the time card line was modified'
+          format: date-time
+        summary:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeCardSummaryDto'
+          description: Summary tab &gt; Time Card summary information
+        materials:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeCardMaterialsDto'
+          description: Summary tab &gt; Time Card materials information
+        approvalStatusText:
+          type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+    claimedByInExpenseReceiptDto:
+      properties:
+        employeeUserId:
+          type: string
+          description: Employee internal user ID. This is the ID of the user linked to the employee
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        employeeId:
+          type: integer
+          description: 'Mandatory field: The top part &gt; Employee ID* &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEE segmented key.'
+          format: int32
+        employeeNumber:
+          type: string
+          description: General information tab &gt; Employee settings section &gt; Employee ref. no. &gt; A reference number for the employee.
+        employeeName:
+          type: string
+          description: The top part &gt; Employee name &gt; The name of this employee.
+        status:
+          enum:
+          - Active
+          - OnHold
+          - HoldPayments
+          - Inactive
+          - OneTime
+          type: string
+          description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
+        department:
+          type: string
+          description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
+        contact:
+          $ref: '#/components/schemas/contactInEmployeeDto'
+        address:
+          $ref: '#/components/schemas/addressInEmployeeDto'
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        employeeClass:
+          $ref: '#/components/schemas/employeeClassInEmployeeDto'
+        branch:
+          $ref: '#/components/schemas/BranchNumberDto'
+        calendarID:
+          type: string
+        employeeLogin:
+          type: string
+        workGroupDescription:
+          type: array
+          items:
+            type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: "Mandatory field: The top part &gt; Claimed by* &gt; \tThe name of the employee who is claiming the expenses."
+    imageInExpenseReceiptDto:
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+      description: Receipt details tab &gt; Image section
+    customerInExpenseClaimDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The top part &gt; Customer &gt; The applicable customer.
+    salesAccountInExpenseReceiptDto:
       properties:
         type:
           type: string
@@ -2269,7 +2018,43 @@ components:
         description:
           type: string
           description: Name of item/description
-      description: Receipt details tab &gt; Financial details section &gt; Expense account &gt; The expense account to which the system records the part of the expense to be paid back to the employee.
+      description: Receipt details tab &gt; Financial details section &gt; Sales account &gt; The sales account to which the system records the part of the amount to charge the customer for.
+    salesSubaccountInExpenseClaimDetailDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Sales sub. &gt; The corresponding subaccount the system uses to record the amount to charge the customer for. This is applicable only when a customer has been specified.
+    addressInEmployeeDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInAddressDto'
+      description: General information tab &gt; Address info section &gt;
     ChangeEmployeeNrActionResultDto:
       type: object
       properties:
@@ -2285,6 +2070,221 @@ components:
           type: string
         errorInfo:
           type: string
+    expenseSubaccountInExpenseClaimDetailDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'MAndatory field: Expense sub. &gt; The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.'
+    projectInTimeCardSummaryDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Project* &gt; The project that the employee worked on.'
+    branchInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Branch &gt; The branch that will reimburse the expenses to the employee.'
+    EmployeeDto:
+      type: object
+      properties:
+        employeeUserId:
+          type: string
+          description: Employee internal user ID. This is the ID of the user linked to the employee
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        employeeId:
+          type: integer
+          description: 'Mandatory field: The top part &gt; Employee ID* &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEE segmented key.'
+          format: int32
+        employeeNumber:
+          type: string
+          description: General information tab &gt; Employee settings section &gt; Employee ref. no. &gt; A reference number for the employee.
+        employeeName:
+          type: string
+          description: The top part &gt; Employee name &gt; The name of this employee.
+        status:
+          enum:
+          - Active
+          - OnHold
+          - HoldPayments
+          - Inactive
+          - OneTime
+          type: string
+          description: 'Mandatory field: The top part &gt; Status &gt; The status of the employee. The following options are available: Active, On hold, Hold payments, Inactive, One-time.'
+        department:
+          type: string
+          description: 'Mandatory field: General information tab &gt; Employee section &gt; Department* &gt; The department the employee works for.'
+        contact:
+          $ref: '#/components/schemas/contactInEmployeeDto'
+        address:
+          $ref: '#/components/schemas/addressInEmployeeDto'
+        lastModifiedDateTime:
+          type: string
+          format: date-time
+        employeeClass:
+          $ref: '#/components/schemas/employeeClassInEmployeeDto'
+        branch:
+          $ref: '#/components/schemas/BranchNumberDto'
+        calendarID:
+          type: string
+        employeeLogin:
+          type: string
+        workGroupDescription:
+          type: array
+          items:
+            type: string
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents an Employee in EmployeeController. Used for getting data.
+    taxCategoryInExpenseReceiptDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Receipt details tab &gt; Expense details section &gt; VAT category &gt; The tax category for the expense receipt.
+    BranchNumberDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    EmployeeCreateDTO:
+      required:
+      - employeeCd
+      - department
+      - employeeClass
+      - branch
+      - calendar
+      - contact
+      type: object
+      properties:
+        employeeCd:
+          $ref: '#/components/schemas/DtoValueOfString'
+        department:
+          $ref: '#/components/schemas/DtoValueOfString'
+        employeeClass:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branch:
+          $ref: '#/components/schemas/DtoValueOfString'
+        calendar:
+          $ref: '#/components/schemas/DtoValueOfString'
+        contact:
+          $ref: '#/components/schemas/EmployeeContactUpdateDto'
+        address:
+          $ref: '#/components/schemas/AddressUpdateDto'
+        status:
+          $ref: '#/components/schemas/statusInEmployeeCreateDTO'
+    TimeCardSummaryDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: The time card line number
+          format: int32
+        lineId:
+          type: string
+          description: The time card line id
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        earningType:
+          $ref: '#/components/schemas/earningTypeInTimeCardSummaryDto'
+        project:
+          $ref: '#/components/schemas/projectInTimeCardSummaryDto'
+        mon:
+          type: integer
+          description: Mon &gt; The work time reported for Monday, including overtime.
+          format: int32
+        tue:
+          type: integer
+          description: Tue &gt; The work time reported for Tuesday, including overtime.
+          format: int32
+        wed:
+          type: integer
+          description: Wed &gt; The work time reported for Wednesday, including overtime.
+          format: int32
+        thu:
+          type: integer
+          description: Thu &gt; The work time reported for Thursday, including overtime.
+          format: int32
+        fri:
+          type: integer
+          description: Fri &gt; The work time reported for Friday, including overtime.
+          format: int32
+        sat:
+          type: integer
+          description: Sat &gt; The work time reported for Saturday, including overtime.
+          format: int32
+        sun:
+          type: integer
+          description: Sun &gt; The work time reported for Sunday, including overtime.
+          format: int32
+        invoiceable:
+          type: boolean
+          description: Invoicable &gt; A check box that you select to indicate that these work hours are invoiceable.
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInTimeCardSummaryDto'
+        timeSpent:
+          type: integer
+          description: Time spent &gt; The work time (regular and overtime) that the employee spent on the project and task during the week.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the reported work hours.
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: Approval status &gt; The approval status, which indicates whether the summary row requires approval and, if it does, what the current state of approval is.
+        approver:
+          type: string
+          description: The identifier of the person authorized to approve the activity, if approval is required. This is either the approver of the project task or, if no approver is assigned to the project task, the project manager.
+        approvalStatusText:
+          type: string
+          description: last approval comment &gt; The approval status text suitable for display
+        lastModifiedDateTime:
+          type: string
+          description: The last time the time card line was modified
+          format: date-time
   securitySchemes:
     interactiveapi:
       type: oauth2

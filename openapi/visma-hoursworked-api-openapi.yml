@@ -320,57 +320,37 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
-    ProjectCostCenterDistributionApi:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Project:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
-          description: Allocations on Project. The percentages within Project must total at most 100%.
-        CostCenter1:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
-          description: Allocations on cost center 1. The percentages within CostCenter1 must total at most 100%.
-        CostCenter2:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
-          description: Allocations on cost center 2. The percentages within CostCenter2 must total at most 100%.
-        CostCenter3:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
-          description: Allocations on cost center 3. The percentages within CostCenter3 must total at most 100%.
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
         ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-        Message:
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
           type:
-          - string
+          - array
           - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    ProjectCostCenterAllocationApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Project id or cost center item id for this allocation.
+          format: uuid
+        Percentage:
+          type: number
+          description: Allocation percentage for this entry.
+          format: double
       additionalProperties: false
     HoursWorkedApi:
       required:
@@ -487,51 +467,7 @@ components:
           - $ref: '#/components/schemas/ProjectCostCenterDistributionApi'
           description: Percentage based distribution across projects and cost centers. When supplied on a request, ProjectId and CostCenterItemId1-3 are ignored. In a response, each of ProjectId and CostCenterItemId1-3 is only returned when its dimension holds a single allocation of 100%, and is null when the dimension is split across several allocations or allocated less than 100%. The percentages within each of Project, CostCenter1, CostCenter2 and CostCenter3 must total at most 100%.
       additionalProperties: false
-    ProjectCostCenterAllocationApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Project id or cost center item id for this allocation.
-          format: uuid
-        Percentage:
-          type: number
-          description: Allocation percentage for this entry.
-          format: double
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    ProjectCostCenterAllocationRequest:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Project id or cost center item id for this allocation.
-          format: uuid
-        Percentage:
-          type: number
-          description: Allocation percentage for this entry. Allocations with a percentage of 0 are ignored.
-          format: double
-      additionalProperties: false
-    ProjectCostCenterDistributionRequest:
+    ProjectCostCenterDistributionApi:
       type: object
       properties:
         Project:
@@ -539,29 +475,49 @@ components:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
-          description: 'Allocations on Project. The percentages within Project must total at most 100%. Each allocation Id is a project id. Source: Get from eAccounting API, /v2/projects'
+            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
+          description: Allocations on Project. The percentages within Project must total at most 100%.
         CostCenter1:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
-          description: 'Allocations on cost center 1. The percentages within CostCenter1 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
+          description: Allocations on cost center 1. The percentages within CostCenter1 must total at most 100%.
         CostCenter2:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
-          description: 'Allocations on cost center 2. The percentages within CostCenter2 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
+          description: Allocations on cost center 2. The percentages within CostCenter2 must total at most 100%.
         CostCenter3:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
-          description: 'Allocations on cost center 3. The percentages within CostCenter3 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+            $ref: '#/components/schemas/ProjectCostCenterAllocationApi'
+          description: Allocations on cost center 3. The percentages within CostCenter3 must total at most 100%.
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     HoursWorkedRequest:
       required:
@@ -674,6 +630,38 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectCostCenterDistributionRequest'
           description: Percentage based distribution across projects and cost centers. When supplied, ProjectId and CostCenterItemId1-3 are ignored. The percentages within each of Project, CostCenter1, CostCenter2 and CostCenter3 must total at most 100%.
+      additionalProperties: false
+    ProjectCostCenterDistributionRequest:
+      type: object
+      properties:
+        Project:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
+          description: 'Allocations on Project. The percentages within Project must total at most 100%. Each allocation Id is a project id. Source: Get from eAccounting API, /v2/projects'
+        CostCenter1:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
+          description: 'Allocations on cost center 1. The percentages within CostCenter1 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+        CostCenter2:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
+          description: 'Allocations on cost center 2. The percentages within CostCenter2 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
+        CostCenter3:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProjectCostCenterAllocationRequest'
+          description: 'Allocations on cost center 3. The percentages within CostCenter3 must total at most 100%. Each allocation Id is a cost center item id. Source: Get from eAccounting API, /v2/costcenters'
       additionalProperties: false
     ProjectCostCenterAllocationResponse:
       type: object
@@ -794,6 +782,18 @@ components:
           allOf:
           - $ref: '#/components/schemas/ProjectCostCenterDistributionResponse'
           description: 'Percentage based distribution across projects and cost centers. ProjectId and CostCenterItemId1-3 mirror this distribution: each is only returned when its dimension holds a single allocation of 100%, and is null when the dimension is split across several allocations or allocated less than 100%, since a single id cannot represent that.'
+      additionalProperties: false
+    ProjectCostCenterAllocationRequest:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Project id or cost center item id for this allocation.
+          format: uuid
+        Percentage:
+          type: number
+          description: Allocation percentage for this entry. Allocations with a percentage of 0 are ignored.
+          format: double
       additionalProperties: false
     ProjectCostCenterDistributionResponse:
       type: object

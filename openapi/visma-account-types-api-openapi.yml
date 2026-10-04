@@ -62,6 +62,52 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    AccountTypesApi:
+      type: object
+      properties:
+        Type:
+          type: integer
+          description: The unique identifier for the account type
+          format: int32
+        TypeDescription:
+          type:
+          - string
+          - 'null'
+          description: Description of the account type
+      additionalProperties: false
+    PaginatedResponseOfAccountTypesApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountTypesApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -92,26 +138,6 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -131,32 +157,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    PaginatedResponseOfAccountTypesApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountTypesApi'
-      additionalProperties: false
-    AccountTypesApi:
-      type: object
-      properties:
-        Type:
-          type: integer
-          description: The unique identifier for the account type
-          format: int32
-        TypeDescription:
-          type:
-          - string
-          - 'null'
-          description: Description of the account type
       additionalProperties: false
 x-tagGroups:
 - name: Sales

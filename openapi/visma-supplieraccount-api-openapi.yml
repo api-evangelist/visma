@@ -88,60 +88,6 @@ components:
         maxPageSize:
           type: integer
           format: int64
-    SupplierItemAccountDto:
-      type: object
-      properties:
-        supplierItemId:
-          type: string
-          description: The supplier item id for which the account is displayed.
-        itemId:
-          type: string
-          description: The item id matched to the SupplierItemId. If null, this means that no itemId was found for the corresponding {Visma.net.ERP.Web.Api.Model.V1.SupplierItemAccountDto.SupplierItemId}
-        accountID:
-          type: string
-          description: The Account ID is the actual ID of the expense account for the SupplierItemID or of the supplier if no SUpplierItemId was specified in the request. If null, this means that no account was found for the {Visma.net.ERP.Web.Api.Model.V1.SupplierItemAccountDto.SupplierItemId}
-        subaccount:
-          $ref: '#/components/schemas/subaccountInSupplierItemAccountDto'
-    supplierAccountInSupplierAccountsDto:
-      properties:
-        number:
-          type: string
-          description: The supplier number
-        name:
-          type: string
-          description: The supplier name
-        accountID:
-          type: string
-          description: The default Expense Account ID for the supplier
-        subaccount:
-          $ref: '#/components/schemas/subaccountInSupplierAccountDto'
-      description: The supplier account information
-    SupplierAccountsDto:
-      type: object
-      properties:
-        supplierAccount:
-          $ref: '#/components/schemas/supplierAccountInSupplierAccountsDto'
-        supplierItemAccounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/SupplierItemAccountDto'
-          description: The list of SUpplierItems Ids with their expense accounts
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
     subaccountInSupplierItemAccountDto:
       properties:
         subaccountNumber:
@@ -182,6 +128,46 @@ components:
           type: string
         stateLocation:
           type: string
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    SupplierItemAccountDto:
+      type: object
+      properties:
+        supplierItemId:
+          type: string
+          description: The supplier item id for which the account is displayed.
+        itemId:
+          type: string
+          description: The item id matched to the SupplierItemId. If null, this means that no itemId was found for the corresponding {Visma.net.ERP.Web.Api.Model.V1.SupplierItemAccountDto.SupplierItemId}
+        accountID:
+          type: string
+          description: The Account ID is the actual ID of the expense account for the SupplierItemID or of the supplier if no SUpplierItemId was specified in the request. If null, this means that no account was found for the {Visma.net.ERP.Web.Api.Model.V1.SupplierItemAccountDto.SupplierItemId}
+        subaccount:
+          $ref: '#/components/schemas/subaccountInSupplierItemAccountDto'
+    SupplierAccountsDto:
+      type: object
+      properties:
+        supplierAccount:
+          $ref: '#/components/schemas/supplierAccountInSupplierAccountsDto'
+        supplierItemAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierItemAccountDto'
+          description: The list of SUpplierItems Ids with their expense accounts
     subaccountInSupplierAccountDto:
       properties:
         subaccountNumber:
@@ -215,6 +201,20 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: The default Expense SubAccount for the supplier
+    supplierAccountInSupplierAccountsDto:
+      properties:
+        number:
+          type: string
+          description: The supplier number
+        name:
+          type: string
+          description: The supplier name
+        accountID:
+          type: string
+          description: The default Expense Account ID for the supplier
+        subaccount:
+          $ref: '#/components/schemas/subaccountInSupplierAccountDto'
+      description: The supplier account information
   securitySchemes:
     interactiveapi:
       type: oauth2

@@ -538,48 +538,46 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    AttachmentDto:
+    JournalTransactionUpdateDto:
       type: object
       properties:
-        name:
-          type: string
-          description: The name of the attachment.
-        id:
-          type: string
-          description: The ID of the attachment
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        revision:
-          type: integer
-          description: The version of the attachment.
-          format: int32
-    projectInJournalTransactionLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
+        batchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        transactionDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInJournalTransactionUpdateDto'
+        financialPeriod:
+          $ref: '#/components/schemas/financialPeriodInJournalTransactionUpdateDto'
+        ledger:
+          $ref: '#/components/schemas/DtoValueOfString'
+        currencyId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        exchangeRate:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        autoReversing:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
         description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The table &gt; Project &gt; The project with which this batch is associated, or the code indicating that this batch is not associated with any project.
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    vatInJournalTransactionLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The table &gt; VAT ID &gt; The VAT used to calculate the VAT amount.
+          $ref: '#/components/schemas/DtoValueOfString'
+        controlTotalInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        createVatTransaction:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        skipVatAmountValidation:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        transactionCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branch:
+          $ref: '#/components/schemas/DtoValueOfString'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        journalTransactionLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalTransactionLineUpdateDto'
+      description: This class represents a journal transaction in JournalTransactionController. Used for creating/updating data.
     projectTaskInJournalTransactionLineDto:
       properties:
         internalId:
@@ -593,206 +591,19 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: The table &gt; Project task &gt; The particular task of the project with which this batch is associated.
-    vatCodeInJournalTransactionLineDto:
+    projectInJournalTransactionLineDto:
       properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
         id:
           type: string
           description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: The table &gt; VAT code &gt; The VAT code based on which the taxable amount is calculated.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
-    DtoValueOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    JournalTransactionLineUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        accountNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        subaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-        project:
-          $ref: '#/components/schemas/DtoValueOfString'
-        projectTask:
-          $ref: '#/components/schemas/DtoValueOfString'
-        referenceNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        transactionDescription:
-          $ref: '#/components/schemas/DtoValueOfString'
-        debitAmountInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        creditAmountInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        vatCodeId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        vatId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        branch:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    JournalTransactionLineDto:
-      type: object
-      properties:
-        lineNumber:
-          type: integer
-          description: The table &gt; Number at the left indicating the line number of the table.
-          format: int32
-        accountNumber:
-          type: string
-          description: 'Mandatory field: The table &gt; Account* &gt; The account (associated with the specified branch) whose balance will be updated by the journal entry.'
-        description:
-          type: string
-          description: The table &gt; Description &gt; A detailed description provided by a user or generated by the system.
-        subaccount:
-          $ref: '#/components/schemas/subaccountInJournalTransactionLineDto'
-        referenceNumber:
-          type: string
-          description: The table &gt; Ref. no. &gt; The reference number of the external or internal document associated with the journal transaction.
-        debitAmount:
-          type: number
-          description: The table &gt; Debit amount &gt; The debit amount of the journal entry.
-          format: double
-        debitAmountInCurrency:
-          type: number
-          description: Background calculation giving you the debit amount in your default currency. This field is applicable if the amount is given in another currency than your default.
-          format: double
-        creditAmount:
-          type: number
-          description: The table &gt; Credit amount &gt; The credit amount of the journal entry.
-          format: double
-        creditAmountInCurrency:
-          type: number
-          description: Background calculation giving you the Credit amount in your default currency. This field is applicable if the amount is given in another currency than your default.
-          format: double
-        transactionDescription:
-          type: string
-          description: The table &gt; Transaction Description &gt; A description of the transaction or any comments relevant to the transaction.
-        vatCode:
-          $ref: '#/components/schemas/vatCodeInJournalTransactionLineDto'
-        vat:
-          $ref: '#/components/schemas/vatInJournalTransactionLineDto'
-        branch:
-          type: string
-          description: The table &gt; Branch &gt; The branch associated with this journal entry.
-        customerSupplier:
-          type: string
-          description: The table &gt; Customer/Supplier &gt; The customer or supplier associated with the entry.
-        transactionType:
-          type: string
-          description: The top part &gt; Type &gt; The type of this general ledger batch, which is specified by the system automatically.
-        module:
-          enum:
-          - ModuleGL
-          - ModuleAP
-          - ModuleAR
-          - ModuleCA
-          - ModuleCM
-          - ModuleIN
-          - ModuleSO
-          - ModulePO
-          - ModuleDR
-          - ModuleFA
-          - ModuleEP
-          - ModulePM
-          - ModuleTX
-          - ModuleCR
-          type: string
-          description: The workspace where the batch originates. See module in the Top part &gt; Workspace
-        uom:
-          type: string
-          description: The table &gt; UoM &gt; The quantity of items associated with the transaction, if relevant.
-        project:
-          $ref: '#/components/schemas/projectInJournalTransactionLineDto'
-        projectTask:
-          $ref: '#/components/schemas/projectTaskInJournalTransactionLineDto'
-        attachments:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttachmentDto'
-        quantity:
-          type: number
-          description: The table &gt; Quantity &gt; The quantity of items associated with the transaction, if relevant.
-          format: double
-        inventoryNumber:
-          type: string
-          description: Item ID &gt; The item ID of the line item, if applicable.
-        note:
-          type: string
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    postPeriodInJournalTransactionUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+      description: The table &gt; Project &gt; The project with which this batch is associated, or the code indicating that this batch is not associated with any project.
     JournalTransactionDto:
       type: object
       properties:
@@ -929,51 +740,118 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a journal transaction in JournalTransactionController. Used by getting data.
-    financialPeriodInJournalTransactionUpdateDto:
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
+    DtoValueOfString:
+      type: object
       properties:
         value:
           type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
-    JournalTransactionUpdateDto:
+    vatCodeInJournalTransactionLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; VAT code &gt; The VAT code based on which the taxable amount is calculated.
+    SegmentUpdateDto:
       type: object
       properties:
-        batchNumber:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    postPeriodInJournalTransactionUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    JournalTransactionLineUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        accountNumber:
           $ref: '#/components/schemas/DtoValueOfString'
-        hold:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        transactionDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        postPeriod:
-          $ref: '#/components/schemas/postPeriodInJournalTransactionUpdateDto'
-        financialPeriod:
-          $ref: '#/components/schemas/financialPeriodInJournalTransactionUpdateDto'
-        ledger:
+        subaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        project:
           $ref: '#/components/schemas/DtoValueOfString'
-        currencyId:
+        projectTask:
           $ref: '#/components/schemas/DtoValueOfString'
-        exchangeRate:
+        referenceNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        transactionDescription:
+          $ref: '#/components/schemas/DtoValueOfString'
+        debitAmountInCurrency:
           $ref: '#/components/schemas/DtoValueOfDecimal'
-        autoReversing:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        controlTotalInCurrency:
+        creditAmountInCurrency:
           $ref: '#/components/schemas/DtoValueOfDecimal'
-        createVatTransaction:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        skipVatAmountValidation:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        transactionCode:
+        vatCodeId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        vatId:
           $ref: '#/components/schemas/DtoValueOfString'
         branch:
           $ref: '#/components/schemas/DtoValueOfString'
-        overrideNumberSeries:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        journalTransactionLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/JournalTransactionLineUpdateDto'
-      description: This class represents a journal transaction in JournalTransactionController. Used for creating/updating data.
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
     subaccountInJournalTransactionLineDto:
       properties:
         subaccountNumber:
@@ -1007,12 +885,134 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: 'Mandatory field: The table &gt; Subaccount &gt; The subaccount used with the account to detail a journal entry.'
+    JournalTransactionLineDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: The table &gt; Number at the left indicating the line number of the table.
+          format: int32
+        accountNumber:
+          type: string
+          description: 'Mandatory field: The table &gt; Account* &gt; The account (associated with the specified branch) whose balance will be updated by the journal entry.'
+        description:
+          type: string
+          description: The table &gt; Description &gt; A detailed description provided by a user or generated by the system.
+        subaccount:
+          $ref: '#/components/schemas/subaccountInJournalTransactionLineDto'
+        referenceNumber:
+          type: string
+          description: The table &gt; Ref. no. &gt; The reference number of the external or internal document associated with the journal transaction.
+        debitAmount:
+          type: number
+          description: The table &gt; Debit amount &gt; The debit amount of the journal entry.
+          format: double
+        debitAmountInCurrency:
+          type: number
+          description: Background calculation giving you the debit amount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        creditAmount:
+          type: number
+          description: The table &gt; Credit amount &gt; The credit amount of the journal entry.
+          format: double
+        creditAmountInCurrency:
+          type: number
+          description: Background calculation giving you the Credit amount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        transactionDescription:
+          type: string
+          description: The table &gt; Transaction Description &gt; A description of the transaction or any comments relevant to the transaction.
+        vatCode:
+          $ref: '#/components/schemas/vatCodeInJournalTransactionLineDto'
+        vat:
+          $ref: '#/components/schemas/vatInJournalTransactionLineDto'
+        branch:
+          type: string
+          description: The table &gt; Branch &gt; The branch associated with this journal entry.
+        customerSupplier:
+          type: string
+          description: The table &gt; Customer/Supplier &gt; The customer or supplier associated with the entry.
+        transactionType:
+          type: string
+          description: The top part &gt; Type &gt; The type of this general ledger batch, which is specified by the system automatically.
+        module:
+          enum:
+          - ModuleGL
+          - ModuleAP
+          - ModuleAR
+          - ModuleCA
+          - ModuleCM
+          - ModuleIN
+          - ModuleSO
+          - ModulePO
+          - ModuleDR
+          - ModuleFA
+          - ModuleEP
+          - ModulePM
+          - ModuleTX
+          - ModuleCR
+          type: string
+          description: The workspace where the batch originates. See module in the Top part &gt; Workspace
+        uom:
+          type: string
+          description: The table &gt; UoM &gt; The quantity of items associated with the transaction, if relevant.
+        project:
+          $ref: '#/components/schemas/projectInJournalTransactionLineDto'
+        projectTask:
+          $ref: '#/components/schemas/projectTaskInJournalTransactionLineDto'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+        quantity:
+          type: number
+          description: The table &gt; Quantity &gt; The quantity of items associated with the transaction, if relevant.
+          format: double
+        inventoryNumber:
+          type: string
+          description: Item ID &gt; The item ID of the line item, if applicable.
+        note:
+          type: string
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
     DtoValueOfInt32:
       type: object
       properties:
         value:
           type: integer
           format: int32
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    vatInJournalTransactionLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; VAT ID &gt; The VAT used to calculate the VAT amount.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    financialPeriodInJournalTransactionUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
   securitySchemes:
     interactiveapi:
       type: oauth2

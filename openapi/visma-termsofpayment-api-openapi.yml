@@ -106,6 +106,63 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    TermsOfPaymentApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system. For v2/quotes and v2/quotedrafts endpoints Id is editable
+          format: uuid
+          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the terms of payment
+        NameEnglish:
+          type:
+          - string
+          - 'null'
+          description: English name of the terms of payment
+        NumberOfDays:
+          type: integer
+          description: Number of days to pay
+          format: int32
+        TermsOfPaymentTypeId:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = CurrentMonth,<br/>2 = Cash,<br/>3 = CardPayment,<br/>4 = DigitalWallet,<br/>5 = PaymentServiceProvider<br/><br/>Type of terms of payment, possible values are.
+          format: int32
+        TermsOfPaymentTypeText:
+          type:
+          - string
+          - 'null'
+        AvailableForSales:
+          type: boolean
+          description: True if this terms of payment can be used on sales documents, false otherwise
+        AvailableForPurchase:
+          type: boolean
+          description: True if this terms of payment can be used on purchase documents, false otherwise
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -149,43 +206,6 @@ components:
           items:
             $ref: '#/components/schemas/TermsOfPaymentApi'
       additionalProperties: false
-    TermsOfPaymentApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system. For v2/quotes and v2/quotedrafts endpoints Id is editable
-          format: uuid
-          readOnly: true
-        Name:
-          type:
-          - string
-          - 'null'
-          description: Name of the terms of payment
-        NameEnglish:
-          type:
-          - string
-          - 'null'
-          description: English name of the terms of payment
-        NumberOfDays:
-          type: integer
-          description: Number of days to pay
-          format: int32
-        TermsOfPaymentTypeId:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = CurrentMonth,<br/>2 = Cash,<br/>3 = CardPayment,<br/>4 = DigitalWallet,<br/>5 = PaymentServiceProvider<br/><br/>Type of terms of payment, possible values are.
-          format: int32
-        TermsOfPaymentTypeText:
-          type:
-          - string
-          - 'null'
-        AvailableForSales:
-          type: boolean
-          description: True if this terms of payment can be used on sales documents, false otherwise
-        AvailableForPurchase:
-          type: boolean
-          description: True if this terms of payment can be used on purchase documents, false otherwise
-      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -205,26 +225,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

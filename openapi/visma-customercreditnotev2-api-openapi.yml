@@ -82,6 +82,137 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    SalesInvoiceContactUpdateDto:
+      type: object
+      properties:
+        overrideContact:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        attention:
+          $ref: '#/components/schemas/DtoValueOfString'
+        email:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone1:
+          $ref: '#/components/schemas/DtoValueOfString'
+    TaxDetailUpdateDto:
+      type: object
+      properties:
+        taxId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taxableAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        expenseAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+      description: This class represents a Tax Detail Line. Used to pass data to server for updating a tax line
+    DtoValueOfCustomerDocumentTypes:
+      type: object
+      properties:
+        value:
+          enum:
+          - Invoice
+          - DebitNote
+          - CreditNote
+          - Payment
+          - VoidPayment
+          - Prepayment
+          - Refund
+          - FinCharge
+          - SmallBalanceWo
+          - SmallCreditWo
+          - CashSale
+          - CashReturn
+          - Undefined
+          - NoUpdate
+          type: string
+    CustomerCreditNoteLineUpdateDto:
+      type: object
+      properties:
+        discountCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taskId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        unitPriceInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        accountNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        vatCodeId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        discountPercent:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        discountAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualDiscount:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        subaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        salesperson:
+          $ref: '#/components/schemas/DtoValueOfString'
+        deferralSchedule:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        deferralCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        termStartDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        termEndDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    salesPersonIDInCustomerCreditNoteUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: The field is deprecated for customer document endpoints, please use Salesperson instead
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
     CustomerCreditNoteUpdateDto:
       type: object
       properties:
@@ -167,17 +298,40 @@ components:
           $ref: '#/components/schemas/DtoValueOfBoolean'
         dontEmail:
           $ref: '#/components/schemas/DtoValueOfBoolean'
-    DtoValueOfBoolean:
+    postPeriodInCustomerCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    DtoValueOfNullableOfBoolean:
       type: object
       properties:
         value:
           type: boolean
-    salesPersonIDInCustomerCreditNoteUpdateDto:
+    DtoValueOfSalesInvoiceContactUpdateDto:
+      type: object
       properties:
         value:
-          type: integer
-          format: int32
-      description: The field is deprecated for customer document endpoints, please use Salesperson instead
+          $ref: '#/components/schemas/SalesInvoiceContactUpdateDto'
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
     SalesInvoiceAddressUpdateDto:
       type: object
       properties:
@@ -197,12 +351,6 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         county:
           $ref: '#/components/schemas/DtoValueOfString'
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
     PaymentLineBaseUpdateDto:
       type: object
       properties:
@@ -218,186 +366,38 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         amountPaid:
           $ref: '#/components/schemas/DtoValueOfDecimal'
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    TaxDetailUpdateDto:
-      type: object
-      properties:
-        taxId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        taxableAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        vatAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        expenseAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-      description: This class represents a Tax Detail Line. Used to pass data to server for updating a tax line
     DtoValueOfInt32:
       type: object
       properties:
         value:
           type: integer
           format: int32
-    DtoValueOfCustomerDocumentTypes:
+    DtoValueOfSalesInvoiceAddressUpdateDto:
       type: object
       properties:
         value:
-          enum:
-          - Invoice
-          - DebitNote
-          - CreditNote
-          - Payment
-          - VoidPayment
-          - Prepayment
-          - Refund
-          - FinCharge
-          - SmallBalanceWo
-          - SmallCreditWo
-          - CashSale
-          - CashReturn
-          - Undefined
-          - NoUpdate
-          type: string
-    financialPeriodInCustomerCreditNoteUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
+          $ref: '#/components/schemas/SalesInvoiceAddressUpdateDto'
     DtoValueOfNullableOfInt32:
       type: object
       properties:
         value:
           type: integer
           format: int32
-    DtoValueOfNullableOfBoolean:
+    DtoValueOfBoolean:
       type: object
       properties:
         value:
           type: boolean
-    DtoValueOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
     salespersonInCustomerCreditNoteUpdateDto:
       properties:
         value:
           type: string
       description: The identifier of the salesperson involved.
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    DtoValueOfNullableOfDateTime:
-      type: object
+    financialPeriodInCustomerCreditNoteUpdateDto:
       properties:
         value:
           type: string
-          format: date-time
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    DtoValueOfSalesInvoiceAddressUpdateDto:
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/SalesInvoiceAddressUpdateDto'
-    SalesInvoiceContactUpdateDto:
-      type: object
-      properties:
-        overrideContact:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        name:
-          $ref: '#/components/schemas/DtoValueOfString'
-        attention:
-          $ref: '#/components/schemas/DtoValueOfString'
-        email:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone1:
-          $ref: '#/components/schemas/DtoValueOfString'
-    CustomerCreditNoteLineUpdateDto:
-      type: object
-      properties:
-        discountCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        taskId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        inventoryNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        unitPriceInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        manualAmountInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        accountNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        vatCodeId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        discountPercent:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        discountAmountInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        manualDiscount:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        subaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-        salesperson:
-          $ref: '#/components/schemas/DtoValueOfString'
-        deferralSchedule:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        deferralCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        termStartDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        termEndDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-    postPeriodInCustomerCreditNoteUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    DtoValueOfSalesInvoiceContactUpdateDto:
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/SalesInvoiceContactUpdateDto'
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
   securitySchemes:
     interactiveapi:
       type: oauth2

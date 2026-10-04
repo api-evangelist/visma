@@ -320,6 +320,64 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    TravelAndExpenseApi:
+      required:
+      - Date
+      - EmployeeId
+      - Rows
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+          readOnly: true
+        EmployeeId:
+          type: string
+          description: 'The ID of the employee that the shortcut is registered for. Source: Get from /v1/employees'
+          format: uuid
+        Date:
+          type: string
+          description: The date for the shortcut
+          format: date-time
+        ReportLink:
+          type:
+          - string
+          - 'null'
+          description: 'Report link (format: absolute HTTPS URL)'
+        Comment:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Optional comment for the shortcut
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelAndExpenseRowApi'
+          description: Travel and other Expenses
+      additionalProperties: false
     TravelAndExpenseRowApi:
       required:
       - PaycodeNumber
@@ -378,64 +436,6 @@ components:
           description: 'Project ID. Source: Get from eAccounting API, /v2/projects'
           format: uuid
       additionalProperties: false
-    TravelAndExpenseApi:
-      required:
-      - Date
-      - EmployeeId
-      - Rows
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier provided by VLS
-          format: uuid
-          readOnly: true
-        EmployeeId:
-          type: string
-          description: 'The ID of the employee that the shortcut is registered for. Source: Get from /v1/employees'
-          format: uuid
-        Date:
-          type: string
-          description: The date for the shortcut
-          format: date-time
-        ReportLink:
-          type:
-          - string
-          - 'null'
-          description: 'Report link (format: absolute HTTPS URL)'
-        Comment:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Optional comment for the shortcut
-        Rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/TravelAndExpenseRowApi'
-          description: Travel and other Expenses
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -455,6 +455,39 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    TravelAndExpenseResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+        EmployeeId:
+          type: string
+          description: The ID of the employee that the shortcut is registered for
+          format: uuid
+        Date:
+          type: string
+          description: 'The date for the shortcut (format: yyyy-MM-dd)'
+          format: date-time
+        ReportLink:
+          type:
+          - string
+          - 'null'
+          description: 'Report link (format: URL)'
+        Comment:
+          type:
+          - string
+          - 'null'
+          description: Optional comment for the shortcut
+        Rows:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TravelAndExpenseRowResponse'
+          description: Travel and other Expenses
       additionalProperties: false
     TravelAndExpenseRowRequest:
       required:
@@ -514,72 +547,6 @@ components:
           description: 'Cost center item ID 3. Source: get from eAccounting API, /v2/costcenters.'
           format: uuid
       additionalProperties: false
-    TravelAndExpenseResponse:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier provided by VLS
-          format: uuid
-        EmployeeId:
-          type: string
-          description: The ID of the employee that the shortcut is registered for
-          format: uuid
-        Date:
-          type: string
-          description: 'The date for the shortcut (format: yyyy-MM-dd)'
-          format: date-time
-        ReportLink:
-          type:
-          - string
-          - 'null'
-          description: 'Report link (format: URL)'
-        Comment:
-          type:
-          - string
-          - 'null'
-          description: Optional comment for the shortcut
-        Rows:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TravelAndExpenseRowResponse'
-          description: Travel and other Expenses
-      additionalProperties: false
-    TravelAndExpenseRequest:
-      required:
-      - Date
-      - EmployeeId
-      - Rows
-      type: object
-      properties:
-        EmployeeId:
-          type: string
-          description: 'The ID of the employee that the shortcut should be registered for. Source: get from /v2/employees.'
-          format: uuid
-        Date:
-          type: string
-          description: 'The date for the shortcut (format: yyyy-MM-dd)'
-          format: date-time
-        ReportLink:
-          type:
-          - string
-          - 'null'
-          description: 'Report link (format: URL, https is required)'
-        Comment:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Optional comment for the shortcut
-        Rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/TravelAndExpenseRowRequest'
-          description: Travel and other Expenses
-      additionalProperties: false
     TravelAndExpenseRowResponse:
       required:
       - PaycodeNumber
@@ -636,6 +603,39 @@ components:
           - 'null'
           description: Cost center item ID 3
           format: uuid
+      additionalProperties: false
+    TravelAndExpenseRequest:
+      required:
+      - Date
+      - EmployeeId
+      - Rows
+      type: object
+      properties:
+        EmployeeId:
+          type: string
+          description: 'The ID of the employee that the shortcut should be registered for. Source: get from /v2/employees.'
+          format: uuid
+        Date:
+          type: string
+          description: 'The date for the shortcut (format: yyyy-MM-dd)'
+          format: date-time
+        ReportLink:
+          type:
+          - string
+          - 'null'
+          description: 'Report link (format: URL, https is required)'
+        Comment:
+          maxLength: 2000
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Optional comment for the shortcut
+        Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelAndExpenseRowRequest'
+          description: Travel and other Expenses
       additionalProperties: false
 x-refined-from:
 - visma-payroll-api-v1-openapi-original.json

@@ -208,6 +208,34 @@ components:
         maxPageSize:
           type: integer
           format: int64
+    accountInGeneralLedgerTransactionDetailsDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+        externalCode1:
+          type: string
+          description: ExternalCode1 is deprecated, please use ExternalCode1Info instead.
+        externalCode2:
+          type: string
+          description: ExternalCode2 is deprecated, please use ExternalCode2Info instead.
+        externalCode1Info:
+          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
+        externalCode2Info:
+          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
+        glConsolAccountCD:
+          type: string
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Account &gt; The account updated by the batch transactions.
     GeneralLedgerTransactionDetailsDto:
       type: object
       properties:
@@ -287,43 +315,13 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    branchInGeneralLedgerTransactionDetailsDto:
+    BackgroundApiAcceptedDto:
+      type: object
       properties:
-        number:
+        id:
           type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
+        stateLocation:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: Branch &gt; The branch of the company.
-    accountInGeneralLedgerTransactionDetailsDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-        externalCode1:
-          type: string
-          description: ExternalCode1 is deprecated, please use ExternalCode1Info instead.
-        externalCode2:
-          type: string
-          description: ExternalCode2 is deprecated, please use ExternalCode2Info instead.
-        externalCode1Info:
-          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
-        externalCode2Info:
-          $ref: '#/components/schemas/ExternalCodeNumberDescriptionDto'
-        glConsolAccountCD:
-          type: string
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Account &gt; The account updated by the batch transactions.
     ledgerInGeneralLedgerTransactionDetailsDto:
       properties:
         id:
@@ -333,13 +331,6 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: Ledger &gt; The ledger used for the batch.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
     ExternalCodeNumberDescriptionDto:
       type: object
       properties:
@@ -349,6 +340,15 @@ components:
         description:
           type: string
           description: Name of item/description
+    branchInGeneralLedgerTransactionDetailsDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Branch &gt; The branch of the company.
   securitySchemes:
     interactiveapi:
       type: oauth2

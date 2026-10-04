@@ -423,6 +423,20 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    postPeriodInInventoryAdjustmentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    warehouseInInventoryAdjustmentLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Warehouse* &gt; The warehouse where the item is stocked.'
     AttachmentDto:
       type: object
       properties:
@@ -438,26 +452,49 @@ components:
           type: integer
           description: The version of the attachment.
           format: int32
+    locationInInventoryAdjustmentLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Location &gt; The warehouse location from which the goods are transferred.
+    externalReferenceInInventoryAdjustmentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The external reference number of the inventory issue document (for example, the vendor’s reference code).
+    controlQuantityInInventoryAdjustmentUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The manually entered quantity of inventory items. Control Qty. is available only if the Validate Document Totals on Entry option is selected on the Inventory Preferences form. If the Control Qty. and Total Qty.values do not match, the system generates a warning message and the issue cannot be saved.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    holdInInventoryAdjustmentUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: A check box that you select to give the receipt the On Hold status. Clear the check box to save the receipt with the Balanced status.
     referenceNumberInInventoryAdjustmentUpdateDto:
       properties:
         value:
           type: string
       description: The unique reference number of the receipt, which the system automatically assigns according to the numbering sequence selected for receipts on the Inventory Preferences IN.10.10.00) form.
-    warehouseInInventoryAdjustmentLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Warehouse* &gt; The warehouse where the item is stocked.'
-    controlCostInInventoryAdjustmentUpdateDto:
+    branchNumberInInventoryAdjustmentUpdateDto:
       properties:
         value:
-          type: number
-          format: double
-      description: The manually entered summary cost for all specified inventory adjustment items.
+          type: string
+      description: The Branch associated
     ReleaseInventoryDocumentActionResultDto:
       type: object
       properties:
@@ -473,33 +510,26 @@ components:
           type: string
         errorInfo:
           type: string
-    holdInInventoryAdjustmentUpdateDto:
-      properties:
-        value:
-          type: boolean
-      description: A check box that you select to give the receipt the On Hold status. Clear the check box to save the receipt with the Balanced status.
-    descriptionInInventoryAdjustmentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A brief description of the inventory issue or its transactions.
     DtoValueOfNullableOfDecimal:
       type: object
       properties:
         value:
           type: number
           format: double
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    branchNumberInInventoryAdjustmentUpdateDto:
+    controlCostInInventoryAdjustmentUpdateDto:
       properties:
         value:
+          type: number
+          format: double
+      description: The manually entered summary cost for all specified inventory adjustment items.
+    branchNumberInInventoryAdjustmentDto:
+      properties:
+        number:
           type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
       description: The Branch associated
     inventoryItemInInventoryAdjustmentLineDto:
       properties:
@@ -510,42 +540,62 @@ components:
           type: string
           description: Name of item/description
       description: 'Mandatory field: Item ID* &gt; The ID of the goods to be transferred.'
-    InventoryAdjustmentUpdateDto:
+    BackgroundApiAcceptedDto:
       type: object
       properties:
-        controlCost:
-          $ref: '#/components/schemas/controlCostInInventoryAdjustmentUpdateDto'
-        adjustmentLines:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    descriptionInInventoryAdjustmentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A brief description of the inventory issue or its transactions.
+    InventoryAdjustmentLineDto:
+      type: object
+      properties:
+        warehouse:
+          $ref: '#/components/schemas/warehouseInInventoryAdjustmentLineDto'
+        unitCost:
+          type: number
+          description: Unit cost &gt; The cost of the unit used as base unit for the stock item.
+          format: double
+        extCost:
+          type: number
+          description: Cost &gt; The cost of the item.
+          format: double
+        receiptNumber:
+          type: string
+          description: Receipt no. &gt; Reference number for the receipt for the stock item.
+        poReceiptNumber:
+          type: string
+          description: Purchase order receipt number
+        lineNumber:
+          type: integer
+          format: int32
+        inventoryItem:
+          $ref: '#/components/schemas/inventoryItemInInventoryAdjustmentLineDto'
+        location:
+          $ref: '#/components/schemas/locationInInventoryAdjustmentLineDto'
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of the transferred goods (in the units indicated below).
+          format: double
+        uom:
+          type: string
+          description: 'Mandatory field: UoM* &gt; The unit of measure (UoM) used for the goods to be transferred.'
+        reasonCode:
+          $ref: '#/components/schemas/reasonCodeInInventoryAdjustmentLineDto'
+        description:
+          type: string
+          description: Description &gt; A brief description of the goods transfer transaction.
+        attachments:
           type: array
           items:
-            $ref: '#/components/schemas/InventoryAdjustmentLineUpdateDto'
-          description: The inventory adjustment lines
-        referenceNumber:
-          $ref: '#/components/schemas/referenceNumberInInventoryAdjustmentUpdateDto'
-        hold:
-          $ref: '#/components/schemas/holdInInventoryAdjustmentUpdateDto'
-        date:
-          $ref: '#/components/schemas/dateInInventoryAdjustmentUpdateDto'
-        postPeriod:
-          $ref: '#/components/schemas/postPeriodInInventoryAdjustmentUpdateDto'
-        externalReference:
-          $ref: '#/components/schemas/externalReferenceInInventoryAdjustmentUpdateDto'
-        description:
-          $ref: '#/components/schemas/descriptionInInventoryAdjustmentUpdateDto'
-        controlQuantity:
-          $ref: '#/components/schemas/controlQuantityInInventoryAdjustmentUpdateDto'
+            $ref: '#/components/schemas/AttachmentDto'
         branchNumber:
-          $ref: '#/components/schemas/branchNumberInInventoryAdjustmentUpdateDto'
-      description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
+          $ref: '#/components/schemas/BranchNumberDto'
     InventoryAdjustmentDto:
       type: object
       properties:
@@ -618,60 +668,45 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
-    DtoValueOfString:
+    InventoryAdjustmentUpdateDto:
       type: object
       properties:
-        value:
-          type: string
-    postPeriodInInventoryAdjustmentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    InventoryAdjustmentLineDto:
-      type: object
-      properties:
-        warehouse:
-          $ref: '#/components/schemas/warehouseInInventoryAdjustmentLineDto'
-        unitCost:
-          type: number
-          description: Unit cost &gt; The cost of the unit used as base unit for the stock item.
-          format: double
-        extCost:
-          type: number
-          description: Cost &gt; The cost of the item.
-          format: double
-        receiptNumber:
-          type: string
-          description: Receipt no. &gt; Reference number for the receipt for the stock item.
-        poReceiptNumber:
-          type: string
-          description: Purchase order receipt number
-        lineNumber:
-          type: integer
-          format: int32
-        inventoryItem:
-          $ref: '#/components/schemas/inventoryItemInInventoryAdjustmentLineDto'
-        location:
-          $ref: '#/components/schemas/locationInInventoryAdjustmentLineDto'
-        quantity:
-          type: number
-          description: Quantity &gt; The quantity of the transferred goods (in the units indicated below).
-          format: double
-        uom:
-          type: string
-          description: 'Mandatory field: UoM* &gt; The unit of measure (UoM) used for the goods to be transferred.'
-        reasonCode:
-          $ref: '#/components/schemas/reasonCodeInInventoryAdjustmentLineDto'
-        description:
-          type: string
-          description: Description &gt; A brief description of the goods transfer transaction.
-        attachments:
+        controlCost:
+          $ref: '#/components/schemas/controlCostInInventoryAdjustmentUpdateDto'
+        adjustmentLines:
           type: array
           items:
-            $ref: '#/components/schemas/AttachmentDto'
+            $ref: '#/components/schemas/InventoryAdjustmentLineUpdateDto'
+          description: The inventory adjustment lines
+        referenceNumber:
+          $ref: '#/components/schemas/referenceNumberInInventoryAdjustmentUpdateDto'
+        hold:
+          $ref: '#/components/schemas/holdInInventoryAdjustmentUpdateDto'
+        date:
+          $ref: '#/components/schemas/dateInInventoryAdjustmentUpdateDto'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInInventoryAdjustmentUpdateDto'
+        externalReference:
+          $ref: '#/components/schemas/externalReferenceInInventoryAdjustmentUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInInventoryAdjustmentUpdateDto'
+        controlQuantity:
+          $ref: '#/components/schemas/controlQuantityInInventoryAdjustmentUpdateDto'
         branchNumber:
-          $ref: '#/components/schemas/BranchNumberDto'
+          $ref: '#/components/schemas/branchNumberInInventoryAdjustmentUpdateDto'
+      description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
+    dateInInventoryAdjustmentUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: The date when the receipt was created. All transactions included in this document will have this transaction date.
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
     InventoryAdjustmentLineUpdateDto:
       type: object
       properties:
@@ -709,11 +744,15 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         branchNumber:
           $ref: '#/components/schemas/DtoValueOfString'
-    externalReferenceInInventoryAdjustmentUpdateDto:
+    MetadataDto:
+      type: object
       properties:
-        value:
-          type: string
-      description: The external reference number of the inventory issue document (for example, the vendor’s reference code).
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     BranchNumberDto:
       type: object
       properties:
@@ -723,45 +762,6 @@ components:
         name:
           type: string
           description: Click the magnifier. &gt; The name.
-    dateInInventoryAdjustmentUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: The date when the receipt was created. All transactions included in this document will have this transaction date.
-    locationInInventoryAdjustmentLineDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Location &gt; The warehouse location from which the goods are transferred.
-    controlQuantityInInventoryAdjustmentUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The manually entered quantity of inventory items. Control Qty. is available only if the Validate Document Totals on Entry option is selected on the Inventory Preferences form. If the Control Qty. and Total Qty.values do not match, the system generates a warning message and the issue cannot be saved.
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    branchNumberInInventoryAdjustmentDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The Branch associated
     reasonCodeInInventoryAdjustmentLineDto:
       properties:
         id:

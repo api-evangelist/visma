@@ -489,81 +489,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    PaginatedResponseOfSalesDocumentAttachmentApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SalesDocumentAttachmentApi'
-      additionalProperties: false
-    SalesDocumentAttachmentUploadApi:
-      required:
-      - ContentType
-      - DockumentId
-      - FileName
-      type: object
-      properties:
-        ContentType:
-          maxLength: 15
-          minLength: 0
-          type: string
-          description: 'Content type of the file. Allowed values: ''application/pdf'', ''image/jpeg'', ''image/tiff'', ''image/png''.'
-        FileName:
-          maxLength: 128
-          minLength: 0
-          type: string
-          description: The file name that will be shown in UI.
-        DockumentId:
-          type: string
-          description: Document's id to which a sales document is being attached.
-          format: uuid
-        Data:
-          type:
-          - string
-          - 'null'
-          description: Base64 encoded data of the file. Required if 'Url' is not provided.
-        Url:
-          type:
-          - string
-          - 'null'
-          description: Public URL of the file. Required if 'Data' is not provided.
-      additionalProperties: false
     SalesDocumentAttachmentApi:
       type: object
       properties:
@@ -615,26 +540,6 @@ components:
           description: Thumbnail of the attached file, null if the file is a pdf file
           format: byte
       additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     CommonExtendedBadRequest:
       type: object
       properties:
@@ -654,6 +559,101 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfSalesDocumentAttachmentApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesDocumentAttachmentApi'
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    SalesDocumentAttachmentUploadApi:
+      required:
+      - ContentType
+      - DockumentId
+      - FileName
+      type: object
+      properties:
+        ContentType:
+          maxLength: 15
+          minLength: 0
+          type: string
+          description: 'Content type of the file. Allowed values: ''application/pdf'', ''image/jpeg'', ''image/tiff'', ''image/png''.'
+        FileName:
+          maxLength: 128
+          minLength: 0
+          type: string
+          description: The file name that will be shown in UI.
+        DockumentId:
+          type: string
+          description: Document's id to which a sales document is being attached.
+          format: uuid
+        Data:
+          type:
+          - string
+          - 'null'
+          description: Base64 encoded data of the file. Required if 'Url' is not provided.
+        Url:
+          type:
+          - string
+          - 'null'
+          description: Public URL of the file. Required if 'Data' is not provided.
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

@@ -1081,145 +1081,98 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    WorkTypeDto:
-      type: object
+    subaccountInSalesOrderLineDto:
       properties:
-        rutRotType:
-          enum:
-          - Rut
-          - Rot
-          type: string
-        description:
-          type: string
-        xmlTag:
-          type: string
-    customerInCustomerInvoiceDto:
-      properties:
-        number:
-          type: string
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The top part &gt; Customer &gt; The customer associated with the document.
-    ProjectTaskIdDescriptionDto:
-      type: object
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-    transactionTypeInShipmentDto:
-      properties:
-        id:
-          type: integer
-          description: Click on the magnifier. &gt; The identifier.
-          format: int32
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Intrastat section &gt; Transaction type &gt; The 1-digit code that describes the nature of the transaction (according to EU regulations for Intrastat reporting).
-    customerInShipmentDto:
-      properties:
-        internalId:
-          type: integer
-          format: int32
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: The top part &gt; Customer &gt; The customer to whom the goods specified in the document should be shipped. (This field does not appear for transfers.)
-    shippingTermsInSalesOrderDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; Shipping terms
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    locationInSalesOrderDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location from which the goods or services have been ordered or, if the sales order is created from an opportunity, the customer location specified for the opportunity.'
-    fobPointInShipmentDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; FOB point &gt; The point where obligation of goods passes to the customer.
-    deliveryAddressInShipmentDto:
-      properties:
-        overrideAddress:
+        active:
           type: boolean
-          description: Override address &gt; A check box that you select to not include the default address information and to type new address information.
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInShipmentAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInShipmentAddressDto'
-      description: Delivery settings tab &gt; Delivery address section &gt;
-    sellerInCustomerInvoiceLineDto:
-      properties:
         id:
           type: string
           description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Salesperson ID &gt; The identifier of the salesperson involved.
-    orderTypeInSalesOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field
-    DtoValueOfNullableOfDateTime:
+      description: Subaccount &gt; A subcategory of the account that carries identifying information.
+    SalesOrderShipmentDto:
       type: object
       properties:
-        value:
+        shipmentType:
+          type: string
+        shipmentNo:
+          type: string
+        shipmentDate:
           type: string
           format: date-time
+        shippedQty:
+          type: number
+          format: double
+        shippedWeight:
+          type: number
+          format: double
+        shippedVolume:
+          type: number
+          format: double
+        invoiceType:
+          type: string
+        invoiceNo:
+          type: string
+        inventoryDocType:
+          type: string
+        inventoryRefNo:
+          type: string
+    ArAdjustDto:
+      type: object
+      properties:
+        docType:
+          type: string
+        customerCD:
+          type: string
+        refNbr:
+          type: string
+        amountPaid:
+          type: number
+          format: double
+        cashDiscountTaken:
+          type: number
+          format: double
+        balance:
+          type: number
+          format: double
+        pendingPPD:
+          type: boolean
+        released:
+          type: boolean
+        hold:
+          type: boolean
+        voided:
+          type: boolean
+        ppdCrMemoRefNbr:
+          type: string
+        paymentRef:
+          type: string
+        status:
+          type: string
+        applicationDate:
+          type: string
+          format: date-time
+        applicationPeriod:
+          type: string
+        invoiceText:
+          type: string
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
     SalesOrderLineDto:
       type: object
       properties:
@@ -1385,24 +1338,296 @@ components:
           items:
             $ref: '#/components/schemas/AttachmentDto'
           description: The data containing information about the document attachments
-    contactInCustomerInvoiceDto:
+    customerInShipmentDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: The top part &gt; Customer &gt; The customer to whom the goods specified in the document should be shipped. (This field does not appear for transfers.)
+    shipViaInShipmentDto:
       properties:
         id:
-          type: integer
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; Ship via &gt; The carrier used for shipping the goods.
+    paymentMethodInSalesOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Payment settings tab &gt; Payment method
+    InventoryNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    locationInShipmentDetailLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
           description: Click the magnifier &gt; The identifier
-          format: int32
         name:
           type: string
           description: Click the magnifier &gt; The displayed name
-      description: The top part &gt; Contact &gt; The contact associated with the customer.
-    CancelSalesOrderActionDto:
-      required:
-      - orderType
+      description: Document details tab &gt; Location &gt; The location in the warehouse from which the item is shipped.
+    DtoValueOfString:
       type: object
       properties:
+        value:
+          type: string
+    invoiceAddressInCustomerInvoiceDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInCustomerDocumentAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInCustomerDocumentAddressDto'
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box that indicates (if selected) that the invoice address is not the default invoice address of the customer.
+      description: The Invoice address tab &gt; The Invoice address section.
+    TaxDetailDto:
+      type: object
+      properties:
+        taxId:
+          type: string
+          description: 'Mandatory field: VAT ID* &gt; The ID of the VAT applied to the document.'
+        recordId:
+          type: integer
+          description: The id as stored in the database. It can be used when we want to update a VAT record.
+          format: int32
+        vatId:
+          $ref: '#/components/schemas/vatIdInTaxDetailDto'
+        vatRate:
+          type: number
+          description: VAT rate &gt; The rate of the VAT.
+          format: double
+        taxableAmount:
+          type: number
+          description: Taxable amount &gt; The taxable amount for the VAT, which is calculated at the document level.
+          format: double
+        vatAmount:
+          type: number
+          description: VAT &gt; The VAT amount for the specific VAT, which is calculated at the document level.
+          format: double
+        expenseAmount:
+          type: number
+          description: Expense Amount for the VAT type that has been added.
+          format: double
+      description: This class represents a VAT Detail Line. Used for getting data.
+    salesPersonInCustomerInvoiceDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The document details tab &gt; Salesperson ID &gt; The salesperson involved.
+    modeOfTrasportInShipmentDto:
+      properties:
+        id:
+          type: integer
+          description: Click on the magnifier. &gt; The identifier.
+          format: int32
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Intrastat section &gt; Mode of transportation &gt; The method of transportation.
+    countyInShipmentAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    shippingTermsInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; Shipping terms &gt; The shipping terms used in relations with the customer.
+    ShipmentDetailLineDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: Document details tab &gt; The line number indicating sequence.
+          format: int32
         orderType:
           type: string
-          description: Mandatory field
+          description: Document details tab &gt; The type of the document, which is one of the predefined order types or a custom order type.
+        orderNbr:
+          type: string
+          description: Document details tab &gt; Order no. &gt; The reference number of the document.
+        inventoryNumber:
+          type: string
+          description: Document details tab &gt; Item ID &gt; The ID of the item being shipped.
+        freeItem:
+          type: boolean
+          description: Document details tab &gt; Free item &gt; The free item earned by the customer, if applicable. (This column does not appear for transfer.)
+        warehouse:
+          $ref: '#/components/schemas/warehouseInShipmentDetailLineDto'
+        location:
+          $ref: '#/components/schemas/locationInShipmentDetailLineDto'
+        uom:
+          type: string
+          description: Document details tab &gt; UoM &gt; The unit of measure used for the item in shipment.
+        shippedQty:
+          type: number
+          description: Document details tab &gt; Shipped qty. &gt; The quantity of the item shipped with the specified properties.
+          format: double
+        orderedQty:
+          type: number
+          description: Document details tab &gt; Ordered qty. &gt; The quantity of the item ordered with the specified properties.
+          format: double
+        openQty:
+          type: number
+          description: Document details tab &gt; Open qty. &gt; The number of items with the specified quantities still to be shipped.
+          format: double
+        lotSerialNbr:
+          type: string
+          description: Document details tab &gt; Lot/serial no. &gt; The lot or serial number of particular items of the item.
+        expirationDate:
+          type: string
+          description: Document details tab &gt; Expiration date &gt; The expiration date of the item, if it is traced for this item ID.
+          format: date-time
+        reasonCode:
+          type: string
+          description: Document details tab &gt; Reason code &gt; The reason code used for shipments.
+        description:
+          type: string
+          description: Document details tab &gt; Description &gt; A short description for the shipment.
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationsDto'
+          description: Document details tab &gt; Allocations button &gt; Opens the Allocations dialog box, so that you can specify the locations, or lot or serial numbers for the units of the of the item.
+        orderLineNbr:
+          type: integer
+          description: Document details tab &gt; Order line no. &gt; Read only. The order's line number that matches this shipment line.
+          format: int32
+        note:
+          type: string
+        externalLink:
+          type: string
+        alternateID:
+          type: string
+        customStr1:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr2:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr3:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr4:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr5:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customDec1:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customDec2:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customInt1:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customInt2:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customDateTimeUTC1:
+          type: string
+          description: A free custom colum of type DateTime - in UTC timezone
+          format: date-time
+    AllocationsDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          description: Line no. &gt; The line of the purchase order that contains the selected item.
+          format: int32
+        itemId:
+          type: string
+          description: ItemId &gt; The id of the item.
+        location:
+          $ref: '#/components/schemas/locationInAllocationsDto'
+        lotSerialNumber:
+          type: string
+          description: Lot/Serial no. &gt; The lot or serial number of the item.
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
+          format: double
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
+        expirationDate:
+          type: string
+          description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
+          format: date-time
+        description:
+          type: string
+          description: Description &gt; The description of the stock item.
+      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptController. Used for getting data.
+    shippingZoneInSalesOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; Shipping zone
     CreatePurchaseOrderActionDto:
       required:
       - orderType
@@ -1414,141 +1639,495 @@ components:
         preferSupplierFromSOLine:
           type: boolean
           description: Supplier
-    SalesOrderUpdateDto:
-      required:
-      - orderType
+    projectInCustomerInvoiceDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
+    SalesOrderDto:
       type: object
       properties:
-        project:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        projectCD:
+          type: string
+          description: 'Mandatory field: The top part &gt; Project* &gt; The field consists of Project ID and Project description. Project ID: The identifier for the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.'
         printDescriptionOnInvoice:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: The top part &gt; Print description on invoice &gt; A check box
         printNoteOnExternalDocuments:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: The top part &gt; Print note on external sales documents &gt; A check box
         printNoteOnInternalDocuments:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: The top part &gt; Print line note on internal sales documents &gt; A check box
         soBillingContact:
-          $ref: '#/components/schemas/DtoValueOfSalesOrderContactUpdateDto'
+          $ref: '#/components/schemas/soBillingContactInSalesOrderDto'
         soBillingAddress:
-          $ref: '#/components/schemas/DtoValueOfSalesOrderAddressUpdateDto'
+          $ref: '#/components/schemas/soBillingAddressInSalesOrderDto'
         customerVATZone:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/customerVATZoneInSalesOrderDto'
         invoiceSeparately:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Financial settings tab &gt; Financial information section &gt; Invoice separately &gt; A check box that indicating that this document is to be invoiced separately (if that is required).
+        invoiceNbr:
+          type: string
+          description: Financial settings tab &gt; Financial information section &gt; Invoice no.&gt; The invoice number of the invoice generated for this order.
+        invoiceDate:
+          type: string
+          description: Financial settings tab &gt; Financial information section &gt; Invoice date&gt; The date of the invoice generated for the order.
+          format: date-time
         terms:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/termsInSalesOrderDto'
+        dueDate:
+          type: string
+          description: Financial settings tab &gt; Financial information section &gt; Due date &gt; The due date of the invoice according to the credit terms.
+          format: date-time
+        cashDiscountDate:
+          type: string
+          description: Financial settings tab &gt; Financial information section &gt; Cash discount date &gt; The date when the cash discount is available for the invoice based on the credit terms.
+          format: date-time
+        postPeriod:
+          type: string
+          description: The Financial settings tab &gt; Financial information section &gt; Post period &gt; The period to post the transactions generated by the invoice. Format MMYYYY.
         salesPerson:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/salesPersonInSalesOrderDto'
+        commissionPercent:
+          type: string
+          description: The Commissions tab &gt; Commission (%) &gt; The percentage of commission generally earned by the salesperson.
+        commissionAmount:
+          type: string
+          description: "The Commissions tab &gt; Commission amt. &gt;\tThe commission amount earned by the salesperson on this document."
+        commissionableAmount:
+          type: string
+          description: "The Commissions tab &gt; Commissionable amount\t&gt; The amount used to calculate the commission."
         owner:
-          $ref: '#/components/schemas/DtoValueOfNullableOfGuid'
+          $ref: '#/components/schemas/ownerInSalesOrderDto'
         origOrderType:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
+          description: 'Mandatory field: The top part &gt; Order type* &gt; The type of the document, which is one of the predefined order types or a custom order type created by using the window SO201000.'
         origOrderNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
+          description: The top part &gt; Order no. &gt; The order number of the document.
         soShippingContact:
-          $ref: '#/components/schemas/DtoValueOfSalesOrderContactUpdateDto'
+          $ref: '#/components/schemas/soShippingContactInSalesOrderDto'
         soShippingAddress:
-          $ref: '#/components/schemas/DtoValueOfSalesOrderAddressUpdateDto'
+          $ref: '#/components/schemas/soShippingAddressInSalesOrderDto'
         schedShipment:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+          type: string
+          description: Delivery settings tab &gt; Shipping information section &gt; Sched. shipment &gt; The date when the ordered goods are scheduled to be shipped.
+          format: date-time
         shipSeparately:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Delivery settings tab &gt; Shipping information section &gt; Ship separately &gt; This check box indicates that the goods for the customer should be shipped separately for each sales order.
         shipComplete:
-          $ref: '#/components/schemas/DtoValueOfNullableOfSalesOrderShipCompleteStatuses'
+          enum:
+          - BackOrderAllowed
+          - CancelRemainder
+          - ShipComplete
+          type: string
+          description: Delivery settings tab &gt; Shipping information section &gt; Shipping rule &gt; An option that controls whether incomplete and partial shipments for the order are allowed.
         cancelBy:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+          type: string
+          description: Delivery settings tab &gt; Shipping information section &gt; Cancel by &gt; The date when the order should be cancelled if the Back order allowed option has been selected in the Shipping rule field.
+          format: date-time
         canceled:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: The Delivery settings tab &gt; The Shipping information section &gt; Cancelled &gt; A check box that indicates that the order has been cancelled on the date specified in Cancel by.
         preferredWarehouse:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/preferredWarehouseInSalesOrderDto'
         shipVia:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/shipViaInSalesOrderDto'
         fobPoint:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/fobPointInSalesOrderDto'
         priority:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt16'
+          type: integer
+          description: Delivery settings tab &gt; Shipping information section &gt; Priority &gt; Field only for informational purposes. The level of priority for processing order of this customer, as specified for the customer on the Shipping settings tab on the AR303000 window.
+          format: int32
         shippingTerms:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/shippingTermsInSalesOrderDto'
         shippingZone:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/shippingZoneInSalesOrderDto'
         residentialDelivery:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Delivery settings tab &gt; Shipping information section &gt; Residential delivery &gt; A check box that you select to indicate that the shipment should be delivered to a residential area.
         saturdayDelivery:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Delivery settings tab &gt; Shipping information section &gt; Saturday delivery &gt; A check box that indicates that the order may be delivered on Saturday.
         insurance:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: Delivery settings tab &gt; Shipping information section &gt; Insurance &gt; A check box that you select to indicate that insurance is required for this order.
         transactionType:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+          $ref: '#/components/schemas/transactionTypeInSalesOrderDto'
         paymentMethod:
-          $ref: '#/components/schemas/DtoValueOfString'
+          $ref: '#/components/schemas/paymentMethodInSalesOrderDto'
         cashAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
+          description: Payment settings tab &gt; Cash account
         paymentRef:
-          $ref: '#/components/schemas/DtoValueOfString'
+          type: string
+          description: Payment settings tab &gt; Payment ref.
         isRotRutDeductible:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          type: boolean
+          description: A check box indicating if the document is Rot/rut deductible (applicable for the Swedish markets)
         emailed:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        rotRutDetails:
-          $ref: '#/components/schemas/RotRutUpdateDto'
+          type: boolean
+          description: A check box indicating if the document is emailed
         lines:
           type: array
           items:
-            $ref: '#/components/schemas/SalesOrderLineUpdateDto'
-        orderType:
-          $ref: '#/components/schemas/orderTypeInSalesOrderUpdateDto'
-        orderNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        hold:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        date:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        requestOn:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        customerOrder:
-          $ref: '#/components/schemas/DtoValueOfString'
-        customerRefNo:
-          $ref: '#/components/schemas/DtoValueOfString'
-        customer:
-          $ref: '#/components/schemas/customerInSalesOrderUpdateDto'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        contactId:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        gln:
-          $ref: '#/components/schemas/glnInSalesOrderUpdateDto'
-        vatRegistrationId:
-          $ref: '#/components/schemas/vatRegistrationIdInSalesOrderUpdateDto'
-        currency:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        recalculateShipment:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        overrideNumberSeries:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-      description: This class represent a Sales Order in Sales Order Controller. Used to pass data to server for creating or updating an order
-    RotRutUpdateDto:
-      type: object
-      properties:
-        distributedAutomaticaly:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        type:
-          $ref: '#/components/schemas/DtoValueOfNullableOfRutRotTypes'
-        appartment:
-          $ref: '#/components/schemas/DtoValueOfString'
-        estate:
-          $ref: '#/components/schemas/DtoValueOfString'
-        organizationNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        distribution:
+            $ref: '#/components/schemas/SalesOrderLineDto'
+          description: Document details tab &gt;
+        shipments:
           type: array
           items:
-            $ref: '#/components/schemas/RotRutDistributionUpdateDto'
+            $ref: '#/components/schemas/SalesOrderShipmentDto'
+          description: Shipment tab &gt;
+        orderType:
+          type: string
+          description: 'Mandatory field: The top part &gt; Order type &gt; The type of the document, which is one of the predefined order types or a custom order type created by using the (SO201000) window.'
+        orderNo:
+          type: string
+          description: 'The top part &gt; Order no.: &gt; The reference number of the document.'
+        status:
+          enum:
+          - Open
+          - Hold
+          - CreditHold
+          - Completed
+          - Cancelled
+          - BackOrder
+          - Shipping
+          - Invoiced
+          - PendingApproval
+          - Voided
+          type: string
+          description: 'The top part &gt; Status &gt; The status of the document, which can be one of the following options: On hold, Credit hold, Pending aååroval, Rejected, Open, Cancelled, Shipping, Back order, Invoiced, Completed.'
+        hold:
+          type: boolean
+          description: The top part &gt; Hold &gt; A check box that you select if the document is on hold and should not be processed further at this time.
+        date:
+          type: string
+          description: 'Mandatory field: The top part &gt; Date* &gt;  The date of the document.'
+          format: date-time
+        requestOn:
+          type: string
+          description: 'Mandatory field: The top part &gt; Requested on &gt; The date when the customer wants to receive the goods; this date provides the default values for the Requested on dates for order lines.'
+          format: date-time
+        customerOrder:
+          type: string
+          description: The top part &gt; Customer order &gt; The reference number of the original customer document that the sales order is based on.
+        customerRefNo:
+          type: string
+          description: The top part &gt; External reference &gt; The reference number of the sales order in a third-party application if Visma.net Financials is integrated with such an application and imports the sales orders from it.
+        customer:
+          $ref: '#/components/schemas/customerInSalesOrderDto'
+        contactId:
+          type: integer
+          description: The top part &gt; Contact &gt; The contact person of the customer.
+          format: int32
+        location:
+          $ref: '#/components/schemas/locationInSalesOrderDto'
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency of the document.
+        description:
+          type: string
+          description: The top part &gt; Description &gt; A brief description of the document.
+        orderTotal:
+          type: number
+          description: 'The top part &gt; Order total &gt; The total amount of the document, which is calculated as follows:
+
+            Line Total + Misc.Charges + Freight + Premium Freight – Discount Total+ Tax Total'
+          format: double
+        orderTotalInBaseCurrency:
+          type: number
+          format: double
+        vatTaxableTotal:
+          type: number
+          description: The top part &gt; VAT taxable total &gt; The document total that is subject to VAT.
+          format: double
+        vatTaxableTotalInBaseCurrency:
+          type: number
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
+          format: double
+        vatExemptTotalInBaseCurrency:
+          type: number
+          format: double
+        taxTotal:
+          type: number
+          description: The top part &gt; VAT total &gt; The total amount of tax paid on the document.
+          format: double
+        taxTotalInBaseCurrency:
+          type: number
+          format: double
+        exchangeRate:
+          type: number
+          format: double
+        discountTotal:
+          type: number
+          format: double
+        discountTotalInBaseCurrency:
+          type: number
+          format: double
+        lastModifiedDateTime:
+          type: string
+          description: Background information collected from the system.
+          format: date-time
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInSalesOrderDto'
+        note:
+          type: string
+          description: Icon Notes on top of the window &gt; Pop-up window for providing any user-defined text connected to the order.
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+          description: The data containing information about the document attachments
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a SOOrder in SOOrderController. Used by getting data.
+    soBillingAddressInSalesOrderDto:
+      properties:
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box indicating that you want to override the default address information.
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInSalesOrderAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInSalesOrderAddressDto'
+      description: Financial settings tab &gt; Invoice address section
+    customerVATZoneInSalesOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        description:
+          type: string
+          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultVatCategory:
+          type: string
+          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultTaxCategory:
+          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Financial settings tab &gt; Financial information section &gt; Customer VAT zone &gt; The customers VAT zone to be used to process customer sales orders, which generally is the zone associated with the customer's delivery address.
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    accountInCustomerInvoiceLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Account* &gt; The sales account used for the transaction.'
+    PrepareInvoiceActionResultDto:
+      type: object
+      properties:
+        referenceNumber:
+          type: string
+        customerInvoiceDto:
+          $ref: '#/components/schemas/CustomerInvoiceDto'
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    countryInSalesOrderAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    salesPersonInSalesOrderLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Salesperson ID &gt; The salesperson associated with the sale of the line item.
+    transactionTypeInSalesOrderDto:
+      properties:
+        id:
+          type: integer
+          description: Click on the magnifier. &gt; The identifier.
+          format: int32
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Intrastat section &gt; Transaction type
+    salesPersonInSalesOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Commissions tab &gt; Salesperson ID &gt; The salesperson.
+    WarehouseIdDescriptionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    termsInSalesOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Financial settings tab &gt; Financial information section &gt; Terms* &gt; The credit terms used in relations with the customer. See also window CS206500.'
+    locationInSalesOrderDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location from which the goods or services have been ordered or, if the sales order is created from an opportunity, the customer location specified for the opportunity.'
+    SalesOrderContactUpdateDto:
+      type: object
+      properties:
+        overrideContact:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        name:
+          $ref: '#/components/schemas/DtoValueOfString'
+        attention:
+          $ref: '#/components/schemas/DtoValueOfString'
+        email:
+          $ref: '#/components/schemas/DtoValueOfString'
+        web:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        phone2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        fax:
+          $ref: '#/components/schemas/DtoValueOfString'
+    ownerInSalesOrderDto:
+      properties:
+        id:
+          type: string
+          description: Employee internal user ID. This is the ID of the user linked to the employee
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        employeeId:
+          type: string
+          description: The Financial settings tab &gt; The Financial information section &gt; Owner &gt; Click the magnifier  &gt; Employee ID &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEEsegmented key. This information is retrieved from window EP203000.
+        name:
+          type: string
+          description: The Financial settings tab &gt; The Financial information section &gt; Owner &gt; Click the magnifier &gt; Employee name &gt; The name of this employee. This information is retrieved from window EP203000.
+      description: The Financial settings tab &gt; Financial information section &gt; Owner &gt; The user in the work group who is responsible for the sales order.
+    soBillingContactInSalesOrderDto:
+      properties:
+        overrideContact:
+          type: boolean
+          description: Override contact &gt; A check box indicating that you want to override the default contact information.
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: The Financial settings tab &gt; The Invoice address section or on the Delivery address section
     saleOrderUpdateDtoInReopenSalesOrderActionDto:
       properties:
         project:
@@ -1664,24 +2243,81 @@ components:
         overrideNumberSeries:
           $ref: '#/components/schemas/DtoValueOfBoolean'
       description: Mandatory
-    shippingZoneInShipmentDto:
+    ShipmentOrderLineDto:
+      type: object
+      properties:
+        orderType:
+          type: string
+          description: Orders tab &gt; Order typer &gt; The type of the order.
+        orderNbr:
+          type: string
+          description: Orders tab &gt; Order no. &gt; The reference number of the sales or transfer order.
+        shippedQty:
+          type: number
+          description: Orders tab &gt; Shipped qty. &gt; The quantity of goods shipped in accordance with the order.
+          format: double
+        shippedWeight:
+          type: number
+          description: Orders tab &gt; Shipped weight &gt; The weight of the goods shipped in accordance with the order.
+          format: double
+        shippedVolume:
+          type: number
+          description: Orders tab &gt; Shipped volume &gt; The volume of the goods shipped in accordance with the sales or transfer order.
+          format: double
+        invoiceType:
+          type: string
+          description: Orders tab &gt; Invoice type &gt; The type of invoice for the goods shipped for the sales order.
+        invoiceNbr:
+          type: string
+          description: Orders tab &gt; Invoice no. &gt; The reference number of the invoice for the goods shipped.
+        inventoryDocType:
+          type: string
+          description: Orders tab &gt; Inventory doc. type &gt; The type of the inventory document that lists the items for this shipment.
+        inventoryRefNbr:
+          type: string
+          description: Orders tab &gt; Inventory ref. no. &gt; The reference number of the inventory document that lists the items for this shipment.
+        note:
+          type: string
+    RotRutDistributionUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        personalId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        extra:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+    locationInShipmentDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location to receive the shipment.'
+    ownerInShipmentDto:
       properties:
         id:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; Shipping zone ID &gt; The shipping zone of the customer.
-    branchNumberInCustomerInvoiceLineDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
+          description: Click the magnifier &gt; The identifier
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
         name:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: Branch* &gt; The branch that sells the line item or provides the service.'
+          description: Click the magnifier &gt; The displayed name
+      description: The top part &gt; Owner &gt; The user assigned to approve the document.
     subaccountInCustomerInvoiceLineDto:
       properties:
         subaccountNumber:
@@ -1715,6 +2351,172 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: 'Mandatory field: Subaccount* &gt; The corresponding subaccount used for this transaction.'
+    invoiceContactInCustomerInvoiceDto:
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        businessName:
+          type: string
+        attention:
+          type: string
+        email:
+          type: string
+        phone1:
+          type: string
+        overrideContact:
+          type: boolean
+      description: The Invoice address tab &gt; The Invoice contact section.
+    shippingZoneInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; Shipping zone ID &gt; The shipping zone of the customer.
+    DtoValueOfNullableOfInt16:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    DtoValueOfNullableOfInventoryReplenishmentSources:
+      type: object
+      properties:
+        value:
+          enum:
+          - DropShipToOrder
+          - Manufactured
+          - None
+          - Purchased
+          - PurchaseToOrder
+          - Transfer
+          type: string
+    branchNumberInCustomerInvoiceDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    soShippingContactInSalesOrderDto:
+      properties:
+        overrideContact:
+          type: boolean
+          description: Override contact &gt; A check box indicating that you want to override the default contact information.
+        contactId:
+          type: integer
+          format: int32
+        name:
+          type: string
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
+          type: string
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
+          type: string
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
+          type: string
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: Delivery settings tab &gt; Delivery address contact section
+    DtoValueOfSalesOrderAddressUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/SalesOrderAddressUpdateDto'
+    TaxCategoryNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    WorkTypeDto:
+      type: object
+      properties:
+        rutRotType:
+          enum:
+          - Rut
+          - Rot
+          type: string
+        description:
+          type: string
+        xmlTag:
+          type: string
+    CreateShipmentActionResultDto:
+      type: object
+      properties:
+        referenceNumber:
+          type: string
+        shipmentDto:
+          $ref: '#/components/schemas/ShipmentDto'
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    countryInCustomerDocumentAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    countryInShipmentAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    ReopenSalesOrderActionDto:
+      required:
+      - saleOrderUpdateDto
+      type: object
+      properties:
+        saleOrderUpdateDto:
+          $ref: '#/components/schemas/saleOrderUpdateDtoInReopenSalesOrderActionDto'
     BranchNumberDto:
       type: object
       properties:
@@ -1724,47 +2526,41 @@ components:
         name:
           type: string
           description: Click the magnifier. &gt; The name.
-    ReopenSalesOrderActionDto:
-      required:
-      - saleOrderUpdateDto
-      type: object
+    vatRegistrationIdInSalesOrderUpdateDto:
       properties:
-        saleOrderUpdateDto:
-          $ref: '#/components/schemas/saleOrderUpdateDtoInReopenSalesOrderActionDto'
-    accountInCustomerInvoiceDto:
+        value:
+          type: string
+      description: Mandatory field if Customer or GLN is not specified.
+    deliveryContactInShipmentDto:
       properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
+        overrideContact:
           type: boolean
-        number:
+          description: Override contact &gt; A check box that you select to not use+ the default contact information and to type new contact information.
+        contactId:
+          type: integer
+          format: int32
+        name:
           type: string
-          description: Number of item
-        description:
+          description: Name &gt; The legal name of to appear on the documents.
+        attention:
           type: string
-          description: Name of item/description
-      description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
-    shipViaInSalesOrderDto:
-      properties:
-        id:
+          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
+        email:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
+          description: Email &gt; The email address of the customer/supplier/company as a business entity.
+        web:
           type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Delivery settings tab &gt; Shipping information section &gt; Ship via &gt;  The Ship via code that represents the carrier and its service to be used for shipping the ordered goods.
+          description: Web &gt; The website of the company, if one exists.
+        phone1:
+          type: string
+          description: Phone 1 &gt; The default phone number.
+        phone2:
+          type: string
+          description: Phone 2 &gt; An additional phone number.
+        fax:
+          type: string
+          description: Fax &gt; The fax number.
+      description: Delivery settings tab &gt; Delivery address contact section &gt;
     CustomerInvoiceDto:
       type: object
       properties:
@@ -2044,385 +2840,141 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents an invoice in InvoiceController. Used by getting data.
-    countryInSalesOrderAddressDto:
+    customerInCustomerInvoiceDto:
       properties:
-        id:
+        number:
           type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
         name:
           type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    SalesOrderDto:
-      type: object
-      properties:
-        projectCD:
-          type: string
-          description: 'Mandatory field: The top part &gt; Project* &gt; The field consists of Project ID and Project description. Project ID: The identifier for the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.'
-        printDescriptionOnInvoice:
-          type: boolean
-          description: The top part &gt; Print description on invoice &gt; A check box
-        printNoteOnExternalDocuments:
-          type: boolean
-          description: The top part &gt; Print note on external sales documents &gt; A check box
-        printNoteOnInternalDocuments:
-          type: boolean
-          description: The top part &gt; Print line note on internal sales documents &gt; A check box
-        soBillingContact:
-          $ref: '#/components/schemas/soBillingContactInSalesOrderDto'
-        soBillingAddress:
-          $ref: '#/components/schemas/soBillingAddressInSalesOrderDto'
-        customerVATZone:
-          $ref: '#/components/schemas/customerVATZoneInSalesOrderDto'
-        invoiceSeparately:
-          type: boolean
-          description: Financial settings tab &gt; Financial information section &gt; Invoice separately &gt; A check box that indicating that this document is to be invoiced separately (if that is required).
-        invoiceNbr:
-          type: string
-          description: Financial settings tab &gt; Financial information section &gt; Invoice no.&gt; The invoice number of the invoice generated for this order.
-        invoiceDate:
-          type: string
-          description: Financial settings tab &gt; Financial information section &gt; Invoice date&gt; The date of the invoice generated for the order.
-          format: date-time
-        terms:
-          $ref: '#/components/schemas/termsInSalesOrderDto'
-        dueDate:
-          type: string
-          description: Financial settings tab &gt; Financial information section &gt; Due date &gt; The due date of the invoice according to the credit terms.
-          format: date-time
-        cashDiscountDate:
-          type: string
-          description: Financial settings tab &gt; Financial information section &gt; Cash discount date &gt; The date when the cash discount is available for the invoice based on the credit terms.
-          format: date-time
-        postPeriod:
-          type: string
-          description: The Financial settings tab &gt; Financial information section &gt; Post period &gt; The period to post the transactions generated by the invoice. Format MMYYYY.
-        salesPerson:
-          $ref: '#/components/schemas/salesPersonInSalesOrderDto'
-        commissionPercent:
-          type: string
-          description: The Commissions tab &gt; Commission (%) &gt; The percentage of commission generally earned by the salesperson.
-        commissionAmount:
-          type: string
-          description: "The Commissions tab &gt; Commission amt. &gt;\tThe commission amount earned by the salesperson on this document."
-        commissionableAmount:
-          type: string
-          description: "The Commissions tab &gt; Commissionable amount\t&gt; The amount used to calculate the commission."
-        owner:
-          $ref: '#/components/schemas/ownerInSalesOrderDto'
-        origOrderType:
-          type: string
-          description: 'Mandatory field: The top part &gt; Order type* &gt; The type of the document, which is one of the predefined order types or a custom order type created by using the window SO201000.'
-        origOrderNbr:
-          type: string
-          description: The top part &gt; Order no. &gt; The order number of the document.
-        soShippingContact:
-          $ref: '#/components/schemas/soShippingContactInSalesOrderDto'
-        soShippingAddress:
-          $ref: '#/components/schemas/soShippingAddressInSalesOrderDto'
-        schedShipment:
-          type: string
-          description: Delivery settings tab &gt; Shipping information section &gt; Sched. shipment &gt; The date when the ordered goods are scheduled to be shipped.
-          format: date-time
-        shipSeparately:
-          type: boolean
-          description: Delivery settings tab &gt; Shipping information section &gt; Ship separately &gt; This check box indicates that the goods for the customer should be shipped separately for each sales order.
-        shipComplete:
-          enum:
-          - BackOrderAllowed
-          - CancelRemainder
-          - ShipComplete
-          type: string
-          description: Delivery settings tab &gt; Shipping information section &gt; Shipping rule &gt; An option that controls whether incomplete and partial shipments for the order are allowed.
-        cancelBy:
-          type: string
-          description: Delivery settings tab &gt; Shipping information section &gt; Cancel by &gt; The date when the order should be cancelled if the Back order allowed option has been selected in the Shipping rule field.
-          format: date-time
-        canceled:
-          type: boolean
-          description: The Delivery settings tab &gt; The Shipping information section &gt; Cancelled &gt; A check box that indicates that the order has been cancelled on the date specified in Cancel by.
-        preferredWarehouse:
-          $ref: '#/components/schemas/preferredWarehouseInSalesOrderDto'
-        shipVia:
-          $ref: '#/components/schemas/shipViaInSalesOrderDto'
-        fobPoint:
-          $ref: '#/components/schemas/fobPointInSalesOrderDto'
-        priority:
-          type: integer
-          description: Delivery settings tab &gt; Shipping information section &gt; Priority &gt; Field only for informational purposes. The level of priority for processing order of this customer, as specified for the customer on the Shipping settings tab on the AR303000 window.
-          format: int32
-        shippingTerms:
-          $ref: '#/components/schemas/shippingTermsInSalesOrderDto'
-        shippingZone:
-          $ref: '#/components/schemas/shippingZoneInSalesOrderDto'
-        residentialDelivery:
-          type: boolean
-          description: Delivery settings tab &gt; Shipping information section &gt; Residential delivery &gt; A check box that you select to indicate that the shipment should be delivered to a residential area.
-        saturdayDelivery:
-          type: boolean
-          description: Delivery settings tab &gt; Shipping information section &gt; Saturday delivery &gt; A check box that indicates that the order may be delivered on Saturday.
-        insurance:
-          type: boolean
-          description: Delivery settings tab &gt; Shipping information section &gt; Insurance &gt; A check box that you select to indicate that insurance is required for this order.
-        transactionType:
-          $ref: '#/components/schemas/transactionTypeInSalesOrderDto'
-        paymentMethod:
-          $ref: '#/components/schemas/paymentMethodInSalesOrderDto'
-        cashAccount:
-          type: string
-          description: Payment settings tab &gt; Cash account
-        paymentRef:
-          type: string
-          description: Payment settings tab &gt; Payment ref.
-        isRotRutDeductible:
-          type: boolean
-          description: A check box indicating if the document is Rot/rut deductible (applicable for the Swedish markets)
-        emailed:
-          type: boolean
-          description: A check box indicating if the document is emailed
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/SalesOrderLineDto'
-          description: Document details tab &gt;
-        shipments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SalesOrderShipmentDto'
-          description: Shipment tab &gt;
-        orderType:
-          type: string
-          description: 'Mandatory field: The top part &gt; Order type &gt; The type of the document, which is one of the predefined order types or a custom order type created by using the (SO201000) window.'
-        orderNo:
-          type: string
-          description: 'The top part &gt; Order no.: &gt; The reference number of the document.'
-        status:
-          enum:
-          - Open
-          - Hold
-          - CreditHold
-          - Completed
-          - Cancelled
-          - BackOrder
-          - Shipping
-          - Invoiced
-          - PendingApproval
-          - Voided
-          type: string
-          description: 'The top part &gt; Status &gt; The status of the document, which can be one of the following options: On hold, Credit hold, Pending aååroval, Rejected, Open, Cancelled, Shipping, Back order, Invoiced, Completed.'
-        hold:
-          type: boolean
-          description: The top part &gt; Hold &gt; A check box that you select if the document is on hold and should not be processed further at this time.
-        date:
-          type: string
-          description: 'Mandatory field: The top part &gt; Date* &gt;  The date of the document.'
-          format: date-time
-        requestOn:
-          type: string
-          description: 'Mandatory field: The top part &gt; Requested on &gt; The date when the customer wants to receive the goods; this date provides the default values for the Requested on dates for order lines.'
-          format: date-time
-        customerOrder:
-          type: string
-          description: The top part &gt; Customer order &gt; The reference number of the original customer document that the sales order is based on.
-        customerRefNo:
-          type: string
-          description: The top part &gt; External reference &gt; The reference number of the sales order in a third-party application if Visma.net Financials is integrated with such an application and imports the sales orders from it.
-        customer:
-          $ref: '#/components/schemas/customerInSalesOrderDto'
-        contactId:
-          type: integer
-          description: The top part &gt; Contact &gt; The contact person of the customer.
-          format: int32
-        location:
-          $ref: '#/components/schemas/locationInSalesOrderDto'
-        currency:
-          type: string
-          description: The top part &gt; Currency &gt; The currency of the document.
-        description:
-          type: string
-          description: The top part &gt; Description &gt; A brief description of the document.
-        orderTotal:
-          type: number
-          description: 'The top part &gt; Order total &gt; The total amount of the document, which is calculated as follows:
-
-            Line Total + Misc.Charges + Freight + Premium Freight – Discount Total+ Tax Total'
-          format: double
-        orderTotalInBaseCurrency:
-          type: number
-          format: double
-        vatTaxableTotal:
-          type: number
-          description: The top part &gt; VAT taxable total &gt; The document total that is subject to VAT.
-          format: double
-        vatTaxableTotalInBaseCurrency:
-          type: number
-          format: double
-        vatExemptTotal:
-          type: number
-          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
-          format: double
-        vatExemptTotalInBaseCurrency:
-          type: number
-          format: double
-        taxTotal:
-          type: number
-          description: The top part &gt; VAT total &gt; The total amount of tax paid on the document.
-          format: double
-        taxTotalInBaseCurrency:
-          type: number
-          format: double
-        exchangeRate:
-          type: number
-          format: double
-        discountTotal:
-          type: number
-          format: double
-        discountTotalInBaseCurrency:
-          type: number
-          format: double
-        lastModifiedDateTime:
-          type: string
-          description: Background information collected from the system.
-          format: date-time
-        branchNumber:
-          $ref: '#/components/schemas/branchNumberInSalesOrderDto'
-        note:
-          type: string
-          description: Icon Notes on top of the window &gt; Pop-up window for providing any user-defined text connected to the order.
-        attachments:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttachmentDto'
-          description: The data containing information about the document attachments
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: This class represents a SOOrder in SOOrderController. Used by getting data.
-    ReopenSalesOrderActionResultDto:
-      type: object
-      properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    vatCodeInCustomerInvoiceLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: VAT category &gt; The VAT category (if applied) for the transaction. The category represents the type of goods or services.
-    paymentMethodInSalesOrderDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Payment settings tab &gt; Payment method
-    customerVATZoneInSalesOrderDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        description:
-          type: string
-          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultVatCategory:
-          type: string
-          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultTaxCategory:
-          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Financial settings tab &gt; Financial information section &gt; Customer VAT zone &gt; The customers VAT zone to be used to process customer sales orders, which generally is the zone associated with the customer's delivery address.
-    locationInAllocationsDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Location &gt; The location in the warehouse.
-    DtoValueOfNullableOfInventoryReplenishmentSources:
+          description: Click the magnifier. &gt; The name.
+      description: The top part &gt; Customer &gt; The customer associated with the document.
+    DtoValueOfNullableOfRutRotTypes:
       type: object
       properties:
         value:
           enum:
-          - DropShipToOrder
-          - Manufactured
-          - None
-          - Purchased
-          - PurchaseToOrder
-          - Transfer
+          - Rut
+          - Rot
           type: string
-    TaxDetailDto:
+    SalesOrderUpdateDto:
+      required:
+      - orderType
       type: object
       properties:
-        taxId:
-          type: string
-          description: 'Mandatory field: VAT ID* &gt; The ID of the VAT applied to the document.'
-        recordId:
-          type: integer
-          description: The id as stored in the database. It can be used when we want to update a VAT record.
-          format: int32
-        vatId:
-          $ref: '#/components/schemas/vatIdInTaxDetailDto'
-        vatRate:
-          type: number
-          description: VAT rate &gt; The rate of the VAT.
-          format: double
-        taxableAmount:
-          type: number
-          description: Taxable amount &gt; The taxable amount for the VAT, which is calculated at the document level.
-          format: double
-        vatAmount:
-          type: number
-          description: VAT &gt; The VAT amount for the specific VAT, which is calculated at the document level.
-          format: double
-        expenseAmount:
-          type: number
-          description: Expense Amount for the VAT type that has been added.
-          format: double
-      description: This class represents a VAT Detail Line. Used for getting data.
-    CancelSalesOrderActionResultDto:
-      type: object
-      properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    salesPersonInSalesOrderDto:
+        project:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        printDescriptionOnInvoice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        printNoteOnExternalDocuments:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        printNoteOnInternalDocuments:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        soBillingContact:
+          $ref: '#/components/schemas/DtoValueOfSalesOrderContactUpdateDto'
+        soBillingAddress:
+          $ref: '#/components/schemas/DtoValueOfSalesOrderAddressUpdateDto'
+        customerVATZone:
+          $ref: '#/components/schemas/DtoValueOfString'
+        invoiceSeparately:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        terms:
+          $ref: '#/components/schemas/DtoValueOfString'
+        salesPerson:
+          $ref: '#/components/schemas/DtoValueOfString'
+        owner:
+          $ref: '#/components/schemas/DtoValueOfNullableOfGuid'
+        origOrderType:
+          $ref: '#/components/schemas/DtoValueOfString'
+        origOrderNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        soShippingContact:
+          $ref: '#/components/schemas/DtoValueOfSalesOrderContactUpdateDto'
+        soShippingAddress:
+          $ref: '#/components/schemas/DtoValueOfSalesOrderAddressUpdateDto'
+        schedShipment:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        shipSeparately:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        shipComplete:
+          $ref: '#/components/schemas/DtoValueOfNullableOfSalesOrderShipCompleteStatuses'
+        cancelBy:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        canceled:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        preferredWarehouse:
+          $ref: '#/components/schemas/DtoValueOfString'
+        shipVia:
+          $ref: '#/components/schemas/DtoValueOfString'
+        fobPoint:
+          $ref: '#/components/schemas/DtoValueOfString'
+        priority:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt16'
+        shippingTerms:
+          $ref: '#/components/schemas/DtoValueOfString'
+        shippingZone:
+          $ref: '#/components/schemas/DtoValueOfString'
+        residentialDelivery:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        saturdayDelivery:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        insurance:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        transactionType:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        paymentMethod:
+          $ref: '#/components/schemas/DtoValueOfString'
+        cashAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        paymentRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        isRotRutDeductible:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        emailed:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        rotRutDetails:
+          $ref: '#/components/schemas/RotRutUpdateDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesOrderLineUpdateDto'
+        orderType:
+          $ref: '#/components/schemas/orderTypeInSalesOrderUpdateDto'
+        orderNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        date:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        requestOn:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        customerOrder:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerRefNo:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customer:
+          $ref: '#/components/schemas/customerInSalesOrderUpdateDto'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        contactId:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        gln:
+          $ref: '#/components/schemas/glnInSalesOrderUpdateDto'
+        vatRegistrationId:
+          $ref: '#/components/schemas/vatRegistrationIdInSalesOrderUpdateDto'
+        currency:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        recalculateShipment:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+      description: This class represent a Sales Order in Sales Order Controller. Used to pass data to server for creating or updating an order
+    fobPointInSalesOrderDto:
       properties:
         id:
           type: string
@@ -2430,20 +2982,7 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: The Commissions tab &gt; Salesperson ID &gt; The salesperson.
-    countryInCustomerDocumentAddressDto:
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
-          type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
+      description: Delivery settings tab &gt; Shipping information section &gt; FOB point &gt; The point where ownership of the goods is transferred to the customer.
     DirectDebitMandateDto:
       type: object
       properties:
@@ -2459,246 +2998,104 @@ components:
           type: string
           description: Mandate description show on Billing Address tab
       description: This class represents a Customer Mandate
-    toWarehouseInShipmentDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; To warehouse &gt; The warehouse to which the goods should be shipped in case of a transfer.
-    paymentMethodInCustomerInvoiceDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
-    salesPersonInSalesOrderLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Salesperson ID &gt; The salesperson associated with the sale of the line item.
-    ownerInShipmentDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: The top part &gt; Owner &gt; The user assigned to approve the document.
-    ShipmentOrderLineDto:
+    SegmentUpdateDto:
       type: object
       properties:
-        orderType:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
           type: string
-          description: Orders tab &gt; Order typer &gt; The type of the order.
-        orderNbr:
-          type: string
-          description: Orders tab &gt; Order no. &gt; The reference number of the sales or transfer order.
-        shippedQty:
-          type: number
-          description: Orders tab &gt; Shipped qty. &gt; The quantity of goods shipped in accordance with the order.
-          format: double
-        shippedWeight:
-          type: number
-          description: Orders tab &gt; Shipped weight &gt; The weight of the goods shipped in accordance with the order.
-          format: double
-        shippedVolume:
-          type: number
-          description: Orders tab &gt; Shipped volume &gt; The volume of the goods shipped in accordance with the sales or transfer order.
-          format: double
-        invoiceType:
-          type: string
-          description: Orders tab &gt; Invoice type &gt; The type of invoice for the goods shipped for the sales order.
+    SalesOrderLineUpdateDto:
+      required:
+      - inventoryNumber
+      type: object
+      properties:
         invoiceNbr:
-          type: string
-          description: Orders tab &gt; Invoice no. &gt; The reference number of the invoice for the goods shipped.
-        inventoryDocType:
-          type: string
-          description: Orders tab &gt; Inventory doc. type &gt; The type of the inventory document that lists the items for this shipment.
-        inventoryRefNbr:
-          type: string
-          description: Orders tab &gt; Inventory ref. no. &gt; The reference number of the inventory document that lists the items for this shipment.
-        note:
-          type: string
-    vatRegistrationIdInSalesOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field if Customer or GLN is not specified.
-    preferredWarehouseInSalesOrderDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Delivery settings tab &gt; The shipping information section &gt; Preferred warehouse ID
-    vatIdInTaxDetailDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: VAT ID &gt; The ID of the specific VAT applied.
-    AllocationsDto:
-      type: object
-      properties:
-        lineNbr:
-          type: integer
-          description: Line no. &gt; The line of the purchase order that contains the selected item.
-          format: int32
-        itemId:
-          type: string
-          description: ItemId &gt; The id of the item.
-        location:
-          $ref: '#/components/schemas/locationInAllocationsDto'
-        lotSerialNumber:
-          type: string
-          description: Lot/Serial no. &gt; The lot or serial number of the item.
-        quantity:
-          type: number
-          description: Quantity &gt; The quantity of the stock item with the same lot number. It is 1 for items with serial numbers.
-          format: double
-        uom:
-          type: string
-          description: UoM &gt; The unit of measure for the specified quantity of the inventory item.
-        expirationDate:
-          type: string
-          description: Expiration date &gt; The expiration date of the specified quantity of the stock item.
-          format: date-time
-        description:
-          type: string
-          description: Description &gt; The description of the stock item.
-      description: This class represents a Allocations for Purchase Receipt Line in PurchaseReceiptController. Used for getting data.
-    DtoValueOfNullableOfSalesOrderOperations:
-      type: object
-      properties:
-        value:
-          enum:
-          - Issue
-          - Receipt
-          type: string
-    fobPointInSalesOrderDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; FOB point &gt; The point where ownership of the goods is transferred to the customer.
-    countyInCustomerDocumentAddressDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
-    soShippingAddressInSalesOrderDto:
-      properties:
-        overrideAddress:
-          type: boolean
-          description: Override address &gt; A check box indicating that you want to override the default address information.
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInSalesOrderAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInSalesOrderAddressDto'
-      description: Delivery settings tab &gt; Delivery address section
-    inventoryNumberInSalesOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field
-    SalesOrderShipmentDto:
-      type: object
-      properties:
-        shipmentType:
-          type: string
-        shipmentNo:
-          type: string
-        shipmentDate:
-          type: string
-          format: date-time
-        shippedQty:
-          type: number
-          format: double
-        shippedWeight:
-          type: number
-          format: double
-        shippedVolume:
-          type: number
-          format: double
-        invoiceType:
-          type: string
-        invoiceNo:
-          type: string
-        inventoryDocType:
-          type: string
-        inventoryRefNo:
-          type: string
-    SalesOrderContactUpdateDto:
-      type: object
-      properties:
-        overrideContact:
+          $ref: '#/components/schemas/DtoValueOfString'
+        salesOrderOperation:
+          $ref: '#/components/schemas/DtoValueOfNullableOfSalesOrderOperations'
+        freeItem:
           $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        name:
+        requestedOn:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        shipOn:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        shipComplete:
+          $ref: '#/components/schemas/DtoValueOfNullableOfSalesOrderShipCompleteStatuses'
+        undershipThreshold:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        overshipThreshold:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        completed:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        markForPO:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        poSource:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInventoryReplenishmentSources'
+        lotSerialNbr:
           $ref: '#/components/schemas/DtoValueOfString'
-        attention:
+        expirationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        reasonCode:
           $ref: '#/components/schemas/DtoValueOfString'
-        email:
+        salesPerson:
           $ref: '#/components/schemas/DtoValueOfString'
-        web:
+        taxCategory:
           $ref: '#/components/schemas/DtoValueOfString'
-        phone1:
+        commissionable:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        alternateID:
           $ref: '#/components/schemas/DtoValueOfString'
-        phone2:
+        projectTask:
           $ref: '#/components/schemas/DtoValueOfString'
-        fax:
+        subaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        externalLink:
           $ref: '#/components/schemas/DtoValueOfString'
-    fromWarehouseInShipmentDto:
-      properties:
-        id:
+        isRotRutDeductible:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part &gt; Warehouse ID* &gt; The warehouse from which the goods should be shipped.'
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        inventoryId:
+          $ref: '#/components/schemas/inventoryIdInSalesOrderLineUpdateDto'
+        inventoryNumber:
+          $ref: '#/components/schemas/inventoryNumberInSalesOrderLineUpdateDto'
+        warehouse:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        unitCost:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        unitPrice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountPercent:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        manualDiscount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        discUnitPrice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        lineDescription:
+          $ref: '#/components/schemas/DtoValueOfString'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+      description: This class represent a Sales Order Line in Sales Order Controller. Used to pass data to server for creating or updating an order line
     SalesOrderAddressUpdateDto:
       type: object
       properties:
@@ -2718,63 +3115,21 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         county:
           $ref: '#/components/schemas/DtoValueOfString'
-    CreateShipmentActionDto:
-      required:
-      - orderType
-      - shipmentDate
-      - shipmentWarehouse
-      type: object
-      properties:
-        orderType:
-          type: string
-          description: Mandatory field
-        returnShipmentDto:
-          type: boolean
-        shipmentDate:
-          type: string
-          description: Mandatory field
-          format: date-time
-        shipmentWarehouse:
-          type: string
-          description: Mandatory field
-        operation:
-          type: string
-          description: 'Operation Type. Possible values: I or R, I = Issue, R = Receipt. If not set it will take the default one defined on Order Type.'
-    deliveryContactInShipmentDto:
-      properties:
-        overrideContact:
-          type: boolean
-          description: Override contact &gt; A check box that you select to not use+ the default contact information and to type new contact information.
-        contactId:
-          type: integer
-          format: int32
-        name:
-          type: string
-          description: Name &gt; The legal name of to appear on the documents.
-        attention:
-          type: string
-          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
-        email:
-          type: string
-          description: Email &gt; The email address of the customer/supplier/company as a business entity.
-        web:
-          type: string
-          description: Web &gt; The website of the company, if one exists.
-        phone1:
-          type: string
-          description: Phone 1 &gt; The default phone number.
-        phone2:
-          type: string
-          description: Phone 2 &gt; An additional phone number.
-        fax:
-          type: string
-          description: Fax &gt; The fax number.
-      description: Delivery settings tab &gt; Delivery address contact section &gt;
-    DtoValueOfBoolean:
+    DtoValueOfNullableOfDecimal:
       type: object
       properties:
         value:
-          type: boolean
+          type: number
+          format: double
+    shipViaInSalesOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Delivery settings tab &gt; Shipping information section &gt; Ship via &gt;  The Ship via code that represents the carrier and its service to be used for shipping the ordered goods.
     CustomerInvoiceLineDto:
       type: object
       properties:
@@ -2956,210 +3311,55 @@ components:
           $ref: '#/components/schemas/branchNumberInCustomerInvoiceLineDto'
         externalLink:
           type: string
-    branchNumberInSalesOrderDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: Document details tab &gt; Branch* &gt; The branch of the company.'
-    SalesOrderLineUpdateDto:
+    CreateShipmentActionDto:
       required:
-      - inventoryNumber
+      - orderType
+      - shipmentDate
+      - shipmentWarehouse
       type: object
       properties:
-        invoiceNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        salesOrderOperation:
-          $ref: '#/components/schemas/DtoValueOfNullableOfSalesOrderOperations'
-        freeItem:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        requestedOn:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        shipOn:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        shipComplete:
-          $ref: '#/components/schemas/DtoValueOfNullableOfSalesOrderShipCompleteStatuses'
-        undershipThreshold:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        overshipThreshold:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        completed:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        markForPO:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        poSource:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInventoryReplenishmentSources'
-        lotSerialNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        expirationDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        reasonCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        salesPerson:
-          $ref: '#/components/schemas/DtoValueOfString'
-        taxCategory:
-          $ref: '#/components/schemas/DtoValueOfString'
-        commissionable:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        alternateID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        projectTask:
-          $ref: '#/components/schemas/DtoValueOfString'
-        subaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-        externalLink:
-          $ref: '#/components/schemas/DtoValueOfString'
-        isRotRutDeductible:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
+        orderType:
           type: string
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        inventoryId:
-          $ref: '#/components/schemas/inventoryIdInSalesOrderLineUpdateDto'
-        inventoryNumber:
-          $ref: '#/components/schemas/inventoryNumberInSalesOrderLineUpdateDto'
-        warehouse:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        unitCost:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        unitPrice:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        discountPercent:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        discountAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        discountCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        manualDiscount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        discUnitPrice:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        lineDescription:
-          $ref: '#/components/schemas/DtoValueOfString'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-      description: This class represent a Sales Order Line in Sales Order Controller. Used to pass data to server for creating or updating an order line
-    customerInSalesOrderDto:
+          description: Mandatory field
+        returnShipmentDto:
+          type: boolean
+        shipmentDate:
+          type: string
+          description: Mandatory field
+          format: date-time
+        shipmentWarehouse:
+          type: string
+          description: Mandatory field
+        operation:
+          type: string
+          description: 'Operation Type. Possible values: I or R, I = Issue, R = Receipt. If not set it will take the default one defined on Order Type.'
+    glnInSalesOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field if Customer or VatRegistrationId is not specified.
+    warehouseInShipmentDetailLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Document details tab &gt; Warehouse* &gt; The warehouse from which the items is shipped.'
+    ProjectTaskIdDescriptionDto:
+      type: object
       properties:
         internalId:
           type: integer
+          description: The internal identifier.
           format: int32
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: The top part &gt; Customer &gt; The customer that has ordered the goods or services.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    countyInShipmentAddressDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
-    transactionTypeInSalesOrderDto:
-      properties:
-        id:
-          type: integer
-          description: Click on the magnifier. &gt; The identifier.
-          format: int32
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Intrastat section &gt; Transaction type
-    WarehouseIdDescriptionDto:
-      type: object
-      properties:
         id:
           type: string
           description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-    subaccountInSalesOrderLineDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Subaccount &gt; A subcategory of the account that carries identifying information.
-    DtoValueOfNullableOfRutRotTypes:
-      type: object
-      properties:
-        value:
-          enum:
-          - Rut
-          - Rot
-          type: string
-    soShippingContactInSalesOrderDto:
-      properties:
-        overrideContact:
-          type: boolean
-          description: Override contact &gt; A check box indicating that you want to override the default contact information.
-        contactId:
-          type: integer
-          format: int32
-        name:
-          type: string
-          description: Name &gt; The legal name of to appear on the documents.
-        attention:
-          type: string
-          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
-        email:
-          type: string
-          description: Email &gt; The email address of the customer/supplier/company as a business entity.
-        web:
-          type: string
-          description: Web &gt; The website of the company, if one exists.
-        phone1:
-          type: string
-          description: Phone 1 &gt; The default phone number.
-        phone2:
-          type: string
-          description: Phone 2 &gt; An additional phone number.
-        fax:
-          type: string
-          description: Fax &gt; The fax number.
-      description: Delivery settings tab &gt; Delivery address contact section
-    creditTermsInCustomerInvoiceDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part &gt; Terms* &gt; The credit terms used in relations with the customer.'
     SegmentDto:
       type: object
       properties:
@@ -3176,42 +3376,77 @@ components:
         segmentValueDescription:
           type: string
           description: The Segment values window &gt; The table &gt; The description of the segment value.
+    contactInCustomerInvoiceDto:
+      properties:
+        id:
+          type: integer
+          description: Click the magnifier &gt; The identifier
+          format: int32
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: The top part &gt; Contact &gt; The contact associated with the customer.
     DtoValueOfNullableOfBoolean:
       type: object
       properties:
         value:
           type: boolean
-    DtoValueOfNullableOfInt16:
+    ChildRecordDto:
       type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    toWarehouseInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; To warehouse &gt; The warehouse to which the goods should be shipped in case of a transfer.
+    debtCollectionInCustomerInvoiceDto:
+      properties:
+        caseNumber:
+          type: string
+          description: Debt Collection Case Number
+        caseType:
+          type: string
+          description: Debt Collection Case Number
+        caseStatus:
+          type: string
+          description: Debt Collection Case Number
+        caseUrl:
+          type: string
+          description: Debt Collection Case Number
+      description: Debt Collection information
+    countyInCustomerDocumentAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    inventoryNumberInSalesOrderLineUpdateDto:
       properties:
         value:
-          type: integer
-          format: int32
-    SegmentUpdateDto:
+          type: string
+      description: Mandatory field
+    MetadataDto:
       type: object
       properties:
-        segmentId:
+        totalCount:
           type: integer
-          format: int32
-        segmentValue:
-          type: string
-    RotRutDistributionUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        personalId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        amount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        extra:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     SendEmailActionResultDto:
       type: object
       properties:
@@ -3227,106 +3462,58 @@ components:
           type: string
         errorInfo:
           type: string
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfString:
+    DtoValueOfSalesOrderContactUpdateDto:
       type: object
       properties:
         value:
-          type: string
-    soBillingContactInSalesOrderDto:
-      properties:
-        overrideContact:
-          type: boolean
-          description: Override contact &gt; A check box indicating that you want to override the default contact information.
-        contactId:
-          type: integer
-          format: int32
-        name:
-          type: string
-          description: Name &gt; The legal name of to appear on the documents.
-        attention:
-          type: string
-          description: Attention &gt; The attention line as it is used in your customer's/supplier's/company's business letters. The intention of this line is to direct the letter to the right person if the letter is not addressed to any specific person.
-        email:
-          type: string
-          description: Email &gt; The email address of the customer/supplier/company as a business entity.
-        web:
-          type: string
-          description: Web &gt; The website of the company, if one exists.
-        phone1:
-          type: string
-          description: Phone 1 &gt; The default phone number.
-        phone2:
-          type: string
-          description: Phone 2 &gt; An additional phone number.
-        fax:
-          type: string
-          description: Fax &gt; The fax number.
-      description: The Financial settings tab &gt; The Invoice address section or on the Delivery address section
-    soBillingAddressInSalesOrderDto:
-      properties:
-        overrideAddress:
-          type: boolean
-          description: Override address &gt; A check box indicating that you want to override the default address information.
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInSalesOrderAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInSalesOrderAddressDto'
-      description: Financial settings tab &gt; Invoice address section
-    countyInSalesOrderAddressDto:
+          $ref: '#/components/schemas/SalesOrderContactUpdateDto'
+    vatCodeInCustomerInvoiceLineDto:
       properties:
         id:
           type: string
-          description: Click the magnifier &gt; The identifier
-        name:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
-    DtoValueOfSalesOrderAddressUpdateDto:
+          description: Click on the magnifier. &gt; The description.
+      description: VAT category &gt; The VAT category (if applied) for the transaction. The category represents the type of goods or services.
+    customerVatZoneInCustomerInvoiceDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Financial details tab &gt; The VAT info section &gt; Dunning letter date &gt;
+    DtoValueOfNullableOfGuid:
       type: object
       properties:
         value:
-          $ref: '#/components/schemas/SalesOrderAddressUpdateDto'
-    DtoValueOfNullableOfSalesOrderShipCompleteStatuses:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+    DtoValueOfNullableOfSalesOrderOperations:
       type: object
       properties:
         value:
           enum:
-          - BackOrderAllowed
-          - CancelRemainder
-          - ShipComplete
+          - Issue
+          - Receipt
           type: string
-    customerInSalesOrderUpdateDto:
+    branchNumberInSalesOrderDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Document details tab &gt; Branch* &gt; The branch of the company.'
+    DtoValueOfBoolean:
+      type: object
       properties:
         value:
-          type: string
-      description: Mandatory field if GLN or VatRegistrationId is not specified.
+          type: boolean
     subaccountInCustomerInvoiceDto:
       properties:
         subaccountNumber:
@@ -3360,20 +3547,122 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
-    ownerInSalesOrderDto:
+    vatIdInTaxDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT ID &gt; The ID of the specific VAT applied.
+    customerInSalesOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field if GLN or VatRegistrationId is not specified.
+    ReopenSalesOrderActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    DtoValueOfNullableOfSalesOrderShipCompleteStatuses:
+      type: object
+      properties:
+        value:
+          enum:
+          - BackOrderAllowed
+          - CancelRemainder
+          - ShipComplete
+          type: string
+    creditTermsInCustomerInvoiceDto:
       properties:
         id:
           type: string
-          description: Employee internal user ID. This is the ID of the user linked to the employee
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        employeeId:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-          description: The Financial settings tab &gt; The Financial information section &gt; Owner &gt; Click the magnifier  &gt; Employee ID &gt; The unique identifier, which is assigned to the employee in accordance with the configuration of the EMPLOYEEsegmented key. This information is retrieved from window EP203000.
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Terms* &gt; The credit terms used in relations with the customer.'
+    fobPointInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; FOB point &gt; The point where obligation of goods passes to the customer.
+    countyInSalesOrderAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
         name:
           type: string
-          description: The Financial settings tab &gt; The Financial information section &gt; Owner &gt; Click the magnifier &gt; Employee name &gt; The name of this employee. This information is retrieved from window EP203000.
-      description: The Financial settings tab &gt; Financial information section &gt; Owner &gt; The user in the work group who is responsible for the sales order.
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    customerInSalesOrderDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: The top part &gt; Customer &gt; The customer that has ordered the goods or services.
+    sellerInCustomerInvoiceLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Salesperson ID &gt; The identifier of the salesperson involved.
+    accountInCustomerInvoiceDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
+    inventoryIdInSalesOrderLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: InventoryId is deprecated, please use InventoryNumber instead.
     ShipmentDto:
       type: object
       properties:
@@ -3556,316 +3845,6 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a Shipment in ShipmentController. Used by getting data.
-    ArAdjustDto:
-      type: object
-      properties:
-        docType:
-          type: string
-        customerCD:
-          type: string
-        refNbr:
-          type: string
-        amountPaid:
-          type: number
-          format: double
-        cashDiscountTaken:
-          type: number
-          format: double
-        balance:
-          type: number
-          format: double
-        pendingPPD:
-          type: boolean
-        released:
-          type: boolean
-        hold:
-          type: boolean
-        voided:
-          type: boolean
-        ppdCrMemoRefNbr:
-          type: string
-        paymentRef:
-          type: string
-        status:
-          type: string
-        applicationDate:
-          type: string
-          format: date-time
-        applicationPeriod:
-          type: string
-        invoiceText:
-          type: string
-    accountInCustomerInvoiceLineDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Account* &gt; The sales account used for the transaction.'
-    inventoryIdInSalesOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: InventoryId is deprecated, please use InventoryNumber instead.
-    salesPersonInCustomerInvoiceDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The document details tab &gt; Salesperson ID &gt; The salesperson involved.
-    AttachmentDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the attachment.
-        id:
-          type: string
-          description: The ID of the attachment
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        revision:
-          type: integer
-          description: The version of the attachment.
-          format: int32
-    ShipmentDetailLineDto:
-      type: object
-      properties:
-        lineNumber:
-          type: integer
-          description: Document details tab &gt; The line number indicating sequence.
-          format: int32
-        orderType:
-          type: string
-          description: Document details tab &gt; The type of the document, which is one of the predefined order types or a custom order type.
-        orderNbr:
-          type: string
-          description: Document details tab &gt; Order no. &gt; The reference number of the document.
-        inventoryNumber:
-          type: string
-          description: Document details tab &gt; Item ID &gt; The ID of the item being shipped.
-        freeItem:
-          type: boolean
-          description: Document details tab &gt; Free item &gt; The free item earned by the customer, if applicable. (This column does not appear for transfer.)
-        warehouse:
-          $ref: '#/components/schemas/warehouseInShipmentDetailLineDto'
-        location:
-          $ref: '#/components/schemas/locationInShipmentDetailLineDto'
-        uom:
-          type: string
-          description: Document details tab &gt; UoM &gt; The unit of measure used for the item in shipment.
-        shippedQty:
-          type: number
-          description: Document details tab &gt; Shipped qty. &gt; The quantity of the item shipped with the specified properties.
-          format: double
-        orderedQty:
-          type: number
-          description: Document details tab &gt; Ordered qty. &gt; The quantity of the item ordered with the specified properties.
-          format: double
-        openQty:
-          type: number
-          description: Document details tab &gt; Open qty. &gt; The number of items with the specified quantities still to be shipped.
-          format: double
-        lotSerialNbr:
-          type: string
-          description: Document details tab &gt; Lot/serial no. &gt; The lot or serial number of particular items of the item.
-        expirationDate:
-          type: string
-          description: Document details tab &gt; Expiration date &gt; The expiration date of the item, if it is traced for this item ID.
-          format: date-time
-        reasonCode:
-          type: string
-          description: Document details tab &gt; Reason code &gt; The reason code used for shipments.
-        description:
-          type: string
-          description: Document details tab &gt; Description &gt; A short description for the shipment.
-        allocations:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllocationsDto'
-          description: Document details tab &gt; Allocations button &gt; Opens the Allocations dialog box, so that you can specify the locations, or lot or serial numbers for the units of the of the item.
-        orderLineNbr:
-          type: integer
-          description: Document details tab &gt; Order line no. &gt; Read only. The order's line number that matches this shipment line.
-          format: int32
-        note:
-          type: string
-        externalLink:
-          type: string
-        alternateID:
-          type: string
-        customStr1:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr2:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr3:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr4:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customStr5:
-          type: string
-          description: A free custom colum of type string with max length 100.
-        customDec1:
-          type: number
-          description: A free custom colum of type decimal with max 4 decimals.
-          format: double
-        customDec2:
-          type: number
-          description: A free custom colum of type decimal with max 4 decimals.
-          format: double
-        customInt1:
-          type: integer
-          description: A free custom colum of type int
-          format: int32
-        customInt2:
-          type: integer
-          description: A free custom colum of type int
-          format: int32
-        customDateTimeUTC1:
-          type: string
-          description: A free custom colum of type DateTime - in UTC timezone
-          format: date-time
-    shippingTermsInShipmentDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; Shipping terms &gt; The shipping terms used in relations with the customer.
-    warehouseInShipmentDetailLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Document details tab &gt; Warehouse* &gt; The warehouse from which the items is shipped.'
-    locationInCustomerInvoiceDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
-
-        location of the selected customer or, if the invoice is created from an opportunity,
-
-        it is the customer location specified for the opportunity.'
-    branchNumberInCustomerInvoiceDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
-    DtoValueOfSalesOrderContactUpdateDto:
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/SalesOrderContactUpdateDto'
-    projectInCustomerInvoiceDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    invoiceAddressInCustomerInvoiceDto:
-      properties:
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInCustomerDocumentAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInCustomerDocumentAddressDto'
-        overrideAddress:
-          type: boolean
-          description: Override address &gt; A check box that indicates (if selected) that the invoice address is not the default invoice address of the customer.
-      description: The Invoice address tab &gt; The Invoice address section.
-    invoiceContactInCustomerInvoiceDto:
-      properties:
-        contactId:
-          type: integer
-          format: int32
-        businessName:
-          type: string
-        attention:
-          type: string
-        email:
-          type: string
-        phone1:
-          type: string
-        overrideContact:
-          type: boolean
-      description: The Invoice address tab &gt; The Invoice contact section.
-    glnInSalesOrderUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field if Customer or VatRegistrationId is not specified.
     PackageDetailLineDto:
       type: object
       properties:
@@ -3916,90 +3895,14 @@ components:
         customRefNbr2:
           type: string
           description: Packages tab &gt; Customer ref. no. 2 &gt; An additional auxiliary reference number to appear on the carrier label for the box.
-    locationInShipmentDetailLineDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Document details tab &gt; Location &gt; The location in the warehouse from which the item is shipped.
-    debtCollectionInCustomerInvoiceDto:
-      properties:
-        caseNumber:
-          type: string
-          description: Debt Collection Case Number
-        caseType:
-          type: string
-          description: Debt Collection Case Number
-        caseStatus:
-          type: string
-          description: Debt Collection Case Number
-        caseUrl:
-          type: string
-          description: Debt Collection Case Number
-      description: Debt Collection information
-    DtoValueOfNullableOfGuid:
+    BackgroundApiAcceptedDto:
       type: object
       properties:
-        value:
-          type: string
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-    customerVatZoneInCustomerInvoiceDto:
-      properties:
         id:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
+        stateLocation:
           type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Financial details tab &gt; The VAT info section &gt; Dunning letter date &gt;
-    countryInShipmentAddressDto:
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
-          type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    ChildRecordDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-    shippingZoneInSalesOrderDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; Shipping zone
-    shipViaInShipmentDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Shipping information section &gt; Ship via &gt; The carrier used for shipping the goods.
-    modeOfTrasportInShipmentDto:
+    transactionTypeInShipmentDto:
       properties:
         id:
           type: integer
@@ -4008,27 +3911,8 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Delivery settings tab &gt; Intrastat section &gt; Mode of transportation &gt; The method of transportation.
-    PrepareInvoiceActionResultDto:
-      type: object
-      properties:
-        referenceNumber:
-          type: string
-        customerInvoiceDto:
-          $ref: '#/components/schemas/CustomerInvoiceDto'
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    termsInSalesOrderDto:
+      description: Delivery settings tab &gt; Intrastat section &gt; Transaction type &gt; The 1-digit code that describes the nature of the transaction (according to EU regulations for Intrastat reporting).
+    paymentMethodInCustomerInvoiceDto:
       properties:
         id:
           type: string
@@ -4036,8 +3920,93 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Financial settings tab &gt; Financial information section &gt; Terms* &gt; The credit terms used in relations with the customer. See also window CS206500.'
-    locationInShipmentDto:
+      description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
+    preferredWarehouseInSalesOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Delivery settings tab &gt; The shipping information section &gt; Preferred warehouse ID
+    RotRutUpdateDto:
+      type: object
+      properties:
+        distributedAutomaticaly:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        type:
+          $ref: '#/components/schemas/DtoValueOfNullableOfRutRotTypes'
+        appartment:
+          $ref: '#/components/schemas/DtoValueOfString'
+        estate:
+          $ref: '#/components/schemas/DtoValueOfString'
+        organizationNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        distribution:
+          type: array
+          items:
+            $ref: '#/components/schemas/RotRutDistributionUpdateDto'
+    shippingTermsInSalesOrderDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Delivery settings tab &gt; Shipping information section &gt; Shipping terms
+    soShippingAddressInSalesOrderDto:
+      properties:
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box indicating that you want to override the default address information.
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInSalesOrderAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInSalesOrderAddressDto'
+      description: Delivery settings tab &gt; Delivery address section
+    orderTypeInSalesOrderUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field
+    fromWarehouseInShipmentDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Warehouse ID* &gt; The warehouse from which the goods should be shipped.'
+    CancelSalesOrderActionDto:
+      required:
+      - orderType
+      type: object
+      properties:
+        orderType:
+          type: string
+          description: Mandatory field
+    locationInAllocationsDto:
       properties:
         countryId:
           type: string
@@ -4048,23 +4017,35 @@ components:
         name:
           type: string
           description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location to receive the shipment.'
-    InventoryNumberDescriptionDto:
-      type: object
+      description: Location &gt; The location in the warehouse.
+    locationInCustomerInvoiceDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
+
+        location of the selected customer or, if the invoice is created from an opportunity,
+
+        it is the customer location specified for the opportunity.'
+    branchNumberInCustomerInvoiceLineDto:
       properties:
         number:
           type: string
-          description: Number of item
-        description:
+          description: Click the magnifier. &gt; The identifier.
+        name:
           type: string
-          description: Name of item/description
-    CreateShipmentActionResultDto:
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Branch* &gt; The branch that sells the line item or provides the service.'
+    CancelSalesOrderActionResultDto:
       type: object
       properties:
-        referenceNumber:
-          type: string
-        shipmentDto:
-          $ref: '#/components/schemas/ShipmentDto'
         actionId:
           type: string
           format: uuid
@@ -4077,15 +4058,34 @@ components:
           type: string
         errorInfo:
           type: string
-    TaxCategoryNumberDescriptionDto:
-      type: object
+    deliveryAddressInShipmentDto:
       properties:
-        number:
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box that you select to not include the default address information and to type new address information.
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
           type: string
-          description: Number of item
-        description:
+          description: Address 1 &gt; The first line of the customer's/supplier's/company's/employee's contact address.
+        addressLine2:
           type: string
-          description: Name of item/description
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInShipmentAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInShipmentAddressDto'
+      description: Delivery settings tab &gt; Delivery address section &gt;
   securitySchemes:
     interactiveapi:
       type: oauth2

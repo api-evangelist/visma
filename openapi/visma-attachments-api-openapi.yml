@@ -186,6 +186,39 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    PaginatedResponseOfAttachment:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -215,55 +248,6 @@ components:
           type: string
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
-      additionalProperties: false
-    AttachmentUploadApi:
-      required:
-      - ContentType
-      - FileName
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier for the attachment
-          format: uuid
-        ContentType:
-          maxLength: 15
-          minLength: 0
-          type: string
-          description: 'Content type of the attachment. Allowed values: ''image/jpeg'', ''image/png'', ''image/tiff'', ''application/pdf'''
-        FileName:
-          maxLength: 200
-          minLength: 0
-          type: string
-          description: File name of the attachment. Allowed characters are alphabetic letters, numbers and characters - _ ()
-        Data:
-          type:
-          - string
-          - 'null'
-          description: 'Base64 encoded byte array of the file content. Individual file size limits: Sweden 20 MB, other countries 10 MB. Total size of all attachments on a document cannot exceed 20 MB'
-        Url:
-          type:
-          - string
-          - 'null'
-          description: 'Public URL for the attachment file. Individual file size limits: Sweden 20 MB, other countries 10 MB. Total size of all attachments on a document cannot exceed 20 MB'
-        Comment:
-          type:
-          - string
-          - 'null'
-          description: Optional comment for the attachment
-      additionalProperties: false
-    PaginatedResponseOfAttachment:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attachment'
       additionalProperties: false
     Attachment:
       type: object
@@ -400,6 +384,42 @@ components:
           description: Invoice payment date
           format: date-time
       additionalProperties: false
+    AttachmentUploadApi:
+      required:
+      - ContentType
+      - FileName
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the attachment
+          format: uuid
+        ContentType:
+          maxLength: 15
+          minLength: 0
+          type: string
+          description: 'Content type of the attachment. Allowed values: ''image/jpeg'', ''image/png'', ''image/tiff'', ''application/pdf'''
+        FileName:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: File name of the attachment. Allowed characters are alphabetic letters, numbers and characters - _ ()
+        Data:
+          type:
+          - string
+          - 'null'
+          description: 'Base64 encoded byte array of the file content. Individual file size limits: Sweden 20 MB, other countries 10 MB. Total size of all attachments on a document cannot exceed 20 MB'
+        Url:
+          type:
+          - string
+          - 'null'
+          description: 'Public URL for the attachment file. Individual file size limits: Sweden 20 MB, other countries 10 MB. Total size of all attachments on a document cannot exceed 20 MB'
+        Comment:
+          type:
+          - string
+          - 'null'
+          description: Optional comment for the attachment
+      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -419,26 +439,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

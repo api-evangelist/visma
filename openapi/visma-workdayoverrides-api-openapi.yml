@@ -89,6 +89,26 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -118,6 +138,77 @@ components:
           type: string
           description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
           format: date-time
+      additionalProperties: false
+    WorkDayOverrideRequest:
+      required:
+      - DateToOverride
+      - EmployeeId
+      type: object
+      properties:
+        EmployeeId:
+          type: string
+          description: 'The unique identifier of the employee that the work day override should be registered for. Source: Get from /v2/employees'
+          format: uuid
+        DateToOverride:
+          type: string
+          description: Date that should be overriden
+          format: date-time
+        StartTime:
+          type:
+          - string
+          - 'null'
+          description: 'Work day start time (format: HH:mm). Null indicates a free day.'
+        EndTime:
+          type:
+          - string
+          - 'null'
+          description: 'Work day end time (format: HH:mm). Null indicates a free day.'
+        LunchBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a lunch break, if any
+          format: uuid
+        FirstCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a first coffee break, if any
+          format: uuid
+        SecondCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a second coffee break, if any
+          format: uuid
+        FullTimeStartTime:
+          type:
+          - string
+          - 'null'
+          description: 'Full-time work day start time (format: HH:mm)'
+        FullTimeEndTime:
+          type:
+          - string
+          - 'null'
+          description: 'Full-time work day end time (format: HH:mm)'
+        FullTimeLunchBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a lunch break for full-time work day, if any
+          format: uuid
+        FullTimeFirstCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a first coffee break for full-time work day, if any
+          format: uuid
+        FullTimeSecondCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a second coffee break for full-time work day, if any
+          format: uuid
       additionalProperties: false
     PaginatedResponseOfWorkDayOverrideResponse:
       required:
@@ -232,95 +323,4 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    WorkDayOverrideRequest:
-      required:
-      - DateToOverride
-      - EmployeeId
-      type: object
-      properties:
-        EmployeeId:
-          type: string
-          description: 'The unique identifier of the employee that the work day override should be registered for. Source: Get from /v2/employees'
-          format: uuid
-        DateToOverride:
-          type: string
-          description: Date that should be overriden
-          format: date-time
-        StartTime:
-          type:
-          - string
-          - 'null'
-          description: 'Work day start time (format: HH:mm). Null indicates a free day.'
-        EndTime:
-          type:
-          - string
-          - 'null'
-          description: 'Work day end time (format: HH:mm). Null indicates a free day.'
-        LunchBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a lunch break, if any
-          format: uuid
-        FirstCoffeeBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a first coffee break, if any
-          format: uuid
-        SecondCoffeeBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a second coffee break, if any
-          format: uuid
-        FullTimeStartTime:
-          type:
-          - string
-          - 'null'
-          description: 'Full-time work day start time (format: HH:mm)'
-        FullTimeEndTime:
-          type:
-          - string
-          - 'null'
-          description: 'Full-time work day end time (format: HH:mm)'
-        FullTimeLunchBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a lunch break for full-time work day, if any
-          format: uuid
-        FullTimeFirstCoffeeBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a first coffee break for full-time work day, if any
-          format: uuid
-        FullTimeSecondCoffeeBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a second coffee break for full-time work day, if any
-          format: uuid
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false

@@ -246,6 +246,30 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    VatCategoryDto:
+      type: object
+      properties:
+        vatCategoryId:
+          type: string
+          description: 'Mandatory field: The top part &gt; VAT category ID* &gt; The unique ID of the VAT category. An alphanumeric string of up to six characters can be used.'
+        description:
+          type: string
+          description: The top part &gt; Description &gt; A detailed description of the category.
+        active:
+          type: boolean
+          description: The top part &gt; Active &gt; A check box that means (if selected) that this VAT category is active.
+        excludeListedTaxes:
+          type: boolean
+          description: The top part &gt; Exclude listed taxes &gt; A check box that indicates (if selected) this VAT category should exclude the listed taxes from VAT zones.
+        lastModifiedDateTime:
+          type: string
+          description: Systemgenerated information.
+          format: date-time
+        vatCategoryLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/VatCategoryLineDto'
+          description: The table &gt;
     VatCategoryLineDto:
       type: object
       properties:
@@ -293,37 +317,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VatRateLineDto'
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    VatCategoryDto:
-      type: object
-      properties:
-        vatCategoryId:
-          type: string
-          description: 'Mandatory field: The top part &gt; VAT category ID* &gt; The unique ID of the VAT category. An alphanumeric string of up to six characters can be used.'
-        description:
-          type: string
-          description: The top part &gt; Description &gt; A detailed description of the category.
-        active:
-          type: boolean
-          description: The top part &gt; Active &gt; A check box that means (if selected) that this VAT category is active.
-        excludeListedTaxes:
-          type: boolean
-          description: The top part &gt; Exclude listed taxes &gt; A check box that indicates (if selected) this VAT category should exclude the listed taxes from VAT zones.
-        lastModifiedDateTime:
-          type: string
-          description: Systemgenerated information.
-          format: date-time
-        vatCategoryLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/VatCategoryLineDto'
-          description: The table &gt;
     VatRateLineDto:
       type: object
       properties:
@@ -344,6 +337,13 @@ components:
           type: string
           description: The date and time from which the VAT rate is effective.
           format: date-time
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
   securitySchemes:
     interactiveapi:
       type: oauth2

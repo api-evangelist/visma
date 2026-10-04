@@ -298,6 +298,100 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    AccountOpeningBalanceApi:
+      type: object
+      properties:
+        AccountNumber:
+          type: integer
+          description: The account number to update
+          format: int64
+        Balance:
+          type: number
+          description: The opening balance amount to set
+          format: double
+      additionalProperties: false
+    FiscalYearUpdateApi:
+      type: object
+      properties:
+        IsLockedForAccounting:
+          type: boolean
+          description: Indicates if the fiscal year should be locked for accounting purposes
+        BookkeepingMethod:
+          enum:
+          - 0
+          - 1
+          - 2
+          type:
+          - integer
+          - 'null'
+          description: The bookkeeping method used for the fiscal year. Defaults to the existing value if null
+          format: int32
+      additionalProperties: false
+    FiscalYearApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier for the fiscal year
+          format: uuid
+          readOnly: true
+        StartDate:
+          type: string
+          description: The start date of the fiscal year
+          format: date-time
+        EndDate:
+          type: string
+          description: The end date of the fiscal year
+          format: date-time
+        IsLockedForAccounting:
+          type: boolean
+          description: Indicates if the fiscal year is locked for accounting purposes
+        BookkeepingMethod:
+          enum:
+          - 0
+          - 1
+          - 2
+          type: integer
+          description: The bookkeeping method used for the fiscal year
+          format: int32
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    OpeningBalancesApi:
+      type: object
+      properties:
+        Name:
+          type:
+          - string
+          - 'null'
+          description: The name of the account
+        Number:
+          type: integer
+          description: The account number
+          format: int64
+        Balance:
+          type: number
+          description: The opening balance amount on the account
+          format: double
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -341,84 +435,6 @@ components:
           items:
             $ref: '#/components/schemas/FiscalYearApi'
       additionalProperties: false
-    FiscalYearApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: The unique identifier for the fiscal year
-          format: uuid
-          readOnly: true
-        StartDate:
-          type: string
-          description: The start date of the fiscal year
-          format: date-time
-        EndDate:
-          type: string
-          description: The end date of the fiscal year
-          format: date-time
-        IsLockedForAccounting:
-          type: boolean
-          description: Indicates if the fiscal year is locked for accounting purposes
-        BookkeepingMethod:
-          enum:
-          - 0
-          - 1
-          - 2
-          type: integer
-          description: The bookkeeping method used for the fiscal year
-          format: int32
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    OpeningBalancesApi:
-      type: object
-      properties:
-        Name:
-          type:
-          - string
-          - 'null'
-          description: The name of the account
-        Number:
-          type: integer
-          description: The account number
-          format: int64
-        Balance:
-          type: number
-          description: The opening balance amount on the account
-          format: double
-      additionalProperties: false
-    PaginatedResponseOfOpeningBalancesApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/OpeningBalancesApi'
-      additionalProperties: false
     FiscalYearCreateApi:
       required:
       - EndDate
@@ -444,54 +460,38 @@ components:
           description: The bookkeeping method used for the fiscal year. Defaults to the bookkeeping method of the closest existing fiscal year if null
           format: int32
       additionalProperties: false
-    FiscalYearUpdateApi:
+    CommonError:
       type: object
       properties:
-        IsLockedForAccounting:
-          type: boolean
-          description: Indicates if the fiscal year should be locked for accounting purposes
-        BookkeepingMethod:
-          enum:
-          - 0
-          - 1
-          - 2
-          type:
-          - integer
-          - 'null'
-          description: The bookkeeping method used for the fiscal year. Defaults to the existing value if null
-          format: int32
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        Field:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+        ErrorCode:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
-    AccountOpeningBalanceApi:
+    PaginatedResponseOfOpeningBalancesApi:
+      required:
+      - Data
+      - Meta
       type: object
       properties:
-        AccountNumber:
-          type: integer
-          description: The account number to update
-          format: int64
-        Balance:
-          type: number
-          description: The opening balance amount to set
-          format: double
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpeningBalancesApi'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

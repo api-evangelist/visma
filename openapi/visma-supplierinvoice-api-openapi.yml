@@ -1875,33 +1875,62 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    paySelectedInSupplierInvoiceUpdateDto:
+    subaccountInSupplierInvoiceLineDto:
       properties:
-        value:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
           type: boolean
-      description: The Financial details tab &gt; The Default Payment Info section &gt; When set to true indicates that the document is approved for payment.
-    siteIdInSupplierInvoiceLandedCostUpdateDto:
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'The table &gt; Mandatory field: Subaccount* &gt; The corresponding subaccount used for this invoice line.'
+    branchInSupplierInvoiceLineUpdateDto:
       properties:
         value:
           type: string
-      description: Landed Costs Tab &gt; Warehouse &gt; The ID of the warehouse
-    DtoValueOfNullableOfSupplierInvoiceTypes:
-      type: object
+      description: Branch is deprecated, please use BranchNumber instead.
+    supplierTaxZoneInSupplierInvoiceDto:
       properties:
-        value:
-          enum:
-          - Invoice
-          - CreditAdj
-          - DebitAdj
-          - Prepayment
-          - Refund
-          - Payment
+        id:
           type: string
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
+          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        description:
+          type: string
+          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultVatCategory:
+          type: string
+          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
+        defaultTaxCategory:
+          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: The Financial details tab &gt; The VAT section &gt; Supplier VAT Zone &gt; The VAT zone of the supplier, which is specified in the  AP303000 window.
     AttachmentDto:
       type: object
       properties:
@@ -1917,6 +1946,44 @@ components:
           type: integer
           description: The version of the attachment.
           format: int32
+    TaxDetailUpdateDto:
+      type: object
+      properties:
+        taxId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taxableAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        vatAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        expenseAmount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+      description: This class represents a Tax Detail Line. Used to pass data to server for updating a tax line
+    AddPOReceiptLineDto:
+      type: object
+      properties:
+        poReceiptNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        poReceiptLineNumber:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        unitCostInCurrency:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        costInCurrency:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+    supplierInSupplierInvoiceDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal id of the supplier
+          format: int64
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Top part &gt; Supplier* &gt; The identifier of the supplier referred to in the document.
     DtoValueOfNullableOfTaxCalcMode:
       type: object
       properties:
@@ -1926,6 +1993,80 @@ components:
           - Gross
           - Net
           type: string
+    prebookAccountNumberInSupplierInvoiceLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Account used for prebooking. Note that this feature is not available for all countries.
+    branchNumberInSupplierInvoiceLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'The table &gt; Mandatory field: Branch* &gt; The branch that purchases the line item or service.
+
+        Note: The field type has been changed from string to BranchNumberDto, please consider doing changes accordingly.'
+    vatCodeInSupplierInvoiceLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; VAT category &gt; The VAT category (if applied) for the transaction. Unless you specify otherwise, it is the default VAT category of the supplier location's VAT zone.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    prebookAccountInSupplierInvoiceLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Prebook account used on the line. Note that this feature is not available in all countries.
+    amountInSupplierInvoiceLandedCostUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: Landed Costs Tab &gt; Amount &gt; The amount in currency of the landed cost
+    projectTaskInSupplierInvoiceLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; Project task &gt; The project task associated with the invoice line.
     accountInSupplierInvoiceLineDto:
       properties:
         type:
@@ -1951,68 +2092,76 @@ components:
           type: string
           description: Name of item/description
       description: 'The table &gt; Mandatory field: Account* &gt; The purchase account used for the invoice line.'
-    SupplierInvoiceLandedCostDto:
-      type: object
+    approvalDetailsInSupplierInvoiceDto:
       properties:
-        lineNumber:
-          type: integer
-          description: Landed Costs Tab &gt; Number at the left indicating the line number of the table.
-          format: int32
-        landedCostCodeId:
+        attachmentID:
           type: string
-          description: Landed Costs Tab &gt; Landed cost code &gt; The Landed Cost Code ID lf the Landed Cost Code
-        description:
+          description: The Approval details tab &gt; Default document &gt; The default document that includes the payments requiring approval.
+        comment:
           type: string
-          description: Landed Costs Tab &gt; Description &gt; The description of the landed cost
-        amount:
-          type: number
-          description: Landed Costs Tab &gt; Amount &gt; The amount of the landed cost
-          format: double
-        vatCategoryId:
-          type: string
-          description: Landed Costs Tab &gt; VAT Category &gt; The ID of VAT cateogry
-        purchaseReceiptType:
-          enum:
-          - PoReceipt
-          - PoReturn
-          - TransferReceipt
-          type: string
-          description: Landed Costs Tab &gt; Purchase Receipt Type &gt; The purchase receipt type
-        purcahseOrderReceiptNumber:
-          type: string
-          description: Landed Costs Tab &gt; Purchase order receipt no. &gt; The purchase order receipt number
-        inventoryId:
-          type: string
-          description: Landed Costs Tab &gt; Item ID &gt; The ID of the inventory item
-        siteId:
-          type: string
-          description: Landed Costs Tab &gt; Warehouse &gt; The ID of the warehouse
-        locationId:
-          type: string
-          description: Landed Costs Tab &gt; Location &gt; The ID of the warehouse location
-    PrebookingUpdateDto:
-      type: object
+          description: The Approval details tab &gt; Comment &gt; The comment connected with the approval of the payments.
+      description: The Approval details tab &gt;
+    locationInSupplierInvoiceDto:
       properties:
-        accountNumber:
-          $ref: '#/components/schemas/accountNumberInPrebookingUpdateDto'
-        subaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-          description: Subaccount used for prebooking.
-    projectTaskInSupplierInvoiceLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
+        countryId:
+          type: string
+          description: Location*.
         id:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
+          description: Click the magnifier &gt; The identifier
+        name:
           type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The table &gt; Project task &gt; The project task associated with the invoice line.
+          description: Click the magnifier &gt; The displayed name
+      description: The Top part &gt; Location* &gt; The supplier location associated with the purchase.
+    LinkLineDto:
+      type: object
+      properties:
+        purchaseType:
+          enum:
+          - PurchaseOrder
+          - PurchaseReceipt
+          type: string
+          description: 'PurchaseTye can be either {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseOrder} or {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt}<para>
+
+            It should be noted that for stock-items, its only limited to {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt}, however,
+
+            for non-stock items we can choose either {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt} or {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseOrder}</para>'
+        purchaseNumber:
+          $ref: '#/components/schemas/purchaseNumberInLinkLineDto'
+        purchaseLineNbr:
+          $ref: '#/components/schemas/purchaseLineNbrInLinkLineDto'
+    SupplierInvoiceLandedCostUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNumber:
+          $ref: '#/components/schemas/lineNumberInSupplierInvoiceLandedCostUpdateDto'
+        landedCostCodeId:
+          $ref: '#/components/schemas/landedCostCodeIdInSupplierInvoiceLandedCostUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInSupplierInvoiceLandedCostUpdateDto'
+        amount:
+          $ref: '#/components/schemas/amountInSupplierInvoiceLandedCostUpdateDto'
+        taxCategoryId:
+          $ref: '#/components/schemas/taxCategoryIdInSupplierInvoiceLandedCostUpdateDto'
+        poReceiptNumber:
+          $ref: '#/components/schemas/poReceiptNumberInSupplierInvoiceLandedCostUpdateDto'
+        inventoryId:
+          $ref: '#/components/schemas/inventoryIdInSupplierInvoiceLandedCostUpdateDto'
+        siteId:
+          $ref: '#/components/schemas/siteIdInSupplierInvoiceLandedCostUpdateDto'
+        locationId:
+          $ref: '#/components/schemas/locationIdInSupplierInvoiceLandedCostUpdateDto'
+    validateLineDetailsInSupplierInvoiceUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: If this flag is set/true, the system will surface any line validation errors to the clients rather than silently ignoring these.
     SupplierInvoiceLineDto:
       type: object
       properties:
@@ -2141,6 +2290,54 @@ components:
         termEndDate:
           type: string
           format: date-time
+    paymentMethodInSupplierInvoiceDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Financial details tab &gt; Payment method &gt; The payment method used for the payment.
+    SupplierInvoiceLandedCostDto:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          description: Landed Costs Tab &gt; Number at the left indicating the line number of the table.
+          format: int32
+        landedCostCodeId:
+          type: string
+          description: Landed Costs Tab &gt; Landed cost code &gt; The Landed Cost Code ID lf the Landed Cost Code
+        description:
+          type: string
+          description: Landed Costs Tab &gt; Description &gt; The description of the landed cost
+        amount:
+          type: number
+          description: Landed Costs Tab &gt; Amount &gt; The amount of the landed cost
+          format: double
+        vatCategoryId:
+          type: string
+          description: Landed Costs Tab &gt; VAT Category &gt; The ID of VAT cateogry
+        purchaseReceiptType:
+          enum:
+          - PoReceipt
+          - PoReturn
+          - TransferReceipt
+          type: string
+          description: Landed Costs Tab &gt; Purchase Receipt Type &gt; The purchase receipt type
+        purcahseOrderReceiptNumber:
+          type: string
+          description: Landed Costs Tab &gt; Purchase order receipt no. &gt; The purchase order receipt number
+        inventoryId:
+          type: string
+          description: Landed Costs Tab &gt; Item ID &gt; The ID of the inventory item
+        siteId:
+          type: string
+          description: Landed Costs Tab &gt; Warehouse &gt; The ID of the warehouse
+        locationId:
+          type: string
+          description: Landed Costs Tab &gt; Location &gt; The ID of the warehouse location
     TaxDetailDto:
       type: object
       properties:
@@ -2170,72 +2367,136 @@ components:
           description: Expense Amount for the VAT type that has been added.
           format: double
       description: This class represents a VAT Detail Line. Used for getting data.
-    prebookAccountInSupplierInvoiceLineDto:
+    SegmentUpdateDto:
+      type: object
       properties:
-        type:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    DtoValueOfNullableOfSupplierInvoiceTypes:
+      type: object
+      properties:
+        value:
           enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
+          - Invoice
+          - CreditAdj
+          - DebitAdj
+          - Prepayment
+          - Refund
+          - Payment
           type: string
-          description: Account &gt; The account number.
-        externalCode1:
+    creditTermsInSupplierInvoiceDto:
+      properties:
+        id:
           type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
+          description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
-          description: Name of item/description
-      description: Prebook account used on the line. Note that this feature is not available in all countries.
+          description: Click on the magnifier. &gt; The description.
+      description: The Top part &gt; Terms &gt; The credit terms associated with the supplier (unavailable for prepayments and debit adjustments)
     DtoValueOfNullableOfDecimal:
       type: object
       properties:
         value:
           type: number
           format: double
+    undoSplitLineInSupplierInvoiceLineUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: 'When set to true on an invoice line with Operation = Delete, the line is treated as an undo split-line request instead of an ordinary delete.
+
+        The field only has an effect for split child lines; the selected line must belong to a split hierarchy.
+
+        The undo removes the split child line and restores the amount/quantity to the parent split line through the same undo split action as the UI.
+
+        On prebooked documents, ordinary line delete remains blocked; this field may be used to request undo split for an eligible split child line.
+
+        When omitted or false, Delete keeps its normal delete behavior.'
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    descriptionInSupplierInvoiceLandedCostUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Landed Costs Tab &gt; Description &gt; The description of the landed cost
+    accountNumberInPrebookingUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Account used for prebooking.
+    prebookSubaccountInSupplierInvoiceLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Prebook subaccount used on the line. Note that this feature is not available in all countries.
+    lineNumberInSupplierInvoiceLandedCostUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: Landed Costs Tab &gt; Number at the left indicating the line number of the table.
+    purchaseNumberInLinkLineDto:
+      properties:
+        value:
+          type: string
+      description: 'PurchaseNumber refers to either PurchaseOrder or PurchaseReceipt number depends on the value of {Visma.net.ERP.Web.Api.Model.V1.AP.LinkLineDto.PurchaseType}
+
+        If {Visma.net.ERP.Web.Api.Model.V1.AP.LinkLineDto.PurchaseType} is set to {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt}, then it should refer to the PruchaseReceipt number
+
+        otherwise it refers to the PurchaseOrder'
+    projectInSupplierInvoiceLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; Project &gt; The project associated with the invoice line.
     financialPeriodInSupplierInvoiceUpdateDto:
       properties:
         value:
           type: string
       description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
-    amountInSupplierInvoiceLandedCostUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: Landed Costs Tab &gt; Amount &gt; The amount in currency of the landed cost
-    TaxDetailUpdateDto:
-      type: object
-      properties:
-        taxId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        taxableAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        vatAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        expenseAmount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-      description: This class represents a Tax Detail Line. Used to pass data to server for updating a tax line
-    locationInSupplierInvoiceDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: The Top part &gt; Location* &gt; The supplier location associated with the purchase.
     BackgroundApiAcceptedDto:
       type: object
       properties:
@@ -2243,11 +2504,70 @@ components:
           type: string
         stateLocation:
           type: string
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    locationIdInSupplierInvoiceLandedCostUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Landed Costs Tab &gt; Location &gt; The ID of the warehouse location
+    taxCategoryIdInSupplierInvoiceLandedCostUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Landed Costs Tab &gt; VAT Category &gt; The ID of VAT cateogry
+    postPeriodInSupplierInvoiceUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
     poReceiptNumberInSupplierInvoiceLandedCostUpdateDto:
       properties:
         value:
           type: string
       description: Landed Costs Tab &gt; Purchase order receipt no. &gt; The purchase order receipt number
+    paySelectedInSupplierInvoiceUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: The Financial details tab &gt; The Default Payment Info section &gt; When set to true indicates that the document is approved for payment.
     SupplierInvoiceUpdateDto:
       type: object
       properties:
@@ -2343,248 +2663,6 @@ components:
         value:
           type: integer
           format: int32
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
-    LinkLineDto:
-      type: object
-      properties:
-        purchaseType:
-          enum:
-          - PurchaseOrder
-          - PurchaseReceipt
-          type: string
-          description: 'PurchaseTye can be either {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseOrder} or {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt}<para>
-
-            It should be noted that for stock-items, its only limited to {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt}, however,
-
-            for non-stock items we can choose either {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt} or {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseOrder}</para>'
-        purchaseNumber:
-          $ref: '#/components/schemas/purchaseNumberInLinkLineDto'
-        purchaseLineNbr:
-          $ref: '#/components/schemas/purchaseLineNbrInLinkLineDto'
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    branchInSupplierInvoiceLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Branch is deprecated, please use BranchNumber instead.
-    DtoValueOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    subaccountInSupplierInvoiceLineDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: 'The table &gt; Mandatory field: Subaccount* &gt; The corresponding subaccount used for this invoice line.'
-    postPeriodInSupplierInvoiceUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    purchaseNumberInLinkLineDto:
-      properties:
-        value:
-          type: string
-      description: 'PurchaseNumber refers to either PurchaseOrder or PurchaseReceipt number depends on the value of {Visma.net.ERP.Web.Api.Model.V1.AP.LinkLineDto.PurchaseType}
-
-        If {Visma.net.ERP.Web.Api.Model.V1.AP.LinkLineDto.PurchaseType} is set to {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt}, then it should refer to the PruchaseReceipt number
-
-        otherwise it refers to the PurchaseOrder'
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    creditTermsInSupplierInvoiceDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Top part &gt; Terms &gt; The credit terms associated with the supplier (unavailable for prepayments and debit adjustments)
-    descriptionInSupplierInvoiceLandedCostUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Landed Costs Tab &gt; Description &gt; The description of the landed cost
-    SupplierInvoiceLineUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        inventoryNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        transactionDescription:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        unitCostInCurrency:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        costInCurrency:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        discountPercent:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        discountAmountInCurrency:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        discountUnitCostInCurrency:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        manualDiscount:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        accountNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        subaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-        deferralSchedule:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        deferralCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        vatCodeId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        branch:
-          $ref: '#/components/schemas/branchInSupplierInvoiceLineUpdateDto'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        projectId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        projectInternalId:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        projectTaskId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        projectTaskInternalId:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        splitLine:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        undoSplitLine:
-          $ref: '#/components/schemas/undoSplitLineInSupplierInvoiceLineUpdateDto'
-        splitHierarchy:
-          $ref: '#/components/schemas/DtoValueOfString'
-        retainagePct:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        curyRetainageAmt:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        linkLine:
-          $ref: '#/components/schemas/LinkLineDto'
-        termStartDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        termEndDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        externalInventoryId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        prebookAccountNumber:
-          $ref: '#/components/schemas/prebookAccountNumberInSupplierInvoiceLineUpdateDto'
-        prebookSubaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-          description: Subaccount used for prebooking. Note that this feature is not available for all countries.
-    accountNumberInPrebookingUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Account used for prebooking.
-    branchNumberInSupplierInvoiceLineDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'The table &gt; Mandatory field: Branch* &gt; The branch that purchases the line item or service.
-
-        Note: The field type has been changed from string to BranchNumberDto, please consider doing changes accordingly.'
-    locationIdInSupplierInvoiceLandedCostUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Landed Costs Tab &gt; Location &gt; The ID of the warehouse location
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    lineNumberInSupplierInvoiceLandedCostUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: Landed Costs Tab &gt; Number at the left indicating the line number of the table.
-    vatIdInTaxDetailDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: VAT ID &gt; The ID of the specific VAT applied.
     MetadataDto:
       type: object
       properties:
@@ -2594,35 +2672,37 @@ components:
         maxPageSize:
           type: integer
           format: int64
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    undoSplitLineInSupplierInvoiceLineUpdateDto:
-      properties:
-        value:
-          type: boolean
-      description: 'When set to true on an invoice line with Operation = Delete, the line is treated as an undo split-line request instead of an ordinary delete.
-
-        The field only has an effect for split child lines; the selected line must belong to a split hierarchy.
-
-        The undo removes the split child line and restores the amount/quantity to the parent split line through the same undo split action as the UI.
-
-        On prebooked documents, ordinary line delete remains blocked; this field may be used to request undo split for an eligible split child line.
-
-        When omitted or false, Delete keeps its normal delete behavior.'
-    DtoValueOfString:
-      type: object
+    siteIdInSupplierInvoiceLandedCostUpdateDto:
       properties:
         value:
           type: string
-    landedCostCodeIdInSupplierInvoiceLandedCostUpdateDto:
+      description: Landed Costs Tab &gt; Warehouse &gt; The ID of the warehouse
+    TaxCategoryNumberDescriptionDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+    ApprovalDetailsUpdateDto:
+      type: object
+      properties:
+        attachmentID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        comment:
+          $ref: '#/components/schemas/DtoValueOfString'
+    purchaseLineNbrInLinkLineDto:
       properties:
         value:
-          type: string
-      description: Landed Costs Tab &gt; Landed cost code &gt; The Landed Cost Code ID lf the Landed Cost Code
+          type: integer
+          format: int32
+      description: 'PurchaseLineNbr refers to either PurchaseOrder or PurchaseReceipt line number depends on the value of {Visma.net.ERP.Web.Api.Model.V1.AP.LinkLineDto.PurchaseType}
+
+        If {Visma.net.ERP.Web.Api.Model.V1.AP.LinkLineDto.PurchaseType} is set to {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt}, then it should refer to the PruchaseReceipt line number
+
+        otherwise it refers to the PurchaseOrder'
     SupplierInvoiceDto:
       type: object
       properties:
@@ -2881,137 +2961,7 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a ApInvoice in SupplierInvoiceController. Used by getting data.
-    prebookSubaccountInSupplierInvoiceLineDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Prebook subaccount used on the line. Note that this feature is not available in all countries.
-    approvalDetailsInSupplierInvoiceDto:
-      properties:
-        attachmentID:
-          type: string
-          description: The Approval details tab &gt; Default document &gt; The default document that includes the payments requiring approval.
-        comment:
-          type: string
-          description: The Approval details tab &gt; Comment &gt; The comment connected with the approval of the payments.
-      description: The Approval details tab &gt;
-    AddPurchaseOrderDto:
-      type: object
-      properties:
-        poOrderNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-    supplierTaxZoneInSupplierInvoiceDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier. The identifier for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        description:
-          type: string
-          description: Click the magnifier. The description for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultVatCategory:
-          type: string
-          description: Click the magnifier. The Default VAT category for the VAT zone of the supplier, which is specified in the  AP303000 window.
-        defaultTaxCategory:
-          $ref: '#/components/schemas/TaxCategoryNumberDescriptionDto'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: The Financial details tab &gt; The VAT section &gt; Supplier VAT Zone &gt; The VAT zone of the supplier, which is specified in the  AP303000 window.
-    BranchNumberDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-    TaxCategoryNumberDescriptionDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-    AddPOReceiptLineDto:
-      type: object
-      properties:
-        poReceiptNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        poReceiptLineNumber:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        unitCostInCurrency:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        costInCurrency:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-    paymentMethodInSupplierInvoiceDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Financial details tab &gt; Payment method &gt; The payment method used for the payment.
-    validateLineDetailsInSupplierInvoiceUpdateDto:
-      properties:
-        value:
-          type: boolean
-      description: If this flag is set/true, the system will surface any line validation errors to the clients rather than silently ignoring these.
-    purchaseLineNbrInLinkLineDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: 'PurchaseLineNbr refers to either PurchaseOrder or PurchaseReceipt line number depends on the value of {Visma.net.ERP.Web.Api.Model.V1.AP.LinkLineDto.PurchaseType}
-
-        If {Visma.net.ERP.Web.Api.Model.V1.AP.LinkLineDto.PurchaseType} is set to {Visma.net.ERP.Web.Api.Model.V1.Enum.PurchaseType.PurchaseReceipt}, then it should refer to the PruchaseReceipt line number
-
-        otherwise it refers to the PurchaseOrder'
-    prebookAccountNumberInSupplierInvoiceLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Account used for prebooking. Note that this feature is not available for all countries.
-    taxCategoryIdInSupplierInvoiceLandedCostUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Landed Costs Tab &gt; VAT Category &gt; The ID of VAT cateogry
-    SupplierInvoiceLandedCostUpdateDto:
+    SupplierInvoiceLineUpdateDto:
       type: object
       properties:
         operation:
@@ -3021,76 +2971,126 @@ components:
           - Delete
           type: string
         lineNumber:
-          $ref: '#/components/schemas/lineNumberInSupplierInvoiceLandedCostUpdateDto'
-        landedCostCodeId:
-          $ref: '#/components/schemas/landedCostCodeIdInSupplierInvoiceLandedCostUpdateDto'
-        description:
-          $ref: '#/components/schemas/descriptionInSupplierInvoiceLandedCostUpdateDto'
-        amount:
-          $ref: '#/components/schemas/amountInSupplierInvoiceLandedCostUpdateDto'
-        taxCategoryId:
-          $ref: '#/components/schemas/taxCategoryIdInSupplierInvoiceLandedCostUpdateDto'
-        poReceiptNumber:
-          $ref: '#/components/schemas/poReceiptNumberInSupplierInvoiceLandedCostUpdateDto'
-        inventoryId:
-          $ref: '#/components/schemas/inventoryIdInSupplierInvoiceLandedCostUpdateDto'
-        siteId:
-          $ref: '#/components/schemas/siteIdInSupplierInvoiceLandedCostUpdateDto'
-        locationId:
-          $ref: '#/components/schemas/locationIdInSupplierInvoiceLandedCostUpdateDto'
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        transactionDescription:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        unitCostInCurrency:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        costInCurrency:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountPercent:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        discountUnitCostInCurrency:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        manualDiscount:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        accountNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        subaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        deferralSchedule:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        deferralCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        vatCodeId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branch:
+          $ref: '#/components/schemas/branchInSupplierInvoiceLineUpdateDto'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectInternalId:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        projectTaskId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        projectTaskInternalId:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        splitLine:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        undoSplitLine:
+          $ref: '#/components/schemas/undoSplitLineInSupplierInvoiceLineUpdateDto'
+        splitHierarchy:
+          $ref: '#/components/schemas/DtoValueOfString'
+        retainagePct:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        curyRetainageAmt:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        linkLine:
+          $ref: '#/components/schemas/LinkLineDto'
+        termStartDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        termEndDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        externalInventoryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        prebookAccountNumber:
+          $ref: '#/components/schemas/prebookAccountNumberInSupplierInvoiceLineUpdateDto'
+        prebookSubaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+          description: Subaccount used for prebooking. Note that this feature is not available for all countries.
+    landedCostCodeIdInSupplierInvoiceLandedCostUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Landed Costs Tab &gt; Landed cost code &gt; The Landed Cost Code ID lf the Landed Cost Code
+    PrebookingUpdateDto:
+      type: object
+      properties:
+        accountNumber:
+          $ref: '#/components/schemas/accountNumberInPrebookingUpdateDto'
+        subaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+          description: Subaccount used for prebooking.
+    AddPurchaseOrderDto:
+      type: object
+      properties:
+        poOrderNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
     inventoryIdInSupplierInvoiceLandedCostUpdateDto:
       properties:
         value:
           type: string
       description: Landed Costs Tab &gt; Item ID &gt; The ID of the inventory item
-    supplierInSupplierInvoiceDto:
+    vatIdInTaxDetailDto:
       properties:
-        internalId:
-          type: integer
-          description: The internal id of the supplier
-          format: int64
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT ID &gt; The ID of the specific VAT applied.
+    BranchNumberDto:
+      type: object
+      properties:
         number:
           type: string
           description: Click the magnifier. &gt; The identifier.
         name:
           type: string
           description: Click the magnifier. &gt; The name.
-      description: The Top part &gt; Supplier* &gt; The identifier of the supplier referred to in the document.
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    ApprovalDetailsUpdateDto:
-      type: object
-      properties:
-        attachmentID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        comment:
-          $ref: '#/components/schemas/DtoValueOfString'
-    projectInSupplierInvoiceLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The table &gt; Project &gt; The project associated with the invoice line.
-    vatCodeInSupplierInvoiceLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The table &gt; VAT category &gt; The VAT category (if applied) for the transaction. Unless you specify otherwise, it is the default VAT category of the supplier location's VAT zone.
   securitySchemes:
     interactiveapi:
       type: oauth2

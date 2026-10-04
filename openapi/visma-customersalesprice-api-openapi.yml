@@ -342,12 +342,74 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DtoValueOfNullableOfDateTime:
+    DtoValueOfString:
       type: object
       properties:
         value:
           type: string
-          format: date-time
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfNullableOfPriceTypesForUpdate:
+      type: object
+      properties:
+        value:
+          enum:
+          - Base
+          - Customer
+          - CustomerPriceClass
+          type: string
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    CustomerSalesPriceUpdateDto:
+      type: object
+      properties:
+        priceType:
+          $ref: '#/components/schemas/DtoValueOfNullableOfPriceTypesForUpdate'
+        priceCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        inventoryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uoM:
+          $ref: '#/components/schemas/DtoValueOfString'
+        promotion:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        breakQty:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        price:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        currency:
+          $ref: '#/components/schemas/DtoValueOfString'
+        vat:
+          $ref: '#/components/schemas/DtoValueOfString'
+        effectiveDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        expirationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        warehouse:
+          $ref: '#/components/schemas/DtoValueOfString'
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
     CustomerSalesPriceDto:
       type: object
       properties:
@@ -416,74 +478,12 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a CustomerSalesPrice in CustomerSalesPriceController.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfString:
+    DtoValueOfNullableOfDateTime:
       type: object
       properties:
         value:
           type: string
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    DtoValueOfNullableOfPriceTypesForUpdate:
-      type: object
-      properties:
-        value:
-          enum:
-          - Base
-          - Customer
-          - CustomerPriceClass
-          type: string
-    CustomerSalesPriceUpdateDto:
-      type: object
-      properties:
-        priceType:
-          $ref: '#/components/schemas/DtoValueOfNullableOfPriceTypesForUpdate'
-        priceCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        inventoryId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uoM:
-          $ref: '#/components/schemas/DtoValueOfString'
-        promotion:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        breakQty:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        price:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        currency:
-          $ref: '#/components/schemas/DtoValueOfString'
-        vat:
-          $ref: '#/components/schemas/DtoValueOfString'
-        effectiveDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        expirationDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        warehouse:
-          $ref: '#/components/schemas/DtoValueOfString'
+          format: date-time
   securitySchemes:
     interactiveapi:
       type: oauth2

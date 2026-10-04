@@ -1027,91 +1027,90 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    CustomerCreditNoteUpdateDto:
+    subaccountInCustomerCreditNoteLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: Subaccount* &gt; The corresponding subaccount used for this transaction.'
+    SalesInvoiceContactUpdateDto:
       type: object
       properties:
-        paymentMethodId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        currencyId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        customerRefNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        externalReference:
-          $ref: '#/components/schemas/DtoValueOfString'
-        contact:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        project:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerCreditNoteLineUpdateDto'
-        taxDetails:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxDetailUpdateDto'
-        applicationLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentLineBaseUpdateDto'
-        customerVatZoneId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        invoiceAddress:
-          $ref: '#/components/schemas/DtoValueOfSalesInvoiceAddressUpdateDto'
-        invoiceContact:
-          $ref: '#/components/schemas/DtoValueOfSalesInvoiceContactUpdateDto'
-        overrideNumberSeries:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        sendToAutoInvoice:
+        overrideContact:
           $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        exchangeRate:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        startDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        endDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        accountingCostRef:
+        name:
           $ref: '#/components/schemas/DtoValueOfString'
-        originatorDocRef:
+        attention:
           $ref: '#/components/schemas/DtoValueOfString'
-        contractDocRef:
+        email:
           $ref: '#/components/schemas/DtoValueOfString'
-        referenceNumber:
+        phone1:
           $ref: '#/components/schemas/DtoValueOfString'
-        customerNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        childCustomerNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        consolidateInvoices:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        documentDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        origInvoiceDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        hold:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        postPeriod:
-          $ref: '#/components/schemas/postPeriodInCustomerCreditNoteUpdateDto'
-        financialPeriod:
-          $ref: '#/components/schemas/financialPeriodInCustomerCreditNoteUpdateDto'
-        invoiceText:
-          $ref: '#/components/schemas/DtoValueOfString'
-        locationId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        salesPersonID:
-          $ref: '#/components/schemas/salesPersonIDInCustomerCreditNoteUpdateDto'
-        salesperson:
-          $ref: '#/components/schemas/salespersonInCustomerCreditNoteUpdateDto'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        cashAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        dontPrint:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        dontEmail:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
+    financialPeriodInCustomerCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
+    subaccountInCustomerCreditNoteDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
     AttachmentDto:
       type: object
       properties:
@@ -1127,122 +1126,61 @@ components:
           type: integer
           description: The version of the attachment.
           format: int32
-    DtoValueOfBoolean:
-      type: object
+    locationInCustomerCreditNoteDto:
       properties:
-        value:
-          type: boolean
-    WorkTypeDto:
-      type: object
-      properties:
-        rutRotType:
-          enum:
-          - Rut
-          - Rot
-          type: string
-        description:
-          type: string
-        xmlTag:
-          type: string
-    salesPersonIDInCustomerCreditNoteUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: The field is deprecated for customer document endpoints, please use Salesperson instead
-    vatCodeInCustomerCreditNoteLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: VAT category &gt; The VAT category (if applied) for the transaction. The category represents the type of goods or services.
-    TaxDetailDto:
-      type: object
-      properties:
-        taxId:
-          type: string
-          description: 'Mandatory field: VAT ID* &gt; The ID of the VAT applied to the document.'
-        recordId:
-          type: integer
-          description: The id as stored in the database. It can be used when we want to update a VAT record.
-          format: int32
-        vatId:
-          $ref: '#/components/schemas/vatIdInTaxDetailDto'
-        vatRate:
-          type: number
-          description: VAT rate &gt; The rate of the VAT.
-          format: double
-        taxableAmount:
-          type: number
-          description: Taxable amount &gt; The taxable amount for the VAT, which is calculated at the document level.
-          format: double
-        vatAmount:
-          type: number
-          description: VAT &gt; The VAT amount for the specific VAT, which is calculated at the document level.
-          format: double
-        expenseAmount:
-          type: number
-          description: Expense Amount for the VAT type that has been added.
-          format: double
-      description: This class represents a VAT Detail Line. Used for getting data.
-    paymentMethodInCustomerCreditNoteDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
-    SalesInvoiceAddressUpdateDto:
-      type: object
-      properties:
-        overrideAddress:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        addressLine1:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine2:
-          $ref: '#/components/schemas/DtoValueOfString'
-        addressLine3:
-          $ref: '#/components/schemas/DtoValueOfString'
-        postalCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        city:
-          $ref: '#/components/schemas/DtoValueOfString'
         countryId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        county:
-          $ref: '#/components/schemas/DtoValueOfString'
-    DtoValueOfNullableOfDecimal:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
+
+        location of the selected customer or, if the invoice is created from an opportunity,
+
+        it is the customer location specified for the opportunity.'
+    ArAdjustDto:
       type: object
       properties:
-        value:
+        docType:
+          type: string
+        customerCD:
+          type: string
+        refNbr:
+          type: string
+        amountPaid:
           type: number
           format: double
-    PaymentLineBaseUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
+        cashDiscountTaken:
+          type: number
+          format: double
+        balance:
+          type: number
+          format: double
+        pendingPPD:
+          type: boolean
+        released:
+          type: boolean
+        hold:
+          type: boolean
+        voided:
+          type: boolean
+        ppdCrMemoRefNbr:
           type: string
-        documentType:
-          $ref: '#/components/schemas/DtoValueOfCustomerDocumentTypes'
-        refNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        amountPaid:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
+        paymentRef:
+          type: string
+        status:
+          type: string
+        applicationDate:
+          type: string
+          format: date-time
+        applicationPeriod:
+          type: string
+        invoiceText:
+          type: string
     TaxDetailUpdateDto:
       type: object
       properties:
@@ -1275,199 +1213,31 @@ components:
           - Undefined
           - NoUpdate
           type: string
-    ProjectTaskIdDescriptionDto:
-      type: object
+    accountInCustomerCreditNoteLineDto:
       properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-    invoiceContactInCustomerCreditNoteDto:
-      properties:
-        contactId:
-          type: integer
-          format: int32
-        businessName:
-          type: string
-        attention:
-          type: string
-        email:
-          type: string
-        phone1:
-          type: string
-        overrideContact:
-          type: boolean
-      description: The Invoice address tab &gt; The Invoice contact section.
-    invoiceAddressInCustomerCreditNoteDto:
-      properties:
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
-          type: string
-          description: Address 1 &gt; The first line of the customer's contact address.
-        addressLine2:
-          type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
-          type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInCustomerDocumentAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInCustomerDocumentAddressDto'
-        overrideAddress:
-          type: boolean
-          description: Override address &gt; A check box that indicates (if selected) that the invoice address is not the default invoice address of the customer.
-      description: The Invoice address tab &gt; The Invoice address section.
-    countryInCustomerDocumentAddressDto:
-      properties:
-        id:
-          type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
-        name:
-          type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    financialPeriodInCustomerCreditNoteUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
-    branchNumberInCustomerCreditNoteDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
-    customerInCustomerCreditNoteDto:
-      properties:
-        number:
-          type: string
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The top part &gt; Customer &gt; The customer associated with the document.
-    customerVatZoneInCustomerCreditNoteDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Financial details tab &gt; The VAT info section &gt; Customer VAT zone
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    DtoValueOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    sellerInCustomerCreditNoteLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Salesperson ID &gt; The identifier of the salesperson involved.
-    salespersonInCustomerCreditNoteUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The identifier of the salesperson involved.
-    ReleaseCustomerCreditNoteActionResultDto:
-      type: object
-      properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
+        type:
           enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
+          - Asset
+          - Liability
+          - Income
+          - Expense
           type: string
-        errorInfo:
+          description: Account &gt; The account number.
+        externalCode1:
           type: string
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
           type: string
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    vatIdInTaxDetailDto:
-      properties:
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
         number:
           type: string
           description: Number of item
         description:
           type: string
           description: Name of item/description
-      description: VAT ID &gt; The ID of the specific VAT applied.
+      description: 'Mandatory field: Account* &gt; The sales account used for the transaction.'
     CustomerCreditNoteDto:
       type: object
       properties:
@@ -1723,26 +1493,125 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    MetadataDto:
+    invoiceContactInCustomerCreditNoteDto:
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        businessName:
+          type: string
+        attention:
+          type: string
+        email:
+          type: string
+        phone1:
+          type: string
+        overrideContact:
+          type: boolean
+      description: The Invoice address tab &gt; The Invoice contact section.
+    CustomerCreditNoteLineUpdateDto:
       type: object
       properties:
-        totalCount:
+        discountCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        taskId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        inventoryNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lineNumber:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        unitPriceInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        accountNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        vatCodeId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        discountPercent:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        discountAmountInCurrency:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        manualDiscount:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        subaccount:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentUpdateDto'
+        salesperson:
+          $ref: '#/components/schemas/DtoValueOfString'
+        deferralSchedule:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        deferralCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        termStartDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        termEndDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+    ReleaseCustomerCreditNoteActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    invoiceAddressInCustomerCreditNoteDto:
+      properties:
+        addressId:
           type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInCustomerDocumentAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInCustomerDocumentAddressDto'
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box that indicates (if selected) that the invoice address is not the default invoice address of the customer.
+      description: The Invoice address tab &gt; The Invoice address section.
     DtoValueOfString:
       type: object
       properties:
         value:
           type: string
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
     accountInCustomerCreditNoteDto:
       properties:
         type:
@@ -1768,99 +1637,67 @@ components:
           type: string
           description: Name of item/description
       description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
-    subaccountInCustomerCreditNoteLineDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: 'Mandatory field: Subaccount* &gt; The corresponding subaccount used for this transaction.'
-    DtoValueOfSalesInvoiceAddressUpdateDto:
-      type: object
+    salesPersonIDInCustomerCreditNoteUpdateDto:
       properties:
         value:
-          $ref: '#/components/schemas/SalesInvoiceAddressUpdateDto'
-    subaccountInCustomerCreditNoteDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
           type: integer
-          description: SubID &gt; The  identifier of the subaccount.
           format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
-    projectInCustomerCreditNoteDto:
+      description: The field is deprecated for customer document endpoints, please use Salesperson instead
+    customerVatZoneInCustomerCreditNoteDto:
       properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
         id:
           type: string
           description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
-    countyInCustomerDocumentAddressDto:
+      description: The Financial details tab &gt; The VAT info section &gt; Customer VAT zone
+    vatCodeInCustomerCreditNoteLineDto:
       properties:
         id:
           type: string
-          description: Click the magnifier &gt; The identifier
-        name:
+          description: Click on the magnifier. &gt; The identifier.
+        description:
           type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
+          description: Click on the magnifier. &gt; The description.
+      description: VAT category &gt; The VAT category (if applied) for the transaction. The category represents the type of goods or services.
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    TaxDetailDto:
+      type: object
+      properties:
+        taxId:
+          type: string
+          description: 'Mandatory field: VAT ID* &gt; The ID of the VAT applied to the document.'
+        recordId:
+          type: integer
+          description: The id as stored in the database. It can be used when we want to update a VAT record.
+          format: int32
+        vatId:
+          $ref: '#/components/schemas/vatIdInTaxDetailDto'
+        vatRate:
+          type: number
+          description: VAT rate &gt; The rate of the VAT.
+          format: double
+        taxableAmount:
+          type: number
+          description: Taxable amount &gt; The taxable amount for the VAT, which is calculated at the document level.
+          format: double
+        vatAmount:
+          type: number
+          description: VAT &gt; The VAT amount for the specific VAT, which is calculated at the document level.
+          format: double
+        expenseAmount:
+          type: number
+          description: Expense Amount for the VAT type that has been added.
+          format: double
+      description: This class represents a VAT Detail Line. Used for getting data.
     CustomerCreditNoteLineDto:
       type: object
       properties:
@@ -2031,200 +1868,12 @@ components:
           $ref: '#/components/schemas/branchNumberInCustomerCreditNoteLineDto'
         externalLink:
           type: string
-    creditTermsInCustomerCreditNoteDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; Terms* &gt; The credit terms used in relations with the customer.
-    SalesInvoiceContactUpdateDto:
-      type: object
-      properties:
-        overrideContact:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        name:
-          $ref: '#/components/schemas/DtoValueOfString'
-        attention:
-          $ref: '#/components/schemas/DtoValueOfString'
-        email:
-          $ref: '#/components/schemas/DtoValueOfString'
-        phone1:
-          $ref: '#/components/schemas/DtoValueOfString'
-    CustomerCreditNoteLineUpdateDto:
-      type: object
-      properties:
-        discountCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        taskId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        inventoryNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lineNumber:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        unitPriceInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        manualAmountInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        accountNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        vatCodeId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        discountPercent:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        discountAmountInCurrency:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        manualDiscount:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        subaccount:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentUpdateDto'
-        salesperson:
-          $ref: '#/components/schemas/DtoValueOfString'
-        deferralSchedule:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        deferralCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        termStartDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        termEndDate:
-          $ref: '#/components/schemas/DtoValueOfDateTime'
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        branchNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-    accountInCustomerCreditNoteLineDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Account* &gt; The sales account used for the transaction.'
-    ChildRecordDto:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-    postPeriodInCustomerCreditNoteUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    ArAdjustDto:
-      type: object
-      properties:
-        docType:
-          type: string
-        customerCD:
-          type: string
-        refNbr:
-          type: string
-        amountPaid:
-          type: number
-          format: double
-        cashDiscountTaken:
-          type: number
-          format: double
-        balance:
-          type: number
-          format: double
-        pendingPPD:
-          type: boolean
-        released:
-          type: boolean
-        hold:
-          type: boolean
-        voided:
-          type: boolean
-        ppdCrMemoRefNbr:
-          type: string
-        paymentRef:
-          type: string
-        status:
-          type: string
-        applicationDate:
-          type: string
-          format: date-time
-        applicationPeriod:
-          type: string
-        invoiceText:
-          type: string
-    locationInCustomerCreditNoteDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
-
-        location of the selected customer or, if the invoice is created from an opportunity,
-
-        it is the customer location specified for the opportunity.'
-    branchNumberInCustomerCreditNoteLineDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: Branch* &gt; The branch that sells the line item or provides the service.'
-    salesPersonInCustomerCreditNoteDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The document details tab &gt; Salesperson ID &gt; The salesperson involved.
-    DtoValueOfSalesInvoiceContactUpdateDto:
+    DtoValueOfNullableOfDecimal:
       type: object
       properties:
         value:
-          $ref: '#/components/schemas/SalesInvoiceContactUpdateDto'
+          type: number
+          format: double
     contactInCustomerCreditNoteDto:
       properties:
         id:
@@ -2235,6 +1884,357 @@ components:
           type: string
           description: Click the magnifier &gt; The displayed name
       description: The top part &gt; Contact &gt; The contact associated with the customer.
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    CustomerCreditNoteUpdateDto:
+      type: object
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        currencyId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerRefNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        externalReference:
+          $ref: '#/components/schemas/DtoValueOfString'
+        contact:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        project:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerCreditNoteLineUpdateDto'
+        taxDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxDetailUpdateDto'
+        applicationLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentLineBaseUpdateDto'
+        customerVatZoneId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        invoiceAddress:
+          $ref: '#/components/schemas/DtoValueOfSalesInvoiceAddressUpdateDto'
+        invoiceContact:
+          $ref: '#/components/schemas/DtoValueOfSalesInvoiceContactUpdateDto'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        sendToAutoInvoice:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        exchangeRate:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        startDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        endDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        accountingCostRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        originatorDocRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        contractDocRef:
+          $ref: '#/components/schemas/DtoValueOfString'
+        referenceNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        customerNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        childCustomerNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        consolidateInvoices:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        documentDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        origInvoiceDate:
+          $ref: '#/components/schemas/DtoValueOfDateTime'
+        hold:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInCustomerCreditNoteUpdateDto'
+        financialPeriod:
+          $ref: '#/components/schemas/financialPeriodInCustomerCreditNoteUpdateDto'
+        invoiceText:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        salesPersonID:
+          $ref: '#/components/schemas/salesPersonIDInCustomerCreditNoteUpdateDto'
+        salesperson:
+          $ref: '#/components/schemas/salespersonInCustomerCreditNoteUpdateDto'
+        note:
+          $ref: '#/components/schemas/DtoValueOfString'
+        branchNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        cashAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
+        dontPrint:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        dontEmail:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+    postPeriodInCustomerCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    ProjectTaskIdDescriptionDto:
+      type: object
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+    projectInCustomerCreditNoteDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfSalesInvoiceContactUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/SalesInvoiceContactUpdateDto'
+    ChildRecordDto:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    SalesInvoiceAddressUpdateDto:
+      type: object
+      properties:
+        overrideAddress:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        addressLine1:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine2:
+          $ref: '#/components/schemas/DtoValueOfString'
+        addressLine3:
+          $ref: '#/components/schemas/DtoValueOfString'
+        postalCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        city:
+          $ref: '#/components/schemas/DtoValueOfString'
+        countryId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        county:
+          $ref: '#/components/schemas/DtoValueOfString'
+    sellerInCustomerCreditNoteLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Salesperson ID &gt; The identifier of the salesperson involved.
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    PaymentLineBaseUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        documentType:
+          $ref: '#/components/schemas/DtoValueOfCustomerDocumentTypes'
+        refNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amountPaid:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+    countyInCustomerDocumentAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    DtoValueOfSalesInvoiceAddressUpdateDto:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/SalesInvoiceAddressUpdateDto'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    salesPersonInCustomerCreditNoteDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The document details tab &gt; Salesperson ID &gt; The salesperson involved.
+    creditTermsInCustomerCreditNoteDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Terms* &gt; The credit terms used in relations with the customer.
+    WorkTypeDto:
+      type: object
+      properties:
+        rutRotType:
+          enum:
+          - Rut
+          - Rot
+          type: string
+        description:
+          type: string
+        xmlTag:
+          type: string
+    branchNumberInCustomerCreditNoteLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Branch* &gt; The branch that sells the line item or provides the service.'
+    paymentMethodInCustomerCreditNoteDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
+    countryInCustomerDocumentAddressDto:
+      properties:
+        id:
+          type: string
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
+          type: string
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    branchNumberInCustomerCreditNoteDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    vatIdInTaxDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT ID &gt; The ID of the specific VAT applied.
+    salespersonInCustomerCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The identifier of the salesperson involved.
+    customerInCustomerCreditNoteDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The top part &gt; Customer &gt; The customer associated with the document.
   securitySchemes:
     interactiveapi:
       type: oauth2

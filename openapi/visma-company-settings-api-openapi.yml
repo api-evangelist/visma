@@ -147,63 +147,101 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    AccountingLockSettingsApi:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        AccountingLockedAsOf:
-          $ref: '#/components/schemas/AccountingLockDateApi'
-        AccountingLockInterval:
-          maximum: 4
-          minimum: 0
+        ErrorCode:
           type: integer
-          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Month,<br/>2 = Quarter,<br/>3 = Year,<br/>4 = TaxDeclaration<br/><br/>Accounting lock interval.
           format: int32
-        TaxDeclarationDate:
-          $ref: '#/components/schemas/TaxDeclarationDateApi'
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
-    AccountingLockDateApi:
+    AutoInvoiceApi:
       type: object
       properties:
-        Year:
+        AutoInvoiceActivationStatus:
           type: integer
-          description: Year
+          description: <strong>Possible values:</strong><br/>0 = Unregistered,<br/>1 = Registered,<br/>2 = Activated<br/><br/>Auto invoice activation status.
           format: int32
-        Month:
-          maximum: 12
-          minimum: 1
+          readOnly: true
+        AutoInvoiceB2CStatus:
           type: integer
-          description: Month
+          description: <strong>Possible values:</strong><br/>0 = NotActivated,<br/>1 = Pending,<br/>2 = Activated<br/><br/>Auto invoice B2C status, only for Norway and Finland.
           format: int32
+          readOnly: true
+        AutoInvoiceInboundStatus:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Deactivated,<br/>1 = Activated<br/><br/>Auto invoice inbound status.
+          format: int32
+          readOnly: true
       additionalProperties: false
-      description: 'Accounting locked as of year and month. Default: No lock'
-    CompanyGreenTechnologySettingsApi:
+      description: Auto invoice settings
+    CommonError:
       type: object
       properties:
-        GreenTechnologyDeductionMaxAmount:
-          type: number
-          description: Green technology deduction maximum amount
-          format: double
-          readOnly: true
-        SollarCellDiscountPercentage:
-          type: number
-          description: Solar cell discount percentage
-          format: double
-          readOnly: true
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
-      description: Green Technology settings
-    ApprovalSettingsApi:
+    CompanyScanningAddressApi:
       type: object
       properties:
-        UsesSupplierInvoiceApproval:
-          type: boolean
-          description: 'Whether supplier invoice approval is used. Used with: /v2/approval/supplierinvoice/{id}'
-          readOnly: true
-        UsesVatReportApproval:
-          type: boolean
-          description: 'Whether VAT report approval is used. Used with: /v2/approval/vatreport/{id}'
-          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: The name of the person to receive the invoice scanning
+        Address1:
+          type:
+          - string
+          - 'null'
+          description: The first line of the address
+        Address2:
+          type:
+          - string
+          - 'null'
+          description: The second line of the address
+        PostCode:
+          type:
+          - string
+          - 'null'
+          description: The postal code of the address
+        PostOffice:
+          type:
+          - string
+          - 'null'
+          description: The postal office of the address
+        Email:
+          type:
+          - string
+          - 'null'
+          description: The email of the person to receive the invoice scanning
       additionalProperties: false
-      description: Approval company settings
+      description: Electronic invoice scanning address. Only valid if autoinvoice scanning is activated otherwise null
     CompanySettingsApi:
       required:
       - Address1
@@ -574,81 +612,6 @@ components:
           format: int32
           readOnly: true
       additionalProperties: false
-    AutoInvoiceApi:
-      type: object
-      properties:
-        AutoInvoiceActivationStatus:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Unregistered,<br/>1 = Registered,<br/>2 = Activated<br/><br/>Auto invoice activation status.
-          format: int32
-          readOnly: true
-        AutoInvoiceB2CStatus:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = NotActivated,<br/>1 = Pending,<br/>2 = Activated<br/><br/>Auto invoice B2C status, only for Norway and Finland.
-          format: int32
-          readOnly: true
-        AutoInvoiceInboundStatus:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Deactivated,<br/>1 = Activated<br/><br/>Auto invoice inbound status.
-          format: int32
-          readOnly: true
-      additionalProperties: false
-      description: Auto invoice settings
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    CompanyScanningAddressApi:
-      type: object
-      properties:
-        Name:
-          type:
-          - string
-          - 'null'
-          description: The name of the person to receive the invoice scanning
-        Address1:
-          type:
-          - string
-          - 'null'
-          description: The first line of the address
-        Address2:
-          type:
-          - string
-          - 'null'
-          description: The second line of the address
-        PostCode:
-          type:
-          - string
-          - 'null'
-          description: The postal code of the address
-        PostOffice:
-          type:
-          - string
-          - 'null'
-          description: The postal office of the address
-        Email:
-          type:
-          - string
-          - 'null'
-          description: The email of the person to receive the invoice scanning
-      additionalProperties: false
-      description: Electronic invoice scanning address. Only valid if autoinvoice scanning is activated otherwise null
     CompanyRotRutSettingsApi:
       type: object
       properties:
@@ -684,6 +647,48 @@ components:
           format: double
       additionalProperties: false
       description: ROT/RUT settings for Swedish companies. Use PUT v2/companysettings/rotrutsettings to update in combination with UsesRotReducedInvoicing set to true
+    ApprovalSettingsApi:
+      type: object
+      properties:
+        UsesSupplierInvoiceApproval:
+          type: boolean
+          description: 'Whether supplier invoice approval is used. Used with: /v2/approval/supplierinvoice/{id}'
+          readOnly: true
+        UsesVatReportApproval:
+          type: boolean
+          description: 'Whether VAT report approval is used. Used with: /v2/approval/vatreport/{id}'
+          readOnly: true
+      additionalProperties: false
+      description: Approval company settings
+    CompanyGreenTechnologySettingsApi:
+      type: object
+      properties:
+        GreenTechnologyDeductionMaxAmount:
+          type: number
+          description: Green technology deduction maximum amount
+          format: double
+          readOnly: true
+        SollarCellDiscountPercentage:
+          type: number
+          description: Solar cell discount percentage
+          format: double
+          readOnly: true
+      additionalProperties: false
+      description: Green Technology settings
+    AccountingLockSettingsApi:
+      type: object
+      properties:
+        AccountingLockedAsOf:
+          $ref: '#/components/schemas/AccountingLockDateApi'
+        AccountingLockInterval:
+          maximum: 4
+          minimum: 0
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Month,<br/>2 = Quarter,<br/>3 = Year,<br/>4 = TaxDeclaration<br/><br/>Accounting lock interval.
+          format: int32
+        TaxDeclarationDate:
+          $ref: '#/components/schemas/TaxDeclarationDateApi'
+      additionalProperties: false
     CompanyTextsApi:
       type: object
       properties:
@@ -804,26 +809,21 @@ components:
           format: int32
       additionalProperties: false
       description: Tax declaration day and month. Only for Sweden and Finland
-    CommonExtendedBadRequest:
+    AccountingLockDateApi:
       type: object
       properties:
-        ErrorCode:
+        Year:
           type: integer
+          description: Year
           format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+        Month:
+          maximum: 12
+          minimum: 1
+          type: integer
+          description: Month
+          format: int32
       additionalProperties: false
+      description: 'Accounting locked as of year and month. Default: No lock'
 x-tagGroups:
 - name: Sales
   tags:

@@ -211,6 +211,44 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    leaseAndRentInfoInDetailsDto:
+      properties:
+        lessorID:
+          type: string
+        lessorName:
+          type: string
+        leaseRentTerm:
+          type: integer
+          format: int32
+        leaseNumber:
+          type: string
+        rentAmount:
+          type: number
+          format: double
+        retailCost:
+          type: number
+          format: double
+        manufacturingYear:
+          type: string
+      description: The lease and rent infor for this fixed asset
+    bookInBookBalanceDto:
+      properties:
+        bookID:
+          type: string
+          description: The book id of this fixed asset
+        description:
+          type: string
+          description: The description of the book
+      description: The book details of this fixed asset
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     bookBalanceInFixedAssetDto:
       properties:
         acquisitionCost:
@@ -253,6 +291,13 @@ components:
           type: string
           description: The description of the property tax group of this fixed asset
       description: The property tax group this fixed asset is conntected to
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
     detailsInFixedAssetDto:
       properties:
         propertyType:
@@ -318,33 +363,63 @@ components:
         leaseAndRentInfo:
           $ref: '#/components/schemas/leaseAndRentInfoInDetailsDto'
       description: The details of this fixed asset
-    MetadataDto:
-      type: object
+    accountsInFixedAssetDto:
       properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    bookInBookBalanceDto:
-      properties:
-        bookID:
+        accountID:
           type: string
-          description: The book id of this fixed asset
-        description:
+          description: The fixed asset account for this fixed asset
+        subAccountID:
           type: string
-          description: The description of the book
-      description: The book details of this fixed asset
-    typeInFixedAssetDto:
-      properties:
-        assetTypeID:
+          description: The sub account for this fixed asset
+        accrualAccountID:
           type: string
-          description: The type id of this fixed asset
-        description:
+          description: The accrual account for this fixed asset
+        accrualSubAccountID:
           type: string
-          description: The type description
-      description: The type of this fixed asset
+          description: The accrual sub account for this fixed asset
+        accumulatedDepreciationAccountID:
+          type: string
+          description: The accumulated depreciation account for this fixed asset
+        accumulatedDepreciationSubAccountID:
+          type: string
+          description: The accumulated depreciation sub for this fixed asset
+        depreciatedExpenseAccountID:
+          type: string
+          description: The depreciation expense account for this fixed asset
+        depreciatedExpenseSubAccountID:
+          type: string
+          description: The depreciation expense sub for this fixed asset
+        disposalAccountID:
+          type: string
+          description: The proceeds account for this fixed asset
+        disposalSubAccountID:
+          type: string
+          description: The proceeds sub for this fixed asset
+        gainAccountID:
+          type: string
+          description: The gain account for this fixed asset
+        gainSubAccountID:
+          type: string
+          description: The gain sub for this fixed asset
+        lossAccountID:
+          type: string
+          description: The loss account for this fixed asset
+        lossSubAccountID:
+          type: string
+          description: The loss sub for this fixed asset
+        debitAccountID:
+          type: string
+          description: The debit account
+        debitSubAccountID:
+          type: string
+          description: The debit sub account
+        creditAccountID:
+          type: string
+          description: The credit account
+        creditSubAccountID:
+          type: string
+          description: The credit sub account
+      description: All accounts selected for this fixed asset
     locationInFixedAssetDto:
       properties:
         departmentID:
@@ -407,96 +482,21 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents an attribute in FixedAssetController. Used for getting data.
-    accountsInFixedAssetDto:
-      properties:
-        accountID:
-          type: string
-          description: The fixed asset account for this fixed asset
-        subAccountID:
-          type: string
-          description: The sub account for this fixed asset
-        accrualAccountID:
-          type: string
-          description: The accrual account for this fixed asset
-        accrualSubAccountID:
-          type: string
-          description: The accrual sub account for this fixed asset
-        accumulatedDepreciationAccountID:
-          type: string
-          description: The accumulated depreciation account for this fixed asset
-        accumulatedDepreciationSubAccountID:
-          type: string
-          description: The accumulated depreciation sub for this fixed asset
-        depreciatedExpenseAccountID:
-          type: string
-          description: The depreciation expense account for this fixed asset
-        depreciatedExpenseSubAccountID:
-          type: string
-          description: The depreciation expense sub for this fixed asset
-        disposalAccountID:
-          type: string
-          description: The proceeds account for this fixed asset
-        disposalSubAccountID:
-          type: string
-          description: The proceeds sub for this fixed asset
-        gainAccountID:
-          type: string
-          description: The gain account for this fixed asset
-        gainSubAccountID:
-          type: string
-          description: The gain sub for this fixed asset
-        lossAccountID:
-          type: string
-          description: The loss account for this fixed asset
-        lossSubAccountID:
-          type: string
-          description: The loss sub for this fixed asset
-        debitAccountID:
-          type: string
-          description: The debit account
-        debitSubAccountID:
-          type: string
-          description: The debit sub account
-        creditAccountID:
-          type: string
-          description: The credit account
-        creditSubAccountID:
-          type: string
-          description: The credit sub account
-      description: All accounts selected for this fixed asset
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    leaseAndRentInfoInDetailsDto:
-      properties:
-        lessorID:
-          type: string
-        lessorName:
-          type: string
-        leaseRentTerm:
-          type: integer
-          format: int32
-        leaseNumber:
-          type: string
-        rentAmount:
-          type: number
-          format: double
-        retailCost:
-          type: number
-          format: double
-        manufacturingYear:
-          type: string
-      description: The lease and rent infor for this fixed asset
     disposalMethodInDetailsDto:
       properties:
         description:
           type: string
           description: The description of the disposal method
       description: The disposal method details of this fixed asset
+    typeInFixedAssetDto:
+      properties:
+        assetTypeID:
+          type: string
+          description: The type id of this fixed asset
+        description:
+          type: string
+          description: The type description
+      description: The type of this fixed asset
   securitySchemes:
     interactiveapi:
       type: oauth2

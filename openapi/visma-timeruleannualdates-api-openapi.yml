@@ -147,6 +147,40 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfTimeRuleAnnualDateApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeRuleAnnualDateApi'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -176,20 +210,6 @@ components:
           type: string
           description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
           format: date-time
-      additionalProperties: false
-    PaginatedResponseOfTimeRuleAnnualDateApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeRuleAnnualDateApi'
       additionalProperties: false
     CommonError:
       type: object
@@ -243,26 +263,6 @@ components:
           type: boolean
           description: Indicates whether the time rule annual date record is marked as deleted
       additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
     TimeRuleAnnualDateResponse:
       required:
       - Name
@@ -294,20 +294,6 @@ components:
           description: Timestamp indicating when the time rule annual date record was last modified (UTC)
           format: date-time
       additionalProperties: false
-    PaginatedResponseOfTimeRuleAnnualDateResponse:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeRuleAnnualDateResponse'
-      additionalProperties: false
     TimeRuleAnnualDateRequest:
       required:
       - Day
@@ -327,6 +313,20 @@ components:
           type: integer
           description: Day of the month for the time rule annual date (1-31)
           format: int32
+      additionalProperties: false
+    PaginatedResponseOfTimeRuleAnnualDateResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeRuleAnnualDateResponse'
       additionalProperties: false
 x-refined-from:
 - visma-payroll-api-v1-openapi-original.json

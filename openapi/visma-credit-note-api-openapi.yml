@@ -733,6 +733,45 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    ArAdjustDto:
+      type: object
+      properties:
+        docType:
+          type: string
+        customerCD:
+          type: string
+        refNbr:
+          type: string
+        amountPaid:
+          type: number
+          format: double
+        cashDiscountTaken:
+          type: number
+          format: double
+        balance:
+          type: number
+          format: double
+        pendingPPD:
+          type: boolean
+        released:
+          type: boolean
+        hold:
+          type: boolean
+        voided:
+          type: boolean
+        ppdCrMemoRefNbr:
+          type: string
+        paymentRef:
+          type: string
+        status:
+          type: string
+        applicationDate:
+          type: string
+          format: date-time
+        applicationPeriod:
+          type: string
+        invoiceText:
+          type: string
     AttachmentDto:
       type: object
       properties:
@@ -748,21 +787,54 @@ components:
           type: integer
           description: The version of the attachment.
           format: int32
-    DtoValueOfBoolean:
-      type: object
+    salesPersonIDInCreditNoteUpdateDto:
       properties:
         value:
+          type: integer
+          format: int32
+      description: The field is deprecated for customer document endpoints, please use Salesperson instead
+    subaccountInCreditNoteLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
           type: boolean
-    ContactIdNameDto:
-      type: object
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: Subaccount* &gt; The corresponding subaccount used for this transaction.'
+    sellerInCreditNoteLineDto:
       properties:
         id:
-          type: integer
-          description: Click the magnifier &gt; The identifier
-          format: int32
-        name:
           type: string
-          description: Click the magnifier &gt; The displayed name
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Salesperson ID &gt; The identifier of the salesperson involved.
     CreditNoteUpdateDto:
       type: object
       properties:
@@ -814,22 +886,243 @@ components:
           $ref: '#/components/schemas/DtoValueOfBoolean'
         dontEmail:
           $ref: '#/components/schemas/DtoValueOfBoolean'
-    locationInCreditNoteDto:
+    branchNumberInCreditNoteDto:
       properties:
-        countryId:
+        number:
           type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
+          description: Click the magnifier. &gt; The identifier.
         name:
           type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
+          description: Click the magnifier. &gt; The name.
+      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
+    accountInCreditNoteLineDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Account* &gt; The sales account used for the transaction.'
+    financialPeriodInCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
+    vatCodeInCreditNoteLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: VAT category &gt; The VAT category (if applied) for the transaction. The category represents the type of goods or services.
+    accountInCreditNoteDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    customerInCreditNoteDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The top part &gt; Customer &gt; The customer associated with the document.
+    invoiceContactInCreditNoteDto:
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        businessName:
+          type: string
+        attention:
+          type: string
+        email:
+          type: string
+        phone1:
+          type: string
+        overrideContact:
+          type: boolean
+      description: The Invoice address tab &gt; The Invoice contact section.
+    CreditNoteLineDto:
+      type: object
+      properties:
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentDto'
+        projectTask:
+          $ref: '#/components/schemas/ProjectTaskIdDescriptionDto'
+        lineNumber:
+          type: integer
+          description: Line no. &gt; A counter of lines in the overview of cash sales document overview.
+          format: int32
+        inventoryNumber:
+          type: string
+          description: Item ID &gt; The item ID of the line item, if applicable. Only a non-stock item can be selected.
+        description:
+          type: string
+          description: Transaction descr. &gt; Any brief comment relevant to the transaction.The alphanumeric string may contain up to 30 characters.
+        quantity:
+          type: number
+          description: Quantity &gt; The quantity of items (goods or services) of a particular type sold to the customer.
+          format: double
+        unitPrice:
+          type: number
+          description: 'Unit price &gt; The unit price set for the item or service. If you want to update the unit price
 
-        location of the selected customer or, if the invoice is created from an opportunity,
+            automatically to the current value(that is, the applicable sales or default price),
 
-        it is the customer location specified for the opportunity.'
+            you can use the Recalculate Prices and Discounts action.If you have modified
+
+            the unit price and saved the document, the value will not be updated by the
+
+            system if you change the document date.'
+          format: double
+        unitPriceInCurrency:
+          type: number
+          description: Background calculation giving you the Unit price in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        manualAmount:
+          type: number
+          description: Manual amount &gt; a check box indicating that the amount has been entered manually.
+          format: double
+        manualAmountInCurrency:
+          type: number
+          description: Background calculation giving you the Manual amount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        amount:
+          type: number
+          description: 'Amount &gt; The amount after the discount has been applied. The value of this read-only box
+
+            is calculated automatically by deducting the discount amount from the extended price.'
+          format: double
+        cost:
+          type: number
+          description: "Cost &gt; The total cost of the line in default currency. \nThe value will always be 0 for unreleased documents."
+          format: double
+        amountInCurrency:
+          type: number
+          description: Background calculation giving you the Amount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        account:
+          $ref: '#/components/schemas/accountInCreditNoteLineDto'
+        vatCode:
+          $ref: '#/components/schemas/vatCodeInCreditNoteLineDto'
+        uom:
+          type: string
+          description: UoM &gt; The unit of measure (UoM) for the item.
+        discountPercent:
+          type: number
+          description: 'Discount percent &gt; The percent of the line-level discount that has been applied manually or
+
+            automatically.The system selects the Manual Discount check box and
+
+            calculates the discount amount after you have entered the percent manually and
+
+            saved your changes or added a new line.'
+          format: double
+        discountAmount:
+          type: number
+          description: 'Discount amount &gt; The amount of the line-level discount that has been applied manually or
+
+            automatically to this line.The system selects the Manual Discount check box
+
+            and calculates the line amount after you have entered the discount amount
+
+            manually and save your changes or added a new line.'
+          format: double
+        discountAmountInCurrency:
+          type: number
+          description: Background calculation giving you the Discount amount in your default currency. This field is applicable if the amount is given in another currency than your default.
+          format: double
+        manualDiscount:
+          type: boolean
+          description: 'Manual discount &gt; A check box that indicates (if selected) that the discount has been applied
+
+            manually.If you clear the check box, the system clears entered discount percent,
+
+            or discount amount, or selected discount code.'
+        subaccount:
+          $ref: '#/components/schemas/subaccountInCreditNoteLineDto'
+        salesperson:
+          type: string
+          description: The field is deprecated for customer document endpoints, please use Seller instead
+        seller:
+          $ref: '#/components/schemas/sellerInCreditNoteLineDto'
+        deferralSchedule:
+          type: integer
+          description: Original deferral schedule &gt; A read-only column filled in by the system in the Cash return documents created by the reversing process. It shows the identifier of the deferral schedule associated with the original Cash sale document.
+          format: int32
+        deferralCode:
+          type: string
+          description: 'The deferral code assigned to the stock item or non-stock item specified in this
+
+            document line.Upon release of the document, the system generates a deferral
+
+            schedule (or schedules) based on the settings defined in this deferral code.'
+        discountCode:
+          type: string
+          description: The code of the line discount that has been applied to this line automatically or manually.
+        note:
+          type: string
+          description: Table &gt; Icon Notes &gt; Pop-up window for providing any user-defined text connected to the order.
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInCreditNoteLineDto'
+        externalLink:
+          type: string
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
     ReleaseInvoiceActionResultDto:
       type: object
       properties:
@@ -845,6 +1138,45 @@ components:
           type: string
         errorInfo:
           type: string
+    invoiceAddressInCreditNoteDto:
+      properties:
+        addressId:
+          type: integer
+          format: int32
+        addressLine1:
+          type: string
+          description: Address 1 &gt; The first line of the customer's contact address.
+        addressLine2:
+          type: string
+          description: Address 2 &gt; The second line of the address.
+        addressLine3:
+          type: string
+          description: Address 3 &gt; The third line of the address.
+        postalCode:
+          type: string
+          description: Postcode &gt; The postcode.
+        city:
+          type: string
+          description: City &gt; The city.
+        country:
+          $ref: '#/components/schemas/countryInCustomerDocumentAddressDto'
+        county:
+          $ref: '#/components/schemas/countyInCustomerDocumentAddressDto'
+        overrideAddress:
+          type: boolean
+          description: Override address &gt; A check box that indicates (if selected) that the invoice address is not the default invoice address of the customer.
+      description: The Invoice address tab &gt; The Invoice address section.
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    salespersonInCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The identifier of the salesperson involved.
     ProjectTaskIdDescriptionDto:
       type: object
       properties:
@@ -865,27 +1197,154 @@ components:
           type: string
         stateLocation:
           type: string
-    customerInCreditNoteDto:
+    SegmentDto:
+      type: object
       properties:
-        number:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
           type: string
-        name:
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: The top part &gt; Customer &gt; The customer associated with the document.
-    countryInCustomerDocumentAddressDto:
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    salesPersonInCreditNoteDto:
       properties:
         id:
           type: string
-          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The document details tab &gt; Salesperson ID &gt; The salesperson involved.
+    ContactIdNameDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Click the magnifier &gt; The identifier
+          format: int32
         name:
           type: string
-          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+          description: Click the magnifier &gt; The displayed name
+    subaccountInCreditNoteDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
         errorInfo:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-      description: Country &gt; The country.
+      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    locationInCreditNoteDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'The top part &gt; Location &gt; The location of the customer related to the document. By default, it is the default
+
+        location of the selected customer or, if the invoice is created from an opportunity,
+
+        it is the customer location specified for the opportunity.'
+    projectInCreditNoteDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
+    countyInCustomerDocumentAddressDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: County &gt; The county or province.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    postPeriodInCreditNoteUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
     CreditNoteDto:
       type: object
       properties:
@@ -1098,355 +1557,6 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a invoice in InvoiceController. Used by getting data.
-    CreditNoteLineDto:
-      type: object
-      properties:
-        attachments:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttachmentDto'
-        projectTask:
-          $ref: '#/components/schemas/ProjectTaskIdDescriptionDto'
-        lineNumber:
-          type: integer
-          description: Line no. &gt; A counter of lines in the overview of cash sales document overview.
-          format: int32
-        inventoryNumber:
-          type: string
-          description: Item ID &gt; The item ID of the line item, if applicable. Only a non-stock item can be selected.
-        description:
-          type: string
-          description: Transaction descr. &gt; Any brief comment relevant to the transaction.The alphanumeric string may contain up to 30 characters.
-        quantity:
-          type: number
-          description: Quantity &gt; The quantity of items (goods or services) of a particular type sold to the customer.
-          format: double
-        unitPrice:
-          type: number
-          description: 'Unit price &gt; The unit price set for the item or service. If you want to update the unit price
-
-            automatically to the current value(that is, the applicable sales or default price),
-
-            you can use the Recalculate Prices and Discounts action.If you have modified
-
-            the unit price and saved the document, the value will not be updated by the
-
-            system if you change the document date.'
-          format: double
-        unitPriceInCurrency:
-          type: number
-          description: Background calculation giving you the Unit price in your default currency. This field is applicable if the amount is given in another currency than your default.
-          format: double
-        manualAmount:
-          type: number
-          description: Manual amount &gt; a check box indicating that the amount has been entered manually.
-          format: double
-        manualAmountInCurrency:
-          type: number
-          description: Background calculation giving you the Manual amount in your default currency. This field is applicable if the amount is given in another currency than your default.
-          format: double
-        amount:
-          type: number
-          description: 'Amount &gt; The amount after the discount has been applied. The value of this read-only box
-
-            is calculated automatically by deducting the discount amount from the extended price.'
-          format: double
-        cost:
-          type: number
-          description: "Cost &gt; The total cost of the line in default currency. \nThe value will always be 0 for unreleased documents."
-          format: double
-        amountInCurrency:
-          type: number
-          description: Background calculation giving you the Amount in your default currency. This field is applicable if the amount is given in another currency than your default.
-          format: double
-        account:
-          $ref: '#/components/schemas/accountInCreditNoteLineDto'
-        vatCode:
-          $ref: '#/components/schemas/vatCodeInCreditNoteLineDto'
-        uom:
-          type: string
-          description: UoM &gt; The unit of measure (UoM) for the item.
-        discountPercent:
-          type: number
-          description: 'Discount percent &gt; The percent of the line-level discount that has been applied manually or
-
-            automatically.The system selects the Manual Discount check box and
-
-            calculates the discount amount after you have entered the percent manually and
-
-            saved your changes or added a new line.'
-          format: double
-        discountAmount:
-          type: number
-          description: 'Discount amount &gt; The amount of the line-level discount that has been applied manually or
-
-            automatically to this line.The system selects the Manual Discount check box
-
-            and calculates the line amount after you have entered the discount amount
-
-            manually and save your changes or added a new line.'
-          format: double
-        discountAmountInCurrency:
-          type: number
-          description: Background calculation giving you the Discount amount in your default currency. This field is applicable if the amount is given in another currency than your default.
-          format: double
-        manualDiscount:
-          type: boolean
-          description: 'Manual discount &gt; A check box that indicates (if selected) that the discount has been applied
-
-            manually.If you clear the check box, the system clears entered discount percent,
-
-            or discount amount, or selected discount code.'
-        subaccount:
-          $ref: '#/components/schemas/subaccountInCreditNoteLineDto'
-        salesperson:
-          type: string
-          description: The field is deprecated for customer document endpoints, please use Seller instead
-        seller:
-          $ref: '#/components/schemas/sellerInCreditNoteLineDto'
-        deferralSchedule:
-          type: integer
-          description: Original deferral schedule &gt; A read-only column filled in by the system in the Cash return documents created by the reversing process. It shows the identifier of the deferral schedule associated with the original Cash sale document.
-          format: int32
-        deferralCode:
-          type: string
-          description: 'The deferral code assigned to the stock item or non-stock item specified in this
-
-            document line.Upon release of the document, the system generates a deferral
-
-            schedule (or schedules) based on the settings defined in this deferral code.'
-        discountCode:
-          type: string
-          description: The code of the line discount that has been applied to this line automatically or manually.
-        note:
-          type: string
-          description: Table &gt; Icon Notes &gt; Pop-up window for providing any user-defined text connected to the order.
-        branchNumber:
-          $ref: '#/components/schemas/branchNumberInCreditNoteLineDto'
-        externalLink:
-          type: string
-    branchNumberInCreditNoteDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The Financial details tab &gt; Branch &gt; The branch with which this invoice or memo is associated. The field is available if your company is set up with branches.
-    subaccountInCreditNoteLineDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: 'Mandatory field: Subaccount* &gt; The corresponding subaccount used for this transaction.'
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
-    DtoValueOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    vatCodeInCreditNoteLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: VAT category &gt; The VAT category (if applied) for the transaction. The category represents the type of goods or services.
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    paymentMethodInCreditNoteDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
-    subaccountInCreditNoteDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: The Document details tab &gt; Subaccount* &gt; The corresponding subaccount used for this transaction.
-    salesPersonIDInCreditNoteUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: The field is deprecated for customer document endpoints, please use Salesperson instead
-    financialPeriodInCreditNoteUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format YYYYMM.
-    countyInCustomerDocumentAddressDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: County &gt; The county or province.
-    postPeriodInCreditNoteUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    salespersonInCreditNoteUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The identifier of the salesperson involved.
-    accountInCreditNoteLineDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Account* &gt; The sales account used for the transaction.'
-    projectInCreditNoteDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The top part &gt; Project* &gt; The identifier and description of the project with which this document is associated, or the code indicating that this document is not associated with any project; the non-project code is specified in the Project accounting preferences (PM101000) window.
     CreditNoteLineUpdateDto:
       type: object
       properties:
@@ -1502,99 +1612,20 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         branchNumber:
           $ref: '#/components/schemas/DtoValueOfString'
-    invoiceAddressInCreditNoteDto:
+    countryInCustomerDocumentAddressDto:
       properties:
-        addressId:
-          type: integer
-          format: int32
-        addressLine1:
+        id:
           type: string
-          description: Address 1 &gt; The first line of the customer's contact address.
-        addressLine2:
+          description: 'Mandatory field: Country ID* &gt; The unique two-letter country ID according to international standard ISO 3166.'
+        name:
           type: string
-          description: Address 2 &gt; The second line of the address.
-        addressLine3:
+          description: 'Mandatory field: Country name* &gt; The complete name of the country.'
+        errorInfo:
           type: string
-          description: Address 3 &gt; The third line of the address.
-        postalCode:
-          type: string
-          description: Postcode &gt; The postcode.
-        city:
-          type: string
-          description: City &gt; The city.
-        country:
-          $ref: '#/components/schemas/countryInCustomerDocumentAddressDto'
-        county:
-          $ref: '#/components/schemas/countyInCustomerDocumentAddressDto'
-        overrideAddress:
-          type: boolean
-          description: Override address &gt; A check box that indicates (if selected) that the invoice address is not the default invoice address of the customer.
-      description: The Invoice address tab &gt; The Invoice address section.
-    ArAdjustDto:
-      type: object
-      properties:
-        docType:
-          type: string
-        customerCD:
-          type: string
-        refNbr:
-          type: string
-        amountPaid:
-          type: number
-          format: double
-        cashDiscountTaken:
-          type: number
-          format: double
-        balance:
-          type: number
-          format: double
-        pendingPPD:
-          type: boolean
-        released:
-          type: boolean
-        hold:
-          type: boolean
-        voided:
-          type: boolean
-        ppdCrMemoRefNbr:
-          type: string
-        paymentRef:
-          type: string
-        status:
-          type: string
-        applicationDate:
-          type: string
-          format: date-time
-        applicationPeriod:
-          type: string
-        invoiceText:
-          type: string
-    accountInCreditNoteDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: The Document details tab &gt;  Account * &gt; The sales account used for the transaction.
-    salesPersonInCreditNoteDto:
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Country &gt; The country.
+    paymentMethodInCreditNoteDto:
       properties:
         id:
           type: string
@@ -1602,29 +1633,7 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: The document details tab &gt; Salesperson ID &gt; The salesperson involved.
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    invoiceContactInCreditNoteDto:
-      properties:
-        contactId:
-          type: integer
-          format: int32
-        businessName:
-          type: string
-        attention:
-          type: string
-        email:
-          type: string
-        phone1:
-          type: string
-        overrideContact:
-          type: boolean
-      description: The Invoice address tab &gt; The Invoice contact section.
+      description: The Financial details tab &gt; The Payment information section &gt; Payment method &gt; The identifier for the payment method that the customer will use to pay the document.
     branchNumberInCreditNoteLineDto:
       properties:
         number:
@@ -1634,15 +1643,6 @@ components:
           type: string
           description: Click the magnifier. &gt; The name.
       description: 'Mandatory field: Branch* &gt; The branch that sells the line item or provides the service.'
-    sellerInCreditNoteLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Salesperson ID &gt; The identifier of the salesperson involved.
   securitySchemes:
     interactiveapi:
       type: oauth2

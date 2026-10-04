@@ -112,24 +112,50 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ApprovalResponseApi:
+    ApprovalApi:
+      required:
+      - DocumentApprovalStatus
       type: object
       properties:
-        DocumentId:
-          type: string
-          description: Document id which has been approved, rejected or is ready for approval.
-          format: uuid
-          readOnly: true
-        DocumentType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = SupplierInvoiceDraft,<br/>2 = SupplierInvoice
-          format: int32
-          readOnly: true
         DocumentApprovalStatus:
           type: integer
           description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Approved,<br/>2 = Rejected,<br/>3 = ReadyForApproval
           format: int32
-          readOnly: true
+        RejectionMessage:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: '<strong>Possible values:</strong><br/>2 = Rejected<br/><br/>Purpose: The message sent to users when rejecting a document. Empty if DocumentApprovalStatus is not.'
+        RejectionMessageReceivers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            format: uuid
+          description: '<strong>Possible values:</strong><br/>2 = Rejected<br/><br/>Purpose: The recipients of the rejection message. Empty if DocumentApprovalStatus is not. List of user ids. Use GET /v2/users.'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     VatReportApi:
       required:
@@ -231,50 +257,24 @@ components:
           description: The history of approval events of the vat report
           readOnly: true
       additionalProperties: false
-    ApprovalApi:
-      required:
-      - DocumentApprovalStatus
+    ApprovalResponseApi:
       type: object
       properties:
+        DocumentId:
+          type: string
+          description: Document id which has been approved, rejected or is ready for approval.
+          format: uuid
+          readOnly: true
+        DocumentType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = SupplierInvoiceDraft,<br/>2 = SupplierInvoice
+          format: int32
+          readOnly: true
         DocumentApprovalStatus:
           type: integer
           description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Approved,<br/>2 = Rejected,<br/>3 = ReadyForApproval
           format: int32
-        RejectionMessage:
-          maxLength: 200
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: '<strong>Possible values:</strong><br/>2 = Rejected<br/><br/>Purpose: The message sent to users when rejecting a document. Empty if DocumentApprovalStatus is not.'
-        RejectionMessageReceivers:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            format: uuid
-          description: '<strong>Possible values:</strong><br/>2 = Rejected<br/><br/>Purpose: The recipients of the rejection message. Empty if DocumentApprovalStatus is not. List of user ids. Use GET /v2/users.'
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+          readOnly: true
       additionalProperties: false
     DocumentApprovalEventApi:
       type: object
@@ -295,25 +295,25 @@ components:
           format: uuid
           readOnly: true
       additionalProperties: false
-    CommonExtendedBadRequest:
+    CommonError:
       type: object
       properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        Field:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+        ErrorCode:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

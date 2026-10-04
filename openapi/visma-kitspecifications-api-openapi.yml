@@ -383,22 +383,17 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    BasePaginationDtoOfKitSpecificationDto:
+    DtoValueOfString:
       type: object
       properties:
-        pageNumber:
+        value:
+          type: string
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
           type: integer
           format: int32
-        pageSize:
-          type: integer
-          format: int32
-        totalCount:
-          type: integer
-          format: int64
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitSpecificationDto'
     MetadataDto:
       type: object
       properties:
@@ -408,40 +403,6 @@ components:
         maxPageSize:
           type: integer
           format: int64
-    KitSpecificationUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        kitInventoryID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        revisionID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        descr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        isActive:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        allowCompAddition:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        isNonStock:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        stockComponentLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitSpecificationStockComponentsUpdateDto'
-        nonStockComponentLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitSpecificationNonStockComponentsUpdateDto'
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
     KitSpecificationStockComponentsUpdateDto:
       type: object
       properties:
@@ -469,7 +430,30 @@ components:
           $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
         allowSubstitution:
           $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-    KitSpecificationStockComponentsDto:
+    BasePaginationDtoOfKitSpecificationDto:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitSpecificationDto'
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    KitSpecificationNonStockComponentDto:
       type: object
       properties:
         lineNbr:
@@ -490,23 +474,12 @@ components:
         maxComponentQty:
           type: number
           format: double
-        disassemblyCoeff:
-          type: number
-          format: double
-        allowComponentSubstitution:
-          type: boolean
         description:
           type: string
         errorInfo:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
     KitSpecificationNonStockComponentsUpdateDto:
       type: object
       properties:
@@ -571,7 +544,13 @@ components:
       properties:
         value:
           type: boolean
-    KitSpecificationNonStockComponentDto:
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    KitSpecificationStockComponentsDto:
       type: object
       properties:
         lineNbr:
@@ -592,25 +571,46 @@ components:
         maxComponentQty:
           type: number
           format: double
+        disassemblyCoeff:
+          type: number
+          format: double
+        allowComponentSubstitution:
+          type: boolean
         description:
           type: string
         errorInfo:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    DtoValueOfNullableOfDecimal:
+    KitSpecificationUpdateDto:
       type: object
       properties:
-        value:
-          type: number
-          format: double
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
-        stateLocation:
-          type: string
+        kitInventoryID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        revisionID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        descr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        isActive:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        allowCompAddition:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        isNonStock:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        stockComponentLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitSpecificationStockComponentsUpdateDto'
+        nonStockComponentLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitSpecificationNonStockComponentsUpdateDto'
   securitySchemes:
     interactiveapi:
       type: oauth2

@@ -496,103 +496,16 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    BasePaginationDtoOfDiscountDto:
+    DiscountItemDto:
       type: object
       properties:
-        pageNumber:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        totalCount:
-          type: integer
-          format: int64
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/DiscountDto'
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    DiscountBranchDto:
-      type: object
-      properties:
-        branch:
-          type: string
-    DiscountItemPriceClassDto:
-      type: object
-      properties:
-        priceClassId:
+        itemId:
           type: string
     DiscountWarehouseDto:
       type: object
       properties:
         warehouse:
           type: string
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    DiscountCustomer2Dto:
-      type: object
-      properties:
-        customer:
-          type: string
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    DiscountCustomerPriceClassDto:
-      type: object
-      properties:
-        priceClassId:
-          type: string
-    DiscountUpdateDto:
-      type: object
-      properties:
-        discountCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        series:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        discountBy:
-          $ref: '#/components/schemas/DtoValueOfString'
-        breakBy:
-          $ref: '#/components/schemas/DtoValueOfString'
-        promotional:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        active:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        prorateDiscount:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        effectiveDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        expirationDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        discountBreakpoints:
-          type: array
-          items:
-            $ref: '#/components/schemas/DiscountBreakpointUpdateDto'
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
     DiscountBreakpointUpdateDto:
       type: object
       properties:
@@ -620,20 +533,135 @@ components:
           $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
         discountPercent:
           $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
     DtoValueOfString:
       type: object
       properties:
         value:
           type: string
+    DiscountBreakpointDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          format: int32
+        active:
+          type: boolean
+          description: The top part &gt; Active &gt; A check box that indicates (if selected) that the series is active.
+        breakAmount:
+          type: number
+          description: Discount breakpoints tab &gt; Break amount &gt; The line amount (break point) that starts the new range for the currently effective series.
+          format: double
+        amountTo:
+          type: number
+          format: double
+        lastBreakAmount:
+          type: number
+          description: Discount breakpoints tab &gt; Last break amount &gt; The amount (break point) that started the new range for the previously effective series (the one that was used before the effective date).
+          format: double
+        lastAmountTo:
+          type: number
+          format: double
+        pendingBreakAmount:
+          type: number
+          description: Discount breakpoints tab &gt; Pending break amount &gt; The amount (break point) that starts the new range for the pending series (one that is not yet in effect).
+          format: double
+        breakQuantity:
+          type: number
+          description: Discount breakpoints tab &gt; Break quantity &gt; The quantity of items (break quantity) that starts the new range for a discount level for the currently effective series. Any break quantity should be specified in the base units.
+          format: double
+        quantityTo:
+          type: number
+          format: double
+        lastBreakQuantity:
+          type: number
+          description: Discount breakpoints tab &gt; Last break quantity &gt; The quantity of item (break point) that started the range for the discount series used before the effective date.
+          format: double
+        lastQuantityTo:
+          type: number
+          format: double
+        pendingBreakQuantity:
+          type: number
+          description: Discount breakpoints tab &gt; Pending break quantity &gt; The quantity of items (break point) that starts the new range for the pending (not yet effective) series.
+          format: double
+        discountAmount:
+          type: number
+          description: Discount breakpoints tab &gt; Discount amount &gt; The discount amount to be used for the quantities that exceed this break quantity if the Amount option is selected as Discount by.
+          format: double
+        discountPercent:
+          type: number
+          description: Discount breakpoints tab &gt; Discount percent &gt; The discount percent to be currently used for the quantities that exceed this break quantity if the Percent option is selected as Discount by.
+          format: double
+        lastDiscountAmount:
+          type: number
+          description: Discount breakpoints tab &gt; Last discount amount &gt; The amount used as the discount for the discount series that was in effect before the effective date.
+          format: double
+        lastDiscountPercent:
+          type: number
+          description: Discount breakpoints tab &gt; Last discount percent &gt; The percentage used for the break point in the previously effective series.
+          format: double
+        lastDiscount:
+          type: number
+          description: Discount breakpoints tab &gt; Last discount amount &gt; The amount used as the discount for the discount series that was in effect before the effective date.
+          format: double
+        pendingDiscountAmount:
+          type: number
+          description: Discount breakpoints tab &gt; Pending discount amount &gt; The amount to be used as the discount for the pending series if the Amount option is selected as Discount by.
+          format: double
+        pendingDiscountPercent:
+          type: number
+          description: Discount breakpoints tab &gt; Pending discount percent &gt; The discount percent to be used for the break point in the pending series.
+          format: double
+        freeItemQty:
+          type: number
+          description: Discount breakpoints tab &gt; Free item qty. &gt; The quantity of the free item to be added as the discount to orders for this discount series.
+          format: double
+        lastFreeItemQty:
+          type: number
+          description: Discount breakpoints tab &gt; Last free item qty. &gt; The quantity of the free item that was used as the discount for the previously effective series.
+          format: double
+        pendingFreeItemQty:
+          type: number
+          description: Discount breakpoints tab &gt; Pending free item qty. &gt; The quantity of the free item to be added as the discount to orders for the pending discount series.
+          format: double
+        pendingDate:
+          type: string
+          format: date-time
+        effectiveDate:
+          type: string
+          format: date-time
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    DiscountUpdateDto:
+      type: object
+      properties:
+        discountCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        series:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        discountBy:
+          $ref: '#/components/schemas/DtoValueOfString'
+        breakBy:
+          $ref: '#/components/schemas/DtoValueOfString'
+        promotional:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        active:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        prorateDiscount:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        effectiveDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        expirationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+        discountBreakpoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiscountBreakpointUpdateDto'
     DiscountDto:
       type: object
       properties:
@@ -740,108 +768,80 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    DiscountBreakpointDto:
+    DiscountCustomerPriceClassDto:
       type: object
       properties:
-        lineNbr:
+        priceClassId:
+          type: string
+    DiscountBranchDto:
+      type: object
+      properties:
+        branch:
+          type: string
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    BasePaginationDtoOfDiscountDto:
+      type: object
+      properties:
+        pageNumber:
           type: integer
           format: int32
-        active:
-          type: boolean
-          description: The top part &gt; Active &gt; A check box that indicates (if selected) that the series is active.
-        breakAmount:
-          type: number
-          description: Discount breakpoints tab &gt; Break amount &gt; The line amount (break point) that starts the new range for the currently effective series.
-          format: double
-        amountTo:
-          type: number
-          format: double
-        lastBreakAmount:
-          type: number
-          description: Discount breakpoints tab &gt; Last break amount &gt; The amount (break point) that started the new range for the previously effective series (the one that was used before the effective date).
-          format: double
-        lastAmountTo:
-          type: number
-          format: double
-        pendingBreakAmount:
-          type: number
-          description: Discount breakpoints tab &gt; Pending break amount &gt; The amount (break point) that starts the new range for the pending series (one that is not yet in effect).
-          format: double
-        breakQuantity:
-          type: number
-          description: Discount breakpoints tab &gt; Break quantity &gt; The quantity of items (break quantity) that starts the new range for a discount level for the currently effective series. Any break quantity should be specified in the base units.
-          format: double
-        quantityTo:
-          type: number
-          format: double
-        lastBreakQuantity:
-          type: number
-          description: Discount breakpoints tab &gt; Last break quantity &gt; The quantity of item (break point) that started the range for the discount series used before the effective date.
-          format: double
-        lastQuantityTo:
-          type: number
-          format: double
-        pendingBreakQuantity:
-          type: number
-          description: Discount breakpoints tab &gt; Pending break quantity &gt; The quantity of items (break point) that starts the new range for the pending (not yet effective) series.
-          format: double
-        discountAmount:
-          type: number
-          description: Discount breakpoints tab &gt; Discount amount &gt; The discount amount to be used for the quantities that exceed this break quantity if the Amount option is selected as Discount by.
-          format: double
-        discountPercent:
-          type: number
-          description: Discount breakpoints tab &gt; Discount percent &gt; The discount percent to be currently used for the quantities that exceed this break quantity if the Percent option is selected as Discount by.
-          format: double
-        lastDiscountAmount:
-          type: number
-          description: Discount breakpoints tab &gt; Last discount amount &gt; The amount used as the discount for the discount series that was in effect before the effective date.
-          format: double
-        lastDiscountPercent:
-          type: number
-          description: Discount breakpoints tab &gt; Last discount percent &gt; The percentage used for the break point in the previously effective series.
-          format: double
-        lastDiscount:
-          type: number
-          description: Discount breakpoints tab &gt; Last discount amount &gt; The amount used as the discount for the discount series that was in effect before the effective date.
-          format: double
-        pendingDiscountAmount:
-          type: number
-          description: Discount breakpoints tab &gt; Pending discount amount &gt; The amount to be used as the discount for the pending series if the Amount option is selected as Discount by.
-          format: double
-        pendingDiscountPercent:
-          type: number
-          description: Discount breakpoints tab &gt; Pending discount percent &gt; The discount percent to be used for the break point in the pending series.
-          format: double
-        freeItemQty:
-          type: number
-          description: Discount breakpoints tab &gt; Free item qty. &gt; The quantity of the free item to be added as the discount to orders for this discount series.
-          format: double
-        lastFreeItemQty:
-          type: number
-          description: Discount breakpoints tab &gt; Last free item qty. &gt; The quantity of the free item that was used as the discount for the previously effective series.
-          format: double
-        pendingFreeItemQty:
-          type: number
-          description: Discount breakpoints tab &gt; Pending free item qty. &gt; The quantity of the free item to be added as the discount to orders for the pending discount series.
-          format: double
-        pendingDate:
-          type: string
-          format: date-time
-        effectiveDate:
-          type: string
-          format: date-time
-    DiscountItemDto:
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiscountDto'
+    DtoValueOfNullableOfBoolean:
       type: object
       properties:
-        itemId:
+        value:
+          type: boolean
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
           type: string
+          format: date-time
     DtoValueOfInt32:
       type: object
       properties:
         value:
           type: integer
           format: int32
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DiscountItemPriceClassDto:
+      type: object
+      properties:
+        priceClassId:
+          type: string
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DiscountCustomer2Dto:
+      type: object
+      properties:
+        customer:
+          type: string
   securitySchemes:
     interactiveapi:
       type: oauth2

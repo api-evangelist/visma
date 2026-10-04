@@ -147,144 +147,6 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
-    PaginatedResponseOfWorkScheduleApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkScheduleApi'
-      additionalProperties: false
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
-          format: date-time
-      additionalProperties: false
-    WorkScheduleSeasonsApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier provided by VLS
-          format: uuid
-        StartDay:
-          type: integer
-          description: Start day of the season
-          format: int32
-        StartMonth:
-          type: integer
-          description: Start month of the season
-          format: int32
-        EndDay:
-          type: integer
-          description: End day of the season
-          format: int32
-        EndMonth:
-          type: integer
-          description: End month of the season
-          format: int32
-        PeriodIndex:
-          type: integer
-          description: Index of the period/season within the work schedule
-          format: int32
-        CreatedUtc:
-          type: string
-          description: Timestamp indicating when the work schedule period/season was created (UTC)
-          format: date-time
-        ModifiedUtc:
-          type: string
-          description: Timestamp indicating when the work schedule period/season was last modified (UTC)
-          format: date-time
-      additionalProperties: false
-    WorkScheduleWorkDayIrregularWorkingHoursApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier provided by VLS
-          format: uuid
-        MinutesToWorkFullTime:
-          type: integer
-          description: Minutes to work for full-time employees per week
-          format: int32
-        WorkingDaysFullTime:
-          type:
-          - number
-          - 'null'
-          description: Number of working days for full-time employees per week
-          format: double
-        MinutesToWorkPartTime:
-          type:
-          - integer
-          - 'null'
-          description: Minutes to work for part-time employees per week
-          format: int32
-        WorkingDaysPartTime:
-          type:
-          - number
-          - 'null'
-          description: Number of working days for part-time employees per week
-          format: double
-        CreatedUtc:
-          type: string
-          description: Timestamp indicating when work days working hours were created (UTC)
-          format: date-time
-        ModifiedUtc:
-          type: string
-          description: Timestamp indicating when work days working hours were last modified (UTC)
-          format: date-time
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     WorkScheduleWorkDayApi:
       type: object
       properties:
@@ -344,6 +206,130 @@ components:
           - 'null'
           description: Unique identifier of a second coffee break, if any
           format: uuid
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    WorkScheduleSeasonsApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+        StartDay:
+          type: integer
+          description: Start day of the season
+          format: int32
+        StartMonth:
+          type: integer
+          description: Start month of the season
+          format: int32
+        EndDay:
+          type: integer
+          description: End day of the season
+          format: int32
+        EndMonth:
+          type: integer
+          description: End month of the season
+          format: int32
+        PeriodIndex:
+          type: integer
+          description: Index of the period/season within the work schedule
+          format: int32
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the work schedule period/season was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the work schedule period/season was last modified (UTC)
+          format: date-time
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
+      additionalProperties: false
+    WorkScheduleWorkDayIrregularWorkingHoursApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+        MinutesToWorkFullTime:
+          type: integer
+          description: Minutes to work for full-time employees per week
+          format: int32
+        WorkingDaysFullTime:
+          type:
+          - number
+          - 'null'
+          description: Number of working days for full-time employees per week
+          format: double
+        MinutesToWorkPartTime:
+          type:
+          - integer
+          - 'null'
+          description: Minutes to work for part-time employees per week
+          format: int32
+        WorkingDaysPartTime:
+          type:
+          - number
+          - 'null'
+          description: Number of working days for part-time employees per week
+          format: double
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when work days working hours were created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when work days working hours were last modified (UTC)
+          format: date-time
       additionalProperties: false
     WorkScheduleApi:
       type: object
@@ -423,61 +409,110 @@ components:
           description: Number of weekly working days that constitute a full-time work schedule
           format: double
       additionalProperties: false
-    CommonExtendedBadRequest:
+    CommonError:
       type: object
       properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        Field:
           type:
           - string
           - 'null'
-        ErrorId:
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PaginatedResponseOfWorkScheduleApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkScheduleApi'
+      additionalProperties: false
+    WorkScheduleResponse:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
           type: string
+          description: Unique identifier provided by VLS
           format: uuid
-        Errors:
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the work schedule
+        IsActive:
+          type: boolean
+          description: Is time work schedule active
+        ScheduleType:
+          type: integer
+          description: 'Work schedule type<br/>Possible values: 0 - Scheduled, 1 - Irregular'
+          format: int32
+        HandleBreakRules:
+          type: boolean
+          description: Indicates whether work schedule can handle break rules
+        IsFullTime:
+          type: boolean
+          description: Indicates whether work schedule is full time
+        CreatedFromExternalApp:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether work schedule is created not via VLS
+        FullTimeWorkScheduleId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the full time work schedule
+          format: uuid
+        WorkScheduleTimeAdjustmentId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the work schedule time adjustment
+          format: uuid
+        WorkScheduleWorkDaysIrregularWorkingHours:
+          allOf:
+          - $ref: '#/components/schemas/WorkScheduleWorkDaysIrregularWorkingHoursResponse'
+          description: Work days working hours for irregular schedules
+        WorkScheduleWorkDays:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    WorkScheduleWorkDaysIrregularWorkingHoursRequest:
-      required:
-      - MinutesToWorkFullTime
-      type: object
-      properties:
-        MinutesToWorkFullTime:
-          maximum: 10080
-          minimum: 0
-          type: integer
-          description: Minutes to work for full-time employees per week (max 10080 minutes)
-          format: int32
-        WorkingDaysFullTime:
-          maximum: 7
-          minimum: 0
+            $ref: '#/components/schemas/WorkScheduleWorkDayResponse'
+          description: Work schedule work days
+        WorkScheduleSeasons:
           type:
-          - number
+          - array
           - 'null'
-          description: Number of working days for full-time employees per week (max 7 days)
-          format: double
-        MinutesToWorkPartTime:
-          maximum: 10080
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: Minutes to work for part-time employees per week (max 10080 minutes)
-          format: int32
-        WorkingDaysPartTime:
-          maximum: 7
-          minimum: 0
-          type:
-          - number
-          - 'null'
-          description: Number of working days for part-time employees per week (max 7 days)
-          format: double
+          items:
+            $ref: '#/components/schemas/WorkScheduleSeasonResponse'
+          description: Work schedule periods/seasons
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the work schedule was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the work schedule was last modified (UTC)
+          format: date-time
       additionalProperties: false
     WorkScheduleWorkDaysIrregularWorkingHoursResponse:
       type: object
@@ -516,63 +551,6 @@ components:
           type: string
           description: Timestamp indicating when work days working hours were last modified (UTC)
           format: date-time
-      additionalProperties: false
-    WorkScheduleRequest:
-      required:
-      - HandleBreakRules
-      - IsActive
-      - IsFullTime
-      - Name
-      - ScheduleType
-      type: object
-      properties:
-        Name:
-          minLength: 1
-          type: string
-          description: Name of the work schedule (max 255 characters)
-        IsActive:
-          type: boolean
-          description: Is time work schedule active. Inactive schedule can still be used by an employee.
-        ScheduleType:
-          type: integer
-          description: 'Work schedule type<br/>Possible values: 0 - Scheduled, 1 - Irregular'
-          format: int32
-        HandleBreakRules:
-          type: boolean
-          description: Indicates whether work schedule can handle break rules
-        IsFullTime:
-          type: boolean
-          description: Indicates whether work schedule is full time
-        FullTimeWorkScheduleId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of the full time work schedule. Required for part-time regular schedules.
-          format: uuid
-        WorkScheduleTimeAdjustmentId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of the work schedule time adjustment. Required for regular schedules.
-          format: uuid
-        WorkScheduleWorkDaysIrregularWorkingHours:
-          allOf:
-          - $ref: '#/components/schemas/WorkScheduleWorkDaysIrregularWorkingHoursRequest'
-          description: Work days working hours. Required for irregular schedules.
-        WorkScheduleWorkDays:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/WorkScheduleWorkDayRequest'
-          description: Work schedule work days. Required for regular schedules.
-        WorkScheduleSeasons:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/WorkScheduleSeasonRequest'
-          description: Work schedule periods/seasons. Required for regular schedules.
       additionalProperties: false
     WorkScheduleWorkDayResponse:
       type: object
@@ -690,77 +668,6 @@ components:
           description: Average minutes to work during the day, excluding breaks (max 1440 minutes)
           format: int32
       additionalProperties: false
-    WorkScheduleResponse:
-      required:
-      - Name
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier provided by VLS
-          format: uuid
-        Name:
-          type:
-          - string
-          - 'null'
-          description: Name of the work schedule
-        IsActive:
-          type: boolean
-          description: Is time work schedule active
-        ScheduleType:
-          type: integer
-          description: 'Work schedule type<br/>Possible values: 0 - Scheduled, 1 - Irregular'
-          format: int32
-        HandleBreakRules:
-          type: boolean
-          description: Indicates whether work schedule can handle break rules
-        IsFullTime:
-          type: boolean
-          description: Indicates whether work schedule is full time
-        CreatedFromExternalApp:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether work schedule is created not via VLS
-        FullTimeWorkScheduleId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of the full time work schedule
-          format: uuid
-        WorkScheduleTimeAdjustmentId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of the work schedule time adjustment
-          format: uuid
-        WorkScheduleWorkDaysIrregularWorkingHours:
-          allOf:
-          - $ref: '#/components/schemas/WorkScheduleWorkDaysIrregularWorkingHoursResponse'
-          description: Work days working hours for irregular schedules
-        WorkScheduleWorkDays:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/WorkScheduleWorkDayResponse'
-          description: Work schedule work days
-        WorkScheduleSeasons:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/WorkScheduleSeasonResponse'
-          description: Work schedule periods/seasons
-        CreatedUtc:
-          type: string
-          description: Timestamp indicating when the work schedule was created (UTC)
-          format: date-time
-        ModifiedUtc:
-          type: string
-          description: Timestamp indicating when the work schedule was last modified (UTC)
-          format: date-time
-      additionalProperties: false
     PaginatedResponseOfWorkScheduleResponse:
       required:
       - Data
@@ -811,6 +718,63 @@ components:
           description: Timestamp indicating when the work schedule period/season was last modified (UTC)
           format: date-time
       additionalProperties: false
+    WorkScheduleRequest:
+      required:
+      - HandleBreakRules
+      - IsActive
+      - IsFullTime
+      - Name
+      - ScheduleType
+      type: object
+      properties:
+        Name:
+          minLength: 1
+          type: string
+          description: Name of the work schedule (max 255 characters)
+        IsActive:
+          type: boolean
+          description: Is time work schedule active. Inactive schedule can still be used by an employee.
+        ScheduleType:
+          type: integer
+          description: 'Work schedule type<br/>Possible values: 0 - Scheduled, 1 - Irregular'
+          format: int32
+        HandleBreakRules:
+          type: boolean
+          description: Indicates whether work schedule can handle break rules
+        IsFullTime:
+          type: boolean
+          description: Indicates whether work schedule is full time
+        FullTimeWorkScheduleId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the full time work schedule. Required for part-time regular schedules.
+          format: uuid
+        WorkScheduleTimeAdjustmentId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the work schedule time adjustment. Required for regular schedules.
+          format: uuid
+        WorkScheduleWorkDaysIrregularWorkingHours:
+          allOf:
+          - $ref: '#/components/schemas/WorkScheduleWorkDaysIrregularWorkingHoursRequest'
+          description: Work days working hours. Required for irregular schedules.
+        WorkScheduleWorkDays:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WorkScheduleWorkDayRequest'
+          description: Work schedule work days. Required for regular schedules.
+        WorkScheduleSeasons:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WorkScheduleSeasonRequest'
+          description: Work schedule periods/seasons. Required for regular schedules.
+      additionalProperties: false
     WorkScheduleSeasonRequest:
       required:
       - EndDay
@@ -840,6 +804,42 @@ components:
           type: integer
           description: Index of the period/season within the work schedule (starting from 0)
           format: int32
+      additionalProperties: false
+    WorkScheduleWorkDaysIrregularWorkingHoursRequest:
+      required:
+      - MinutesToWorkFullTime
+      type: object
+      properties:
+        MinutesToWorkFullTime:
+          maximum: 10080
+          minimum: 0
+          type: integer
+          description: Minutes to work for full-time employees per week (max 10080 minutes)
+          format: int32
+        WorkingDaysFullTime:
+          maximum: 7
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Number of working days for full-time employees per week (max 7 days)
+          format: double
+        MinutesToWorkPartTime:
+          maximum: 10080
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: Minutes to work for part-time employees per week (max 10080 minutes)
+          format: int32
+        WorkingDaysPartTime:
+          maximum: 7
+          minimum: 0
+          type:
+          - number
+          - 'null'
+          description: Number of working days for part-time employees per week (max 7 days)
+          format: double
       additionalProperties: false
 x-refined-from:
 - visma-payroll-api-v1-openapi-original.json

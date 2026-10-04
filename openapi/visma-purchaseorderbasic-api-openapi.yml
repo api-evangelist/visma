@@ -479,22 +479,179 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    taxCategoryInPurchaseOrderLineDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT category &gt; The VAT category assigned to the ordered stock item.
+    customStr4InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    branchInPurchaseOrderBasicDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Document details tab &gt; Branch &gt; The branch to receive the item.
+    customInt1InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    subInPurchaseOrderLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: Sub. ID &gt; The subaccount used to record the purchased non-stock item that does not require receipt (by default, the subaccount generated in accordance with the rule defined in the Combine COGS/expense sub. from field in the Posting classes (IN206000) window).
+    customStr5InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    projectInPurchaseOrderLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project &gt; The project with which this purchase order line is associated.
+    glnInPurchaseOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field if Supplier or VatRegistrationId is not specified.
+    customDec2InPurchaseOrderBasicUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    customStr5InPurchaseOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
     customDec1InPurchaseOrderBasicUpdateDto:
       properties:
         value:
           type: number
           format: double
       description: A free custom colum of type decimal with max 4 decimals.
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    customStr3InPurchaseOrderBasicUpdateDto:
+    customStr2InPurchaseOrderBasicUpdateDto:
       properties:
         value:
           type: string
       description: A free custom colum of type string with max length 100.
+    branchInPurchaseOrderLineDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Branch &gt; The branch associated with the purchase order.
+    DtoValueOfNullableOfPurchaseOrderReceiptAction:
+      type: object
+      properties:
+        value:
+          enum:
+          - Reject
+          - AcceptButWarn
+          - Accept
+          type: string
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    DtoValueOfNullableOfPoLineType:
+      type: object
+      properties:
+        value:
+          enum:
+          - GoodsForInventory
+          - GoodsForSalesOrder
+          - GoodsForReplenishment
+          - GoodsForDropShip
+          - NonStockForDropShip
+          - NonStockForSalesOrder
+          - NonStock
+          - Service
+          - Freight
+          - Description
+          type: string
+    customInt2InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: integer
+          format: int32
+      description: A free custom colum of type int
+    ownerInPurchaseOrderBasicDto:
+      properties:
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: The top part &gt; Owner &gt; The employee who is responsible for the purchase order.
+    locationInPurchaseOrderBasicDto:
+      properties:
+        id:
+          type: integer
+          description: Click the magnifier &gt; The identifier
+          format: int32
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; Click the magnifier. The supplier location from which the items will be received.'
     TaxDetailDto:
       type: object
       properties:
@@ -524,169 +681,92 @@ components:
           description: Expense Amount for the VAT type that has been added.
           format: double
       description: This class represents a VAT Detail Line. Used for getting data.
-    PurchaseOrderBasicDto:
+    PurchaseOrderBasicUpdateDto:
       type: object
       properties:
         orderType:
-          enum:
-          - RegularOrder
-          - DropShip
-          - Blanket
-          - StandardBlanket
-          type: string
-          description: 'The top part &gt; Type &gt; The type of the purchase order, which can be one of these options: Normal, Drop-ship, Blanket, Default'
-        orderNbr:
-          type: string
-          description: The top part &gt; Order no. &gt; The unique reference number of the purchase order, which the system assigns based on the number series assigned to purchase orders of this type, as specified in the PO101000 window.
+          $ref: '#/components/schemas/DtoValueOfNullableOfPurchaseOrderType'
+        orderNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
         hold:
-          type: boolean
-          description: The top part &gt; Hold &gt; A check box that you select to give the purchase order the On hold status.
-        status:
-          enum:
-          - Balanced
-          - Cancelled
-          - Closed
-          - Hold
-          - Open
-          - PendingEmail
-          - PendingPrint
-          - Printed
-          - Voided
-          type: string
-          description: 'The top part &gt; Status &gt; The system-generated status of the purchase order, which can be one of the following options: On hold, Open, Pending approval, Rejected, Pending printing, Pending e-mail, Closed, Cancelled.'
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
         date:
-          type: string
-          description: 'Mandatory field: The top part &gt; Date* &gt; The date when the purchase order was created.'
-          format: date-time
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
         promisedOn:
-          type: string
-          description: The top part &gt; Delivery date &gt; The date when the supplier promised that the items listed in the order will be received at their destination location.
-          format: date-time
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
         description:
-          type: string
-          description: The top part &gt; Description &gt; A brief description of the purchase order.
+          $ref: '#/components/schemas/DtoValueOfString'
         supplier:
-          $ref: '#/components/schemas/supplierInPurchaseOrderBasicDto'
+          $ref: '#/components/schemas/supplierInPurchaseOrderBasicUpdateDto'
         location:
-          $ref: '#/components/schemas/locationInPurchaseOrderBasicDto'
+          $ref: '#/components/schemas/DtoValueOfString'
+        gln:
+          $ref: '#/components/schemas/glnInPurchaseOrderBasicUpdateDto'
+        vatRegistrationId:
+          $ref: '#/components/schemas/vatRegistrationIdInPurchaseOrderBasicUpdateDto'
         owner:
-          $ref: '#/components/schemas/ownerInPurchaseOrderBasicDto'
+          $ref: '#/components/schemas/DtoValueOfNullableOfGuid'
         currency:
-          type: string
-          description: The top part &gt; Currency &gt; The currency the purchase order will be paid in.
-        supplierRef:
-          type: string
-          description: The top part &gt; Supplier ref. &gt; The reference number of the supplier document related to this purchase order.
+          $ref: '#/components/schemas/DtoValueOfString'
         exchangeRate:
-          type: number
-          format: double
-        lineTotal:
-          type: number
-          description: The top part &gt; Line total &gt; The total sum of the Extended amount entries for all lines in the current purchase order. This value is calculated by the system and users cannot manually change it.
-          format: double
-        lineTotalInBaseCurrency:
-          type: number
-          description: The top part &gt; View base &gt; A button that recalculates the Line total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
-          format: double
-        vatExemptTotal:
-          type: number
-          description: The Top part &gt; VAT exempt total &gt; The document total that is exempt from VAT. This total is calculated as the taxable amount for the VAT with the Include in VAT exempt total check box selected in the TX205000 window.
-          format: double
-        vatExemptTotalInBaseCurrency:
-          type: number
-          description: The top part &gt; View base &gt; A button that recalculates the VAT exempt total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
-          format: double
-        taxTotal:
-          type: number
-          description: The Top part &gt; VAT total &gt; The total VAT amount for all lines added to the current purchase order. This value, also calculated by the system, is the sum of the VAT amounts for each line.
-          format: double
-        taxTotalInBaseCurrency:
-          type: number
-          description: The top part &gt; View base &gt; A button that recalculates the VAT total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
-          format: double
-        orderTotal:
-          type: number
-          description: The Top part &gt; Order total &gt; The total sum for the purchase order, including VAT. This read-only value is the sum of the Line total and VAT total values.
-          format: double
-        orderTotalInBaseCurrency:
-          type: number
-          description: The top part &gt; View base &gt; A button that recalculates the Order total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
-          format: double
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        supplierRef:
+          $ref: '#/components/schemas/DtoValueOfString'
         controlTotal:
-          type: number
-          description: The top part &gt; Control total &gt; The order's total amount (including VAT), which you must enter manually when you attempt to save the order with the Balanced status.
-          format: double
-        controlTotalInBaseCurrency:
-          type: number
-          description: The top part &gt; View base &gt; A button that recalculates the Control total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
-          format: double
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
         branch:
-          $ref: '#/components/schemas/branchInPurchaseOrderBasicDto'
+          $ref: '#/components/schemas/DtoValueOfString'
         lines:
           type: array
           items:
-            $ref: '#/components/schemas/PurchaseOrderLineDto'
-          description: Document details tab &gt; The table &gt;
-        taxDetails:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxDetailDto'
-          description: VAT details tab &gt;
-        purchaseReceipts:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseReceiptsDto'
-          description: Purchase receipts tab &gt;
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
+            $ref: '#/components/schemas/PurchaseOrderLineUpdateDto'
+        changeDatesOnLines:
+          type: boolean
         note:
-          type: string
-          description: Icon Notes on top of the window &gt; Pop-up window for providing any user-defined text connected to the document.
+          $ref: '#/components/schemas/DtoValueOfString'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
         customStr1:
-          type: string
-          description: A free custom colum of type string with max length 100.
+          $ref: '#/components/schemas/customStr1InPurchaseOrderBasicUpdateDto'
         customStr2:
-          type: string
-          description: A free custom colum of type string with max length 100.
+          $ref: '#/components/schemas/customStr2InPurchaseOrderBasicUpdateDto'
         customStr3:
-          type: string
-          description: A free custom colum of type string with max length 100.
+          $ref: '#/components/schemas/customStr3InPurchaseOrderBasicUpdateDto'
         customStr4:
-          type: string
-          description: A free custom colum of type string with max length 100.
+          $ref: '#/components/schemas/customStr4InPurchaseOrderBasicUpdateDto'
         customStr5:
-          type: string
-          description: A free custom colum of type string with max length 100.
+          $ref: '#/components/schemas/customStr5InPurchaseOrderBasicUpdateDto'
         customDec1:
-          type: number
-          description: A free custom colum of type decimal with max 4 decimals.
-          format: double
+          $ref: '#/components/schemas/customDec1InPurchaseOrderBasicUpdateDto'
         customDec2:
-          type: number
-          description: A free custom colum of type decimal with max 4 decimals.
-          format: double
+          $ref: '#/components/schemas/customDec2InPurchaseOrderBasicUpdateDto'
         customInt1:
-          type: integer
-          description: A free custom colum of type int
-          format: int32
+          $ref: '#/components/schemas/customInt1InPurchaseOrderBasicUpdateDto'
         customInt2:
-          type: integer
-          description: A free custom colum of type int
-          format: int32
+          $ref: '#/components/schemas/customInt2InPurchaseOrderBasicUpdateDto'
         customDateTimeUTC1:
-          type: string
-          description: A free custom colum of type DateTime - in UTC timezone
-          format: date-time
+          $ref: '#/components/schemas/customDateTimeUTC1InPurchaseOrderBasicUpdateDto'
         timeStamp:
           type: string
           format: byte
-        errorInfo:
+      description: 'This class represent a Purchase Order in Purchase Order Controller. Used to pass data to server for creating or updating an order
+
+        Supplier is mandatory to create Purchase Order, customer can be identified by Supplier, GLN or VatRegistrationId'
+    inventoryInPurchaseOrderLineDto:
+      properties:
+        number:
           type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: This class represents a Purchase Order in PurchaseOrderController. Used for getting data.
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Item ID &gt; The ID of the item.
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
     PurchaseOrderLineDto:
       type: object
       properties:
@@ -865,221 +945,6 @@ components:
           description: A free custom colum of type DateTime - in UTC timezone
           format: date-time
       description: This class represents a Purchase Order Line in PurchaseOrderController. Used for getting data.
-    customStr4InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    projectTaskInPurchaseOrderLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The project task with which this purchase order is associated.
-    customDec2InPurchaseOrderBasicUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    ownerInPurchaseOrderBasicDto:
-      properties:
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: The top part &gt; Owner &gt; The employee who is responsible for the purchase order.
-    customInt1InPurchaseOrderBasicUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    branchInPurchaseOrderBasicDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Document details tab &gt; Branch &gt; The branch to receive the item.
-    discountCodeInPurchaseOrderLineDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Discount code &gt; The code of the line discount that has been applied to this line automatically.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    warehouseInPurchaseOrderLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Warehouse &gt; The warehouse to receive the item listed on the order.
-    PurchaseOrderBasicUpdateDto:
-      type: object
-      properties:
-        orderType:
-          $ref: '#/components/schemas/DtoValueOfNullableOfPurchaseOrderType'
-        orderNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        hold:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        date:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        promisedOn:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        supplier:
-          $ref: '#/components/schemas/supplierInPurchaseOrderBasicUpdateDto'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        gln:
-          $ref: '#/components/schemas/glnInPurchaseOrderBasicUpdateDto'
-        vatRegistrationId:
-          $ref: '#/components/schemas/vatRegistrationIdInPurchaseOrderBasicUpdateDto'
-        owner:
-          $ref: '#/components/schemas/DtoValueOfNullableOfGuid'
-        currency:
-          $ref: '#/components/schemas/DtoValueOfString'
-        exchangeRate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        supplierRef:
-          $ref: '#/components/schemas/DtoValueOfString'
-        controlTotal:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        branch:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseOrderLineUpdateDto'
-        changeDatesOnLines:
-          type: boolean
-        note:
-          $ref: '#/components/schemas/DtoValueOfString'
-        overrideNumberSeries:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        customStr1:
-          $ref: '#/components/schemas/customStr1InPurchaseOrderBasicUpdateDto'
-        customStr2:
-          $ref: '#/components/schemas/customStr2InPurchaseOrderBasicUpdateDto'
-        customStr3:
-          $ref: '#/components/schemas/customStr3InPurchaseOrderBasicUpdateDto'
-        customStr4:
-          $ref: '#/components/schemas/customStr4InPurchaseOrderBasicUpdateDto'
-        customStr5:
-          $ref: '#/components/schemas/customStr5InPurchaseOrderBasicUpdateDto'
-        customDec1:
-          $ref: '#/components/schemas/customDec1InPurchaseOrderBasicUpdateDto'
-        customDec2:
-          $ref: '#/components/schemas/customDec2InPurchaseOrderBasicUpdateDto'
-        customInt1:
-          $ref: '#/components/schemas/customInt1InPurchaseOrderBasicUpdateDto'
-        customInt2:
-          $ref: '#/components/schemas/customInt2InPurchaseOrderBasicUpdateDto'
-        customDateTimeUTC1:
-          $ref: '#/components/schemas/customDateTimeUTC1InPurchaseOrderBasicUpdateDto'
-        timeStamp:
-          type: string
-          format: byte
-      description: 'This class represent a Purchase Order in Purchase Order Controller. Used to pass data to server for creating or updating an order
-
-        Supplier is mandatory to create Purchase Order, customer can be identified by Supplier, GLN or VatRegistrationId'
-    customStr5InPurchaseOrderBasicUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customInt2InPurchaseOrderBasicUpdateDto:
-      properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    customDec2InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    branchInPurchaseOrderLineDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: Branch &gt; The branch associated with the purchase order.
-    customStr2InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customStr5InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
     SegmentUpdateDto:
       type: object
       properties:
@@ -1088,181 +953,12 @@ components:
           format: int32
         segmentValue:
           type: string
-    taxCategoryInPurchaseOrderLineDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: VAT category &gt; The VAT category assigned to the ordered stock item.
-    locationInPurchaseOrderBasicDto:
-      properties:
-        id:
-          type: integer
-          description: Click the magnifier &gt; The identifier
-          format: int32
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: The top part &gt; Location* &gt; Click the magnifier. The supplier location from which the items will be received.'
-    PurchaseReceiptsDto:
-      type: object
-      properties:
-        type:
-          enum:
-          - PoReceipt
-          - PoReturn
-          - TransferReceipt
-          type: string
-          description: The top part &gt; Type &gt; The type of the document, which can be Receipt, Return, or Transfer receipt.
-        receiptNumber:
-          type: string
-          description: The top part &gt; Receipt no. &gt; The unique reference number of the purchase receipt, transfer receipt, or return, which the system automatically assigns according to its number series.
-        status:
-          enum:
-          - Hold
-          - Balanced
-          - Released
-          - Cancelled
-          type: string
-          description: The top part &gt; Status &gt; The current status of the purchase or transfer receipt, or return, which the system assigns automatically.
-        supplierName:
-          type: string
-          description: The top part &gt; Supplier &gt; The supplier from which the items have been received or to which they will be returned.
-        currency:
-          type: string
-          description: The top part &gt; Currency &gt; The currency the supplier uses for invoicing.
-        totalQty:
-          type: number
-          description: The top part &gt; Total qty. &gt; The total quantity of items received from or returned to the supplier; the sum of all quantities of all stock items listed on the Document details tab.
-          format: double
-        totalAmt:
-          type: number
-          description: The top part &gt; Total amt. &gt; The total amount calculated for items received from or returned to the supplier; the sum of all amounts of all stock items listed on the Document details tab.
-          format: double
-    supplierInPurchaseOrderBasicUpdateDto:
+    customInt2InPurchaseOrderBasicUpdateDto:
       properties:
         value:
-          type: string
-      description: Mandatory field if GLN or VatRegistrationId is not specified.
-    DtoValueOfNullableOfGuid:
-      type: object
-      properties:
-        value:
-          type: string
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-    supplierInPurchaseOrderBasicDto:
-      properties:
-        internalId:
           type: integer
           format: int32
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: 'Mandatory field: The top part &gt; Supplier* &gt; The supplier from which the items will be purchased.'
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    vatIdInTaxDetailDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: VAT ID &gt; The ID of the specific VAT applied.
-    customStr3InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    DtoValueOfNullableOfPurchaseOrderType:
-      type: object
-      properties:
-        value:
-          enum:
-          - RegularOrder
-          - DropShip
-          - Blanket
-          - StandardBlanket
-          type: string
-    DtoValueOfNullableOfPurchaseOrderReceiptAction:
-      type: object
-      properties:
-        value:
-          enum:
-          - Reject
-          - AcceptButWarn
-          - Accept
-          type: string
-    customDateTimeUTC1InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: A free custom colum of type DateTime - in UTC timezone
-    projectInPurchaseOrderLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project &gt; The project with which this purchase order line is associated.
-    customStr4InPurchaseOrderBasicUpdateDto:
-      properties:
-        value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    inventoryInPurchaseOrderLineDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Item ID &gt; The ID of the item.
-    customDec1InPurchaseOrderLineUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: A free custom colum of type decimal with max 4 decimals.
-    vatRegistrationIdInPurchaseOrderBasicUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field if Supplier or GLN is not specified.
+      description: A free custom colum of type int
     PurchaseOrderLineUpdateDto:
       type: object
       properties:
@@ -1353,16 +1049,323 @@ components:
         completed:
           $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
       description: This class represent a Purchase Order Line in Purchase Order Controller. Used to pass data to server for creating or updating an order line
-    glnInPurchaseOrderBasicUpdateDto:
+    customDec1InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    supplierInPurchaseOrderBasicUpdateDto:
       properties:
         value:
           type: string
-      description: Mandatory field if Supplier or VatRegistrationId is not specified.
+      description: Mandatory field if GLN or VatRegistrationId is not specified.
+    customStr3InPurchaseOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    supplierInPurchaseOrderBasicDto:
+      properties:
+        internalId:
+          type: integer
+          format: int32
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: The top part &gt; Supplier* &gt; The supplier from which the items will be purchased.'
+    customStr2InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfNullableOfPurchaseOrderType:
+      type: object
+      properties:
+        value:
+          enum:
+          - RegularOrder
+          - DropShip
+          - Blanket
+          - StandardBlanket
+          type: string
+    customStr4InPurchaseOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    vatRegistrationIdInPurchaseOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field if Supplier or GLN is not specified.
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    customDec2InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: A free custom colum of type decimal with max 4 decimals.
+    customStr3InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    PurchaseOrderBasicDto:
+      type: object
+      properties:
+        orderType:
+          enum:
+          - RegularOrder
+          - DropShip
+          - Blanket
+          - StandardBlanket
+          type: string
+          description: 'The top part &gt; Type &gt; The type of the purchase order, which can be one of these options: Normal, Drop-ship, Blanket, Default'
+        orderNbr:
+          type: string
+          description: The top part &gt; Order no. &gt; The unique reference number of the purchase order, which the system assigns based on the number series assigned to purchase orders of this type, as specified in the PO101000 window.
+        hold:
+          type: boolean
+          description: The top part &gt; Hold &gt; A check box that you select to give the purchase order the On hold status.
+        status:
+          enum:
+          - Balanced
+          - Cancelled
+          - Closed
+          - Hold
+          - Open
+          - PendingEmail
+          - PendingPrint
+          - Printed
+          - Voided
+          type: string
+          description: 'The top part &gt; Status &gt; The system-generated status of the purchase order, which can be one of the following options: On hold, Open, Pending approval, Rejected, Pending printing, Pending e-mail, Closed, Cancelled.'
+        date:
+          type: string
+          description: 'Mandatory field: The top part &gt; Date* &gt; The date when the purchase order was created.'
+          format: date-time
+        promisedOn:
+          type: string
+          description: The top part &gt; Delivery date &gt; The date when the supplier promised that the items listed in the order will be received at their destination location.
+          format: date-time
+        description:
+          type: string
+          description: The top part &gt; Description &gt; A brief description of the purchase order.
+        supplier:
+          $ref: '#/components/schemas/supplierInPurchaseOrderBasicDto'
+        location:
+          $ref: '#/components/schemas/locationInPurchaseOrderBasicDto'
+        owner:
+          $ref: '#/components/schemas/ownerInPurchaseOrderBasicDto'
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency the purchase order will be paid in.
+        supplierRef:
+          type: string
+          description: The top part &gt; Supplier ref. &gt; The reference number of the supplier document related to this purchase order.
+        exchangeRate:
+          type: number
+          format: double
+        lineTotal:
+          type: number
+          description: The top part &gt; Line total &gt; The total sum of the Extended amount entries for all lines in the current purchase order. This value is calculated by the system and users cannot manually change it.
+          format: double
+        lineTotalInBaseCurrency:
+          type: number
+          description: The top part &gt; View base &gt; A button that recalculates the Line total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The Top part &gt; VAT exempt total &gt; The document total that is exempt from VAT. This total is calculated as the taxable amount for the VAT with the Include in VAT exempt total check box selected in the TX205000 window.
+          format: double
+        vatExemptTotalInBaseCurrency:
+          type: number
+          description: The top part &gt; View base &gt; A button that recalculates the VAT exempt total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
+          format: double
+        taxTotal:
+          type: number
+          description: The Top part &gt; VAT total &gt; The total VAT amount for all lines added to the current purchase order. This value, also calculated by the system, is the sum of the VAT amounts for each line.
+          format: double
+        taxTotalInBaseCurrency:
+          type: number
+          description: The top part &gt; View base &gt; A button that recalculates the VAT total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
+          format: double
+        orderTotal:
+          type: number
+          description: The Top part &gt; Order total &gt; The total sum for the purchase order, including VAT. This read-only value is the sum of the Line total and VAT total values.
+          format: double
+        orderTotalInBaseCurrency:
+          type: number
+          description: The top part &gt; View base &gt; A button that recalculates the Order total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
+          format: double
+        controlTotal:
+          type: number
+          description: The top part &gt; Control total &gt; The order's total amount (including VAT), which you must enter manually when you attempt to save the order with the Balanced status.
+          format: double
+        controlTotalInBaseCurrency:
+          type: number
+          description: The top part &gt; View base &gt; A button that recalculates the Control total to your base currency if the amount on the purchase order is in another currency then base currency. When you click the button, the button toggles to View currency.
+          format: double
+        branch:
+          $ref: '#/components/schemas/branchInPurchaseOrderBasicDto'
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseOrderLineDto'
+          description: Document details tab &gt; The table &gt;
+        taxDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxDetailDto'
+          description: VAT details tab &gt;
+        purchaseReceipts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseReceiptsDto'
+          description: Purchase receipts tab &gt;
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        note:
+          type: string
+          description: Icon Notes on top of the window &gt; Pop-up window for providing any user-defined text connected to the document.
+        customStr1:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr2:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr3:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr4:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customStr5:
+          type: string
+          description: A free custom colum of type string with max length 100.
+        customDec1:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customDec2:
+          type: number
+          description: A free custom colum of type decimal with max 4 decimals.
+          format: double
+        customInt1:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customInt2:
+          type: integer
+          description: A free custom colum of type int
+          format: int32
+        customDateTimeUTC1:
+          type: string
+          description: A free custom colum of type DateTime - in UTC timezone
+          format: date-time
+        timeStamp:
+          type: string
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a Purchase Order in PurchaseOrderController. Used for getting data.
     customStr1InPurchaseOrderLineUpdateDto:
       properties:
         value:
           type: string
       description: A free custom colum of type string with max length 100.
+    customStr1InPurchaseOrderBasicUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A free custom colum of type string with max length 100.
+    vatIdInTaxDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT ID &gt; The ID of the specific VAT applied.
+    warehouseInPurchaseOrderLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Warehouse &gt; The warehouse to receive the item listed on the order.
+    DtoValueOfNullableOfGuid:
+      type: object
+      properties:
+        value:
+          type: string
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+    customDateTimeUTC1InPurchaseOrderLineUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: A free custom colum of type DateTime - in UTC timezone
     accountInPurchaseOrderLineDto:
       properties:
         type:
@@ -1374,83 +1377,80 @@ components:
           type: string
           description: Name of item/description
       description: Account &gt; The expense account used to record the purchased non-stock item that does not require receipt (by default, the account specified for the item in the Combine COGS/expense sub. from field in the Posting classes (IN206000) window).
-    DtoValueOfNullableOfPoLineType:
+    PurchaseReceiptsDto:
       type: object
       properties:
-        value:
+        type:
           enum:
-          - GoodsForInventory
-          - GoodsForSalesOrder
-          - GoodsForReplenishment
-          - GoodsForDropShip
-          - NonStockForDropShip
-          - NonStockForSalesOrder
-          - NonStock
-          - Service
-          - Freight
-          - Description
+          - PoReceipt
+          - PoReturn
+          - TransferReceipt
           type: string
-    customInt2InPurchaseOrderLineUpdateDto:
+          description: The top part &gt; Type &gt; The type of the document, which can be Receipt, Return, or Transfer receipt.
+        receiptNumber:
+          type: string
+          description: The top part &gt; Receipt no. &gt; The unique reference number of the purchase receipt, transfer receipt, or return, which the system automatically assigns according to its number series.
+        status:
+          enum:
+          - Hold
+          - Balanced
+          - Released
+          - Cancelled
+          type: string
+          description: The top part &gt; Status &gt; The current status of the purchase or transfer receipt, or return, which the system assigns automatically.
+        supplierName:
+          type: string
+          description: The top part &gt; Supplier &gt; The supplier from which the items have been received or to which they will be returned.
+        currency:
+          type: string
+          description: The top part &gt; Currency &gt; The currency the supplier uses for invoicing.
+        totalQty:
+          type: number
+          description: The top part &gt; Total qty. &gt; The total quantity of items received from or returned to the supplier; the sum of all quantities of all stock items listed on the Document details tab.
+          format: double
+        totalAmt:
+          type: number
+          description: The top part &gt; Total amt. &gt; The total amount calculated for items received from or returned to the supplier; the sum of all amounts of all stock items listed on the Document details tab.
+          format: double
+    customInt1InPurchaseOrderBasicUpdateDto:
       properties:
         value:
           type: integer
           format: int32
       description: A free custom colum of type int
-    customStr2InPurchaseOrderBasicUpdateDto:
+    DtoValueOfBoolean:
+      type: object
       properties:
         value:
-          type: string
-      description: A free custom colum of type string with max length 100.
-    customStr1InPurchaseOrderBasicUpdateDto:
+          type: boolean
+    projectTaskInPurchaseOrderLineDto:
       properties:
-        value:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
           type: string
-      description: A free custom colum of type string with max length 100.
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The project task with which this purchase order is associated.
     customDateTimeUTC1InPurchaseOrderBasicUpdateDto:
       properties:
         value:
           type: string
           format: date-time
       description: A free custom colum of type DateTime - in UTC timezone
-    customInt1InPurchaseOrderLineUpdateDto:
+    discountCodeInPurchaseOrderLineDto:
       properties:
-        value:
-          type: integer
-          format: int32
-      description: A free custom colum of type int
-    subInPurchaseOrderLineDto:
-      properties:
-        subaccountNumber:
+        number:
           type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
+          description: Number of item
         description:
           type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: Sub. ID &gt; The subaccount used to record the purchased non-stock item that does not require receipt (by default, the subaccount generated in accordance with the rule defined in the Combine COGS/expense sub. from field in the Posting classes (IN206000) window).
+          description: Name of item/description
+      description: Discount code &gt; The code of the line discount that has been applied to this line automatically.
   securitySchemes:
     interactiveapi:
       type: oauth2

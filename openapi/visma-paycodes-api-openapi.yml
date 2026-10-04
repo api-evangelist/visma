@@ -229,35 +229,19 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
-    CommonPaginationMetadata:
+    PaginatedResponseOfPaycodeApi:
       required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
+      - Data
+      - Meta
       type: object
       properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
-          format: date-time
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
       additionalProperties: false
     CommonExtendedBadRequest:
       type: object
@@ -278,6 +262,38 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    OtherAdditionDeductionPaycodesApi:
+      type: object
+      properties:
+        CompensationPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for other compensation additions
+        DeductionPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for salary deductions
+        BenefitPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for employee benefits
+        AdjustmentTaxPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaycodeApi'
+          description: Paycodes used for tax adjustments
       additionalProperties: false
     TravelAndExpensePaycodesApi:
       type: object
@@ -311,71 +327,35 @@ components:
             $ref: '#/components/schemas/PaycodeApi'
           description: Paycodes used for travel and expense benefits
       additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    PaginatedResponseOfPaycodeApi:
+    CommonPaginationMetadata:
       required:
-      - Data
-      - Meta
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
       type: object
       properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaycodeApi'
-      additionalProperties: false
-    OtherAdditionDeductionPaycodesApi:
-      type: object
-      properties:
-        CompensationPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PaycodeApi'
-          description: Paycodes used for other compensation additions
-        DeductionPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PaycodeApi'
-          description: Paycodes used for salary deductions
-        BenefitPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PaycodeApi'
-          description: Paycodes used for employee benefits
-        AdjustmentTaxPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PaycodeApi'
-          description: Paycodes used for tax adjustments
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
+          format: date-time
       additionalProperties: false
     PaycodeApi:
       type: object
@@ -431,6 +411,26 @@ components:
           description: Date and time in UTC when the paycode was last modified
           format: date-time
       additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     PaginatedResponseOfPayCodeResponse:
       required:
       - Data
@@ -444,6 +444,38 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PayCodeResponse'
+      additionalProperties: false
+    TravelAndExpensePaycodesResponse:
+      type: object
+      properties:
+        ReimbursmentPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for reimbursement of travel and expense costs
+        CompensationPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for travel and expense compensation
+        AllowancePaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for travel and expense allowances
+        BenefitPaycodes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PayCodeResponse'
+          description: Paycodes used for travel and expense benefits
       additionalProperties: false
     PayCodeResponse:
       type: object
@@ -530,38 +562,6 @@ components:
           items:
             $ref: '#/components/schemas/PayCodeResponse'
           description: Paycodes used for tax adjustments
-      additionalProperties: false
-    TravelAndExpensePaycodesResponse:
-      type: object
-      properties:
-        ReimbursmentPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PayCodeResponse'
-          description: Paycodes used for reimbursement of travel and expense costs
-        CompensationPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PayCodeResponse'
-          description: Paycodes used for travel and expense compensation
-        AllowancePaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PayCodeResponse'
-          description: Paycodes used for travel and expense allowances
-        BenefitPaycodes:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PayCodeResponse'
-          description: Paycodes used for travel and expense benefits
       additionalProperties: false
 x-refined-from:
 - visma-payroll-api-v1-openapi-original.json

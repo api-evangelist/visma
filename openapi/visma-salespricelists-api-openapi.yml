@@ -357,36 +357,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
     SalesPriceListApi:
       type: object
       properties:
@@ -435,25 +405,38 @@ components:
           readOnly: true
       additionalProperties: false
       description: Sales price list
-    CommonError:
+    PaginatedResponseOfSalesPriceListRowApi:
+      required:
+      - Data
+      - Meta
       type: object
       properties:
-        Field:
-          type:
-          - string
-          - 'null'
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesPriceListRowApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
         ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-        Message:
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
           type:
-          - string
+          - array
           - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     SalesPriceListRowApi:
       type: object
@@ -493,6 +476,36 @@ components:
           readOnly: true
       additionalProperties: false
       description: Sales price list row
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
     PaginatedResponseOfSalesPriceListApi:
       required:
       - Data
@@ -506,38 +519,25 @@ components:
           items:
             $ref: '#/components/schemas/SalesPriceListApi'
       additionalProperties: false
-    PaginatedResponseOfSalesPriceListRowApi:
-      required:
-      - Data
-      - Meta
+    CommonError:
       type: object
       properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SalesPriceListRowApi'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        Field:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+        ErrorCode:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

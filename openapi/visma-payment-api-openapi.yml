@@ -588,19 +588,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    customerInPaymentDto:
-      properties:
-        number:
-          type: string
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: The top part &gt; Customer* &gt; The customer who issued the payment.'
     paymentMethodInPaymentDto:
       properties:
         id:
@@ -610,101 +597,33 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: The top part &gt; Payment method &gt; The customer's default payment method; this field is not available for credit notes.
-    PaymentLineDto:
-      type: object
+    paymentMethodInPaymentUpdateDto:
       properties:
-        documentType:
-          enum:
-          - Invoice
-          - DebitNote
-          - CreditNote
-          - Payment
-          - VoidPayment
-          - Prepayment
-          - Refund
-          - FinCharge
-          - SmallBalanceWo
-          - SmallCreditWo
-          - CashSale
-          - CashReturn
-          - Undefined
-          - NoUpdate
+        value:
           type: string
-          description: Doc. type &gt; The type of document to which the payment is applied.
-        refNbr:
+      description: The top part &gt; Payment method &gt; The customer's default payment method.
+    customerInPaymentDto:
+      properties:
+        number:
           type: string
-          description: 'Mandatory field: Ref. no.* &gt; The reference number of the invoice or note to which the payment is applied.'
-        amountPaid:
-          type: number
-          description: Amount paid &gt; The amount to be paid which is displayed in the currency of the document that is selected in the window.
-          format: double
-        cashDiscountTaken:
-          type: number
-          description: Cash discount taken &gt; The cash discount to be taken.
-          format: double
-        balanceWriteOff:
-          type: number
-          description: Balance write-off &gt; The amount to be written off.
-          format: double
-        writeOffReasonCode:
-          $ref: '#/components/schemas/writeOffReasonCodeInPaymentLineDto'
-        date:
+        name:
           type: string
-          description: Date &gt; The creation date of the customer ledger document.
-          format: date-time
-        dueDate:
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: The top part &gt; Customer* &gt; The customer who issued the payment.'
+    referenceNumberInPaymentUpdateDto:
+      properties:
+        value:
           type: string
-          description: Due date &gt; The due date of the customer ledger document.
-          format: date-time
-        cashDiscountDate:
+      description: The top part &gt; Ref. no &gt; Reference number for the document. Can be used when manual numbering is enabled.
+    writeOffReasonCodeInPaymentLineDto:
+      properties:
+        id:
           type: string
-          description: Cash disount date &gt; The date through which the customer can take a cash discount.
-          format: date-time
-        balance:
-          type: number
-          description: Balance &gt; The balance of the document after the cash discount is taken and the amount is paid.
-          format: double
-        cashDiscountBalance:
-          type: number
-          description: Cash discount balance &gt; The unused amount of the cash discount, in case of partial payment.
-          format: double
+          description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
-          description: Description &gt; A description of the document.
-        currency:
-          type: string
-          description: Currency &gt; The currency of the customer ledger document.
-        postPeriod:
-          type: string
-          description: Post period &gt; The financial period to which the transactions recorded in the document should be posted. Format MMYYYY.
-        customerOrder:
-          type: string
-          description: Customer order &gt; A reference to a document of the customer, such as a purchase order number.
-        crossRate:
-          type: number
-          description: Cross rate &gt; A cross rate that you can optionally specify between the currency of the payment and currency of the original document.
-          format: double
-    FinanceChargesUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        entryType:
-          $ref: '#/components/schemas/DtoValueOfString'
-        offsetAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        offsetSubAccount:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        amount:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfInt32'
+          description: Click on the magnifier. &gt; The description.
+      description: Write-off reason code &gt; A reason code that defines an account and subaccount to be used for writing off credits or balances.
     DtoValueOfCustomerDocumentTypes:
       type: object
       properties:
@@ -725,19 +644,6 @@ components:
           - Undefined
           - NoUpdate
           type: string
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    paymentAmountInPaymentUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The top part &gt; Payment amount &gt; The total of the documents to which payment is to be applied.
     OrderToApplyDto:
       type: object
       properties:
@@ -803,6 +709,111 @@ components:
           description: Invoice date &gt; The date of the invoice.
           format: date-time
       description: This class represents an OrderToApply in Payments
+    paymentRefInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Mandatory field: The top part &gt; Payment ref.* &gt; A secondary payment reference identifier, which can be a system-generated number or an external reference number entered manually.'
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
+    ReleasePaymentActionDto:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/DtoValueOfNullableOfPaymentTypes'
+    financialDetailsInPaymentDto:
+      properties:
+        paymentDate:
+          type: string
+          description: Financial Details tab &gt; Payment date
+          format: date-time
+      description: Financial Details
+    cashAccountInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Mandatory field: The top part &gt; Cash account* &gt; The default cash account associated with the payment method.'
+    DtoValueOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    VoidPaymentActionDto:
+      type: object
+      properties:
+        type:
+          enum:
+          - Payment
+          - CreditNote
+          - Prepayment
+          - Refund
+          - VoidPayment
+          - SmallBalanceWo
+          - VoidRefund
+          - Undefined
+          type: string
+        returnVoidPayment:
+          type: boolean
+    locationInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location associated with the sale. Once the customer is selected, this field displays the customer''s default location.'
+    paymentAmountInPaymentUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The top part &gt; Payment amount &gt; The total of the documents to which payment is to be applied.
+    customerInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: 'Mandatory field: The top part &gt; Customer* &gt; The customer who issued the payment.'
+    currencyInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The top part &gt; Currency &gt; The currency of the payment document. Once the customer is selected, the system inserts the customer's default currency.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    invoiceTextInPaymentUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The top part &gt; Invoice text &gt; A user-defined description of the payment.
+    PaymentLinesUpdateDto:
+      type: object
+      properties:
+        cashDiscountTaken:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        balanceWriteOff:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        writeOffReasonCode:
+          $ref: '#/components/schemas/DtoValueOfString'
+        crossRate:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        documentType:
+          $ref: '#/components/schemas/DtoValueOfCustomerDocumentTypes'
+        refNbr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amountPaid:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
     VoidPaymentActionResultDto:
       type: object
       properties:
@@ -833,12 +844,77 @@ components:
           type: string
         errorInfo:
           type: string
-    currencyInPaymentUpdateDto:
+    applicationPeriodInPaymentUpdateDto:
       properties:
         value:
           type: string
-      description: The top part &gt; Currency &gt; The currency of the payment document. Once the customer is selected, the system inserts the customer's default currency.
-    PaymentOrdersLinesUpdateDto:
+      description: 'Mandatory field: The top part &gt; Financial period* &gt; The financial period to which the payment should be applied, which the system fills in based on the date.'
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    PaymentUpdateDto:
+      type: object
+      properties:
+        referenceNumber:
+          $ref: '#/components/schemas/referenceNumberInPaymentUpdateDto'
+        type:
+          $ref: '#/components/schemas/typeInPaymentUpdateDto'
+        hold:
+          $ref: '#/components/schemas/holdInPaymentUpdateDto'
+        applicationDate:
+          $ref: '#/components/schemas/applicationDateInPaymentUpdateDto'
+        applicationPeriod:
+          $ref: '#/components/schemas/applicationPeriodInPaymentUpdateDto'
+        paymentRef:
+          $ref: '#/components/schemas/paymentRefInPaymentUpdateDto'
+        customer:
+          $ref: '#/components/schemas/customerInPaymentUpdateDto'
+        location:
+          $ref: '#/components/schemas/locationInPaymentUpdateDto'
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethodInPaymentUpdateDto'
+        cashAccount:
+          $ref: '#/components/schemas/cashAccountInPaymentUpdateDto'
+        currency:
+          $ref: '#/components/schemas/currencyInPaymentUpdateDto'
+        paymentAmount:
+          $ref: '#/components/schemas/paymentAmountInPaymentUpdateDto'
+        invoiceText:
+          $ref: '#/components/schemas/invoiceTextInPaymentUpdateDto'
+        branch:
+          $ref: '#/components/schemas/DtoValueOfString'
+        overrideNumberSeries:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+        ordersToApply:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentOrdersLinesUpdateDto'
+          description: The top part &gt; Applied to orders &gt; The total of the orders for which payment is reserved, minus the amount transferred to invoice.
+        financeCharges:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinanceChargesUpdateDto'
+          description: Financial Charges
+        paymentLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentLinesUpdateDto'
+    locationInPaymentDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location associated with the sale.'
+    FinanceChargesUpdateDto:
       type: object
       properties:
         operation:
@@ -847,26 +923,27 @@ components:
           - Update
           - Delete
           type: string
-        orderType:
+        entryType:
           $ref: '#/components/schemas/DtoValueOfString'
-        orderNumber:
+        offsetAccount:
           $ref: '#/components/schemas/DtoValueOfString'
-        appliedToOrder:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-    paymentRefInPaymentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: 'Mandatory field: The top part &gt; Payment ref.* &gt; A secondary payment reference identifier, which can be a system-generated number or an external reference number entered manually.'
-    writeOffReasonCodeInPaymentLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
+        offsetSubAccount:
+          $ref: '#/components/schemas/DtoValueOfString'
         description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Write-off reason code &gt; A reason code that defines an account and subaccount to be used for writing off credits or balances.
+          $ref: '#/components/schemas/DtoValueOfString'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     PaymentDto:
       type: object
       properties:
@@ -993,152 +1070,26 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a Payment in PaymentController. Used by getting data.
-    PaymentUpdateDto:
-      type: object
-      properties:
-        referenceNumber:
-          $ref: '#/components/schemas/referenceNumberInPaymentUpdateDto'
-        type:
-          $ref: '#/components/schemas/typeInPaymentUpdateDto'
-        hold:
-          $ref: '#/components/schemas/holdInPaymentUpdateDto'
-        applicationDate:
-          $ref: '#/components/schemas/applicationDateInPaymentUpdateDto'
-        applicationPeriod:
-          $ref: '#/components/schemas/applicationPeriodInPaymentUpdateDto'
-        paymentRef:
-          $ref: '#/components/schemas/paymentRefInPaymentUpdateDto'
-        customer:
-          $ref: '#/components/schemas/customerInPaymentUpdateDto'
-        location:
-          $ref: '#/components/schemas/locationInPaymentUpdateDto'
-        paymentMethod:
-          $ref: '#/components/schemas/paymentMethodInPaymentUpdateDto'
-        cashAccount:
-          $ref: '#/components/schemas/cashAccountInPaymentUpdateDto'
-        currency:
-          $ref: '#/components/schemas/currencyInPaymentUpdateDto'
-        paymentAmount:
-          $ref: '#/components/schemas/paymentAmountInPaymentUpdateDto'
-        invoiceText:
-          $ref: '#/components/schemas/invoiceTextInPaymentUpdateDto'
-        branch:
-          $ref: '#/components/schemas/DtoValueOfString'
-        overrideNumberSeries:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
-        ordersToApply:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentOrdersLinesUpdateDto'
-          description: The top part &gt; Applied to orders &gt; The total of the orders for which payment is reserved, minus the amount transferred to invoice.
-        financeCharges:
-          type: array
-          items:
-            $ref: '#/components/schemas/FinanceChargesUpdateDto'
-          description: Financial Charges
-        paymentLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentLinesUpdateDto'
-    paymentMethodInPaymentUpdateDto:
+    holdInPaymentUpdateDto:
       properties:
         value:
-          type: string
-      description: The top part &gt; Payment method &gt; The customer's default payment method.
-    locationInPaymentDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location associated with the sale.'
-    locationInPaymentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: 'Mandatory field: The top part &gt; Location* &gt; The customer location associated with the sale. Once the customer is selected, this field displays the customer''s default location.'
-    invoiceTextInPaymentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The top part &gt; Invoice text &gt; A user-defined description of the payment.
-    cashAccountInPaymentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: 'Mandatory field: The top part &gt; Cash account* &gt; The default cash account associated with the payment method.'
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    typeInPaymentUpdateDto:
-      properties:
-        value:
-          enum:
-          - Payment
-          - CreditNote
-          - Prepayment
-          - Refund
-          - VoidPayment
-          - SmallBalanceWo
-          - VoidRefund
-          - Undefined
-          type: string
-      description: 'The top part &gt; Type &gt; The type of a document: Payment, Credit note, Prepayment, Customer refund, Void payment, Balance write-off.'
-    customerInPaymentUpdateDto:
-      properties:
-        value:
-          type: string
-      description: 'Mandatory field: The top part &gt; Customer* &gt; The customer who issued the payment.'
-    VoidPaymentActionDto:
-      type: object
-      properties:
-        type:
-          enum:
-          - Payment
-          - CreditNote
-          - Prepayment
-          - Refund
-          - VoidPayment
-          - SmallBalanceWo
-          - VoidRefund
-          - Undefined
-          type: string
-        returnVoidPayment:
           type: boolean
-    referenceNumberInPaymentUpdateDto:
+      description: The top part &gt; Hold &gt; A check box that indicates (if selected) that the document is a draft with the On hold status.
+    PaymentOrdersLinesUpdateDto:
+      type: object
       properties:
-        value:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
-      description: The top part &gt; Ref. no &gt; Reference number for the document. Can be used when manual numbering is enabled.
-    financialDetailsInPaymentDto:
-      properties:
-        paymentDate:
-          type: string
-          description: Financial Details tab &gt; Payment date
-          format: date-time
-      description: Financial Details
+        orderType:
+          $ref: '#/components/schemas/DtoValueOfString'
+        orderNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        appliedToOrder:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
     ReleasePaymentActionResultDto:
       type: object
       properties:
@@ -1154,34 +1105,91 @@ components:
           type: string
         errorInfo:
           type: string
-    PaymentLinesUpdateDto:
-      type: object
+    applicationDateInPaymentUpdateDto:
       properties:
-        cashDiscountTaken:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        balanceWriteOff:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        writeOffReasonCode:
-          $ref: '#/components/schemas/DtoValueOfString'
-        crossRate:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
+        value:
           type: string
-        documentType:
-          $ref: '#/components/schemas/DtoValueOfCustomerDocumentTypes'
-        refNbr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        amountPaid:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-    ReleasePaymentActionDto:
+          format: date-time
+      description: 'Mandatory field: The top part &gt; Date* &gt; The date when a payment is applied to a document (invoice or note). The current business date for unapplied or partially applied payments and the latest application date for the closed payment.'
+    DtoValueOfBoolean:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/DtoValueOfNullableOfPaymentTypes'
+        value:
+          type: boolean
+    PaymentLineDto:
+      type: object
+      properties:
+        documentType:
+          enum:
+          - Invoice
+          - DebitNote
+          - CreditNote
+          - Payment
+          - VoidPayment
+          - Prepayment
+          - Refund
+          - FinCharge
+          - SmallBalanceWo
+          - SmallCreditWo
+          - CashSale
+          - CashReturn
+          - Undefined
+          - NoUpdate
+          type: string
+          description: Doc. type &gt; The type of document to which the payment is applied.
+        refNbr:
+          type: string
+          description: 'Mandatory field: Ref. no.* &gt; The reference number of the invoice or note to which the payment is applied.'
+        amountPaid:
+          type: number
+          description: Amount paid &gt; The amount to be paid which is displayed in the currency of the document that is selected in the window.
+          format: double
+        cashDiscountTaken:
+          type: number
+          description: Cash discount taken &gt; The cash discount to be taken.
+          format: double
+        balanceWriteOff:
+          type: number
+          description: Balance write-off &gt; The amount to be written off.
+          format: double
+        writeOffReasonCode:
+          $ref: '#/components/schemas/writeOffReasonCodeInPaymentLineDto'
+        date:
+          type: string
+          description: Date &gt; The creation date of the customer ledger document.
+          format: date-time
+        dueDate:
+          type: string
+          description: Due date &gt; The due date of the customer ledger document.
+          format: date-time
+        cashDiscountDate:
+          type: string
+          description: Cash disount date &gt; The date through which the customer can take a cash discount.
+          format: date-time
+        balance:
+          type: number
+          description: Balance &gt; The balance of the document after the cash discount is taken and the amount is paid.
+          format: double
+        cashDiscountBalance:
+          type: number
+          description: Cash discount balance &gt; The unused amount of the cash discount, in case of partial payment.
+          format: double
+        description:
+          type: string
+          description: Description &gt; A description of the document.
+        currency:
+          type: string
+          description: Currency &gt; The currency of the customer ledger document.
+        postPeriod:
+          type: string
+          description: Post period &gt; The financial period to which the transactions recorded in the document should be posted. Format MMYYYY.
+        customerOrder:
+          type: string
+          description: Customer order &gt; A reference to a document of the customer, such as a purchase order number.
+        crossRate:
+          type: number
+          description: Cross rate &gt; A cross rate that you can optionally specify between the currency of the payment and currency of the original document.
+          format: double
     DtoValueOfNullableOfPaymentTypes:
       type: object
       properties:
@@ -1196,28 +1204,20 @@ components:
           - VoidRefund
           - Undefined
           type: string
-    holdInPaymentUpdateDto:
+    typeInPaymentUpdateDto:
       properties:
         value:
-          type: boolean
-      description: The top part &gt; Hold &gt; A check box that indicates (if selected) that the document is a draft with the On hold status.
-    applicationPeriodInPaymentUpdateDto:
-      properties:
-        value:
+          enum:
+          - Payment
+          - CreditNote
+          - Prepayment
+          - Refund
+          - VoidPayment
+          - SmallBalanceWo
+          - VoidRefund
+          - Undefined
           type: string
-      description: 'Mandatory field: The top part &gt; Financial period* &gt; The financial period to which the payment should be applied, which the system fills in based on the date.'
-    applicationDateInPaymentUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: 'Mandatory field: The top part &gt; Date* &gt; The date when a payment is applied to a document (invoice or note). The current business date for unapplied or partially applied payments and the latest application date for the closed payment.'
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
+      description: 'The top part &gt; Type &gt; The type of a document: Payment, Credit note, Prepayment, Customer refund, Void payment, Balance write-off.'
   securitySchemes:
     interactiveapi:
       type: oauth2

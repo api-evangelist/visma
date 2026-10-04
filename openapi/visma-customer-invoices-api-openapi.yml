@@ -418,110 +418,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    CollectiveCustomerInvoiceRelationToOrderApi:
-      type: object
-      properties:
-        OrderId:
-          type: string
-          description: Unique Id provided by the system for order
-          format: uuid
-        OrderNumber:
-          type:
-          - integer
-          - 'null'
-          description: Order document number
-          format: int32
-        OrderReference:
-          type:
-          - string
-          - 'null'
-          description: Buyers order reference
-        DeliveryDate:
-          type:
-          - string
-          - 'null'
-          description: Delivery date set in order document
-          format: date-time
-        RelatedInvoiceRows:
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-          description: List of invoice row numbers related to the order
-      additionalProperties: false
-    EmailApi:
-      type: object
-      properties:
-        Email:
-          maxLength: 255
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Default value is the customer's email address
-        CcRecipients:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Default value is the customer's cc email addresses (if omitted or empty list). Set to null to skip using any CC addresses.
-        Subject:
-          type:
-          - string
-          - 'null'
-          description: 'The default email subject found in the system followed by the company''s name.The special pattern #### in the subject text will be replaced by the sales document number (quote, order or invoice).This allows you to create a subject that contains the sales document number without querying for the document first'
-        Message:
-          type:
-          - string
-          - 'null'
-          description: Default value is the the domestic or foreign company text from /v2/companysettings
-      additionalProperties: false
-    PaginatedResponseOfCustomerInvoiceApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerInvoiceApi'
-      additionalProperties: false
     CustomerInvoiceApi:
       required:
       - CustomerId
@@ -1050,6 +946,143 @@ components:
           description: Identifier for the background image or template used on the PDF printout
           format: uuid
       additionalProperties: false
+    ElectronicInvoiceRequestApi:
+      type: object
+      properties:
+        SendType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = AutoInvoiceElectronic,<br/>2 = AutoInvoicePrint,<br/>3 = AutoInvoiceB2C,<br/>4 = Kivra<br/><br/>Used for sending the invoice via Autoinvoice. Possible values are.
+          format: int32
+      additionalProperties: false
+    CollectiveCustomerInvoiceRelationToOrderApi:
+      type: object
+      properties:
+        OrderId:
+          type: string
+          description: Unique Id provided by the system for order
+          format: uuid
+        OrderNumber:
+          type:
+          - integer
+          - 'null'
+          description: Order document number
+          format: int32
+        OrderReference:
+          type:
+          - string
+          - 'null'
+          description: Buyers order reference
+        DeliveryDate:
+          type:
+          - string
+          - 'null'
+          description: Delivery date set in order document
+          format: date-time
+        RelatedInvoiceRows:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: List of invoice row numbers related to the order
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfCustomerInvoiceApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerInvoiceApi'
+      additionalProperties: false
+    ContributionMarginApi:
+      type: object
+      properties:
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: Amount of contribution margin
+          format: double
+        Percentage:
+          type:
+          - number
+          - 'null'
+          description: Percentage of contribution margin
+          format: double
+      additionalProperties: false
+    CreditedByApi:
+      type: object
+      properties:
+        CreditInvoiceId:
+          type: string
+          description: The Id of the customer invoice
+          format: uuid
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    InvoiceUrlApi:
+      type: object
+      properties:
+        Url:
+          type:
+          - string
+          - 'null'
+          description: The URL to the invoice.
+      additionalProperties: false
     CustomerInvoiceVatApi:
       type: object
       properties:
@@ -1065,6 +1098,127 @@ components:
           type: number
           format: double
           readOnly: true
+      additionalProperties: false
+    EmailApi:
+      type: object
+      properties:
+        Email:
+          maxLength: 255
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Default value is the customer's email address
+        CcRecipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Default value is the customer's cc email addresses (if omitted or empty list). Set to null to skip using any CC addresses.
+        Subject:
+          type:
+          - string
+          - 'null'
+          description: 'The default email subject found in the system followed by the company''s name.The special pattern #### in the subject text will be replaced by the sales document number (quote, order or invoice).This allows you to create a subject that contains the sales document number without querying for the document first'
+        Message:
+          type:
+          - string
+          - 'null'
+          description: Default value is the the domestic or foreign company text from /v2/companysettings
+      additionalProperties: false
+    InvoicePaymentApi:
+      required:
+      - CompanyBankAccountId
+      - PaymentAmount
+      - PaymentCurrency
+      - PaymentDate
+      - PaymentType
+      type: object
+      properties:
+        CompanyBankAccountId:
+          type: string
+          description: The bank account to which the payment is recorded
+          format: uuid
+        PaymentDate:
+          type: string
+          description: 'Future dates cannot be set. Date format: yyyy-mm-dd. Payment date must be sent in the timezone of the company instead of user''s location timezone.'
+          format: date-time
+        Reference:
+          maxLength: 100
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Payment's reference
+        PaymentAmount:
+          type: number
+          description: 'Amount in invoice currency. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
+          format: double
+        PaymentCurrency:
+          minLength: 1
+          type: string
+          description: Currency code of the payment amount.
+        DomesticPaymentAmount:
+          type: number
+          description: 'Only for non domestic invoices paid with cheque account. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
+          format: double
+        BankFeeAmount:
+          maximum: 1000000000
+          minimum: 0
+          type: number
+          description: Bank fee amount
+          format: double
+        PaymentType:
+          maximum: 4
+          minimum: 1
+          type: integer
+          description: <strong>Possible values:</strong><br/>PartialPayment = 1,<br/>CompletePayment = 2,<br/>Rounding = 3,<br/>BankCharge = 4
+          format: int32
+        FactoringFeeAmount:
+          type: number
+          description: Factoring fee amount for the current invoice, supported only for customer invoice payments
+          format: double
+        FactoringFeeAccountNumber:
+          type: integer
+          description: Factoring account number, supported only for customer invoice payments
+          format: int64
+        BankTransactionId:
+          type: string
+          description: The internal id in the system of the bank transaction corresponding to the payment
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+    PaymentReminderEmailApi:
+      type: object
+      properties:
+        LatePaymentFee:
+          maximum: 10000000
+          minimum: 0
+          type: number
+          description: Amount for late pament fee.
+          format: double
+        EmailDetails:
+          $ref: '#/components/schemas/EmailApi'
+      additionalProperties: false
+    SalesDocumentRotRutReductionPersonApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Ssn:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Social security number
+        Amount:
+          type: number
+          format: double
       additionalProperties: false
     CustomerInvoiceRowApi:
       type: object
@@ -1255,160 +1409,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    InvoicePaymentApi:
-      required:
-      - CompanyBankAccountId
-      - PaymentAmount
-      - PaymentCurrency
-      - PaymentDate
-      - PaymentType
-      type: object
-      properties:
-        CompanyBankAccountId:
-          type: string
-          description: The bank account to which the payment is recorded
-          format: uuid
-        PaymentDate:
-          type: string
-          description: 'Future dates cannot be set. Date format: yyyy-mm-dd. Payment date must be sent in the timezone of the company instead of user''s location timezone.'
-          format: date-time
-        Reference:
-          maxLength: 100
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Payment's reference
-        PaymentAmount:
-          type: number
-          description: 'Amount in invoice currency. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
-          format: double
-        PaymentCurrency:
-          minLength: 1
-          type: string
-          description: Currency code of the payment amount.
-        DomesticPaymentAmount:
-          type: number
-          description: 'Only for non domestic invoices paid with cheque account. If bank fee: for customer invoices, extract that amount here. For supplier invoices, do not extract bank fee amount here.'
-          format: double
-        BankFeeAmount:
-          maximum: 1000000000
-          minimum: 0
-          type: number
-          description: Bank fee amount
-          format: double
-        PaymentType:
-          maximum: 4
-          minimum: 1
-          type: integer
-          description: <strong>Possible values:</strong><br/>PartialPayment = 1,<br/>CompletePayment = 2,<br/>Rounding = 3,<br/>BankCharge = 4
-          format: int32
-        FactoringFeeAmount:
-          type: number
-          description: Factoring fee amount for the current invoice, supported only for customer invoice payments
-          format: double
-        FactoringFeeAccountNumber:
-          type: integer
-          description: Factoring account number, supported only for customer invoice payments
-          format: int64
-        BankTransactionId:
-          type: string
-          description: The internal id in the system of the bank transaction corresponding to the payment
-          format: uuid
-          readOnly: true
-      additionalProperties: false
-    PaymentReminderEmailApi:
-      type: object
-      properties:
-        LatePaymentFee:
-          maximum: 10000000
-          minimum: 0
-          type: number
-          description: Amount for late pament fee.
-          format: double
-        EmailDetails:
-          $ref: '#/components/schemas/EmailApi'
-      additionalProperties: false
-    SalesDocumentRotRutReductionPersonApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system
-          format: uuid
-          readOnly: true
-        Ssn:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Social security number
-        Amount:
-          type: number
-          format: double
-      additionalProperties: false
-    InvoiceUrlApi:
-      type: object
-      properties:
-        Url:
-          type:
-          - string
-          - 'null'
-          description: The URL to the invoice.
-      additionalProperties: false
-    ContributionMarginApi:
-      type: object
-      properties:
-        Amount:
-          type:
-          - number
-          - 'null'
-          description: Amount of contribution margin
-          format: double
-        Percentage:
-          type:
-          - number
-          - 'null'
-          description: Percentage of contribution margin
-          format: double
-      additionalProperties: false
-    CreditedByApi:
-      type: object
-      properties:
-        CreditInvoiceId:
-          type: string
-          description: The Id of the customer invoice
-          format: uuid
-      additionalProperties: false
-    ElectronicInvoiceRequestApi:
-      type: object
-      properties:
-        SendType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>1 = AutoInvoiceElectronic,<br/>2 = AutoInvoicePrint,<br/>3 = AutoInvoiceB2C,<br/>4 = Kivra<br/><br/>Used for sending the invoice via Autoinvoice. Possible values are.
-          format: int32
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

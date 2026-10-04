@@ -155,6 +155,110 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    PaginatedResponseOfVatCodeApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VatCodeApi'
+      additionalProperties: false
+    RelatedAccounts:
+      type: object
+      properties:
+        AccountNumber1:
+          type:
+          - integer
+          - 'null'
+          description: The first account number for VAT.
+          format: int64
+        AccountNumber2:
+          type:
+          - integer
+          - 'null'
+          description: The second account number for VAT.
+          format: int64
+        AccountNumber3:
+          type:
+          - integer
+          - 'null'
+          description: The third account number for VAT.
+          format: int64
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    VatCodeApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: The unique identifier of the vat code.
+          format: uuid
+          readOnly: true
+        Code:
+          type:
+          - string
+          - 'null'
+          description: The code representing the VAT category.
+        Description:
+          type:
+          - string
+          - 'null'
+          description: The description of the VAT code.
+        VatRate:
+          type: number
+          description: The VAT rate as a percentage.
+          format: double
+        OssCodeType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Sales,<br/>2 = Vat
+          format: int32
+        RelatedAccounts:
+          $ref: '#/components/schemas/RelatedAccounts'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -196,26 +300,6 @@ components:
           type: number
           description: The VAT rate as a percentage.
           format: double
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
     PaginatedResponseOfVatCodeRateApi:
       required:
@@ -261,90 +345,6 @@ components:
           format: int32
         RelatedAccounts:
           $ref: '#/components/schemas/RelatedAccounts'
-      additionalProperties: false
-    PaginatedResponseOfVatCodeApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/VatCodeApi'
-      additionalProperties: false
-    VatCodeApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: The unique identifier of the vat code.
-          format: uuid
-          readOnly: true
-        Code:
-          type:
-          - string
-          - 'null'
-          description: The code representing the VAT category.
-        Description:
-          type:
-          - string
-          - 'null'
-          description: The description of the VAT code.
-        VatRate:
-          type: number
-          description: The VAT rate as a percentage.
-          format: double
-        OssCodeType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = None,<br/>1 = Sales,<br/>2 = Vat
-          format: int32
-        RelatedAccounts:
-          $ref: '#/components/schemas/RelatedAccounts'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    RelatedAccounts:
-      type: object
-      properties:
-        AccountNumber1:
-          type:
-          - integer
-          - 'null'
-          description: The first account number for VAT.
-          format: int64
-        AccountNumber2:
-          type:
-          - integer
-          - 'null'
-          description: The second account number for VAT.
-          format: int64
-        AccountNumber3:
-          type:
-          - integer
-          - 'null'
-          description: The third account number for VAT.
-          format: int64
       additionalProperties: false
 x-tagGroups:
 - name: Sales

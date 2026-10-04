@@ -693,11 +693,71 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    expenseAccountInExpenseClaimDetailUpdateDto:
+    refNbrInExpenseClaimDetailUpdateDto:
       properties:
         value:
           type: string
-      description: The expense account to which the system should record the part of the expense to be paid back to the employee.
+      description: The identifier of the transaction.
+    projectInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The project or customer contract associated with the expense claim, if the work performed was for a project or contract. Project Task The task associated with the contract or project.
+    customerInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: Customer &gt; The identifier of the customer associated with the expense.
+    invoiceableInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: boolean
+      description: The currency of the expense receipt. However, if you enter a claim line directly, the currency value is read-only and matching the claim currency.
+    claimedByInExpenseClaimDto:
+      properties:
+        internalId:
+          type: string
+        number:
+          type: string
+          description: The identifier of the particular destination of the selected type.
+        name:
+          type: string
+          description: The name of the particular destination of the selected type.
+      description: 'Mandatory field: The top part &gt; Claimed by &gt; The employee who is claiming the expenses. If the claim is released, an Accounts Payable bill will be generated to this employee.'
+    expenseAccountInExpenseClaimDetailDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
+          type: boolean
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Expense account &gt; The expense account to which the system should record the part of the expense to be paid back to the employee.'
+    employeePartInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: The part of the total amount that will not be paid back to the employee. The percentage depends on the company policy.
     AttachmentDto:
       type: object
       properties:
@@ -713,44 +773,6 @@ components:
           type: integer
           description: The version of the attachment.
           format: int32
-    expenseItemInExpenseClaimDetailDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Expense item* &gt; The expense identifier, if an expense of this type is listed as an inventory nonstock item.'
-    dateInExpenseClaimUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: The date when the claim was entered.
-    projectTaskInExpenseClaimDetailDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project task &gt; The task associated with the contract or project.
-    projectTaskInExpenseClaimDetailUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The task associated with the contract or project.
-    branchInExpenseClaimDetailUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The branch that will reimburse the expenses to the employee.
     ExpenseClaimDetailUpdateDto:
       type: object
       properties:
@@ -799,166 +821,6 @@ components:
           $ref: '#/components/schemas/customerInExpenseClaimDetailUpdateDto'
         location:
           $ref: '#/components/schemas/locationInExpenseClaimDetailUpdateDto'
-    customerInExpenseClaimUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The applicable customer.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    locationInExpenseClaimDetailDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Location &gt; The identifier of the customer location associated with the expense.
-    ExpenseClaimUpdateDto:
-      type: object
-      properties:
-        date:
-          $ref: '#/components/schemas/dateInExpenseClaimUpdateDto'
-        description:
-          $ref: '#/components/schemas/descriptionInExpenseClaimUpdateDto'
-        claimedBy:
-          $ref: '#/components/schemas/claimedByInExpenseClaimUpdateDto'
-        customer:
-          $ref: '#/components/schemas/customerInExpenseClaimUpdateDto'
-        customerUpdateAnswer:
-          enum:
-          - SelectedCustomer
-          - AllLines
-          - Nothing
-          type: string
-          description: If the customer is updated the claim details customer information can be updated using the provided answer. By default 'SelectedCustomer' is selected.
-        location:
-          $ref: '#/components/schemas/locationInExpenseClaimUpdateDto'
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExpenseClaimDetailUpdateDto'
-          description: Expense Claim detail information
-    ExpenseClaimDto:
-      type: object
-      properties:
-        refNbr:
-          type: string
-          description: The top part &gt; Ref. no. &gt; The unique reference number of the expense claim document.
-        status:
-          enum:
-          - Hold
-          - PendingApproval
-          - Approved
-          - Rejected
-          - Released
-          type: string
-          description: 'The top part &gt; Status &gt; The current status of the expense claim: On Hold/Pending Approval/Approved/Rejected/Released.'
-        approvalStatus:
-          enum:
-          - New
-          - Canceled
-          - SentToApproval
-          - ReceivedByApproval
-          - InProgressApproval
-          - RejectedInApproval
-          - ApprovedInApproval
-          - ActiveWorkflowApproval
-          type: string
-          description: The top part &gt; Approval status &gt; The status of the claim in Approval.
-        date:
-          type: string
-          description: 'Mandatory field: The top part &gt; Date* &gt; The date when the claim was entered.'
-          format: date-time
-        description:
-          type: string
-          description: 'Mandatory field: The top part &gt; Description &gt; A description of the claim.'
-        claimedBy:
-          $ref: '#/components/schemas/claimedByInExpenseClaimDto'
-        claimTotal:
-          type: number
-          description: The top part &gt; Claim total &gt; The total amount of the claim.
-          format: double
-        vatTaxableTotal:
-          type: number
-          description: The top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
-          format: double
-        vatExemptTotal:
-          type: number
-          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
-          format: double
-        customer:
-          $ref: '#/components/schemas/customerInExpenseClaimDto'
-        currency:
-          type: string
-          description: The top part &gt; Currency &gt; The currency of the claim.
-        approvalDate:
-          type: string
-          description: The top part &gt; Approval date &gt; The date when the claim was approved.
-          format: date-time
-        department:
-          $ref: '#/components/schemas/departmentInExpenseClaimDto'
-        location:
-          $ref: '#/components/schemas/locationInExpenseClaimDto'
-        lastModifiedDateTime:
-          type: string
-          description: 'System generated information: The lastest time the expense claim was modified'
-          format: date-time
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExpenseClaimDetailDto'
-          description: Expence claim details tab &gt;
-        approvalStatusText:
-          type: string
-          description: The top part &gt; Approval status &gt; A text field.
-        timeStamp:
-          type: string
-          description: 'Identifier that represents a specific version of the resource.
-
-            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: This class represents a Expense Claim in ExpenseClaimController. Used for getting data.
-    PutExpenseClaimOnHoldActionResultDto:
-      type: object
-      properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    customerInExpenseClaimDetailUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The identifier of the customer associated with the expense.
-    projectInExpenseClaimDetailUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The project or customer contract associated with the expense claim, if the work performed was for a project or contract. Project Task The task associated with the contract or project.
-    claimedByInExpenseClaimUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The employee who is claiming the expenses. If the claim is released, an Accounts Payable bill will be generated to this employee.
     locationInExpenseClaimDto:
       properties:
         id:
@@ -968,160 +830,22 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: The top part &gt; Location &gt; The company location associated with the claim.
-    expenseItemInExpenseClaimDetailUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The expense identifier, if an expense of this type is listed as an inventory nonstock item.
     unitCostInExpenseClaimDetailUpdateDto:
       properties:
         value:
           type: number
           format: double
       description: The cost of a unit of the item.
-    refNbrInExpenseClaimDetailUpdateDto:
+    expenseItemInExpenseClaimDetailUpdateDto:
       properties:
         value:
           type: string
-      description: The identifier of the transaction.
-    dateInExpenseClaimDetailUpdateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: The date when the expense was incurred.
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    taxCategoryInExpenseClaimDetailUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The tax category associated with the expense item.
-    departmentInExpenseClaimDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The top part &gt; Department ID &gt; The department associated with the expense claim.'
-    projectInExpenseClaimDetailDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Project &gt; The project or customer contract associated with the expense claim, if the work performed was for a project or contract. Project Task The task associated with the contract or project.'
-    expenseSubaccountInExpenseClaimDetailDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'MAndatory field: Expense sub. &gt; The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.'
+      description: The expense identifier, if an expense of this type is listed as an inventory nonstock item.
     locationInExpenseClaimDetailUpdateDto:
       properties:
         value:
           type: string
       description: The identifier of the customer location associated with the expense.
-    expenseAccountInExpenseClaimDetailDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Expense account &gt; The expense account to which the system should record the part of the expense to be paid back to the employee.'
-    salesSubaccountInExpenseClaimDetailDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Sales sub. &gt; The corresponding subaccount the system uses to record the amount to charge the customer for. This is applicable only when a customer has been specified.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    claimedByInExpenseClaimDto:
-      properties:
-        internalId:
-          type: string
-        number:
-          type: string
-          description: The identifier of the particular destination of the selected type.
-        name:
-          type: string
-          description: The name of the particular destination of the selected type.
-      description: 'Mandatory field: The top part &gt; Claimed by &gt; The employee who is claiming the expenses. If the claim is released, an Accounts Payable bill will be generated to this employee.'
-    salesAccountInExpenseClaimDetailDto:
-      properties:
-        type:
-          enum:
-          - Asset
-          - Liability
-          - Income
-          - Expense
-          type: string
-          description: Account &gt; The account number.
-        externalCode1:
-          type: string
-          description: Account class &gt; The identifier of the account class.
-        externalCode2:
-          type: string
-          description: Account class &gt; The name of the account class.
-        active:
-          type: boolean
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: Sales account &gt; The sales account to which the system should record the part of the amount to charge the customer for. This is applicable only when a customer has been specified.
     ExpenseClaimDetailDto:
       type: object
       properties:
@@ -1225,53 +949,223 @@ components:
           items:
             $ref: '#/components/schemas/AttachmentDto'
           description: Expense claim detail line attachtments
-    customerInExpenseClaimDto:
-      properties:
-        number:
-          type: string
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The top part &gt; Customer &gt; The applicable customer.
-    invoiceableInExpenseClaimDetailUpdateDto:
+    uomInExpenseClaimDetailUpdateDto:
       properties:
         value:
+          type: string
+      description: The unit of measure in which the quantity is shown.
+    salesAccountInExpenseClaimDetailDto:
+      properties:
+        type:
+          enum:
+          - Asset
+          - Liability
+          - Income
+          - Expense
+          type: string
+          description: Account &gt; The account number.
+        externalCode1:
+          type: string
+          description: Account class &gt; The identifier of the account class.
+        externalCode2:
+          type: string
+          description: Account class &gt; The name of the account class.
+        active:
           type: boolean
-      description: The currency of the expense receipt. However, if you enter a claim line directly, the currency value is read-only and matching the claim currency.
-    descriptionInExpenseClaimUpdateDto:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: Sales account &gt; The sales account to which the system should record the part of the amount to charge the customer for. This is applicable only when a customer has been specified.
+    expenseItemInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Expense item* &gt; The expense identifier, if an expense of this type is listed as an inventory nonstock item.'
+    projectTaskInExpenseClaimDetailUpdateDto:
       properties:
         value:
           type: string
-      description: A description of the claim.
-    employeePartInExpenseClaimDetailUpdateDto:
+      description: The task associated with the contract or project.
+    ExpenseClaimDto:
+      type: object
       properties:
-        value:
+        refNbr:
+          type: string
+          description: The top part &gt; Ref. no. &gt; The unique reference number of the expense claim document.
+        status:
+          enum:
+          - Hold
+          - PendingApproval
+          - Approved
+          - Rejected
+          - Released
+          type: string
+          description: 'The top part &gt; Status &gt; The current status of the expense claim: On Hold/Pending Approval/Approved/Rejected/Released.'
+        approvalStatus:
+          enum:
+          - New
+          - Canceled
+          - SentToApproval
+          - ReceivedByApproval
+          - InProgressApproval
+          - RejectedInApproval
+          - ApprovedInApproval
+          - ActiveWorkflowApproval
+          type: string
+          description: The top part &gt; Approval status &gt; The status of the claim in Approval.
+        date:
+          type: string
+          description: 'Mandatory field: The top part &gt; Date* &gt; The date when the claim was entered.'
+          format: date-time
+        description:
+          type: string
+          description: 'Mandatory field: The top part &gt; Description &gt; A description of the claim.'
+        claimedBy:
+          $ref: '#/components/schemas/claimedByInExpenseClaimDto'
+        claimTotal:
           type: number
+          description: The top part &gt; Claim total &gt; The total amount of the claim.
           format: double
-      description: The part of the total amount that will not be paid back to the employee. The percentage depends on the company policy.
-    customerInExpenseClaimDetailDto:
-      properties:
-        number:
+        vatTaxableTotal:
+          type: number
+          description: The top part &gt; VAT taxable total &gt; The document total that is subjected to VAT.
+          format: double
+        vatExemptTotal:
+          type: number
+          description: The top part &gt; VAT exempt total &gt; The document total that is exempt from VAT.
+          format: double
+        customer:
+          $ref: '#/components/schemas/customerInExpenseClaimDto'
+        currency:
           type: string
-        name:
+          description: The top part &gt; Currency &gt; The currency of the claim.
+        approvalDate:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: Customer &gt; The identifier of the customer associated with the expense.
-    branchInExpenseClaimDetailDto:
-      properties:
-        number:
+          description: The top part &gt; Approval date &gt; The date when the claim was approved.
+          format: date-time
+        department:
+          $ref: '#/components/schemas/departmentInExpenseClaimDto'
+        location:
+          $ref: '#/components/schemas/locationInExpenseClaimDto'
+        lastModifiedDateTime:
           type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
+          description: 'System generated information: The lastest time the expense claim was modified'
+          format: date-time
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseClaimDetailDto'
+          description: Expence claim details tab &gt;
+        approvalStatusText:
           type: string
-          description: Click the magnifier. &gt; The name.
-      description: 'Mandatory field: Branch &gt; The branch that will reimburse the expenses to the employee.'
+          description: The top part &gt; Approval status &gt; A text field.
+        timeStamp:
+          type: string
+          description: 'Identifier that represents a specific version of the resource.
+
+            It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: This class represents a Expense Claim in ExpenseClaimController. Used for getting data.
     claimDetailIdInExpenseClaimDetailUpdateDto:
       properties:
         value:
           type: integer
           format: int32
       description: Identifies the expense claim detail line to update
+    branchInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The branch that will reimburse the expenses to the employee.
+    SegmentUpdateDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          format: int32
+        segmentValue:
+          type: string
+    descriptionInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A description of the transaction.
+    taxCategoryInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: VAT category &gt; The VAT category associated with the expense item.
+    locationInExpenseClaimDetailDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Location &gt; The identifier of the customer location associated with the expense.
+    dateInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: The date when the expense was incurred.
+    ExpenseClaimUpdateDto:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/dateInExpenseClaimUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInExpenseClaimUpdateDto'
+        claimedBy:
+          $ref: '#/components/schemas/claimedByInExpenseClaimUpdateDto'
+        customer:
+          $ref: '#/components/schemas/customerInExpenseClaimUpdateDto'
+        customerUpdateAnswer:
+          enum:
+          - SelectedCustomer
+          - AllLines
+          - Nothing
+          type: string
+          description: If the customer is updated the claim details customer information can be updated using the provided answer. By default 'SelectedCustomer' is selected.
+        location:
+          $ref: '#/components/schemas/locationInExpenseClaimUpdateDto'
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseClaimDetailUpdateDto'
+          description: Expense Claim detail information
+    expenseAccountInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The expense account to which the system should record the part of the expense to be paid back to the employee.
+    dateInExpenseClaimUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: The date when the claim was entered.
+    customerInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The identifier of the customer associated with the expense.
     SendExpenseClaimToApprovalActionResultDto:
       type: object
       properties:
@@ -1287,6 +1181,45 @@ components:
           type: string
         errorInfo:
           type: string
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    locationInExpenseClaimUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The company location associated with the claim.
+    projectInExpenseClaimDetailDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Project &gt; The project or customer contract associated with the expense claim, if the work performed was for a project or contract. Project Task The task associated with the contract or project.'
+    departmentInExpenseClaimDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The top part &gt; Department ID &gt; The department associated with the expense claim.'
+    taxCategoryInExpenseClaimDetailUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The tax category associated with the expense item.
     SubmitExpenseClaimActionResultDto:
       type: object
       properties:
@@ -1302,36 +1235,103 @@ components:
           type: string
         errorInfo:
           type: string
-    descriptionInExpenseClaimDetailUpdateDto:
+    descriptionInExpenseClaimUpdateDto:
       properties:
         value:
           type: string
-      description: A description of the transaction.
-    uomInExpenseClaimDetailUpdateDto:
+      description: A description of the claim.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    PutExpenseClaimOnHoldActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    customerInExpenseClaimDto:
+      properties:
+        number:
+          type: string
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The top part &gt; Customer &gt; The applicable customer.
+    salesSubaccountInExpenseClaimDetailDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Sales sub. &gt; The corresponding subaccount the system uses to record the amount to charge the customer for. This is applicable only when a customer has been specified.
+    expenseSubaccountInExpenseClaimDetailDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'MAndatory field: Expense sub. &gt; The corresponding subaccount the system uses to record the part of the expense to be paid back to the employee.'
+    branchInExpenseClaimDetailDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: 'Mandatory field: Branch &gt; The branch that will reimburse the expenses to the employee.'
+    claimedByInExpenseClaimUpdateDto:
       properties:
         value:
           type: string
-      description: The unit of measure in which the quantity is shown.
+      description: The employee who is claiming the expenses. If the claim is released, an Accounts Payable bill will be generated to this employee.
+    projectTaskInExpenseClaimDetailDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project task &gt; The task associated with the contract or project.
     quantityInExpenseClaimDetailUpdateDto:
       properties:
         value:
           type: number
           format: double
       description: The quantity of this expense item.
-    locationInExpenseClaimUpdateDto:
+    customerInExpenseClaimUpdateDto:
       properties:
         value:
           type: string
-      description: The company location associated with the claim.
-    taxCategoryInExpenseClaimDetailDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: VAT category &gt; The VAT category associated with the expense item.
+      description: The applicable customer.
   securitySchemes:
     interactiveapi:
       type: oauth2

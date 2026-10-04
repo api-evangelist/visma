@@ -237,6 +237,64 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PartnerResourceLinkApi:
+      required:
+      - Href
+      - PartnerCompanyName
+      - PartnerSystemName
+      - ResourceId
+      - ResourceType
+      type: object
+      properties:
+        Id:
+          type: string
+          description: 'Purpose: Id provided by the system'
+          format: uuid
+          readOnly: true
+        ResourceId:
+          type: string
+          description: 'Purpose: Link to the resource in the system'
+          format: uuid
+        ResourceType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Article,<br/>1 = Customer,<br/>2 = Supplier,<br/>3 = CustomerInvoice,<br/>4 = SupplierInvoice,<br/>5 = CustomerInvoiceDraft,<br/>6 = SupplierInvoiceDraft
+          format: int32
+        Href:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: Link to the third party solution page
+        PartnerCompanyName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name of the partner company
+        PartnerSystemName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name of the partner system
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -280,44 +338,6 @@ components:
           items:
             $ref: '#/components/schemas/PartnerResourceLinkApi'
       additionalProperties: false
-    PartnerResourceLinkApi:
-      required:
-      - Href
-      - PartnerCompanyName
-      - PartnerSystemName
-      - ResourceId
-      - ResourceType
-      type: object
-      properties:
-        Id:
-          type: string
-          description: 'Purpose: Id provided by the system'
-          format: uuid
-          readOnly: true
-        ResourceId:
-          type: string
-          description: 'Purpose: Link to the resource in the system'
-          format: uuid
-        ResourceType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Article,<br/>1 = Customer,<br/>2 = Supplier,<br/>3 = CustomerInvoice,<br/>4 = SupplierInvoice,<br/>5 = CustomerInvoiceDraft,<br/>6 = SupplierInvoiceDraft
-          format: int32
-        Href:
-          maxLength: 256
-          minLength: 0
-          type: string
-          description: Link to the third party solution page
-        PartnerCompanyName:
-          maxLength: 100
-          minLength: 0
-          type: string
-          description: Name of the partner company
-        PartnerSystemName:
-          maxLength: 100
-          minLength: 0
-          type: string
-          description: Name of the partner system
-      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -337,26 +357,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

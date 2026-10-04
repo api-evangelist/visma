@@ -60,6 +60,53 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    BankApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Bank identifier
+          format: uuid
+          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Bank name
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfBankApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankApi'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -90,20 +137,6 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    BankApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Bank identifier
-          format: uuid
-          readOnly: true
-        Name:
-          type:
-          - string
-          - 'null'
-          description: Bank name
-      additionalProperties: false
     CommonError:
       type: object
       properties:
@@ -123,39 +156,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    PaginatedResponseOfBankApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankApi'
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
 x-tagGroups:
 - name: Sales

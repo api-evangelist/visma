@@ -342,24 +342,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    SubAccountUpdateDto:
-      required:
-      - subaccountNumber
-      type: object
-      properties:
-        subaccountNumber:
-          $ref: '#/components/schemas/subaccountNumberInSubAccountUpdateDto'
-        subaccountId:
-          $ref: '#/components/schemas/subaccountIdInSubAccountUpdateDto'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        active:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
     DtoValueOfString:
       type: object
       properties:
@@ -374,11 +356,57 @@ components:
         maxPageSize:
           type: integer
           format: int64
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
     subaccountIdInSubAccountUpdateDto:
       properties:
         value:
           type: string
       description: The property is now considered obsolete, use SubaccountNumber instead. If SubaccountNumber is specified in a request, this property is ignored.
+    SubAccountUpdateDto:
+      required:
+      - subaccountNumber
+      type: object
+      properties:
+        subaccountNumber:
+          $ref: '#/components/schemas/subaccountNumberInSubAccountUpdateDto'
+        subaccountId:
+          $ref: '#/components/schemas/subaccountIdInSubAccountUpdateDto'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        active:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
+    subaccountNumberInSubAccountUpdateDto:
+      properties:
+        value:
+          type: string
+      description: Mandatory field, identifies the subaccount to update.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
     SubAccountDto:
       type: object
       properties:
@@ -412,34 +440,6 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    subaccountNumberInSubAccountUpdateDto:
-      properties:
-        value:
-          type: string
-      description: Mandatory field, identifies the subaccount to update.
   securitySchemes:
     interactiveapi:
       type: oauth2

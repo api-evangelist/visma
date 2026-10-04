@@ -239,242 +239,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonPaginationMetadata:
-      required:
-      - CurrentPage
-      - PageSize
-      - ServerTimeUtc
-      - TotalNumberOfPages
-      - TotalNumberOfResults
-      type: object
-      properties:
-        CurrentPage:
-          type: integer
-          description: The current page number
-          format: int32
-        PageSize:
-          type: integer
-          description: The number of results per page
-          format: int32
-        TotalNumberOfPages:
-          type: integer
-          description: The total number of pages available
-          format: int32
-        TotalNumberOfResults:
-          type: integer
-          description: The total number of results available for the query
-          format: int32
-        ServerTimeUtc:
-          type: string
-          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
-          format: date-time
-      additionalProperties: false
-    PaginatedResponseOfAutoInvoiceAddressApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AutoInvoiceAddressApi'
-      additionalProperties: false
-    DirectDebitCustomerSettingsApi:
-      type: object
-      properties:
-        MandateId:
-          maxLength: 35
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Maximum length 35 characters
-        MandateType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>1 = Core,<br/>2 = B2B
-          format: int32
-        SequenceType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>1 = Recurring,<br/>2 = Recurring,<br/>3 = One-off
-          format: int32
-        SigningDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        EndDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        LatestDirectDebit:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        Bic:
-          maxLength: 11
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Maximum length 11 characters
-      additionalProperties: false
-    TermsOfPaymentApi:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system. For v2/quotes and v2/quotedrafts endpoints Id is editable
-          format: uuid
-          readOnly: true
-        Name:
-          type:
-          - string
-          - 'null'
-          description: Name of the terms of payment
-        NameEnglish:
-          type:
-          - string
-          - 'null'
-          description: English name of the terms of payment
-        NumberOfDays:
-          type: integer
-          description: Number of days to pay
-          format: int32
-        TermsOfPaymentTypeId:
-          type: integer
-          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = CurrentMonth,<br/>2 = Cash,<br/>3 = CardPayment,<br/>4 = DigitalWallet,<br/>5 = PaymentServiceProvider<br/><br/>Type of terms of payment, possible values are.
-          format: int32
-        TermsOfPaymentTypeText:
-          type:
-          - string
-          - 'null'
-        AvailableForSales:
-          type: boolean
-          description: True if this terms of payment can be used on sales documents, false otherwise
-        AvailableForPurchase:
-          type: boolean
-          description: True if this terms of payment can be used on purchase documents, false otherwise
-      additionalProperties: false
-    CustomerLabelApi:
-      required:
-      - Name
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system
-          format: uuid
-          readOnly: true
-        Name:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Name of the customer label
-        Description:
-          maxLength: 400
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Description of the customer label
-      additionalProperties: false
-    CommonError:
-      type: object
-      properties:
-        Field:
-          type:
-          - string
-          - 'null'
-        ErrorCode:
-          type:
-          - string
-          - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    PaginatedResponseOfCustomerApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomerApi'
-      additionalProperties: false
-    AutoInvoiceAddressApi:
-      type: object
-      properties:
-        Name:
-          type:
-          - string
-          - 'null'
-          description: Name of the recipient
-        ElectronicAddress:
-          type:
-          - string
-          - 'null'
-          description: Electronic address for the recipient
-        EdiServiceDelivererId:
-          type:
-          - string
-          - 'null'
-          description: EDI service deliverer id for the recipient
-        Address1:
-          type:
-          - string
-          - 'null'
-          description: First line of the address
-        Address2:
-          type:
-          - string
-          - 'null'
-          description: Second line of the address, if applicable
-        CorporateIdentityNumber:
-          type:
-          - string
-          - 'null'
-          description: Corporate identity number of the recipient
-        CountryCode:
-          type:
-          - string
-          - 'null'
-          description: Country code of the recipient
-        City:
-          type:
-          - string
-          - 'null'
-          description: City of the recipient
-        Gln:
-          type:
-          - string
-          - 'null'
-          description: Gln of the recipient
-        PostalCode:
-          type:
-          - string
-          - 'null'
-          description: Postal code of the recipient
-        VatNumber:
-          type:
-          - string
-          - 'null'
-          description: VAT number of the recipient
-      additionalProperties: false
     CustomerApi:
       required:
       - InvoiceCity
@@ -856,6 +620,79 @@ components:
           description: The sales price list id that is connected to the customer. It will be used only for Pro variant companies, and for accounting office consultants working with a company in collaboration
           format: uuid
       additionalProperties: false
+    PaginatedResponseOfAutoInvoiceAddressApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoInvoiceAddressApi'
+      additionalProperties: false
+    CustomerLabelApi:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Name of the customer label
+        Description:
+          maxLength: 400
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Description of the customer label
+      additionalProperties: false
+    TermsOfPaymentApi:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique Id provided by the system. For v2/quotes and v2/quotedrafts endpoints Id is editable
+          format: uuid
+          readOnly: true
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the terms of payment
+        NameEnglish:
+          type:
+          - string
+          - 'null'
+          description: English name of the terms of payment
+        NumberOfDays:
+          type: integer
+          description: Number of days to pay
+          format: int32
+        TermsOfPaymentTypeId:
+          type: integer
+          description: <strong>Possible values:</strong><br/>0 = Normal,<br/>1 = CurrentMonth,<br/>2 = Cash,<br/>3 = CardPayment,<br/>4 = DigitalWallet,<br/>5 = PaymentServiceProvider<br/><br/>Type of terms of payment, possible values are.
+          format: int32
+        TermsOfPaymentTypeText:
+          type:
+          - string
+          - 'null'
+        AvailableForSales:
+          type: boolean
+          description: True if this terms of payment can be used on sales documents, false otherwise
+        AvailableForPurchase:
+          type: boolean
+          description: True if this terms of payment can be used on purchase documents, false otherwise
+      additionalProperties: false
     CommonExtendedBadRequest:
       type: object
       properties:
@@ -875,6 +712,169 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    PaginatedResponseOfCustomerApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerApi'
+      additionalProperties: false
+    AutoInvoiceAddressApi:
+      type: object
+      properties:
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the recipient
+        ElectronicAddress:
+          type:
+          - string
+          - 'null'
+          description: Electronic address for the recipient
+        EdiServiceDelivererId:
+          type:
+          - string
+          - 'null'
+          description: EDI service deliverer id for the recipient
+        Address1:
+          type:
+          - string
+          - 'null'
+          description: First line of the address
+        Address2:
+          type:
+          - string
+          - 'null'
+          description: Second line of the address, if applicable
+        CorporateIdentityNumber:
+          type:
+          - string
+          - 'null'
+          description: Corporate identity number of the recipient
+        CountryCode:
+          type:
+          - string
+          - 'null'
+          description: Country code of the recipient
+        City:
+          type:
+          - string
+          - 'null'
+          description: City of the recipient
+        Gln:
+          type:
+          - string
+          - 'null'
+          description: Gln of the recipient
+        PostalCode:
+          type:
+          - string
+          - 'null'
+          description: Postal code of the recipient
+        VatNumber:
+          type:
+          - string
+          - 'null'
+          description: VAT number of the recipient
+      additionalProperties: false
+    CommonPaginationMetadata:
+      required:
+      - CurrentPage
+      - PageSize
+      - ServerTimeUtc
+      - TotalNumberOfPages
+      - TotalNumberOfResults
+      type: object
+      properties:
+        CurrentPage:
+          type: integer
+          description: The current page number
+          format: int32
+        PageSize:
+          type: integer
+          description: The number of results per page
+          format: int32
+        TotalNumberOfPages:
+          type: integer
+          description: The total number of pages available
+          format: int32
+        TotalNumberOfResults:
+          type: integer
+          description: The total number of results available for the query
+          format: int32
+        ServerTimeUtc:
+          type: string
+          description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
+          format: date-time
+      additionalProperties: false
+    DirectDebitCustomerSettingsApi:
+      type: object
+      properties:
+        MandateId:
+          maxLength: 35
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Maximum length 35 characters
+        MandateType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = Core,<br/>2 = B2B
+          format: int32
+        SequenceType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>1 = Recurring,<br/>2 = Recurring,<br/>3 = One-off
+          format: int32
+        SigningDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        EndDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        LatestDirectDebit:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        Bic:
+          maxLength: 11
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: Maximum length 11 characters
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
 x-tagGroups:
 - name: Sales
