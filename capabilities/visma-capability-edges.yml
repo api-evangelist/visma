@@ -1,0 +1,868 @@
+slug: visma
+provider: Visma
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 90
+edges:
+- tag: JournalTransactionV2
+  spec_file: visma-journaltransactionv2-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.95
+  evidence: '"Get a range of Journal Transactions - ScreenId=GL301000"; "Release journal transaction operation";
+    schemas JournalTransactionLineDto, postPeriodInJournalTransactionUpdateDto'
+  reason: General-ledger journal entries with post periods, financial periods, segments and release workflow
+    — plainly general ledger management.
+- tag: Purchase Order
+  spec_file: visma-purchase-order-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.95
+  evidence: PurchaseOrder_Post  Create a Purchase Order; Creates a purchase receipt from an existing purchase
+    order
+  reason: Full purchase order lifecycle including creation, update and receipt generation — unambiguously
+    Purchase Order Management.
+- tag: SupplierInvoice
+  spec_file: visma-supplierinvoice-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.93
+  evidence: '''Create an SupplierInvoice'', ''Release invoice operation'', ''Provides an action for reversing
+    a supplier invoice/adjustment'''
+  reason: Full lifecycle of supplier (vendor) invoices including release, correction and reversal — canonical
+    Accounts Payable invoice processing.
+- tag: Account
+  spec_file: visma-account-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.92
+  evidence: Get a range of General ledger accounts - ScreenId=GL202500
+  reason: Operations create, read and update general ledger accounts in Visma.net ERP — chart of accounts
+    maintenance, which is General Ledger Management.
+- tag: GeneralLedgerTransactions
+  spec_file: visma-generalledgertransactions-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.92
+  evidence: '''Get a range of General Ledger Transactions - ScreenId=GL404000''; GeneralLedgerTransactionDetailsDto,
+    accountInGeneralLedgerTransactionDetailsDto'
+  reason: Journal-level GL transaction retrieval against accounts and ledgers — general ledger management.
+- tag: PurchaseOrderBasic
+  spec_file: visma-purchaseorderbasic-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.92
+  evidence: POST /v1/purchaseorderbasic "Create a Purchase Order Basic"; PUT "Update a Purchase Order"
+  reason: CRUD over purchase order headers and lines (PurchaseOrderBasicDto, PurchaseOrderLineDto) in
+    an ERP procurement module — plainly purchase order lifecycle management.
+- tag: Customer Invoices
+  spec_file: visma-customer-invoices-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.9
+  evidence: '''Create a single customer invoice'', ''Post a customer invoice payment'', ''Send an a payment
+    reminder for an invoice'', ''Void a customer invoice'''
+  reason: Customer invoice issuance, electronic delivery, payment posting and dunning reminders are textbook
+    accounts receivable operations in Visma's invoicing/accounting product.
+- tag: CustomerCreditNote
+  spec_file: visma-customercreditnote-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.9
+  evidence: '''Create a Credit Note.'', ''Release credit note operation'', ''SendToAutoInvoice credit
+    note operation'', ''Get the print report of a Customer Credit Note'''
+  reason: Full lifecycle of customer credit notes (create, release, send, print) against AR screen AR301000
+    — receivables invoicing adjustment, i.e. Accounts Receivable Management.
+- tag: CustomerInvoice
+  spec_file: visma-customerinvoice-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.9
+  evidence: '"Create an Invoice.", "Release invoice operation", "Get the print report of a Customer Invoice"'
+  reason: Full lifecycle of customer (sales) invoices in the ERP AR module — issuing, releasing and distributing
+    customer invoices is Accounts Receivable Management.
+- tag: FixedAsset
+  spec_file: visma-fixedasset-api-openapi.yml
+  capability_id: BC-200.40
+  capability_id_l1: BC-200
+  capability_name: Fixed Asset Accounting
+  confidence: 0.9
+  evidence: FixedAsset_GetAll Get a range of Fixed Assets - Screen ID:FA303000; schemas bookBalanceInFixedAssetDto,
+    disposalMethodInDetailsDto
+  reason: Fixed asset register with book balances, depreciation books and disposal details — plainly Fixed
+    Asset Accounting.
+- tag: GeneralLedgerBalanceV2
+  spec_file: visma-generalledgerbalancev2-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.9
+  evidence: '''Get a range of General Ledger Balances.''; GeneralLedgerBalanceDto, AccountNumberDescriptionDto,
+    LedgerDescriptionDto'
+  reason: Account-level ledger balances by ledger/branch/subaccount — general ledger management.
+- tag: SalesPriceLists
+  spec_file: visma-salespricelists-api-openapi.yml
+  capability_id: BC-440.20
+  capability_id_l1: BC-440
+  capability_name: Price List Management
+  confidence: 0.9
+  evidence: '''Create a sales price list''; ''Get a specific sales price for an article in a price list'';
+    ''Update article prices in a sales price list'''
+  reason: CRUD over sales price lists and per-article prices is exactly price book / price list maintenance.
+- tag: Supplier Invoices
+  spec_file: visma-supplier-invoices-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.9
+  evidence: '''Create a supplier invoice''; ''Create a payment for a supplier invoice''; ''Create an offset
+    between a credit invoice and one or more debit invoices'''
+  reason: Supplier (vendor) invoice capture, payment and credit-note offsetting is core accounts payable
+    processing.
+- tag: SupplierInvoiceDrafts
+  spec_file: visma-supplierinvoicedrafts-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.9
+  evidence: '''Create a supplier invoice draft'' and ''Convert a supplier invoice draft to a supplier
+    invoice''; schema SupplierInvoiceApproverApi'
+  reason: Drafting, approval and conversion of supplier invoices in the bookkeeping product is vendor
+    invoice processing under Accounts Payable Management.
+- tag: SupplierPayment
+  spec_file: visma-supplierpayment-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.9
+  evidence: '''Create a SupplierPayment'', ''Release payment operation'', ''Write-off payment operation'''
+  reason: Creation, release and write-off of payments to suppliers is outgoing vendor payment processing
+    — Accounts Payable Management.
+- tag: Accounts
+  spec_file: visma-accounts-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.88
+  evidence: GET /accounts/{fiscalyearId} 'Get accounts by fiscal year'; 'Get standard accounts'
+  reason: Chart-of-accounts maintenance per fiscal year in an accounting API — general ledger management.
+- tag: FixedAssetTransaction
+  spec_file: visma-fixedassettransaction-api-openapi.yml
+  capability_id: BC-200.40
+  capability_id_l1: BC-200
+  capability_name: Fixed Asset Accounting
+  confidence: 0.88
+  evidence: '''Get transactions for a specific Asset - Screen ID:FA301000''; accountsInFixedAssetTransactionDto,
+    registerInFixedAssetTransactionDto'
+  reason: Reads asset register transactions posted to GL accounts — core fixed asset accounting.
+- tag: Account Balance
+  spec_file: visma-account-balance-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.85
+  evidence: GET /accountbalances/{accountNumber}/{date} 'Get account balance by account number and date'
+  reason: Ledger account balances by account number in an eAccounting/bookkeeping API — general ledger
+    management.
+- tag: Credit Note
+  spec_file: visma-credit-note-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.85
+  evidence: POST /v1/creditNote CreditNote_CreateCreditNote 'Create a Credit Note'; schemas 'customerInCreditNoteDto',
+    'vatCodeInCreditNoteLineDto'; 'Release credit note operation'
+  reason: Operations create, update and release customer credit notes with customer, VAT and line detail
+    — customer billing document adjustment, i.e. accounts receivable accounting, not a software-subscription
+    or legal capability.
+- tag: CustomerCreditNoteV2
+  spec_file: visma-customercreditnotev2-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.85
+  evidence: POST /v2/customerCreditNote 'Create a Customer Credit Note. ScreenID=AR301000'
+  reason: Single creation endpoint for customer credit notes on the accounts-receivable screen, with tax
+    detail and payment line schemas — receivables document management.
+- tag: CustomerDebitNote
+  spec_file: visma-customerdebitnote-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.85
+  evidence: '"Create a Debit Note." / "Release debit note operation" / schema "customerInCustomerDebitNoteDto",
+    ScreenId=AR301000'
+  reason: Customer debit notes are accounts-receivable documents raised against customers, created, released
+    and printed in the ERP's AR module (AR301000), so this realises Accounts Receivable Management.
+- tag: CustomerDebitNoteV2
+  spec_file: visma-customerdebitnotev2-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.85
+  evidence: '"Create a Customer Debit Note. ScreenID=AR301000"'
+  reason: V2 creation endpoint for the same AR customer debit-note document; same accounts-receivable
+    capability.
+- tag: CustomerInvoiceDrafts
+  spec_file: visma-customerinvoicedrafts-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.85
+  evidence: '"Create a single customer invoice draft" and "Convert a CustomerInvoiceDraft to a CustomerInvoice"'
+  reason: Drafting and converting customer invoices in the eAccounting invoicing product is customer invoicing,
+    i.e. Accounts Receivable Management.
+- tag: CustomerInvoiceV2
+  spec_file: visma-customerinvoicev2-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.85
+  evidence: '"Create an Invoice. ScreenID=AR301000"'
+  reason: V2 customer-invoice creation endpoint in the AR module; same customer invoicing capability.
+- tag: CustomerLedgerItems
+  spec_file: visma-customerledgeritems-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.85
+  evidence: '"Get customer ledger items", "Create a customer ledger item with voucher", schemas CustomerLedgerItemApi,
+    VoucherApi'
+  reason: Customer ledger (sales ledger / AR sub-ledger) items with vouchers are the open-item receivables
+    records, squarely Accounts Receivable Management.
+- tag: CustomerOverdueCharge
+  spec_file: visma-customeroverduecharge-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.85
+  evidence: '"Get a range of Customer Overdue Charges - ScreenId=AR301000", "Release overdue charge operation"'
+  reason: Overdue/finance charges raised against customers for late payment are AR collections documents
+    in the receivables module.
+- tag: CustomerPayment
+  spec_file: visma-customerpayment-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.85
+  evidence: '"Create a Payment", "Release payment operation", schemas customerInPaymentDto, OrderToApplyDto,
+    writeOffReasonCodeInPaymentLineDto'
+  reason: Recording, applying, releasing and voiding customer payments against documents is cash application
+    within Accounts Receivable Management.
+- tag: Discount
+  spec_file: visma-discount-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.85
+  evidence: POST /v1/discount "Creates a new discount"; schemas DiscountBreakpointDto, DiscountCustomerPriceClassDto,
+    DiscountItemPriceClassDto
+  reason: Create/update/delete of discount definitions with volume breakpoints and customer/item price
+    classes is squarely discount and promotion management within pricing.
+- tag: Fiscal Years
+  spec_file: visma-fiscal-years-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.85
+  evidence: POST /fiscalyears Create a fiscal year; GET /fiscalyears/openingbalances Get opening balances;
+    AccountOpeningBalanceApi
+  reason: Fiscal year setup and per-account opening balances in the bookkeeping product — ledger structure
+    and period/year-end accounting, i.e. General Ledger Management.
+- tag: FixedAssetClass
+  spec_file: visma-fixedassetclass-api-openapi.yml
+  capability_id: BC-200.40
+  capability_id_l1: BC-200
+  capability_name: Fixed Asset Accounting
+  confidence: 0.85
+  evidence: GET /v1/fixedAssetClass/{ClassID} 'Get a specific Fixed Asset Class'; schemas bookSettingsInFixedAssetClassDto,
+    accountsInFixedAssetClassDto
+  reason: ERP master data defining fixed asset classes with book settings and GL accounts — depreciation/asset
+    register configuration, i.e. fixed asset accounting.
+- tag: Payslips
+  spec_file: visma-payslips-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.85
+  evidence: Gets payslips for specified wage run; PaginatedResponseOfPayslipDetailedResponse
+  reason: Payslips tied to wage runs and employees are core payroll administration, a sub-function of
+    HR Operations Management.
+- tag: PurchaseReceipt
+  spec_file: visma-purchasereceipt-api-openapi.yml
+  capability_id: BC-500.40
+  capability_id_l1: BC-500
+  capability_name: Procure-to-Pay Operations Management
+  confidence: 0.85
+  evidence: '"Create a Purchase Receipt"; "Add purchase orders to receipt"; "Release purchase receipt
+    operation"'
+  reason: Goods/purchase receipt processing against purchase orders is day-to-day procure-to-pay operations
+    (receipts), not PO creation itself.
+- tag: PurchaseReceiptBasic
+  spec_file: visma-purchasereceiptbasic-api-openapi.yml
+  capability_id: BC-500.40
+  capability_id_l1: BC-500
+  capability_name: Procure-to-Pay Operations Management
+  confidence: 0.85
+  evidence: '"Create a Purchase Receipt"; "Release purchase receipt operation"'
+  reason: Same purchase-receipt surface in a simplified variant; receipt capture and release is P2P operations.
+- tag: Vat
+  spec_file: visma-vat-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.85
+  evidence: '"Get a range of Vats - ScreenId=TX205000"; schemas VatInformationDto, vatAgencyIdInVatInformationDto,
+    VatRateLineDto, taxPeriodId'
+  reason: Operations manage VAT information, rates, tax periods and VAT agency data — squarely indirect
+    tax (VAT) management in the ERP.
+- tag: VoucherDrafts
+  spec_file: visma-voucherdrafts-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.85
+  evidence: '"Convert voucher draft to voucher"; schemas VoucherDraftApi, VoucherRowApi'
+  reason: Vouchers in the bookkeeping API are journal entries; creating, editing and posting voucher drafts
+    is general ledger journal management.
+- tag: DiscountV2
+  spec_file: visma-discountv2-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.82
+  evidence: GET /v2/discount "Get a range of discounts"; schemas DiscountBreakpointDto, DiscountCustomerPriceClassDto,
+    DiscountWarehouseDto
+  reason: V2 read surface over the same discount definitions with breakpoints and price classes — discount
+    and promotion management.
+- tag: Ledger
+  spec_file: visma-ledger-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.82
+  evidence: '"Get a range of Ledgers - ScreenId=GL201500"; schemas LedgerDto, consolBranchInLedgerDto'
+  reason: Lists the general-ledger ledgers (incl. consolidation branch) of the ERP's GL module — general
+    ledger structure, though only a single read operation.
+- tag: PurchaseReceiptV2
+  spec_file: visma-purchasereceiptv2-api-openapi.yml
+  capability_id: BC-500.40
+  capability_id_l1: BC-500
+  capability_name: Procure-to-Pay Operations Management
+  confidence: 0.82
+  evidence: GET /v2/PurchaseReceipt "Get a range of Purchase Receipts"; schema supplierInPurchaseReceiptDto
+  reason: Read-only v2 of the purchase receipt resource; supplier receipt documents are procure-to-pay
+    operational artefacts.
+- tag: Quotes
+  spec_file: visma-quotes-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.82
+  evidence: '"Accepts an ongoing quote"; "Convert a quote to an order"; "Convert a quote to a customer
+    invoice"'
+  reason: Full sales quote lifecycle including acceptance and conversion to order/invoice — quote management
+    within sales.
+- tag: StocktakeV2
+  spec_file: visma-stocktakev2-api-openapi.yml
+  capability_id: BC-530.40
+  capability_id_l1: BC-530
+  capability_name: Inventory Accuracy Management
+  confidence: 0.82
+  evidence: '''Update a specific stocktake''; ''Get a range of stocktakes - ScreenId=IN305000''; schemas
+    StocktakeLineV2Dto, warehouseInStocktakeLineV2Dto'
+  reason: Stocktake (physical inventory count) records per warehouse/location line — inventory counting
+    and discrepancy handling.
+- tag: Vouchers
+  spec_file: visma-vouchers-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.82
+  evidence: GET /vouchers/{fiscalyearId} 'Get vouchers by fiscal year'; schemas VoucherApi, VoucherRowApi
+    in the 'Bookkeeping & Invoicing/eAccounting API'
+  reason: Accounting vouchers with voucher rows retrieved and created per fiscal year are bookkeeping
+    journal entries, i.e. general ledger postings, in this bookkeeping product.
+- tag: Budget
+  spec_file: visma-budget-api-openapi.yml
+  capability_id: BC-230.10
+  capability_id_l1: BC-230
+  capability_name: Budgeting Management
+  confidence: 0.8
+  evidence: GET /v1/budget Budget_GetAll Get a range of General Ledger Budget Figures - ScreenId=GL302010;
+    POST /v1/budget Budget_CreateBudget
+  reason: Create, read and update of general-ledger budget figures by financial period and segment — budget
+    preparation and maintenance, i.e. Budgeting Management within FP&A.
+- tag: CashSale
+  spec_file: visma-cashsale-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.8
+  evidence: POST /v1/cashsale  CashSale_Post  Create a Cash Sale ... Get a range of Cash Sales - ScreenId=AR304000
+  reason: Create/update of Cash Sale documents on the Accounts Receivable screen (AR3xxxxx) with invoiceAddressInCashSaleDto,
+    creditTermsInCashSaleDto and paymentMethodInCashSaleDto — i.e. customer sales invoicing/receivable
+    document processing.
+- tag: CustomerCreditWriteOff
+  spec_file: visma-customercreditwriteoff-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.8
+  evidence: '''Get a range of Customer Credit WriteOffs - ScreenId=AR301000''; schema ''customerInCustomerCreditWriteOffDto'''
+  reason: Read access to customer credit write-off documents on the AR document screen — write-off of
+    receivable balances, part of accounts receivable accounting. Read-only surface slightly lowers confidence.
+- tag: CustomerDocument
+  spec_file: visma-customerdocument-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.8
+  evidence: '"Gets a range of Customer Documents - ScreenId=AR301000" with schemas CustomerDocumentDto,
+    customerInCustomerDocumentDto, paymentMethodInCustomerDocumentDto'
+  reason: Read surface over AR customer documents (invoices/notes) in the accounts-receivable screen;
+    supports receivables administration rather than generic document management.
+- tag: CustomerSalesPrice
+  spec_file: visma-customersalesprice-api-openapi.yml
+  capability_id: BC-440.20
+  capability_id_l1: BC-440
+  capability_name: Price List Management
+  confidence: 0.8
+  evidence: '"Get a range of Customer Sales Prices - ScreenId=AR202000", "Create a new Customer Sales
+    Price", schema DtoValueOfNullableOfPriceTypesForUpdate'
+  reason: Maintenance of customer-specific sales prices is price book / price list maintenance.
+- tag: Employee
+  spec_file: visma-employee-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.8
+  evidence: Employee_CreateEmployee Create an employee; Employee_GetEmployeeTimeCards Get a specific employee
+    time cards
+  reason: 'CRUD over employee master records plus time cards and expense claims — employee records maintenance,
+    i.e. HR operations. Not a homograph: EmployeeDto schema confirms person records.'
+- tag: Employees
+  spec_file: visma-employees-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.8
+  evidence: POST /v2/employees Create employee; postV2EmployeesByEmployeeIdWorkschedules Create employee
+    work schedule; AddAgreementToEmployeeRequest
+  reason: Payroll API employee records, work schedules and employment agreements — employee record and
+    payroll administration under HR Operations.
+- tag: FinancialPeriod
+  spec_file: visma-financialperiod-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.8
+  evidence: FinancialPeriod_GetAll Get a range of Financial Periods - ScreenId=GL201000
+  reason: Accounting period definitions on the General Ledger screen (GL201000) — core GL period structure
+    used for period close.
+- tag: OtherAbsence
+  spec_file: visma-otherabsence-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.8
+  evidence: POST /v1/shortcuts/otherabsence  Create an other absence shortcut (visma-payroll-api-v1-openapi-original.json)
+  reason: Payroll API operations registering employee absence records for payroll processing — employee
+    record/payroll administration within HR Operations.
+- tag: ParentalLeave
+  spec_file: visma-parentalleave-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.8
+  evidence: POST /v1/shortcuts/parentalLeave  Create a parental leave shortcut
+  reason: Parental leave records maintained in the payroll API for payroll and absence administration
+    — HR Operations Management.
+- tag: Sub Account
+  spec_file: visma-sub-account-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.8
+  evidence: '''Get all SubAccounts - ScreenId=GL203000''; schemas SubAccountDto, SegmentDto'
+  reason: GL screen subaccount/segment maintenance is part of chart-of-accounts structure in the general
+    ledger.
+- tag: VatCategory
+  spec_file: visma-vatcategory-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.8
+  evidence: '"Get a range of VatCategories - ScreenId=TX205500" with schemas VatCategoryDto, VatRateLineDto'
+  reason: VAT category and rate-line configuration used for VAT determination; an indirect tax management
+    surface.
+- tag: VatCode
+  spec_file: visma-vatcode-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.8
+  evidence: '"Get vat codes with rates" with schemas VatCodeRateApi, VatRateApi'
+  reason: VAT codes and their rates drive VAT calculation on bookkeeping and invoicing documents — indirect
+    tax management.
+- tag: AllocationPeriods
+  spec_file: visma-allocationperiods-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.78
+  evidence: POST /allocationperiods 'Add allocation periods for voucher or supplier invoice'
+  reason: Accrual/allocation periods applied to vouchers and supplier invoices — journal/period accounting
+    within the general ledger.
+- tag: Discount Code
+  spec_file: visma-discount-code-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.78
+  evidence: GET /v1/discountCode "Get a range of discount codes - ScreenId=AR209000"; schema DiscountCodeDto
+  reason: Discount code master used by the ERP discount engine; read-only so slightly lower confidence,
+    but the object is unambiguously a discount construct.
+- tag: DiscountAgreements
+  spec_file: visma-discountagreements-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.78
+  evidence: GET /discountagreements "Gets all discount agreements"; schema DiscountAgreementApi
+  reason: Customer-level discount agreements retrieved from the invoicing product represent negotiated
+    discount arrangements — discount management under pricing.
+- tag: DiscountCodeV2
+  spec_file: visma-discountcodev2-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.78
+  evidence: GET /v2/discountCode "Get a range of discount codes - ScreenId=AR209000"; schema DiscountCodeDto
+  reason: Versioned duplicate of the discount code master surface; same discount management capability.
+- tag: InventoryIssue
+  spec_file: visma-inventoryissue-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.78
+  evidence: '"Get a specific Inventory Issue document"; "Release inventory operation"; schemas INAllocationsDto,
+    InventoryIssueLineDto, warehouseInInventoryIssueLineDto'
+  reason: Operations create, update and release inventory issue documents (goods issued out of a warehouse)
+    with warehouse/allocation lines — stock movement and inventory management in an ERP. L1 only, as issue
+    documents span stock level and allocation sub-capabilities.
+- tag: InventoryTransfer
+  spec_file: visma-inventorytransfer-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.78
+  evidence: '"Create an inventory transfer"; schemas warehouseInInventoryTransferDto, toWarehouseInInventoryTransferDto,
+    AllocationsBasicDto'
+  reason: Transfer documents move stock between warehouses (from/to warehouse, allocations), i.e. inventory
+    movement across the network. Mapped at L1 since transfers straddle allocation and logistics sub-capabilities.
+- tag: Payroll Settings
+  spec_file: visma-payroll-settings-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.78
+  evidence: GET /v1/payrollsettings — Get payroll settings; PayrollSettingsApi
+  reason: Payroll configuration within Visma's payroll product; payroll administration is HR Operations.
+    Configuration-only surface tempers confidence slightly.
+- tag: QuoteDrafts
+  spec_file: visma-quotedrafts-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.78
+  evidence: '"Create a quote draft"; "Convert a quote draft to a quote"; schema QuoteRowApi'
+  reason: Customer-facing sales quote documents and their conversion — quote management. Sub-capability
+    is quote management rather than configuration, hence slight ambiguity.
+- tag: SupplierDocument
+  spec_file: visma-supplierdocument-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.78
+  evidence: '''Gets a range of supplier documents - ScreenId=AP301000''; schemas SupplierDocumentDto,
+    paymentMethodInSupplierDocumentDto'
+  reason: AP301000 is the ERP accounts-payable document screen; the tag exposes supplier (payable) documents
+    with payment method and GL account references, which is AP invoice/document processing.
+- tag: Wageruns
+  spec_file: visma-wageruns-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.78
+  evidence: '''Get wage runs'' across visma-payroll-api-v1/v2; schema WagerunApi'
+  reason: Wage runs are payroll processing runs from Visma's payroll API, which realises payroll administration
+    under HR Operations Management.
+- tag: Account Types
+  spec_file: visma-account-types-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.75
+  evidence: GET /accountTypes 'Get default account types'
+  reason: Account type reference data underpinning the chart of accounts in a bookkeeping API; thin but
+    clearly GL-structural.
+- tag: Inventory
+  spec_file: visma-inventory-api-openapi.yml
+  capability_id: BC-530
+  capability_id_l1: BC-530
+  capability_name: Inventory Management
+  confidence: 0.75
+  evidence: '''Get a range of Inventory items - ScreenId=IN202000'', ''Get a range of barcodes for a specific
+    stock count'''
+  reason: ERP stock item master, item classes and warehouse barcodes for shipments/stock counts — inventory
+    management; spans several sub-capabilities so only L1 asserted.
+- tag: OtherAdditionDeduction
+  spec_file: visma-otheradditiondeduction-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.75
+  evidence: POST /v2/shortcuts/otheradditiondeduction  Create other addition and deduction shortcut
+  reason: Payroll additions and deductions entry in Visma's payroll API — payroll administration. Could
+    also read as compensation administration, hence moderate confidence on the sub-capability.
+- tag: Overtime
+  spec_file: visma-overtime-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.75
+  evidence: POST /v1/shortcuts/overtime  Create an overtime shortcut
+  reason: Overtime registration shortcuts in the payroll API feed payroll calculation — HR/payroll operations.
+    Sub-capability boundary with compensation management keeps confidence moderate.
+- tag: SickLeave
+  spec_file: visma-sickleave-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.75
+  evidence: '''Create a sick leave shortcut''; ''Get sick leave shortcuts between dates''; schema SickLeaveApi
+    in the Visma payroll API'
+  reason: 'Recording and maintaining employee sick-leave absences within a payroll product is HR/absence
+    administration under HR Operations. Minor ambiguity: absence could be treated as payroll input rather
+    than records management.'
+- tag: VatZone
+  spec_file: visma-vatzone-api-openapi.yml
+  capability_id: BC-220.20
+  capability_id_l1: BC-220
+  capability_name: Indirect Tax Management
+  confidence: 0.75
+  evidence: '"Get Tax Zones - ScreenId=TX206000" with schema VatZoneDto'
+  reason: VAT/tax zone reference configuration used for VAT jurisdiction determination in the ERP — indirect
+    tax management.
+- tag: CustomerV2
+  spec_file: visma-customerv2-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.72
+  evidence: GET /v2/customer/balance — "Get the balance for one or multiple customers"; schema CustomerBalanceV2Dto
+  reason: ERP finance API returning outstanding customer balances, which is the receivables ledger view
+    of customers rather than CRM data; maps to Accounts Receivable Management, though a single read-only
+    operation keeps confidence moderate.
+- tag: HoursWorked
+  spec_file: visma-hoursworked-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.72
+  evidence: '''Create a hours worked shortcut'' from visma-payroll-api-v1-openapi; HoursWorkedApi, ProjectCostCenterAllocationRequest'
+  reason: Payroll API capturing worked hours per employee with cost-centre allocation, feeding payroll
+    administration — HR operations.
+- tag: ProjectTask
+  spec_file: visma-projecttask-api-openapi.yml
+  capability_id: BC-900.30
+  capability_id_l1: BC-900
+  capability_name: Project Management
+  confidence: 0.72
+  evidence: ProjectTask_PostByinternalId  Create a Task; ProjectTask_GetAllTasks  Get all project tasks
+    for one project
+  reason: Creation and maintenance of tasks belonging to a project is project execution/tracking.
+- tag: SupplierAccount
+  spec_file: visma-supplieraccount-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.72
+  evidence: GET /v1/supplieraccount/{supplierId} — 'Get expense accounts for a supplier'; schema SupplierItemAccountDto
+  reason: Returns the expense/GL accounts assigned to a supplier in the ERP accounts-payable module —
+    vendor accounting setup, i.e. Accounts Payable Management.
+- tag: Agreements
+  spec_file: visma-agreements-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.7
+  evidence: 'schemas: OverTimeRuleApi, InconvenientTimeRuleApi; published in visma-payroll-api-v1-openapi-original.json'
+  reason: Payroll API 'agreements' carrying overtime and inconvenient-time rules — collective/employment
+    agreement rules used in payroll administration, not commercial contracts.
+- tag: ArticleAccountCodings
+  spec_file: visma-articleaccountcodings-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.7
+  evidence: GET /articleaccountcodings 'Get article account codings'
+  reason: Mapping of articles to accounting/VAT codes used when posting sales — chart-of-accounts/posting
+    configuration in the ledger.
+- tag: CareOfSickChild
+  spec_file: visma-careofsickchild-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.7
+  evidence: POST /v2/shortcuts/careofsickchild Create a care of sick child shortcut; Spiris Lön/Cloud
+    Payroll API
+  reason: Registration of care-of-sick-child (statutory leave) entries in a cloud payroll product, including
+    project/cost-centre allocation — employee absence and payroll record administration under HR Operations.
+    Sub-capability choice carries some uncertainty (could be benefits administration).
+- tag: CareOfSickChildren
+  spec_file: visma-careofsickchildren-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.7
+  evidence: POST /v1/shortcuts/careofsickchild Create a care of sick child shortcut; schema CareOfSickChildApi
+  reason: V1 equivalent of the same payroll absence-registration surface for care-of-sick-child leave;
+    payroll/absence record administration within Human Capital Management.
+- tag: Contact
+  spec_file: visma-contact-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.7
+  evidence: POST /v1/contact  Contact_CreateContact  Create a Contact ... Get a range of Contacts - ScreenId=CR302000
+  reason: Full CRUD over contact records on the ERP's CRM screen (CR3xxxxx) with ContactDto, address and
+    contact-method schemas — maintenance of customer/contact master records. Mapped to Customer Data Management;
+    it could arguably sit under broader CRM, hence 0.7.
+- tag: Customer
+  spec_file: visma-customer-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.7
+  evidence: '''Get a specific customer by internalID'', ''Updates a specific customer using the internalID'',
+    ''Get Customer Classes'', ''Get a range of Contacts of a specific customer'''
+  reason: Surface is customer master records, classes, contacts and related sales/AR views in the ERP
+    — customer data management. Mixed with receivables balance reads ('Get a specific customer's balance'),
+    hence moderate confidence on the specific sub-capability.
+- tag: CustomerPaymentMethod
+  spec_file: visma-customerpaymentmethod-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.7
+  evidence: '"Create a Customer payment method", schemas CustomerPaymentMethodDto, cashAccountInCustomerPaymentMethodDto'
+  reason: Maintains per-customer payment methods and linked cash accounts in the ERP receivables module;
+    supports customer payment/collection handling rather than a SaaS billing or generic master-data capability.
+- tag: Holiday
+  spec_file: visma-holiday-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.7
+  evidence: '''Create a holiday shortcut'' in visma-payroll-api-v1/v2; HolidayApi, HolidayRequest with
+    ProjectCostCenterAllocation'
+  reason: Payroll API registering employee holiday periods for payroll processing — HR operations / payroll
+    administration. Sub-capability choice (vs leave/benefits) carries some ambiguity.
+- tag: InventoryAdjustment
+  spec_file: visma-inventoryadjustment-api-openapi.yml
+  capability_id: BC-530.40
+  capability_id_l1: BC-530
+  capability_name: Inventory Accuracy Management
+  confidence: 0.7
+  evidence: '''Get a specific Inventory Adjustment document''; warehouseInInventoryAdjustmentLineDto,
+    InventoryAdjustmentLineDto, ''Release inventory document action'''
+  reason: Stock adjustment documents against warehouse/item lines — correction of stock discrepancies,
+    i.e. inventory accuracy management.
+- tag: Orders
+  spec_file: visma-orders-api-openapi.yml
+  capability_id: BC-520.40
+  capability_id_l1: BC-520
+  capability_name: Order Fulfilment Management
+  confidence: 0.7
+  evidence: POST /orders/{id}/backorder  Create a backorder; POST /orders/{id}/convert  Convert an order
+    to an invoice; GET /orders/{id}/deliverynote/print
+  reason: 'Sales order lifecycle: create, complete, void, backorder, convert to invoice and print delivery
+    note — order promising/fulfilment orchestration. Some ambiguity versus sales-side opportunity management,
+    but these are confirmed orders being fulfilled and invoiced.'
+- tag: Paycodes
+  spec_file: visma-paycodes-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.7
+  evidence: GET /v1/paycodes  Gets paycodes; GET /v2/paycodes/travelandexpense  Gets paycodes to use for
+    travel and expense shortcut
+  reason: Read-only pay code reference data from the payroll API, used to classify payroll transactions
+    — payroll administration support. Reference-data nature keeps confidence moderate.
+- tag: Payment
+  spec_file: visma-payment-api-openapi.yml
+  capability_id: BC-200.30
+  capability_id_l1: BC-200
+  capability_name: Accounts Receivable Management
+  confidence: 0.7
+  evidence: Payment_GetAllPayments  Get a range of Payments - ScreenId=AP302000 ... please use CustomerPayment
+    instead; schemas customerInPaymentDto, OrderToApplyDto, writeOffReasonCodeInPaymentLineDto
+  reason: ERP payment documents applied to customer orders/invoices with write-off reasons, deprecated
+    in favour of CustomerPayment — customer cash application within Accounts Receivable. The AP screen
+    id introduces some ambiguity between receivables and payables.
+- tag: Project
+  spec_file: visma-project-api-openapi.yml
+  capability_id: BC-900.30
+  capability_id_l1: BC-900
+  capability_name: Project Management
+  confidence: 0.7
+  evidence: POST /v1/project — Create an project; Project_GetTasks — Get all tasks for a project; schemas
+    TaskExtendedDto, billingRuleInProjectDto
+  reason: Project master with tasks, employees and billing rules — project execution/tracking in ERP.
+    Project accounting overtones leave some ambiguity between PPM and cost accounting.
+- tag: Supplier
+  spec_file: visma-supplier-api-openapi.yml
+  capability_id: BC-510
+  capability_id_l1: BC-510
+  capability_name: Supplier Management
+  confidence: 0.7
+  evidence: '''Create a supplier''; ''Get supplier classes''; ''Get the PO balance of a range of suppliers'''
+  reason: Supplier master records, classes and balances in an ERP — supplier registration and maintenance.
+    L2 ambiguous between onboarding/registration and supplier master data, so only L1 asserted.
+- tag: SupplierV2
+  spec_file: visma-supplierv2-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.7
+  evidence: GET /v2/supplier/balance — 'Get the balance for one or multiple suppliers'; schema SupplierBalanceV2Dto
+  reason: Reads outstanding payable balances per supplier, a vendor-accounting read in the AP ledger.
+- tag: VoucherWithOverunderPayment
+  spec_file: visma-voucherwithoverunderpayment-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.7
+  evidence: '"Create over/under payment voucher" with schemas LedgerVoucherRelationApi, VoucherWithOverunderPaymentApi'
+  reason: Posts ledger vouchers for over/under payments and retrieves voucher relations — ledger journal
+    posting; could alternatively touch receivables cash application, hence moderate confidence.
