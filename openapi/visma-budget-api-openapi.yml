@@ -309,6 +309,13 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
     BudgetUpdateDto:
       type: object
       properties:
@@ -332,11 +339,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FinancialPeriodAmountUpdateDto'
-    DtoValueOfString:
+    DtoValueOfDecimal:
       type: object
       properties:
         value:
-          type: string
+          type: number
+          format: double
     FinancialPeriodAmountDto:
       type: object
       properties:
@@ -345,12 +353,10 @@ components:
         amount:
           type: number
           format: double
-    BackgroundApiAcceptedDto:
+    DtoValueOfString:
       type: object
       properties:
-        id:
-          type: string
-        stateLocation:
+        value:
           type: string
     SegmentUpdateDto:
       type: object
@@ -369,25 +375,6 @@ components:
           type: string
           description: Click the magnifier. &gt; The name.
       description: The Top part &gt; Branch &gt; Click the magnifier
-    FinancialPeriodAmountUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        periodId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        amount:
-          $ref: '#/components/schemas/DtoValueOfDecimal'
-    DtoValueOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
     accountInBudgetDto:
       properties:
         type:
@@ -413,6 +400,30 @@ components:
           type: string
           description: Name of item/description
       description: 'Mandatory field: The budget area &gt; The budget articles pane &gt; Account* &gt; The account of the budget article if the article is a leaf on the budget tree.'
+    FinancialPeriodAmountUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        periodId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        amount:
+          $ref: '#/components/schemas/DtoValueOfDecimal'
+    subaccountInBudgetDto:
+      properties:
+        active:
+          type: boolean
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: The budget area &gt; The budget articles pane &gt; Subaccount* &gt; The subaccount of the budget article if the article is a leaf on the budget tree.'
     BudgetDto:
       type: object
       properties:
@@ -456,17 +467,6 @@ components:
           type: string
           description: The timestamp of the budget article, used for concurrency control.
           format: byte
-    subaccountInBudgetDto:
-      properties:
-        active:
-          type: boolean
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: The budget area &gt; The budget articles pane &gt; Subaccount* &gt; The subaccount of the budget article if the article is a leaf on the budget tree.'
   securitySchemes:
     interactiveapi:
       type: oauth2

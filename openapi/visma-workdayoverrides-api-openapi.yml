@@ -89,6 +89,100 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    WorkDayOverrideResponse:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
+          format: uuid
+        EmployeeId:
+          type: string
+          description: The unique identifier of the employee that the work day is registered for
+          format: uuid
+        DateToOverride:
+          type: string
+          description: Date that is overriden
+          format: date-time
+        StartTime:
+          type:
+          - string
+          - 'null'
+          description: 'Work day start time (format: HH:mm). Null indicates a free day.'
+        EndTime:
+          type:
+          - string
+          - 'null'
+          description: 'Work day end time (format: HH:mm). Null indicates a free day.'
+        LunchBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a lunch break
+          format: uuid
+        FirstCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a first coffee break
+          format: uuid
+        SecondCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a second coffee break
+          format: uuid
+        FullTimeStartTime:
+          type:
+          - string
+          - 'null'
+          description: 'Full-time work day start time (format: HH:mm)'
+        FullTimeEndTime:
+          type:
+          - string
+          - 'null'
+          description: 'Full-time work day end time (format: HH:mm)'
+        FullTimeLunchBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a lunch break for full-time work day
+          format: uuid
+        FullTimeFirstCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a first coffee break for full-time work day
+          format: uuid
+        FullTimeSecondCoffeeBreakId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of a second coffee break for full-time work day
+          format: uuid
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the work day override was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the work day override was last modified (UTC)
+          format: date-time
+      additionalProperties: false
+    PaginatedResponseOfWorkDayOverrideResponse:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkDayOverrideResponse'
+      additionalProperties: false
     CommonExtendedBadRequest:
       type: object
       properties:
@@ -209,100 +303,6 @@ components:
           - 'null'
           description: Unique identifier of a second coffee break for full-time work day, if any
           format: uuid
-      additionalProperties: false
-    PaginatedResponseOfWorkDayOverrideResponse:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkDayOverrideResponse'
-      additionalProperties: false
-    WorkDayOverrideResponse:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier provided by VLS
-          format: uuid
-        EmployeeId:
-          type: string
-          description: The unique identifier of the employee that the work day is registered for
-          format: uuid
-        DateToOverride:
-          type: string
-          description: Date that is overriden
-          format: date-time
-        StartTime:
-          type:
-          - string
-          - 'null'
-          description: 'Work day start time (format: HH:mm). Null indicates a free day.'
-        EndTime:
-          type:
-          - string
-          - 'null'
-          description: 'Work day end time (format: HH:mm). Null indicates a free day.'
-        LunchBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a lunch break
-          format: uuid
-        FirstCoffeeBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a first coffee break
-          format: uuid
-        SecondCoffeeBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a second coffee break
-          format: uuid
-        FullTimeStartTime:
-          type:
-          - string
-          - 'null'
-          description: 'Full-time work day start time (format: HH:mm)'
-        FullTimeEndTime:
-          type:
-          - string
-          - 'null'
-          description: 'Full-time work day end time (format: HH:mm)'
-        FullTimeLunchBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a lunch break for full-time work day
-          format: uuid
-        FullTimeFirstCoffeeBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a first coffee break for full-time work day
-          format: uuid
-        FullTimeSecondCoffeeBreakId:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier of a second coffee break for full-time work day
-          format: uuid
-        CreatedUtc:
-          type: string
-          description: Timestamp indicating when the work day override was created (UTC)
-          format: date-time
-        ModifiedUtc:
-          type: string
-          description: Timestamp indicating when the work day override was last modified (UTC)
-          format: date-time
       additionalProperties: false
     CommonError:
       type: object

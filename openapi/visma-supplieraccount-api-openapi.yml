@@ -79,71 +79,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    subaccountInSupplierItemAccountDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
-          format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: The SubAccount for the SupplierItemID. If null, this means that no account was found for the {Visma.net.ERP.Web.Api.Model.V1.SupplierItemAccountDto.SupplierItemId}
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
     SupplierItemAccountDto:
       type: object
       properties:
@@ -158,16 +93,6 @@ components:
           description: The Account ID is the actual ID of the expense account for the SupplierItemID or of the supplier if no SUpplierItemId was specified in the request. If null, this means that no account was found for the {Visma.net.ERP.Web.Api.Model.V1.SupplierItemAccountDto.SupplierItemId}
         subaccount:
           $ref: '#/components/schemas/subaccountInSupplierItemAccountDto'
-    SupplierAccountsDto:
-      type: object
-      properties:
-        supplierAccount:
-          $ref: '#/components/schemas/supplierAccountInSupplierAccountsDto'
-        supplierItemAccounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/SupplierItemAccountDto'
-          description: The list of SUpplierItems Ids with their expense accounts
     subaccountInSupplierAccountDto:
       properties:
         subaccountNumber:
@@ -201,6 +126,23 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: The default Expense SubAccount for the supplier
+    SupplierAccountsDto:
+      type: object
+      properties:
+        supplierAccount:
+          $ref: '#/components/schemas/supplierAccountInSupplierAccountsDto'
+        supplierItemAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierItemAccountDto'
+          description: The list of SUpplierItems Ids with their expense accounts
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
     supplierAccountInSupplierAccountsDto:
       properties:
         number:
@@ -215,6 +157,64 @@ components:
         subaccount:
           $ref: '#/components/schemas/subaccountInSupplierAccountDto'
       description: The supplier account information
+    subaccountInSupplierItemAccountDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: The SubAccount for the SupplierItemID. If null, this means that no account was found for the {Visma.net.ERP.Web.Api.Model.V1.SupplierItemAccountDto.SupplierItemId}
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
   securitySchemes:
     interactiveapi:
       type: oauth2

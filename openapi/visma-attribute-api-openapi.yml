@@ -426,20 +426,23 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DtoValueOfString:
+    AttributeDetailUpdateDto:
       type: object
       properties:
-        value:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
           type: string
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
+        valueId:
+          $ref: '#/components/schemas/DtoValueOfString'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        sortOrder:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt16'
+        disabled:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
     AttributeDto:
       type: object
       properties:
@@ -477,53 +480,6 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents an attribute in AttributeController. Used for getting data.
-    DtoValueOfNullableOfInt16:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
-    DtoValueOfAttributeControlType:
-      type: object
-      properties:
-        value:
-          enum:
-          - Text
-          - Combo
-          - MultiSelectCombo
-          - Lookup
-          - Checkbox
-          - Datetime
-          type: string
-    DtoValueOfNullableOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
-    AttributeDetailUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        valueId:
-          $ref: '#/components/schemas/DtoValueOfString'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        sortOrder:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt16'
-        disabled:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
     AttributeUpdateDto:
       type: object
       properties:
@@ -543,6 +499,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AttributeDetailUpdateDto'
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    DtoValueOfNullableOfInt16:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
     AttributeDetailDto:
       type: object
       properties:
@@ -559,6 +528,37 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
+    DtoValueOfAttributeControlType:
+      type: object
+      properties:
+        value:
+          enum:
+          - Text
+          - Combo
+          - MultiSelectCombo
+          - Lookup
+          - Checkbox
+          - Datetime
+          type: string
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
   securitySchemes:
     interactiveapi:
       type: oauth2

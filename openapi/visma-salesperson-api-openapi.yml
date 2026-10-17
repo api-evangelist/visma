@@ -379,11 +379,12 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DtoValueOfString:
+    DtoValueOfNullableOfDecimal:
       type: object
       properties:
         value:
-          type: string
+          type: number
+          format: double
     SalesPersonDto:
       type: object
       properties:
@@ -417,30 +418,22 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a salesperson in SalesPersonController. Used for getting data.
-    MetadataDto:
+    BasePaginationDtoOfSalesPersonDto:
       type: object
       properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
         totalCount:
           type: integer
           format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    CustSalesPeopleUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        customerID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        locationID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        commissionPct:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesPersonDto'
     BackgroundApiAcceptedDto:
       type: object
       properties:
@@ -510,12 +503,6 @@ components:
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
     SalesPersonUpdateDto:
       type: object
       properties:
@@ -533,22 +520,35 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustSalesPeopleUpdateDto'
-    BasePaginationDtoOfSalesPersonDto:
+    CustSalesPeopleUpdateDto:
       type: object
       properties:
-        pageNumber:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        customerID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        locationID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        commissionPct:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+    MetadataDto:
+      type: object
+      properties:
         totalCount:
           type: integer
           format: int64
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/SalesPersonDto'
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
   securitySchemes:
     interactiveapi:
       type: oauth2

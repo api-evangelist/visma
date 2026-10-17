@@ -113,56 +113,18 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    AccountBalanceApi:
+    PaginatedResponseOfAccountBalanceApi:
+      required:
+      - Data
+      - Meta
       type: object
       properties:
-        AccountNumber:
-          type: integer
-          description: The account number
-          format: int64
-          readOnly: true
-        AccountName:
-          type:
-          - string
-          - 'null'
-          description: The account name
-          readOnly: true
-        Balance:
-          type: number
-          description: The total account balance at the given date
-          format: double
-          readOnly: true
-        AccountType:
-          type: integer
-          description: The account type number. For reports only
-          format: int32
-          readOnly: true
-        AccountTypeDescription:
-          type:
-          - string
-          - 'null'
-          description: The Account Type Description. For reports only. Unfilterable property, filter on AccountType instead
-          readOnly: true
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
           items:
-            $ref: '#/components/schemas/CommonError'
+            $ref: '#/components/schemas/AccountBalanceApi'
       additionalProperties: false
     CommonPaginationMetadata:
       required:
@@ -194,18 +156,25 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    PaginatedResponseOfAccountBalanceApi:
-      required:
-      - Data
-      - Meta
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
           items:
-            $ref: '#/components/schemas/AccountBalanceApi'
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     CommonError:
       type: object
@@ -226,6 +195,37 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    AccountBalanceApi:
+      type: object
+      properties:
+        AccountNumber:
+          type: integer
+          description: The account number
+          format: int64
+          readOnly: true
+        AccountName:
+          type:
+          - string
+          - 'null'
+          description: The account name
+          readOnly: true
+        Balance:
+          type: number
+          description: The total account balance at the given date
+          format: double
+          readOnly: true
+        AccountType:
+          type: integer
+          description: The account type number. For reports only
+          format: int32
+          readOnly: true
+        AccountTypeDescription:
+          type:
+          - string
+          - 'null'
+          description: The Account Type Description. For reports only. Unfilterable property, filter on AccountType instead
+          readOnly: true
       additionalProperties: false
 x-tagGroups:
 - name: Sales

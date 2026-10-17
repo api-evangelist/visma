@@ -269,40 +269,18 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
+    PaginatedResponseOfAccountApi:
+      required:
+      - Data
+      - Meta
       type: object
       properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
           items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    StandardAccountApi:
-      type: object
-      properties:
-        AccountType:
-          type:
-          - string
-          - 'null'
-          description: The account type
-        AccountNumber:
-          type:
-          - integer
-          - 'null'
-          description: The account number
-          format: int64
+            $ref: '#/components/schemas/AccountApi'
       additionalProperties: false
     AccountApi:
       required:
@@ -389,19 +367,6 @@ components:
           description: If the account has account search information connected to it, will be shown as description
           readOnly: true
       additionalProperties: false
-    PaginatedResponseOfAccountApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountApi'
-      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -431,6 +396,41 @@ components:
           type: string
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    StandardAccountApi:
+      type: object
+      properties:
+        AccountType:
+          type:
+          - string
+          - 'null'
+          description: The account type
+        AccountNumber:
+          type:
+          - integer
+          - 'null'
+          description: The account number
+          format: int64
       additionalProperties: false
     PaginatedResponseOfStandardAccountApi:
       required:

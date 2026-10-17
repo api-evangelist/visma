@@ -117,6 +117,28 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CurrencyApi:
+      type: object
+      properties:
+        Code:
+          type:
+          - string
+          - 'null'
+          description: Currency code
+      additionalProperties: false
+    PaginatedResponseOfCurrencyApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurrencyApi'
+      additionalProperties: false
     CommonExtendedBadRequest:
       type: object
       properties:
@@ -167,19 +189,6 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    PaginatedResponseOfCurrencyApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CurrencyApi'
-      additionalProperties: false
     ExchangeRateApi:
       type: object
       properties:
@@ -205,15 +214,6 @@ components:
           description: Exchange rate value
           format: double
           readOnly: true
-      additionalProperties: false
-    CurrencyApi:
-      type: object
-      properties:
-        Code:
-          type:
-          - string
-          - 'null'
-          description: Currency code
       additionalProperties: false
     CommonError:
       type: object

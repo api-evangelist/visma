@@ -270,6 +270,17 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    fromCurrencyIdInCreateCurrencyRateDto:
+      properties:
+        value:
+          type: string
+      description: From currency id.
+    effectiveDateInCreateCurrencyRateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: Currency effective date.
     multDivInUpdateCurrencyRateDto:
       properties:
         value:
@@ -278,12 +289,6 @@ components:
           - Divide
           type: string
       description: Mult/Div.
-    effectiveDateInCreateCurrencyRateDto:
-      properties:
-        value:
-          type: string
-          format: date-time
-      description: Currency effective date.
     BackgroundApiAcceptedDto:
       type: object
       properties:
@@ -291,18 +296,20 @@ components:
           type: string
         stateLocation:
           type: string
-    UpdateCurrencyRateDto:
-      type: object
-      properties:
-        rate:
-          $ref: '#/components/schemas/rateInUpdateCurrencyRateDto'
-        multDiv:
-          $ref: '#/components/schemas/multDivInUpdateCurrencyRateDto'
-    toCurrencyIdInCreateCurrencyRateDto:
+    multDivInCreateCurrencyRateDto:
       properties:
         value:
+          enum:
+          - Multiply
+          - Divide
           type: string
-      description: To currency id.
+      description: Mult/Div.
+    rateInUpdateCurrencyRateDto:
+      properties:
+        value:
+          type: number
+          format: double
+      description: Currency rate.
     CurrencyRateDto:
       type: object
       properties:
@@ -340,20 +347,19 @@ components:
 
             It helps to prevent simultaneous updates of the resource from overwriting each other (by using ETags and If-Match headers)'
           format: byte
-    fromCurrencyIdInCreateCurrencyRateDto:
+    rateTypeInCreateCurrencyRateDto:
       properties:
         value:
           type: string
-      description: From currency id.
-    multDivInCreateCurrencyRateDto:
+      description: Currency rate type.
+    UpdateCurrencyRateDto:
+      type: object
       properties:
-        value:
-          enum:
-          - Multiply
-          - Divide
-          type: string
-      description: Mult/Div.
-    rateInUpdateCurrencyRateDto:
+        rate:
+          $ref: '#/components/schemas/rateInUpdateCurrencyRateDto'
+        multDiv:
+          $ref: '#/components/schemas/multDivInUpdateCurrencyRateDto'
+    rateInCreateCurrencyRateDto:
       properties:
         value:
           type: number
@@ -374,17 +380,11 @@ components:
           $ref: '#/components/schemas/rateInCreateCurrencyRateDto'
         multDiv:
           $ref: '#/components/schemas/multDivInCreateCurrencyRateDto'
-    rateTypeInCreateCurrencyRateDto:
+    toCurrencyIdInCreateCurrencyRateDto:
       properties:
         value:
           type: string
-      description: Currency rate type.
-    rateInCreateCurrencyRateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: Currency rate.
+      description: To currency id.
   securitySchemes:
     interactiveapi:
       type: oauth2

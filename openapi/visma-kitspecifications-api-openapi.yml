@@ -383,26 +383,12 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DtoValueOfString:
+    DtoValueOfNullableOfDecimal:
       type: object
       properties:
         value:
-          type: string
-    DtoValueOfNullableOfInt32:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
+          type: number
+          format: double
     KitSpecificationStockComponentsUpdateDto:
       type: object
       properties:
@@ -430,22 +416,29 @@ components:
           $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
         allowSubstitution:
           $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-    BasePaginationDtoOfKitSpecificationDto:
+    KitSpecificationNonStockComponentsUpdateDto:
       type: object
       properties:
-        pageNumber:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        totalCount:
-          type: integer
-          format: int64
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitSpecificationDto'
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
+        compInventoryID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        dfltCompQty:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        uom:
+          $ref: '#/components/schemas/DtoValueOfString'
+        allowQtyVariation:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        minCompQty:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        maxCompQty:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
     BackgroundApiAcceptedDto:
       type: object
       properties:
@@ -453,6 +446,41 @@ components:
           type: string
         stateLocation:
           type: string
+    DtoValueOfNullableOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    KitSpecificationUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        kitInventoryID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        revisionID:
+          $ref: '#/components/schemas/DtoValueOfString'
+        descr:
+          $ref: '#/components/schemas/DtoValueOfString'
+        isActive:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        allowCompAddition:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        isNonStock:
+          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
+        stockComponentLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitSpecificationStockComponentsUpdateDto'
+        nonStockComponentLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitSpecificationNonStockComponentsUpdateDto'
     KitSpecificationNonStockComponentDto:
       type: object
       properties:
@@ -480,29 +508,59 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    KitSpecificationNonStockComponentsUpdateDto:
+    BasePaginationDtoOfKitSpecificationDto:
       type: object
       properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int64
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/KitSpecificationDto'
+    DtoValueOfNullableOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    KitSpecificationStockComponentsDto:
+      type: object
+      properties:
         lineNbr:
-          $ref: '#/components/schemas/DtoValueOfNullableOfInt32'
-        compInventoryID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        dfltCompQty:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+          type: integer
+          format: int32
+        componentID:
+          type: string
+        componentQty:
+          type: number
+          format: double
         uom:
-          $ref: '#/components/schemas/DtoValueOfString'
-        allowQtyVariation:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        minCompQty:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        maxCompQty:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+          type: string
+        allowComponentQtyVariance:
+          type: boolean
+        minComponentQty:
+          type: number
+          format: double
+        maxComponentQty:
+          type: number
+          format: double
+        disassemblyCoeff:
+          type: number
+          format: double
+        allowComponentSubstitution:
+          type: boolean
+        description:
+          type: string
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
     KitSpecificationDto:
       type: object
       properties:
@@ -539,78 +597,20 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
-    DtoValueOfNullableOfBoolean:
+    MetadataDto:
       type: object
       properties:
-        value:
-          type: boolean
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    KitSpecificationStockComponentsDto:
-      type: object
-      properties:
-        lineNbr:
+        totalCount:
           type: integer
-          format: int32
-        componentID:
-          type: string
-        componentQty:
-          type: number
-          format: double
-        uom:
-          type: string
-        allowComponentQtyVariance:
-          type: boolean
-        minComponentQty:
-          type: number
-          format: double
-        maxComponentQty:
-          type: number
-          format: double
-        disassemblyCoeff:
-          type: number
-          format: double
-        allowComponentSubstitution:
-          type: boolean
-        description:
-          type: string
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-    KitSpecificationUpdateDto:
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
       type: object
       properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
+        value:
           type: string
-        kitInventoryID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        revisionID:
-          $ref: '#/components/schemas/DtoValueOfString'
-        descr:
-          $ref: '#/components/schemas/DtoValueOfString'
-        isActive:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        allowCompAddition:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        isNonStock:
-          $ref: '#/components/schemas/DtoValueOfNullableOfBoolean'
-        stockComponentLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitSpecificationStockComponentsUpdateDto'
-        nonStockComponentLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/KitSpecificationNonStockComponentsUpdateDto'
   securitySchemes:
     interactiveapi:
       type: oauth2

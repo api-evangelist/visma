@@ -199,25 +199,60 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
+    BankTransactionApi:
       type: object
       properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
+        Id:
+          type: string
+          description: Unique identifier of the bank transaction
+          format: uuid
+          readOnly: true
+        TransactionDate:
+          type: string
+          description: Date when the bank transaction occurred
+          format: date-time
+        IsReconciled:
+          type: boolean
+          description: True if the transaction has been matched
+        Reference:
           type:
           - string
           - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
+          description: Represents the invoice reference of the bank transaction
+        OriginalAmount:
+          type: number
+          description: The amount which represents the original amount of the bank transaction
+          format: double
+        ChargeAmount:
+          type: number
+          description: The amount which represents bank charges
+          format: double
+        ChargeCurrency:
+          type:
+          - string
+          - 'null'
+          description: The currency of the bank charges amount
+        TransactionAmount:
+          type: number
+          description: The total amount of the bank transaction, including bank charges
+          format: double
+        TransactionAmountCurrency:
+          type:
+          - string
+          - 'null'
+          description: The currency corresponding to the transaction amount
+        OriginalCurrency:
+          type:
+          - string
+          - 'null'
+          description: The currency corresponding to the original amount
+        Rows:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/CommonError'
+            $ref: '#/components/schemas/BankTransactionRowApi'
+          description: Represents the accounting transactions related to the bank transaction
       additionalProperties: false
     BankTransactionRowApi:
       type: object
@@ -296,60 +331,25 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    BankTransactionApi:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Id:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
           type: string
-          description: Unique identifier of the bank transaction
           format: uuid
-          readOnly: true
-        TransactionDate:
-          type: string
-          description: Date when the bank transaction occurred
-          format: date-time
-        IsReconciled:
-          type: boolean
-          description: True if the transaction has been matched
-        Reference:
-          type:
-          - string
-          - 'null'
-          description: Represents the invoice reference of the bank transaction
-        OriginalAmount:
-          type: number
-          description: The amount which represents the original amount of the bank transaction
-          format: double
-        ChargeAmount:
-          type: number
-          description: The amount which represents bank charges
-          format: double
-        ChargeCurrency:
-          type:
-          - string
-          - 'null'
-          description: The currency of the bank charges amount
-        TransactionAmount:
-          type: number
-          description: The total amount of the bank transaction, including bank charges
-          format: double
-        TransactionAmountCurrency:
-          type:
-          - string
-          - 'null'
-          description: The currency corresponding to the transaction amount
-        OriginalCurrency:
-          type:
-          - string
-          - 'null'
-          description: The currency corresponding to the original amount
-        Rows:
+        Errors:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/BankTransactionRowApi'
-          description: Represents the accounting transactions related to the bank transaction
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     PaginatedResponseOfBankTransactionApi:
       required:

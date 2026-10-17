@@ -320,64 +320,6 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    TravelAndExpenseApi:
-      required:
-      - Date
-      - EmployeeId
-      - Rows
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique identifier provided by VLS
-          format: uuid
-          readOnly: true
-        EmployeeId:
-          type: string
-          description: 'The ID of the employee that the shortcut is registered for. Source: Get from /v1/employees'
-          format: uuid
-        Date:
-          type: string
-          description: The date for the shortcut
-          format: date-time
-        ReportLink:
-          type:
-          - string
-          - 'null'
-          description: 'Report link (format: absolute HTTPS URL)'
-        Comment:
-          maxLength: 2000
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Optional comment for the shortcut
-        Rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/TravelAndExpenseRowApi'
-          description: Travel and other Expenses
-      additionalProperties: false
     TravelAndExpenseRowApi:
       required:
       - PaycodeNumber
@@ -456,38 +398,120 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    TravelAndExpenseResponse:
+    TravelAndExpenseApi:
+      required:
+      - Date
+      - EmployeeId
+      - Rows
       type: object
       properties:
         Id:
           type: string
           description: Unique identifier provided by VLS
           format: uuid
+          readOnly: true
         EmployeeId:
           type: string
-          description: The ID of the employee that the shortcut is registered for
+          description: 'The ID of the employee that the shortcut is registered for. Source: Get from /v1/employees'
           format: uuid
         Date:
           type: string
-          description: 'The date for the shortcut (format: yyyy-MM-dd)'
+          description: The date for the shortcut
           format: date-time
         ReportLink:
           type:
           - string
           - 'null'
-          description: 'Report link (format: URL)'
+          description: 'Report link (format: absolute HTTPS URL)'
         Comment:
+          maxLength: 2000
+          minLength: 0
           type:
           - string
           - 'null'
           description: Optional comment for the shortcut
         Rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelAndExpenseRowApi'
+          description: Travel and other Expenses
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/TravelAndExpenseRowResponse'
-          description: Travel and other Expenses
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    TravelAndExpenseRowResponse:
+      required:
+      - PaycodeNumber
+      type: object
+      properties:
+        PaycodeNumber:
+          type:
+          - string
+          - 'null'
+          description: Pay code number
+        Quantity:
+          type: number
+          description: Addition/deduction quantity
+          format: double
+        UnitPrice:
+          type:
+          - number
+          - 'null'
+          description: Addition/deduction unit price
+          format: double
+        Amount:
+          type:
+          - number
+          - 'null'
+          description: Addition/deduction amount
+          format: double
+        VatAmount:
+          type:
+          - number
+          - 'null'
+          description: Value-added tax amount
+          format: double
+        ProjectId:
+          type:
+          - string
+          - 'null'
+          description: Project ID
+          format: uuid
+        CostCenterItemId1:
+          type:
+          - string
+          - 'null'
+          description: Cost center item ID 1
+          format: uuid
+        CostCenterItemId2:
+          type:
+          - string
+          - 'null'
+          description: Cost center item ID 2
+          format: uuid
+        CostCenterItemId3:
+          type:
+          - string
+          - 'null'
+          description: Cost center item ID 3
+          format: uuid
       additionalProperties: false
     TravelAndExpenseRowRequest:
       required:
@@ -547,62 +571,38 @@ components:
           description: 'Cost center item ID 3. Source: get from eAccounting API, /v2/costcenters.'
           format: uuid
       additionalProperties: false
-    TravelAndExpenseRowResponse:
-      required:
-      - PaycodeNumber
+    TravelAndExpenseResponse:
       type: object
       properties:
-        PaycodeNumber:
-          type:
-          - string
-          - 'null'
-          description: Pay code number
-        Quantity:
-          type: number
-          description: Addition/deduction quantity
-          format: double
-        UnitPrice:
-          type:
-          - number
-          - 'null'
-          description: Addition/deduction unit price
-          format: double
-        Amount:
-          type:
-          - number
-          - 'null'
-          description: Addition/deduction amount
-          format: double
-        VatAmount:
-          type:
-          - number
-          - 'null'
-          description: Value-added tax amount
-          format: double
-        ProjectId:
-          type:
-          - string
-          - 'null'
-          description: Project ID
+        Id:
+          type: string
+          description: Unique identifier provided by VLS
           format: uuid
-        CostCenterItemId1:
+        EmployeeId:
+          type: string
+          description: The ID of the employee that the shortcut is registered for
+          format: uuid
+        Date:
+          type: string
+          description: 'The date for the shortcut (format: yyyy-MM-dd)'
+          format: date-time
+        ReportLink:
           type:
           - string
           - 'null'
-          description: Cost center item ID 1
-          format: uuid
-        CostCenterItemId2:
+          description: 'Report link (format: URL)'
+        Comment:
           type:
           - string
           - 'null'
-          description: Cost center item ID 2
-          format: uuid
-        CostCenterItemId3:
+          description: Optional comment for the shortcut
+        Rows:
           type:
-          - string
+          - array
           - 'null'
-          description: Cost center item ID 3
-          format: uuid
+          items:
+            $ref: '#/components/schemas/TravelAndExpenseRowResponse'
+          description: Travel and other Expenses
       additionalProperties: false
     TravelAndExpenseRequest:
       required:

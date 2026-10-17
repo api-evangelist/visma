@@ -578,6 +578,80 @@ components:
           items:
             $ref: '#/components/schemas/JournalTransactionLineUpdateDto'
       description: This class represents a journal transaction in JournalTransactionController. Used for creating/updating data.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    SegmentDto:
+      type: object
+      properties:
+        segmentId:
+          type: integer
+          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
+          format: int32
+        segmentDescription:
+          type: string
+          description: The Segment values window &gt; The Top part &gt; The description of the segment.
+        segmentValue:
+          type: string
+          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
+        segmentValueDescription:
+          type: string
+          description: The Segment values window &gt; The table &gt; The description of the segment value.
+    vatInJournalTransactionLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; VAT ID &gt; The VAT used to calculate the VAT amount.
+    subaccountInJournalTransactionLineDto:
+      properties:
+        subaccountNumber:
+          type: string
+          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
+        subaccountId:
+          type: integer
+          description: SubID &gt; The  identifier of the subaccount.
+          format: int32
+        description:
+          type: string
+          description: Description &gt; The description of the identifier.
+        lastModifiedDateTime:
+          type: string
+          description: System generated information.
+          format: date-time
+        active:
+          type: boolean
+          description: Active &gt; The status of the identifier.
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/SegmentDto'
+          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
+        timeStamp:
+          type: string
+          description: The timestamp of the subaccount, used for concurrency control.
+          format: byte
+        errorInfo:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/MetadataDto'
+      description: 'Mandatory field: The table &gt; Subaccount &gt; The subaccount used with the account to detail a journal entry.'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
     projectTaskInJournalTransactionLineDto:
       properties:
         internalId:
@@ -591,19 +665,6 @@ components:
           type: string
           description: Click on the magnifier. &gt; The description.
       description: The table &gt; Project task &gt; The particular task of the project with which this batch is associated.
-    projectInJournalTransactionLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The table &gt; Project &gt; The project with which this batch is associated, or the code indicating that this batch is not associated with any project.
     JournalTransactionDto:
       type: object
       properties:
@@ -755,33 +816,6 @@ components:
           type: integer
           description: The version of the attachment.
           format: int32
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    vatCodeInJournalTransactionLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The table &gt; VAT code &gt; The VAT code based on which the taxable amount is calculated.
-    SegmentUpdateDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          format: int32
-        segmentValue:
-          type: string
-    postPeriodInJournalTransactionUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
     JournalTransactionLineUpdateDto:
       type: object
       properties:
@@ -823,68 +857,61 @@ components:
           $ref: '#/components/schemas/DtoValueOfDecimal'
         note:
           $ref: '#/components/schemas/DtoValueOfString'
+    vatCodeInJournalTransactionLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; VAT code &gt; The VAT code based on which the taxable amount is calculated.
+    projectInJournalTransactionLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: The table &gt; Project &gt; The project with which this batch is associated, or the code indicating that this batch is not associated with any project.
+    postPeriodInJournalTransactionUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    DtoValueOfBoolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
     DtoValueOfDecimal:
       type: object
       properties:
         value:
           type: number
           format: double
-    BackgroundApiAcceptedDto:
+    DtoValueOfDateTime:
       type: object
       properties:
-        id:
+        value:
           type: string
-        stateLocation:
-          type: string
-    SegmentDto:
-      type: object
-      properties:
-        segmentId:
-          type: integer
-          description: The Segment values window &gt; The Top part &gt; The ID of the segment.
-          format: int32
-        segmentDescription:
-          type: string
-          description: The Segment values window &gt; The Top part &gt; The description of the segment.
-        segmentValue:
-          type: string
-          description: The Segment values window &gt; The table &gt; The value of the segment, alphanumeric.
-        segmentValueDescription:
-          type: string
-          description: The Segment values window &gt; The table &gt; The description of the segment value.
-    subaccountInJournalTransactionLineDto:
-      properties:
-        subaccountNumber:
-          type: string
-          description: 'Mandatory field: Subaccount* &gt; The subaccount number. Format 9-XX.'
-        subaccountId:
-          type: integer
-          description: SubID &gt; The  identifier of the subaccount.
-          format: int32
-        description:
-          type: string
-          description: Description &gt; The description of the identifier.
-        lastModifiedDateTime:
-          type: string
-          description: System generated information.
           format: date-time
-        active:
-          type: boolean
-          description: Active &gt; The status of the identifier.
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/SegmentDto'
-          description: Segments are entities that you use to define the structure of IDs for the subaccount.  This information is collected from window CS202000.
-        timeStamp:
-          type: string
-          description: The timestamp of the subaccount, used for concurrency control.
-          format: byte
-        errorInfo:
-          type: string
-        metadata:
-          $ref: '#/components/schemas/MetadataDto'
-      description: 'Mandatory field: The table &gt; Subaccount &gt; The subaccount used with the account to detail a journal entry.'
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
     JournalTransactionLineDto:
       type: object
       properties:
@@ -973,41 +1000,14 @@ components:
           description: Item ID &gt; The item ID of the line item, if applicable.
         note:
           type: string
-    DtoValueOfDateTime:
+    SegmentUpdateDto:
       type: object
       properties:
-        value:
-          type: string
-          format: date-time
-    DtoValueOfInt32:
-      type: object
-      properties:
-        value:
+        segmentId:
           type: integer
           format: int32
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    vatInJournalTransactionLineDto:
-      properties:
-        id:
+        segmentValue:
           type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: The table &gt; VAT ID &gt; The VAT used to calculate the VAT amount.
-    DtoValueOfBoolean:
-      type: object
-      properties:
-        value:
-          type: boolean
     financialPeriodInJournalTransactionUpdateDto:
       properties:
         value:

@@ -147,40 +147,6 @@ paths:
     - url: https://vlsapi.vismaonline.com/
 components:
   schemas:
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    PaginatedResponseOfTimeRuleAnnualDateApi:
-      required:
-      - Data
-      - Meta
-      type: object
-      properties:
-        Meta:
-          allOf:
-          - $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeRuleAnnualDateApi'
-      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -211,25 +177,25 @@ components:
           description: The date-time notation as defined by RFC 3339, section 5.6  2017-07-21T17:32:28Z
           format: date-time
       additionalProperties: false
-    CommonError:
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Field:
-          type:
-          - string
-          - 'null'
         ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
           type:
           - string
           - 'null'
-        Message:
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
           type:
-          - string
+          - array
           - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     TimeRuleAnnualDateApi:
       type: object
@@ -263,36 +229,39 @@ components:
           type: boolean
           description: Indicates whether the time rule annual date record is marked as deleted
       additionalProperties: false
-    TimeRuleAnnualDateResponse:
+    PaginatedResponseOfTimeRuleAnnualDateApi:
       required:
-      - Name
+      - Data
+      - Meta
       type: object
       properties:
-        Id:
-          type: string
-          description: Unique identifier for the time rule annual date record
-          format: uuid
-        Name:
+        Meta:
+          allOf:
+          - $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeRuleAnnualDateApi'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
           type:
           - string
           - 'null'
-          description: Name of the time rule annual date
-        Month:
-          type: integer
-          description: Month of the year for the time rule annual date (1-12)
-          format: int32
-        Day:
-          type: integer
-          description: Day of the month for the time rule annual date (1-31)
-          format: int32
-        CreatedUtc:
-          type: string
-          description: Timestamp indicating when the time rule annual date record was created (UTC)
-          format: date-time
-        ModifiedUtc:
-          type: string
-          description: Timestamp indicating when the time rule annual date record was last modified (UTC)
-          format: date-time
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     TimeRuleAnnualDateRequest:
       required:
@@ -327,6 +296,37 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TimeRuleAnnualDateResponse'
+      additionalProperties: false
+    TimeRuleAnnualDateResponse:
+      required:
+      - Name
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Unique identifier for the time rule annual date record
+          format: uuid
+        Name:
+          type:
+          - string
+          - 'null'
+          description: Name of the time rule annual date
+        Month:
+          type: integer
+          description: Month of the year for the time rule annual date (1-12)
+          format: int32
+        Day:
+          type: integer
+          description: Day of the month for the time rule annual date (1-31)
+          format: int32
+        CreatedUtc:
+          type: string
+          description: Timestamp indicating when the time rule annual date record was created (UTC)
+          format: date-time
+        ModifiedUtc:
+          type: string
+          description: Timestamp indicating when the time rule annual date record was last modified (UTC)
+          format: date-time
       additionalProperties: false
 x-refined-from:
 - visma-payroll-api-v1-openapi-original.json

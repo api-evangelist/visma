@@ -237,26 +237,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
     PartnerResourceLinkApi:
       required:
       - Href
@@ -295,6 +275,19 @@ components:
           type: string
           description: Name of the partner system
       additionalProperties: false
+    PaginatedResponseOfPartnerResourceLinkApi:
+      required:
+      - Data
+      - Meta
+      type: object
+      properties:
+        Meta:
+          $ref: '#/components/schemas/CommonPaginationMetadata'
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerResourceLinkApi'
+      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -325,18 +318,25 @@ components:
           description: <strong>Possible values:</strong><br/>2017-07-21T17:32:28Z<br/><br/>The date-time notation as defined by RFC 3339, section 5.6.
           format: date-time
       additionalProperties: false
-    PaginatedResponseOfPartnerResourceLinkApi:
-      required:
-      - Data
-      - Meta
+    CommonExtendedBadRequest:
       type: object
       properties:
-        Meta:
-          $ref: '#/components/schemas/CommonPaginationMetadata'
-        Data:
-          type: array
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
           items:
-            $ref: '#/components/schemas/PartnerResourceLinkApi'
+            $ref: '#/components/schemas/CommonError'
       additionalProperties: false
     CommonError:
       type: object

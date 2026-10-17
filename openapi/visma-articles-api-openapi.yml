@@ -195,62 +195,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ArticleBarcodeApi:
-      type: object
-      properties:
-        Barcode:
-          type:
-          - string
-          - 'null'
-          description: Article barcode
-        BarcodeType:
-          type: integer
-          description: <strong>Possible values:</strong><br/>Default = 0<br/><br/>Article barcode type.
-          format: int32
-      additionalProperties: false
-    CommonExtendedBadRequest:
-      type: object
-      properties:
-        ErrorCode:
-          type: integer
-          format: int32
-        DeveloperErrorMessage:
-          type:
-          - string
-          - 'null'
-        ErrorId:
-          type: string
-          format: uuid
-        Errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CommonError'
-      additionalProperties: false
-    ArticleLabelApi:
-      required:
-      - Name
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Unique Id provided by the system
-          format: uuid
-          readOnly: true
-        Name:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: Name of the article label
-        Description:
-          maxLength: 400
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: Description of the article label
-      additionalProperties: false
     CommonPaginationMetadata:
       required:
       - CurrentPage
@@ -293,6 +237,46 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ArticleApi'
+      additionalProperties: false
+    CommonExtendedBadRequest:
+      type: object
+      properties:
+        ErrorCode:
+          type: integer
+          format: int32
+        DeveloperErrorMessage:
+          type:
+          - string
+          - 'null'
+        ErrorId:
+          type: string
+          format: uuid
+        Errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CommonError'
+      additionalProperties: false
+    CommonError:
+      type: object
+      properties:
+        Field:
+          type:
+          - string
+          - 'null'
+        ErrorCode:
+          type:
+          - string
+          - 'null'
+        Message:
+          type:
+          - string
+          - 'null'
+        Key:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     ArticleApi:
       required:
@@ -548,25 +532,41 @@ components:
           - 'null'
           description: Supplier's article number.
       additionalProperties: false
-    CommonError:
+    ArticleLabelApi:
+      required:
+      - Name
       type: object
       properties:
-        Field:
+        Id:
+          type: string
+          description: Unique Id provided by the system
+          format: uuid
+          readOnly: true
+        Name:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Name of the article label
+        Description:
+          maxLength: 400
+          minLength: 0
           type:
           - string
           - 'null'
-        ErrorCode:
+          description: Description of the article label
+      additionalProperties: false
+    ArticleBarcodeApi:
+      type: object
+      properties:
+        Barcode:
           type:
           - string
           - 'null'
-        Message:
-          type:
-          - string
-          - 'null'
-        Key:
-          type:
-          - string
-          - 'null'
+          description: Article barcode
+        BarcodeType:
+          type: integer
+          description: <strong>Possible values:</strong><br/>Default = 0<br/><br/>Article barcode type.
+          format: int32
       additionalProperties: false
 x-tagGroups:
 - name: Sales

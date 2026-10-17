@@ -423,148 +423,6 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    projectTaskInInventoryReceiptLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project Task
-    branchNumberInInventoryReceiptUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The Branch associated
-    AttachmentDto:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the attachment.
-        id:
-          type: string
-          description: The ID of the attachment
-          format: uuid
-          example: 00000000-0000-0000-0000-000000000000
-        revision:
-          type: integer
-          description: The version of the attachment.
-          format: int32
-    warehouseInInventoryReceiptLineDto:
-      properties:
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: 'Mandatory field: Warehouse* &gt; The warehouse where the stock item is received.'
-    DtoValueOfString:
-      type: object
-      properties:
-        value:
-          type: string
-    locationInInventoryReceiptLineDto:
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-      description: Location &gt; The warehouse location from which the goods are transferred.
-    externalReferenceInInventoryReceiptUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The external reference number of the inventory issue document (for example, the vendor’s reference code).
-    ReleaseInventoryDocumentActionResultDto:
-      type: object
-      properties:
-        actionId:
-          type: string
-          format: uuid
-        actionResult:
-          enum:
-          - Queued
-          - InProcess
-          - Failed
-          - Done
-          type: string
-        errorInfo:
-          type: string
-    INAllocationsDto:
-      type: object
-      properties:
-        lineNbr:
-          type: integer
-          format: int32
-        location:
-          $ref: '#/components/schemas/LocationDescriptionDto'
-        lotSerialNumber:
-          type: string
-        quantity:
-          type: number
-          format: double
-        uom:
-          type: string
-        expirationDate:
-          type: string
-          format: date-time
-      description: This class represents Allocation/Kit Allocation. Used for getting data.
-    controlCostInInventoryReceiptUpdateDto:
-      properties:
-        value:
-          type: number
-          format: double
-      description: The manually entered summary amount for all specified inventory receipt items.
-    DtoValueOfNullableOfDecimal:
-      type: object
-      properties:
-        value:
-          type: number
-          format: double
-    LocationDescriptionDto:
-      type: object
-      properties:
-        countryId:
-          type: string
-          description: Location*.
-        id:
-          type: string
-          description: Click the magnifier &gt; The identifier
-        name:
-          type: string
-          description: Click the magnifier &gt; The displayed name
-    projectInInventoryReceiptLineDto:
-      properties:
-        internalId:
-          type: integer
-          description: The internal identifier.
-          format: int32
-        id:
-          type: string
-          description: Click on the magnifier. &gt; The identifier.
-        description:
-          type: string
-          description: Click on the magnifier. &gt; The description.
-      description: Project
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
     InventoryReceiptDto:
       type: object
       properties:
@@ -640,22 +498,102 @@ components:
         metadata:
           $ref: '#/components/schemas/MetadataDto'
       description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
-    holdInInventoryReceiptUpdateDto:
-      properties:
-        value:
-          type: boolean
-      description: A check box that you select to give the receipt the On Hold status. Clear the check box to save the receipt with the Balanced status.
-    transferNumberInInventoryReceiptUpdateDto:
+    postPeriodInInventoryReceiptUpdateDto:
       properties:
         value:
           type: string
-      description: The unique reference number of the receipt, which the system automatically assigns according to the numbering sequence selected for receipts on the Inventory Preferences IN.10.10.00) form.
-    dateInInventoryReceiptUpdateDto:
+      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    locationInInventoryReceiptLineDto:
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+      description: Location &gt; The warehouse location from which the goods are transferred.
+    branchNumberInInventoryReceiptUpdateDto:
       properties:
         value:
           type: string
-          format: date-time
-      description: The date when the receipt was created. All transactions included in this document will have this transaction date.
+      description: The Branch associated
+    reasonCodeInInventoryReceiptLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Reason code &gt; The reason code associated with the transferred goods.
+    descriptionInInventoryReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+      description: A brief description of the inventory issue or its transactions.
+    InventoryReceiptUpdateDto:
+      type: object
+      properties:
+        transferNumber:
+          $ref: '#/components/schemas/transferNumberInInventoryReceiptUpdateDto'
+        controlCost:
+          $ref: '#/components/schemas/controlCostInInventoryReceiptUpdateDto'
+        receiptLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryReceiptLineUpdateDto'
+          description: The inventory issue lines
+        referenceNumber:
+          $ref: '#/components/schemas/referenceNumberInInventoryReceiptUpdateDto'
+        hold:
+          $ref: '#/components/schemas/holdInInventoryReceiptUpdateDto'
+        date:
+          $ref: '#/components/schemas/dateInInventoryReceiptUpdateDto'
+        postPeriod:
+          $ref: '#/components/schemas/postPeriodInInventoryReceiptUpdateDto'
+        externalReference:
+          $ref: '#/components/schemas/externalReferenceInInventoryReceiptUpdateDto'
+        description:
+          $ref: '#/components/schemas/descriptionInInventoryReceiptUpdateDto'
+        controlQuantity:
+          $ref: '#/components/schemas/controlQuantityInInventoryReceiptUpdateDto'
+        branchNumber:
+          $ref: '#/components/schemas/branchNumberInInventoryReceiptUpdateDto'
+      description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    AttachmentDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the attachment.
+        id:
+          type: string
+          description: The ID of the attachment
+          format: uuid
+          example: 00000000-0000-0000-0000-000000000000
+        revision:
+          type: integer
+          description: The version of the attachment.
+          format: int32
     InventoryReceiptLineUpdateDto:
       type: object
       properties:
@@ -695,48 +633,6 @@ components:
           $ref: '#/components/schemas/DtoValueOfString'
         branchNumber:
           $ref: '#/components/schemas/DtoValueOfString'
-    referenceNumberInInventoryReceiptUpdateDto:
-      properties:
-        value:
-          type: string
-      description: The unique reference number of the receipt, which the system automatically assigns according to the numbering sequence selected for receipts on the Inventory Preferences IN.10.10.00) form.
-    DtoValueOfNullableOfDateTime:
-      type: object
-      properties:
-        value:
-          type: string
-          format: date-time
-    InventoryReceiptLineAllocationsUpdateDto:
-      type: object
-      properties:
-        operation:
-          enum:
-          - Insert
-          - Update
-          - Delete
-          type: string
-        lineNbr:
-          $ref: '#/components/schemas/DtoValueOfInt32'
-        location:
-          $ref: '#/components/schemas/DtoValueOfString'
-        lotSerialNumber:
-          $ref: '#/components/schemas/DtoValueOfString'
-        quantity:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
-        expirationDate:
-          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
-      description: 'Lot/serial allocations for stock components in kit assemblies.
-
-        Used for adding and updating allocations.'
-    branchNumberInInventoryReceiptDto:
-      properties:
-        number:
-          type: string
-          description: Click the magnifier. &gt; The identifier.
-        name:
-          type: string
-          description: Click the magnifier. &gt; The name.
-      description: The Branch associated
     InventoryReceiptLineDto:
       type: object
       properties:
@@ -786,84 +682,132 @@ components:
             $ref: '#/components/schemas/AttachmentDto'
         branchNumber:
           $ref: '#/components/schemas/BranchNumberDto'
-    DtoValueOfInt32:
+    DtoValueOfString:
       type: object
       properties:
         value:
+          type: string
+    projectTaskInInventoryReceiptLineDto:
+      properties:
+        internalId:
           type: integer
+          description: The internal identifier.
           format: int32
-    InventoryReceiptUpdateDto:
-      type: object
-      properties:
-        transferNumber:
-          $ref: '#/components/schemas/transferNumberInInventoryReceiptUpdateDto'
-        controlCost:
-          $ref: '#/components/schemas/controlCostInInventoryReceiptUpdateDto'
-        receiptLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/InventoryReceiptLineUpdateDto'
-          description: The inventory issue lines
-        referenceNumber:
-          $ref: '#/components/schemas/referenceNumberInInventoryReceiptUpdateDto'
-        hold:
-          $ref: '#/components/schemas/holdInInventoryReceiptUpdateDto'
-        date:
-          $ref: '#/components/schemas/dateInInventoryReceiptUpdateDto'
-        postPeriod:
-          $ref: '#/components/schemas/postPeriodInInventoryReceiptUpdateDto'
-        externalReference:
-          $ref: '#/components/schemas/externalReferenceInInventoryReceiptUpdateDto'
-        description:
-          $ref: '#/components/schemas/descriptionInInventoryReceiptUpdateDto'
-        controlQuantity:
-          $ref: '#/components/schemas/controlQuantityInInventoryReceiptUpdateDto'
-        branchNumber:
-          $ref: '#/components/schemas/branchNumberInInventoryReceiptUpdateDto'
-      description: This class represents a inventory issue in InventoryIssueController. Used by getting data.
-    reasonCodeInInventoryReceiptLineDto:
-      properties:
         id:
           type: string
           description: Click on the magnifier. &gt; The identifier.
         description:
           type: string
           description: Click on the magnifier. &gt; The description.
-      description: Reason code &gt; The reason code associated with the transferred goods.
-    postPeriodInInventoryReceiptUpdateDto:
+      description: Project Task
+    controlCostInInventoryReceiptUpdateDto:
       properties:
         value:
-          type: string
-      description: The financial period to which the transactions recorded in the document should be posted. Use the format MMYYYY.
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
-    inventoryItemInInventoryReceiptLineDto:
-      properties:
-        number:
-          type: string
-          description: Number of item
-        description:
-          type: string
-          description: Name of item/description
-      description: 'Mandatory field: Item ID* &gt; The ID of the goods to be transferred.'
-    descriptionInInventoryReceiptUpdateDto:
+          type: number
+          format: double
+      description: The manually entered summary amount for all specified inventory receipt items.
+    holdInInventoryReceiptUpdateDto:
       properties:
         value:
-          type: string
-      description: A brief description of the inventory issue or its transactions.
+          type: boolean
+      description: A check box that you select to give the receipt the On Hold status. Clear the check box to save the receipt with the Balanced status.
     controlQuantityInInventoryReceiptUpdateDto:
       properties:
         value:
           type: number
           format: double
       description: The manually entered quantity of inventory items. Control Qty. is available only if the Validate Document Totals on Entry option is selected on the Inventory Preferences form. If the Control Qty. and Total Qty.values do not match, the system generates a warning message and the issue cannot be saved.
+    ReleaseInventoryDocumentActionResultDto:
+      type: object
+      properties:
+        actionId:
+          type: string
+          format: uuid
+        actionResult:
+          enum:
+          - Queued
+          - InProcess
+          - Failed
+          - Done
+          type: string
+        errorInfo:
+          type: string
+    projectInInventoryReceiptLineDto:
+      properties:
+        internalId:
+          type: integer
+          description: The internal identifier.
+          format: int32
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: Project
+    LocationDescriptionDto:
+      type: object
+      properties:
+        countryId:
+          type: string
+          description: Location*.
+        id:
+          type: string
+          description: Click the magnifier &gt; The identifier
+        name:
+          type: string
+          description: Click the magnifier &gt; The displayed name
+    dateInInventoryReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+          format: date-time
+      description: The date when the receipt was created. All transactions included in this document will have this transaction date.
+    transferNumberInInventoryReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The unique reference number of the receipt, which the system automatically assigns according to the numbering sequence selected for receipts on the Inventory Preferences IN.10.10.00) form.
+    DtoValueOfNullableOfDecimal:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+    INAllocationsDto:
+      type: object
+      properties:
+        lineNbr:
+          type: integer
+          format: int32
+        location:
+          $ref: '#/components/schemas/LocationDescriptionDto'
+        lotSerialNumber:
+          type: string
+        quantity:
+          type: number
+          format: double
+        uom:
+          type: string
+        expirationDate:
+          type: string
+          format: date-time
+      description: This class represents Allocation/Kit Allocation. Used for getting data.
+    DtoValueOfInt32:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    branchNumberInInventoryReceiptDto:
+      properties:
+        number:
+          type: string
+          description: Click the magnifier. &gt; The identifier.
+        name:
+          type: string
+          description: Click the magnifier. &gt; The name.
+      description: The Branch associated
     BranchNumberDto:
       type: object
       properties:
@@ -873,6 +817,62 @@ components:
         name:
           type: string
           description: Click the magnifier. &gt; The name.
+    inventoryItemInInventoryReceiptLineDto:
+      properties:
+        number:
+          type: string
+          description: Number of item
+        description:
+          type: string
+          description: Name of item/description
+      description: 'Mandatory field: Item ID* &gt; The ID of the goods to be transferred.'
+    externalReferenceInInventoryReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The external reference number of the inventory issue document (for example, the vendor’s reference code).
+    DtoValueOfNullableOfDateTime:
+      type: object
+      properties:
+        value:
+          type: string
+          format: date-time
+    referenceNumberInInventoryReceiptUpdateDto:
+      properties:
+        value:
+          type: string
+      description: The unique reference number of the receipt, which the system automatically assigns according to the numbering sequence selected for receipts on the Inventory Preferences IN.10.10.00) form.
+    InventoryReceiptLineAllocationsUpdateDto:
+      type: object
+      properties:
+        operation:
+          enum:
+          - Insert
+          - Update
+          - Delete
+          type: string
+        lineNbr:
+          $ref: '#/components/schemas/DtoValueOfInt32'
+        location:
+          $ref: '#/components/schemas/DtoValueOfString'
+        lotSerialNumber:
+          $ref: '#/components/schemas/DtoValueOfString'
+        quantity:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDecimal'
+        expirationDate:
+          $ref: '#/components/schemas/DtoValueOfNullableOfDateTime'
+      description: 'Lot/serial allocations for stock components in kit assemblies.
+
+        Used for adding and updating allocations.'
+    warehouseInInventoryReceiptLineDto:
+      properties:
+        id:
+          type: string
+          description: Click on the magnifier. &gt; The identifier.
+        description:
+          type: string
+          description: Click on the magnifier. &gt; The description.
+      description: 'Mandatory field: Warehouse* &gt; The warehouse where the stock item is received.'
   securitySchemes:
     interactiveapi:
       type: oauth2

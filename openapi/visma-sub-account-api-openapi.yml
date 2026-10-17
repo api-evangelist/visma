@@ -342,20 +342,19 @@ paths:
       - interactiveapi: []
 components:
   schemas:
-    DtoValueOfString:
+    SubAccountUpdateDto:
+      required:
+      - subaccountNumber
       type: object
       properties:
-        value:
-          type: string
-    MetadataDto:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int64
-        maxPageSize:
-          type: integer
-          format: int64
+        subaccountNumber:
+          $ref: '#/components/schemas/subaccountNumberInSubAccountUpdateDto'
+        subaccountId:
+          $ref: '#/components/schemas/subaccountIdInSubAccountUpdateDto'
+        description:
+          $ref: '#/components/schemas/DtoValueOfString'
+        active:
+          $ref: '#/components/schemas/DtoValueOfBoolean'
     BackgroundApiAcceptedDto:
       type: object
       properties:
@@ -384,19 +383,6 @@ components:
         value:
           type: string
       description: The property is now considered obsolete, use SubaccountNumber instead. If SubaccountNumber is specified in a request, this property is ignored.
-    SubAccountUpdateDto:
-      required:
-      - subaccountNumber
-      type: object
-      properties:
-        subaccountNumber:
-          $ref: '#/components/schemas/subaccountNumberInSubAccountUpdateDto'
-        subaccountId:
-          $ref: '#/components/schemas/subaccountIdInSubAccountUpdateDto'
-        description:
-          $ref: '#/components/schemas/DtoValueOfString'
-        active:
-          $ref: '#/components/schemas/DtoValueOfBoolean'
     subaccountNumberInSubAccountUpdateDto:
       properties:
         value:
@@ -440,6 +426,20 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/MetadataDto'
+    MetadataDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        maxPageSize:
+          type: integer
+          format: int64
+    DtoValueOfString:
+      type: object
+      properties:
+        value:
+          type: string
   securitySchemes:
     interactiveapi:
       type: oauth2

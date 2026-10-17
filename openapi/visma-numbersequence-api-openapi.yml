@@ -139,6 +139,32 @@ paths:
       - interactiveapi: []
 components:
   schemas:
+    BackgroundApiAcceptedDto:
+      type: object
+      properties:
+        id:
+          type: string
+        stateLocation:
+          type: string
+    NumberingDto:
+      type: object
+      properties:
+        numberingId:
+          type: string
+          description: 'Mandatory field: The top part &gt; Numbering ID &gt; The unique ID of the numbering series, which is an alphanumeric string of up to 10 characters.'
+        description:
+          type: string
+          description: 'Mandatory field: The top part &gt; Description* &gt; The description of the numbering series.'
+        manualNumbering:
+          type: boolean
+          description: The top part &gt; Manual numbering &gt; A check box that indicates (if selected) that the system will not generate numbers for the series and users will need to specify document numbers manually.
+        newNumberSymbol:
+          type: string
+          description: 'Mandatory field: The top part &gt; New number symbol* &gt; An alphanumeric string used to indicate that a new number for an object will be assigned.'
+        sequence:
+          type: array
+          items:
+            $ref: '#/components/schemas/NumberingSequenceDto'
     NumberingSequenceDto:
       type: object
       properties:
@@ -179,32 +205,6 @@ components:
           type: string
           description: Click the magnifier. &gt; The name.
       description: The table &gt; Branch &gt; The branch using the numbering series.
-    NumberingDto:
-      type: object
-      properties:
-        numberingId:
-          type: string
-          description: 'Mandatory field: The top part &gt; Numbering ID &gt; The unique ID of the numbering series, which is an alphanumeric string of up to 10 characters.'
-        description:
-          type: string
-          description: 'Mandatory field: The top part &gt; Description* &gt; The description of the numbering series.'
-        manualNumbering:
-          type: boolean
-          description: The top part &gt; Manual numbering &gt; A check box that indicates (if selected) that the system will not generate numbers for the series and users will need to specify document numbers manually.
-        newNumberSymbol:
-          type: string
-          description: 'Mandatory field: The top part &gt; New number symbol* &gt; An alphanumeric string used to indicate that a new number for an object will be assigned.'
-        sequence:
-          type: array
-          items:
-            $ref: '#/components/schemas/NumberingSequenceDto'
-    BackgroundApiAcceptedDto:
-      type: object
-      properties:
-        id:
-          type: string
-        stateLocation:
-          type: string
   securitySchemes:
     interactiveapi:
       type: oauth2
